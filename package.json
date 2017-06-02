@@ -10,6 +10,7 @@
   "keywords": [
     "react-native"
   ],
+  "git repository":"https://github.com/reactnativecomponent/react-native-netease-im",
   "author": "",
   "license": "",
   "peerDependencies": {
