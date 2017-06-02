@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <!-- avatar -->
-    <dimen name="avatar_notification_size">48dip</dimen>
-    <dimen name="avatar_max_size">60dip</dimen>
-
-</resources>
