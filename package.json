@@ -10,7 +10,10 @@
   "keywords": [
     "react-native"
   ],
-  "git repository":"https://github.com/reactnativecomponent/react-native-netease-im",
+  "repository" :
+  { "type" : "git",
+    "url" : "https://github.com/reactnativecomponent/react-native-netease-im.git"
+  },
   "author": "",
   "license": "",
   "peerDependencies": {
