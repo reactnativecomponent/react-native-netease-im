@@ -1,0 +1,473 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		4E27A5CB1ED5417100543BFC /* RNNotificationCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E27A5CA1ED5417100543BFC /* RNNotificationCenter.m */; };
+		4E354E871ECBE72700CD6587 /* NIMObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E354E861ECBE72700CD6587 /* NIMObject.m */; };
+		4E354EC01ECC2E3400CD6587 /* NSDictionary+NTESJson.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E354EBF1ECC2E3400CD6587 /* NSDictionary+NTESJson.m */; };
+		4E5B47781EC1793600D74E72 /* RNNeteaseIm.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E5B47771EC1793600D74E72 /* RNNeteaseIm.m */; };
+		4E5B47C41EC17A0D00D74E72 /* ContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E5B47A61EC17A0D00D74E72 /* ContactViewController.m */; };
+		4E5B47C51EC17A0D00D74E72 /* ConversationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E5B47A81EC17A0D00D74E72 /* ConversationViewController.m */; };
+		4E5B47C61EC17A0D00D74E72 /* NIMModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E5B47AA1EC17A0D00D74E72 /* NIMModel.m */; };
+		4E5B47C71EC17A0D00D74E72 /* NIMViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E5B47AC1EC17A0D00D74E72 /* NIMViewController.m */; };
+		4E5B47C81EC17A0D00D74E72 /* NoticeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E5B47AE1EC17A0D00D74E72 /* NoticeViewController.m */; };
+		4E5B47C91EC17A0D00D74E72 /* TeamViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E5B47B21EC17A0D00D74E72 /* TeamViewController.m */; };
+		4E5B47CA1EC17A0D00D74E72 /* NTESContactDataMember.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E5B47B61EC17A0D00D74E72 /* NTESContactDataMember.m */; };
+		4E5B47CB1EC17A0D00D74E72 /* NTESGroupedContacts.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E5B47B81EC17A0D00D74E72 /* NTESGroupedContacts.m */; };
+		4E5B47CC1EC17A0D00D74E72 /* NTESGroupedDataCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E5B47BA1EC17A0D00D74E72 /* NTESGroupedDataCollection.m */; };
+		4E5B47CD1EC17A0D00D74E72 /* NTESBundleSetting.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E5B47BC1EC17A0D00D74E72 /* NTESBundleSetting.m */; };
+		4E5B47CE1EC17A0D00D74E72 /* NTESClientUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E5B47BE1EC17A0D00D74E72 /* NTESClientUtil.m */; };
+		4E5B47CF1EC17A0D00D74E72 /* NTESPinyinConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E5B47C11EC17A0D00D74E72 /* NTESPinyinConverter.m */; };
+		4E5B47D01EC17A0D00D74E72 /* NTESSpellingCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E5B47C31EC17A0D00D74E72 /* NTESSpellingCenter.m */; };
+		4E5B49B41EC1AE0600D74E72 /* NIMKitInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E5B49B31EC1AE0600D74E72 /* NIMKitInfo.m */; };
+		4E5B49B71EC1AE5600D74E72 /* NIMKitUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E5B49B61EC1AE5600D74E72 /* NIMKitUtil.m */; };
+		4E5B49CE1EC1B0A700D74E72 /* NIMKitInfoFetchOption.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E5B49CD1EC1B0A700D74E72 /* NIMKitInfoFetchOption.m */; };
+		4E5B49D11EC1B34B00D74E72 /* NIMKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E5B49D01EC1B34B00D74E72 /* NIMKit.m */; };
+		4E5B49D51EC1BA0900D74E72 /* NIMKitDataProviderImpl.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E5B49D41EC1BA0900D74E72 /* NIMKitDataProviderImpl.m */; };
+		4E6BA8E91EC2D21500630D77 /* NIMKitNotificationFirer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E6BA8E81EC2D21500630D77 /* NIMKitNotificationFirer.m */; };
+		4E6BA8EC1EC2D23A00630D77 /* NIMKitTimerHolder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E6BA8EB1EC2D23A00630D77 /* NIMKitTimerHolder.m */; };
+		4E9C78B91ECE88ED00037A6C /* NTESSDKConfigDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E9C78B71ECE88ED00037A6C /* NTESSDKConfigDelegate.m */; };
+		4EBD0A9D1EC565D2000C77B8 /* BankListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EBD0A9C1EC565D2000C77B8 /* BankListViewController.m */; };
+		4EC4FCCC1ECA9BBC00F3DA5E /* NIMMessageMaker.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EC4FCCB1ECA9BBC00F3DA5E /* NIMMessageMaker.m */; };
+		4EC4FCCF1ECA9BDB00F3DA5E /* NSString+NIMKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EC4FCCE1ECA9BDB00F3DA5E /* NSString+NIMKit.m */; };
+		4EC4FCD21ECA9C6C00F3DA5E /* NIMKitLocationPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EC4FCD11ECA9C6C00F3DA5E /* NIMKitLocationPoint.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		4E5B473F1EC1788F00D74E72 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		4E27A5C91ED5417100543BFC /* RNNotificationCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNNotificationCenter.h; sourceTree = "<group>"; };
+		4E27A5CA1ED5417100543BFC /* RNNotificationCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNNotificationCenter.m; sourceTree = "<group>"; };
+		4E354E851ECBE72700CD6587 /* NIMObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMObject.h; sourceTree = "<group>"; };
+		4E354E861ECBE72700CD6587 /* NIMObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMObject.m; sourceTree = "<group>"; };
+		4E354EBE1ECC2E3400CD6587 /* NSDictionary+NTESJson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+NTESJson.h"; sourceTree = "<group>"; };
+		4E354EBF1ECC2E3400CD6587 /* NSDictionary+NTESJson.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+NTESJson.m"; sourceTree = "<group>"; };
+		4E5B47411EC1788F00D74E72 /* libRNNeteaseIm.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRNNeteaseIm.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		4E5B47761EC1793600D74E72 /* RNNeteaseIm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNNeteaseIm.h; sourceTree = "<group>"; };
+		4E5B47771EC1793600D74E72 /* RNNeteaseIm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNNeteaseIm.m; sourceTree = "<group>"; };
+		4E5B47A51EC17A0D00D74E72 /* ContactViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactViewController.h; sourceTree = "<group>"; };
+		4E5B47A61EC17A0D00D74E72 /* ContactViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactViewController.m; sourceTree = "<group>"; };
+		4E5B47A71EC17A0D00D74E72 /* ConversationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConversationViewController.h; sourceTree = "<group>"; };
+		4E5B47A81EC17A0D00D74E72 /* ConversationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConversationViewController.m; sourceTree = "<group>"; };
+		4E5B47A91EC17A0D00D74E72 /* NIMModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMModel.h; sourceTree = "<group>"; };
+		4E5B47AA1EC17A0D00D74E72 /* NIMModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMModel.m; sourceTree = "<group>"; };
+		4E5B47AB1EC17A0D00D74E72 /* NIMViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMViewController.h; sourceTree = "<group>"; };
+		4E5B47AC1EC17A0D00D74E72 /* NIMViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMViewController.m; sourceTree = "<group>"; };
+		4E5B47AD1EC17A0D00D74E72 /* NoticeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoticeViewController.h; sourceTree = "<group>"; };
+		4E5B47AE1EC17A0D00D74E72 /* NoticeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoticeViewController.m; sourceTree = "<group>"; };
+		4E5B47AF1EC17A0D00D74E72 /* NTESGlobalMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTESGlobalMacro.h; sourceTree = "<group>"; };
+		4E5B47B11EC17A0D00D74E72 /* TeamViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TeamViewController.h; sourceTree = "<group>"; };
+		4E5B47B21EC17A0D00D74E72 /* TeamViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TeamViewController.m; sourceTree = "<group>"; };
+		4E5B47B51EC17A0D00D74E72 /* NTESContactDataMember.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTESContactDataMember.h; sourceTree = "<group>"; };
+		4E5B47B61EC17A0D00D74E72 /* NTESContactDataMember.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTESContactDataMember.m; sourceTree = "<group>"; };
+		4E5B47B71EC17A0D00D74E72 /* NTESGroupedContacts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTESGroupedContacts.h; sourceTree = "<group>"; };
+		4E5B47B81EC17A0D00D74E72 /* NTESGroupedContacts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTESGroupedContacts.m; sourceTree = "<group>"; };
+		4E5B47B91EC17A0D00D74E72 /* NTESGroupedDataCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTESGroupedDataCollection.h; sourceTree = "<group>"; };
+		4E5B47BA1EC17A0D00D74E72 /* NTESGroupedDataCollection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTESGroupedDataCollection.m; sourceTree = "<group>"; };
+		4E5B47BB1EC17A0D00D74E72 /* NTESBundleSetting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTESBundleSetting.h; sourceTree = "<group>"; };
+		4E5B47BC1EC17A0D00D74E72 /* NTESBundleSetting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTESBundleSetting.m; sourceTree = "<group>"; };
+		4E5B47BD1EC17A0D00D74E72 /* NTESClientUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTESClientUtil.h; sourceTree = "<group>"; };
+		4E5B47BE1EC17A0D00D74E72 /* NTESClientUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTESClientUtil.m; sourceTree = "<group>"; };
+		4E5B47C01EC17A0D00D74E72 /* NTESPinyinConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTESPinyinConverter.h; sourceTree = "<group>"; };
+		4E5B47C11EC17A0D00D74E72 /* NTESPinyinConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTESPinyinConverter.m; sourceTree = "<group>"; };
+		4E5B47C21EC17A0D00D74E72 /* NTESSpellingCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTESSpellingCenter.h; sourceTree = "<group>"; };
+		4E5B47C31EC17A0D00D74E72 /* NTESSpellingCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTESSpellingCenter.m; sourceTree = "<group>"; };
+		4E5B47D71EC1952A00D74E72 /* PrefixHeader.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
+		4E5B49B21EC1AE0600D74E72 /* NIMKitInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMKitInfo.h; sourceTree = "<group>"; };
+		4E5B49B31EC1AE0600D74E72 /* NIMKitInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMKitInfo.m; sourceTree = "<group>"; };
+		4E5B49B51EC1AE5600D74E72 /* NIMKitUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMKitUtil.h; sourceTree = "<group>"; };
+		4E5B49B61EC1AE5600D74E72 /* NIMKitUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMKitUtil.m; sourceTree = "<group>"; };
+		4E5B49CC1EC1B0A700D74E72 /* NIMKitInfoFetchOption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMKitInfoFetchOption.h; sourceTree = "<group>"; };
+		4E5B49CD1EC1B0A700D74E72 /* NIMKitInfoFetchOption.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMKitInfoFetchOption.m; sourceTree = "<group>"; };
+		4E5B49CF1EC1B34B00D74E72 /* NIMKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMKit.h; sourceTree = "<group>"; };
+		4E5B49D01EC1B34B00D74E72 /* NIMKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMKit.m; sourceTree = "<group>"; };
+		4E5B49D21EC1B42300D74E72 /* NIMKitDataProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMKitDataProvider.h; sourceTree = "<group>"; };
+		4E5B49D31EC1BA0900D74E72 /* NIMKitDataProviderImpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMKitDataProviderImpl.h; sourceTree = "<group>"; };
+		4E5B49D41EC1BA0900D74E72 /* NIMKitDataProviderImpl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMKitDataProviderImpl.m; sourceTree = "<group>"; };
+		4E6BA8E71EC2D21500630D77 /* NIMKitNotificationFirer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMKitNotificationFirer.h; sourceTree = "<group>"; };
+		4E6BA8E81EC2D21500630D77 /* NIMKitNotificationFirer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMKitNotificationFirer.m; sourceTree = "<group>"; };
+		4E6BA8EA1EC2D23A00630D77 /* NIMKitTimerHolder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMKitTimerHolder.h; sourceTree = "<group>"; };
+		4E6BA8EB1EC2D23A00630D77 /* NIMKitTimerHolder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMKitTimerHolder.m; sourceTree = "<group>"; };
+		4E9C78B61ECE88ED00037A6C /* NTESSDKConfigDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTESSDKConfigDelegate.h; sourceTree = "<group>"; };
+		4E9C78B71ECE88ED00037A6C /* NTESSDKConfigDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTESSDKConfigDelegate.m; sourceTree = "<group>"; };
+		4EBD0A9B1EC565D2000C77B8 /* BankListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BankListViewController.h; sourceTree = "<group>"; };
+		4EBD0A9C1EC565D2000C77B8 /* BankListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BankListViewController.m; sourceTree = "<group>"; };
+		4EC4FCCA1ECA9BBC00F3DA5E /* NIMMessageMaker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMMessageMaker.h; sourceTree = "<group>"; };
+		4EC4FCCB1ECA9BBC00F3DA5E /* NIMMessageMaker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMMessageMaker.m; sourceTree = "<group>"; };
+		4EC4FCCD1ECA9BDB00F3DA5E /* NSString+NIMKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+NIMKit.h"; sourceTree = "<group>"; };
+		4EC4FCCE1ECA9BDB00F3DA5E /* NSString+NIMKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+NIMKit.m"; sourceTree = "<group>"; };
+		4EC4FCD01ECA9C6C00F3DA5E /* NIMKitLocationPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMKitLocationPoint.h; sourceTree = "<group>"; };
+		4EC4FCD11ECA9C6C00F3DA5E /* NIMKitLocationPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMKitLocationPoint.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4E5B473E1EC1788F00D74E72 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		4E5B47381EC1788F00D74E72 = {
+			isa = PBXGroup;
+			children = (
+				4E5B47431EC1788F00D74E72 /* RNNeteaseIm */,
+				4E5B47421EC1788F00D74E72 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		4E5B47421EC1788F00D74E72 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4E5B47411EC1788F00D74E72 /* libRNNeteaseIm.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4E5B47431EC1788F00D74E72 /* RNNeteaseIm */ = {
+			isa = PBXGroup;
+			children = (
+				4E5B47761EC1793600D74E72 /* RNNeteaseIm.h */,
+				4E5B47771EC1793600D74E72 /* RNNeteaseIm.m */,
+				4E5B47A51EC17A0D00D74E72 /* ContactViewController.h */,
+				4E5B47A61EC17A0D00D74E72 /* ContactViewController.m */,
+				4E5B47A71EC17A0D00D74E72 /* ConversationViewController.h */,
+				4E5B47A81EC17A0D00D74E72 /* ConversationViewController.m */,
+				4E354E851ECBE72700CD6587 /* NIMObject.h */,
+				4E354E861ECBE72700CD6587 /* NIMObject.m */,
+				4E5B47A91EC17A0D00D74E72 /* NIMModel.h */,
+				4E5B47AA1EC17A0D00D74E72 /* NIMModel.m */,
+				4E5B47AB1EC17A0D00D74E72 /* NIMViewController.h */,
+				4E5B47AC1EC17A0D00D74E72 /* NIMViewController.m */,
+				4E5B47AD1EC17A0D00D74E72 /* NoticeViewController.h */,
+				4E5B47AE1EC17A0D00D74E72 /* NoticeViewController.m */,
+				4E5B47AF1EC17A0D00D74E72 /* NTESGlobalMacro.h */,
+				4E5B47B11EC17A0D00D74E72 /* TeamViewController.h */,
+				4E5B47B21EC17A0D00D74E72 /* TeamViewController.m */,
+				4EBD0A9B1EC565D2000C77B8 /* BankListViewController.h */,
+				4EBD0A9C1EC565D2000C77B8 /* BankListViewController.m */,
+				4E5B47D71EC1952A00D74E72 /* PrefixHeader.pch */,
+				4E5B47B31EC17A0D00D74E72 /* Util */,
+				4E27A5C91ED5417100543BFC /* RNNotificationCenter.h */,
+				4E27A5CA1ED5417100543BFC /* RNNotificationCenter.m */,
+			);
+			path = RNNeteaseIm;
+			sourceTree = "<group>";
+		};
+		4E5B47B31EC17A0D00D74E72 /* Util */ = {
+			isa = PBXGroup;
+			children = (
+				4E9C78B61ECE88ED00037A6C /* NTESSDKConfigDelegate.h */,
+				4E9C78B71ECE88ED00037A6C /* NTESSDKConfigDelegate.m */,
+				4EC4FCD01ECA9C6C00F3DA5E /* NIMKitLocationPoint.h */,
+				4EC4FCD11ECA9C6C00F3DA5E /* NIMKitLocationPoint.m */,
+				4EC4FCCD1ECA9BDB00F3DA5E /* NSString+NIMKit.h */,
+				4EC4FCCE1ECA9BDB00F3DA5E /* NSString+NIMKit.m */,
+				4EC4FCCA1ECA9BBC00F3DA5E /* NIMMessageMaker.h */,
+				4EC4FCCB1ECA9BBC00F3DA5E /* NIMMessageMaker.m */,
+				4E6BA8EA1EC2D23A00630D77 /* NIMKitTimerHolder.h */,
+				4E6BA8EB1EC2D23A00630D77 /* NIMKitTimerHolder.m */,
+				4E6BA8E71EC2D21500630D77 /* NIMKitNotificationFirer.h */,
+				4E6BA8E81EC2D21500630D77 /* NIMKitNotificationFirer.m */,
+				4E5B49D31EC1BA0900D74E72 /* NIMKitDataProviderImpl.h */,
+				4E5B49D41EC1BA0900D74E72 /* NIMKitDataProviderImpl.m */,
+				4E5B49D21EC1B42300D74E72 /* NIMKitDataProvider.h */,
+				4E5B49CF1EC1B34B00D74E72 /* NIMKit.h */,
+				4E5B49D01EC1B34B00D74E72 /* NIMKit.m */,
+				4E5B49CC1EC1B0A700D74E72 /* NIMKitInfoFetchOption.h */,
+				4E5B49CD1EC1B0A700D74E72 /* NIMKitInfoFetchOption.m */,
+				4E5B49B51EC1AE5600D74E72 /* NIMKitUtil.h */,
+				4E5B49B61EC1AE5600D74E72 /* NIMKitUtil.m */,
+				4E5B49B21EC1AE0600D74E72 /* NIMKitInfo.h */,
+				4E5B49B31EC1AE0600D74E72 /* NIMKitInfo.m */,
+				4E5B47B41EC17A0D00D74E72 /* Model */,
+				4E5B47BB1EC17A0D00D74E72 /* NTESBundleSetting.h */,
+				4E5B47BC1EC17A0D00D74E72 /* NTESBundleSetting.m */,
+				4E5B47BD1EC17A0D00D74E72 /* NTESClientUtil.h */,
+				4E5B47BE1EC17A0D00D74E72 /* NTESClientUtil.m */,
+				4E5B47BF1EC17A0D00D74E72 /* Spelling */,
+			);
+			path = Util;
+			sourceTree = "<group>";
+		};
+		4E5B47B41EC17A0D00D74E72 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				4E354EBE1ECC2E3400CD6587 /* NSDictionary+NTESJson.h */,
+				4E354EBF1ECC2E3400CD6587 /* NSDictionary+NTESJson.m */,
+				4E5B47B51EC17A0D00D74E72 /* NTESContactDataMember.h */,
+				4E5B47B61EC17A0D00D74E72 /* NTESContactDataMember.m */,
+				4E5B47B71EC17A0D00D74E72 /* NTESGroupedContacts.h */,
+				4E5B47B81EC17A0D00D74E72 /* NTESGroupedContacts.m */,
+				4E5B47B91EC17A0D00D74E72 /* NTESGroupedDataCollection.h */,
+				4E5B47BA1EC17A0D00D74E72 /* NTESGroupedDataCollection.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		4E5B47BF1EC17A0D00D74E72 /* Spelling */ = {
+			isa = PBXGroup;
+			children = (
+				4E5B47C01EC17A0D00D74E72 /* NTESPinyinConverter.h */,
+				4E5B47C11EC17A0D00D74E72 /* NTESPinyinConverter.m */,
+				4E5B47C21EC17A0D00D74E72 /* NTESSpellingCenter.h */,
+				4E5B47C31EC17A0D00D74E72 /* NTESSpellingCenter.m */,
+			);
+			path = Spelling;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		4E5B47401EC1788F00D74E72 /* RNNeteaseIm */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4E5B474A1EC1788F00D74E72 /* Build configuration list for PBXNativeTarget "RNNeteaseIm" */;
+			buildPhases = (
+				4E5B473D1EC1788F00D74E72 /* Sources */,
+				4E5B473E1EC1788F00D74E72 /* Frameworks */,
+				4E5B473F1EC1788F00D74E72 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = RNNeteaseIm;
+			productName = RNNeteaseIm;
+			productReference = 4E5B47411EC1788F00D74E72 /* libRNNeteaseIm.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		4E5B47391EC1788F00D74E72 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0830;
+				ORGANIZATIONNAME = Dowin;
+				TargetAttributes = {
+					4E5B47401EC1788F00D74E72 = {
+						CreatedOnToolsVersion = 8.3.2;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 4E5B473C1EC1788F00D74E72 /* Build configuration list for PBXProject "RNNeteaseIm" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 4E5B47381EC1788F00D74E72;
+			productRefGroup = 4E5B47421EC1788F00D74E72 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				4E5B47401EC1788F00D74E72 /* RNNeteaseIm */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4E5B473D1EC1788F00D74E72 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4E5B47D01EC17A0D00D74E72 /* NTESSpellingCenter.m in Sources */,
+				4E5B49B71EC1AE5600D74E72 /* NIMKitUtil.m in Sources */,
+				4E27A5CB1ED5417100543BFC /* RNNotificationCenter.m in Sources */,
+				4E5B47C91EC17A0D00D74E72 /* TeamViewController.m in Sources */,
+				4E5B49D11EC1B34B00D74E72 /* NIMKit.m in Sources */,
+				4E354EC01ECC2E3400CD6587 /* NSDictionary+NTESJson.m in Sources */,
+				4EBD0A9D1EC565D2000C77B8 /* BankListViewController.m in Sources */,
+				4E5B47C51EC17A0D00D74E72 /* ConversationViewController.m in Sources */,
+				4E5B47CE1EC17A0D00D74E72 /* NTESClientUtil.m in Sources */,
+				4E6BA8EC1EC2D23A00630D77 /* NIMKitTimerHolder.m in Sources */,
+				4E5B47CA1EC17A0D00D74E72 /* NTESContactDataMember.m in Sources */,
+				4E5B47781EC1793600D74E72 /* RNNeteaseIm.m in Sources */,
+				4E5B47C61EC17A0D00D74E72 /* NIMModel.m in Sources */,
+				4EC4FCCF1ECA9BDB00F3DA5E /* NSString+NIMKit.m in Sources */,
+				4E5B47CF1EC17A0D00D74E72 /* NTESPinyinConverter.m in Sources */,
+				4E354E871ECBE72700CD6587 /* NIMObject.m in Sources */,
+				4E9C78B91ECE88ED00037A6C /* NTESSDKConfigDelegate.m in Sources */,
+				4EC4FCD21ECA9C6C00F3DA5E /* NIMKitLocationPoint.m in Sources */,
+				4E5B49B41EC1AE0600D74E72 /* NIMKitInfo.m in Sources */,
+				4E5B49D51EC1BA0900D74E72 /* NIMKitDataProviderImpl.m in Sources */,
+				4E5B47CD1EC17A0D00D74E72 /* NTESBundleSetting.m in Sources */,
+				4EC4FCCC1ECA9BBC00F3DA5E /* NIMMessageMaker.m in Sources */,
+				4E5B47C41EC17A0D00D74E72 /* ContactViewController.m in Sources */,
+				4E5B49CE1EC1B0A700D74E72 /* NIMKitInfoFetchOption.m in Sources */,
+				4E5B47CC1EC17A0D00D74E72 /* NTESGroupedDataCollection.m in Sources */,
+				4E5B47C81EC17A0D00D74E72 /* NoticeViewController.m in Sources */,
+				4E5B47CB1EC17A0D00D74E72 /* NTESGroupedContacts.m in Sources */,
+				4E5B47C71EC17A0D00D74E72 /* NIMViewController.m in Sources */,
+				4E6BA8E91EC2D21500630D77 /* NIMKitNotificationFirer.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		4E5B47481EC1788F00D74E72 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		4E5B47491EC1788F00D74E72 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		4E5B474B1EC1788F00D74E72 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PREFIX_HEADER = RNNeteaseIm/PrefixHeader.pch;
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/../../../react-native/React/**",
+					"$(SRCROOT)/../../../../ios/Pods/**",
+				);
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		4E5B474C1EC1788F00D74E72 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PREFIX_HEADER = RNNeteaseIm/PrefixHeader.pch;
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/../../../react-native/React/**",
+					"$(SRCROOT)/../../../../ios/Pods/**",
+				);
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4E5B473C1EC1788F00D74E72 /* Build configuration list for PBXProject "RNNeteaseIm" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4E5B47481EC1788F00D74E72 /* Debug */,
+				4E5B47491EC1788F00D74E72 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4E5B474A1EC1788F00D74E72 /* Build configuration list for PBXNativeTarget "RNNeteaseIm" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4E5B474B1EC1788F00D74E72 /* Debug */,
+				4E5B474C1EC1788F00D74E72 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 4E5B47391EC1788F00D74E72 /* Project object */;
+}
