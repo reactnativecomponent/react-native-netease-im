@@ -43,6 +43,21 @@ dependencies {
 }
 ```
 
+`android/app/src/main/java/<你的包名>/MainActivity.java`
+
+```
+import com.netease.im.uikit.permission.MPermission;
+
+public class MainActivity extends ReactActivity {
+
+ ......
+
+ @Override
+ public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        MPermission.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
+ }
+ ```
+
 `android/app/src/main/java/<你的包名>/MainApplication.java`中添加如下两行：
 
 ```java
@@ -74,7 +89,7 @@ public class MainApplication extends Application implements ReactApplication {
    @Override
   public void onCreate() {
     //初始化方法appId以及appKey在小米开放平台获取，小米推送证书名称在网易云信后台设置
-    IMApplication.init(this, MainActivity.class,R.drawable.ic_stat_notify_msg,new    IMApplication.MiPushConfig("小米推送appId","小米推送的appKey","小米推送证书名称"));
+    IMApplication.init(this, MainActivity.class,R.drawable.ic_stat_notify_msg,new    IMApplication.MiPushConfig("小米推送证书名称","小米推送appId","小米推送的appKey"));
    ...
   }
 }
@@ -102,11 +117,34 @@ public class MainApplication extends Application implements ReactApplication {
 
 在`android/app/build.gradle`里，defaultConfig栏目下添加如下代码：
 
+
+在`AndroidManifest.xml`里，添加如下代码：
 ```
-manifestPlaceholders = [
-	// 如果有多项，每一项之间需要用逗号分隔
-    NIM_KEY: "网易云信APPID"		//在此修改网易云信APPID
-]
+< manifest
+
+    ......
+
+    <!-- SDK 权限申明, 第三方 APP 接入时，请将 com.im.demo 替换为自己的包名 -->
+    <!-- 和下面的 uses-permission 一起加入到你的 AndroidManifest 文件中。 -->
+    <permission
+        android:name="com.im.demo.permission.RECEIVE_MSG"
+        android:protectionLevel="signature"/>
+    <!-- 接收 SDK 消息广播权限， 第三方 APP 接入时，请将 com.netease.nim.demo 替换为自己的包名 -->
+    <uses-permission android:name="com.im.demo.permission.RECEIVE_MSG"/>
+    <!-- 小米推送 -->
+    <permission
+        android:name="com.im.demo.permission.MIPUSH_RECEIVE"
+        android:protectionLevel="signature"/>
+    <uses-permission android:name="com.im.demo.permission.MIPUSH_RECEIVE"/>
+
+    ......
+    < application
+            ......
+            <!-- 设置你的网易聊天App Key -->
+             <meta-data
+                        android:name="com.netease.nim.appKey"
+                        android:value="App Key" />
+
 ```
 
 ## 如何使用
