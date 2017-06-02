@@ -1,5 +1,5 @@
 
-React Native的网易云信插件, 包括登录、分享
+React Native的网易云信插件
 #### 注意: react-native版本需要0.40.0及以上
 
 ## 如何安装
@@ -123,7 +123,7 @@ import NIM from 'react-native-netease-im';
 // 登录参数 
 {
 	accid: "", //云信注册帐号
-  token:"" //登录的token
+    token:"" //登录的token
 }
 ```
 返回一个`Promise`对象
