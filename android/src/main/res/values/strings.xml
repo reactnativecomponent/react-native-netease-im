@@ -9,4 +9,7 @@
     <string name="over_team_member_capacity">邀请失败，成员人数上限为%1$d人</string>
     <string name="over_team_capacity">创建失败，创建群数量达到限制</string>
     <string name="revoke_failed">发送时间超过2分钟的消息，不能被撤回</string>
+    <string name="team_need_authentication">需要身份验证</string>
+    <string name="team_allow_anyone_join">允许任何人加入</string>
+    <string name="team_not_allow_anyone_join">不允许任何人申请加入</string>
 </resources>
