@@ -13,5 +13,4 @@
     <string name="team_allow_anyone_join">允许任何人加入</string>
     <string name="team_not_allow_anyone_join">不允许任何人申请加入</string>
     <string name="team_need_authentication">需要身份验证</string>
-    <string name="team_allow_anyone_join">允许任何人加入</string>
 </resources>
