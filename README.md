@@ -11,8 +11,6 @@ npm install react-native-netease-im --save
 ```
 
 ### 2.link
-#### 自动link方法~rnpm requires node version 4.1 or higher
-
 ```bash
 rnpm link react-native-netease-im
 ```
