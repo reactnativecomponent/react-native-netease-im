@@ -15,7 +15,7 @@ npm install react-native-netease-im --save
 
 ### 2.link
 ```bash
-rnpm link react-native-netease-im
+react-native link react-native-netease-im
 ```
 
 #### 手动link~（如果不能够自动link）
@@ -173,5 +173,5 @@ NativeAppEventEmitter.addListener("observeRecentContact",(data)=>{
   console.log(data); //返回内容android和ios有区别
 })；
 ```
-
+更多接口请参阅`index.js`,或者参考Demo
 
