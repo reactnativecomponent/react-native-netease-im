@@ -279,7 +279,6 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
                     }
                 });
         if (sysMessageObserver != null)
-            if (sysMessageObserver != null)
                 sysMessageObserver.deleteSystemMessageById(contactId);
     }
 

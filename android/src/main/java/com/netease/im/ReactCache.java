@@ -333,7 +333,7 @@ public class ReactCache {
             writableMap.putString("isMyFriend", boolean2String(FriendDataCache.getInstance().isMyFriend(userInfo.getAccount())));
             writableMap.putString("isMe", boolean2String(userInfo.getAccount() != null && userInfo.getAccount().equals(LoginService.getInstance().getAccount())));
             writableMap.putString("isInBlackList", boolean2String(NIMClient.getService(FriendService.class).isInBlackList(userInfo.getAccount())));
-            writableMap.putString("needNotify ", boolean2String(NIMClient.getService(FriendService.class).isNeedMessageNotify(userInfo.getAccount())));
+            writableMap.putString("mute", boolean2String(NIMClient.getService(FriendService.class).isNeedMessageNotify(userInfo.getAccount())));
 
             writableMap.putString("contactId", userInfo.getAccount());
             writableMap.putString("name", userInfo.getName());
@@ -510,7 +510,7 @@ public class ReactCache {
             writableMap.putString("introduce", team.getIntroduce());
             writableMap.putString("createTime", TimeUtil.getTimeShowString(team.getCreateTime(), true));
             writableMap.putString("creator", team.getCreator());
-            writableMap.putString("needNotify", boolean2String(team.mute()));
+            writableMap.putString("mute", boolean2String(team.mute()));
             writableMap.putString("memberCount", Integer.toString(team.getMemberCount()));
             writableMap.putString("memberLimit", Integer.toString(team.getMemberLimit()));
         }
