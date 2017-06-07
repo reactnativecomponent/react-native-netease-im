@@ -211,7 +211,7 @@ export default class NIM{
      * @param asc 查询结果的排序规则，如果为 true，结果按照时间升级排列，如果为 false，按照时间降序排列
      * @returns {*}  @see 回调返回最近所有消息记录
      */
-    static queryMessageListHistory(sessionId, sessionType, timeLong, direction, limit:Number, asc:Boolean){
+    static queryMessageListHistory(sessionId, sessionType, timeLong, direction, limit:Number, asc){
         return RNNeteaseIm.queryMessageListHistory(sessionId, sessionType, timeLong, direction, limit, asc);
     }
 
@@ -437,7 +437,7 @@ export default class NIM{
      * @param needNotify 开启/关闭消息提醒
      * @returns {*}
      */
-    static setTeamNotify(teamId,needNotify: Boolean){
+    static setTeamNotify(teamId,needNotify){
         return RNNeteaseIm.setTeamNotify(teamId,needNotify);
     }
 
@@ -447,7 +447,7 @@ export default class NIM{
      * @param needNotify 开启/关闭消息提醒
      * @returns {*}
      */
-    static setMessageNotify(contactId,needNotify: Boolean){
+    static setMessageNotify(contactId,needNotify){
         return RNNeteaseIm.setMessageNotify(contactId,needNotify);
     }
     /**
@@ -457,7 +457,7 @@ export default class NIM{
      * @param mute 开启/关闭禁言
      * @returns {*}
      */
-    static setTeamMemberMute(teamId, contactId, mute: Boolean){
+    static setTeamMemberMute(teamId, contactId, mute){
         return RNNeteaseIm.setTeamMemberMute(teamId, contactId, mute);
     }
     /**
@@ -548,7 +548,7 @@ export default class NIM{
     /**
      * 踢人出群
      * @param teamId
-     * @param account
+     * @param account['abc12']
      * @returns {*}
      */
     static removeMember(teamId, account){
@@ -571,7 +571,7 @@ export default class NIM{
      * @param quit
      * @returns {*}
      */
-    static transferTeam(teamId, account, quit: boolean){
+    static transferTeam(teamId, account, quit){
         return RNNeteaseIm.transferTeam(teamId, account, quit);
     }
 
@@ -635,13 +635,13 @@ export default class NIM{
      * @param timestamp
      * @returns {*}
      */
-    static onSystemNotificationDeal(type,messageId,targetId,contactId,pass: Boolean,timestamp){
+    static onSystemNotificationDeal(type,messageId,targetId,contactId,pass,timestamp){
         if(type==='0'){
             return RNNeteaseIm.passApply(messageId, targetId,fromAccount,pass,timestamp);
         }else if(type==='2'){
             return RNNeteaseIm.acceptInvite(messageId,targetId,fromAccount,pass,timestamp);
         }else if(type==='5'){
-            return RNNeteaseIm.addFriend(messageId,fromAccount,pass,timestamp);
+            return RNNeteaseIm.ackAddFriendRequest(messageId,fromAccount,pass,timestamp);
         }
     }
 
@@ -669,7 +669,7 @@ export default class NIM{
      * @param timestamp ios使用
      * @returns {*}
      */
-    static passApply(messageId, targetId,fromAccount,pass: Boolean,timestamp){
+    static passApply(messageId, targetId,fromAccount,pass,timestamp){
         return RNNeteaseIm.passApply(messageId, targetId,fromAccount,pass,timestamp);
     }
 
@@ -682,7 +682,7 @@ export default class NIM{
      * @param timestamp ios使用
      * @returns {*}
      */
-    static acceptInvite(messageId,targetId,fromAccount,pass: Boolean,timestamp){
+    static acceptInvite(messageId,targetId,fromAccount,pass,timestamp){
         return RNNeteaseIm.acceptInvite(messageId,targetId,fromAccount,pass,timestamp);
     }
     /**
@@ -717,7 +717,7 @@ export default class NIM{
      * @returns {*}
      */
     static downloadAttachment(messageId){
-        return RNNeteaseIm.downloadAttachment(messageId,false);
+        return RNNeteaseIm.downloadAttachment(messageId,'0');
     }
 
 }

@@ -11,6 +11,7 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.facebook.react.bridge.ActivityEventListener;
+import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -18,6 +19,8 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.ReadableType;
+import com.facebook.react.bridge.WritableMap;
 import com.netease.im.contact.BlackListObserver;
 import com.netease.im.contact.FriendListService;
 import com.netease.im.contact.FriendObserver;
@@ -276,8 +279,8 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
                     }
                 });
         if (sysMessageObserver != null)
-        if (sysMessageObserver != null)
-            sysMessageObserver.deleteSystemMessageById(contactId);
+            if (sysMessageObserver != null)
+                sysMessageObserver.deleteSystemMessageById(contactId);
     }
 
     /*************Black 黑名单***********/
@@ -423,8 +426,8 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
      * @param promise
      */
     @ReactMethod
-    public void setMessageNotify(String contactId, boolean mute, final Promise promise) {
-        NIMClient.getService(FriendService.class).setMessageNotify(contactId, mute)
+    public void setMessageNotify(String contactId, String mute, final Promise promise) {
+        NIMClient.getService(FriendService.class).setMessageNotify(contactId, string2Boolean(mute))
                 .setCallback(new RequestCallbackWrapper<Void>() {
                     @Override
                     public void onResult(int code, Void aVoid, Throwable throwable) {
@@ -445,8 +448,9 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
      * @param promise
      */
     @ReactMethod
-    public void setTeamNotify(String teamId, boolean mute, final Promise promise) {
-        NIMClient.getService(TeamService.class).muteTeam(teamId, mute)
+    public void setTeamNotify(String teamId, String mute, final Promise promise) {
+
+        NIMClient.getService(TeamService.class).muteTeam(teamId, string2Boolean(mute))
                 .setCallback(new RequestCallbackWrapper<Void>() {
                     @Override
                     public void onResult(int code, Void aVoid, Throwable throwable) {
@@ -468,17 +472,19 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
      * @param promise
      */
     @ReactMethod
-    public void setTeamMemberMute(String teamId, String contactId, boolean mute, final Promise promise) {
-        NIMClient.getService(TeamService.class).muteTeamMember(teamId, contactId, mute).setCallback(new RequestCallbackWrapper<Void>() {
-            @Override
-            public void onResult(int code, Void aVoid, Throwable throwable) {
-                if (code == ResponseCode.RES_SUCCESS) {
-                    promise.resolve("" + code);
-                } else {
-                    promise.reject("" + code, "");
-                }
-            }
-        });
+    public void setTeamMemberMute(String teamId, String contactId, String mute, final Promise promise) {
+
+        NIMClient.getService(TeamService.class).muteTeamMember(teamId, contactId, string2Boolean(mute))
+                .setCallback(new RequestCallbackWrapper<Void>() {
+                    @Override
+                    public void onResult(int code, Void aVoid, Throwable throwable) {
+                        if (code == ResponseCode.RES_SUCCESS) {
+                            promise.resolve("" + code);
+                        } else {
+                            promise.reject("" + code, "");
+                        }
+                    }
+                });
     }
 
     /**
@@ -661,26 +667,17 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
             }
         }
         fieldsMap.put(TeamFieldEnum.Name, teamName);
-        List<String> memberAccounts = new ArrayList<>();
-        int size = 0;
-        if (accounts != null && (size = accounts.size()) > 0) {
-            for (int i = 0; i < size; i++) {
-                String account = accounts.getString(i);
-                if (TextUtils.isEmpty(account)) {
-                    continue;
-                }
-                memberAccounts.add(account);
-            }
-        }
         final String finalTeamName = teamName;
-        NIMClient.getService(TeamService.class).createTeam(fieldsMap, teamTypeEnum, "", memberAccounts)
+        NIMClient.getService(TeamService.class).createTeam(fieldsMap, teamTypeEnum, "", array2ListString(accounts))
                 .setCallback(new RequestCallbackWrapper<Team>() {
                     @Override
                     public void onResult(int code, Team team, Throwable throwable) {
                         if (code == ResponseCode.RES_SUCCESS) {
 
                             MessageHelper.getInstance().onCreateTeamMessage(team);
-                            promise.resolve("" + code);
+                            WritableMap id = Arguments.createMap();
+                            id.putString("teamId",team.getId());
+                            promise.resolve(id);
                         } else if (code == 801) {
                             promise.reject("" + code, reactContext.getString(R.string.over_team_member_capacity, 200));
                         } else if (code == 806) {
@@ -855,6 +852,21 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
                 });
     }
 
+    List<String> array2ListString(ReadableArray accounts){
+        List<String> memberAccounts = new ArrayList<>();
+        if (accounts != null && accounts.size() > 0) {
+            for(int i=0;i<accounts.size();i++){
+                if(accounts.getType(i) == ReadableType.String) {
+                    String account = accounts.getString(i);
+                    if (TextUtils.isEmpty(account)) {
+                        continue;
+                    }
+                    memberAccounts.add(account);
+                }
+            }
+        }
+        return memberAccounts;
+    }
     /**
      * 拉人入群
      *
@@ -865,11 +877,8 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
     @ReactMethod
     public void addMembers(String teamId, ReadableArray accounts, final Promise promise) {
 
-        List<String> memberAccounts = new ArrayList<>();
-        if (accounts != null && accounts.size() > 0) {
 
-        }
-        NIMClient.getService(TeamService.class).addMembers(teamId, memberAccounts)
+        NIMClient.getService(TeamService.class).addMembers(teamId, array2ListString(accounts))
                 .setCallback(new RequestCallbackWrapper<Void>() {
                     @Override
                     public void onResult(int code, Void aVoid, Throwable throwable) {
@@ -888,12 +897,13 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
      * 踢人出群
      *
      * @param teamId
-     * @param contactId
+     * @param accounts
      * @param promise
      */
     @ReactMethod
-    public void removeMember(String teamId, String contactId, final Promise promise) {
-        NIMClient.getService(TeamService.class).removeMember(teamId, contactId)
+    public void removeMember(String teamId, ReadableArray accounts, final Promise promise) {
+
+        NIMClient.getService(TeamService.class).removeMembers(teamId, array2ListString(accounts))
                 .setCallback(new RequestCallbackWrapper<Void>() {
                     @Override
                     public void onResult(int code, Void aVoid, Throwable throwable) {
@@ -927,6 +937,10 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
                 });
     }
 
+    boolean string2Boolean(String bool) {
+        return TextUtils.isEmpty(bool) ? false : !bool.equals("0");
+    }
+
     /**
      * 转让群组
      *
@@ -939,9 +953,9 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
      * quit为true: 参数为空。
      */
     @ReactMethod
-    public void transferTeam(String teamId, String contactId, boolean quit, final Promise promise) {
+    public void transferTeam(String teamId, String contactId, String quit, final Promise promise) {
 
-        NIMClient.getService(TeamService.class).transferTeam(teamId, contactId, quit)
+        NIMClient.getService(TeamService.class).transferTeam(teamId, contactId, string2Boolean(quit))
                 .setCallback(new RequestCallbackWrapper<List<TeamMember>>() {
                     @Override
                     public void onResult(int code, List<TeamMember> teamMembers, Throwable throwable) {
@@ -1125,12 +1139,12 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
      * @param promise
      */
     @ReactMethod
-    public void downloadAttachment(String messageId, final boolean isThumb, final Promise promise) {
+    public void downloadAttachment(String messageId, final String isThumb, final Promise promise) {
         sessionService.queryMessage(messageId, new SessionService.OnMessageQueryListener() {
             @Override
             public int onResult(int code, IMMessage message) {
                 if (message != null) {
-                    sessionService.downloadAttachment(message, isThumb);
+                    sessionService.downloadAttachment(message, string2Boolean(isThumb));
                     promise.resolve("开始下载");
                 } else {
                     promise.resolve("开始下载");
@@ -1410,7 +1424,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
      */
     @ReactMethod
     public void queryMessageListHistory(String sessionId, String sessionType, String
-            timeLong, String direction, int limit, boolean asc, final Promise promise) {
+            timeLong, String direction, int limit, String asc, final Promise promise) {
         LogUtil.i(TAG, "queryMessageListHistory");
         long time = 0;
         try {
@@ -1421,7 +1435,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
         SessionTypeEnum sessionTypeEnum = SessionUtil.getSessionType(sessionType);
         QueryDirectionEnum directionEnum = getQueryDirection(direction);
         IMMessage message = MessageBuilder.createEmptyMessage(sessionId, sessionTypeEnum, time);
-        NIMClient.getService(MsgService.class).queryMessageListEx(message, directionEnum, limit, asc)
+        NIMClient.getService(MsgService.class).queryMessageListEx(message, directionEnum, limit, string2Boolean(asc))
                 .setCallback(new RequestCallbackWrapper<List<IMMessage>>() {
 
                     @Override
@@ -1582,7 +1596,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
      * *****************************systemMsg 系统通知******************************************
      **/
 
-    SysMessageObserver sysMessageObserver= new SysMessageObserver();
+    SysMessageObserver sysMessageObserver = new SysMessageObserver();
 
     /**
      * 进入系统通知消息
@@ -1680,7 +1694,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
      * @param promise
      */
     @ReactMethod
-    public void acceptInvite(String messageId, String targetId, String fromAccount, boolean pass, String timestamp, final Promise promise) {
+    public void acceptInvite(String messageId, String targetId, String fromAccount, String pass, String timestamp, final Promise promise) {
         long messageIdLong = 0L;
         try {
             messageIdLong = Long.parseLong(messageId);
@@ -1688,7 +1702,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
             e.printStackTrace();
         }
         if (sysMessageObserver != null)
-            sysMessageObserver.acceptInvite(messageIdLong, targetId, fromAccount, pass, timestamp, new RequestCallbackWrapper<Void>() {
+            sysMessageObserver.acceptInvite(messageIdLong, targetId, fromAccount, string2Boolean(pass), timestamp, new RequestCallbackWrapper<Void>() {
                 @Override
                 public void onResult(int code, Void aVoid, Throwable throwable) {
                     if (code == ResponseCode.RES_SUCCESS) {
@@ -1710,7 +1724,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
      * @param promise
      */
     @ReactMethod
-    public void passApply(String messageId, String targetId, String fromAccount, boolean pass, String timestamp, final Promise promise) {
+    public void passApply(String messageId, String targetId, String fromAccount, String pass, String timestamp, final Promise promise) {
         long messageIdLong = 0L;
         try {
             messageIdLong = Long.parseLong(messageId);
@@ -1718,7 +1732,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
             e.printStackTrace();
         }
         if (sysMessageObserver != null)
-            sysMessageObserver.passApply(messageIdLong, targetId, fromAccount, pass, timestamp, new RequestCallbackWrapper<Void>() {
+            sysMessageObserver.passApply(messageIdLong, targetId, fromAccount, string2Boolean(pass), timestamp, new RequestCallbackWrapper<Void>() {
                 @Override
                 public void onResult(int code, Void aVoid, Throwable throwable) {
                     if (code == ResponseCode.RES_SUCCESS) {
@@ -1739,7 +1753,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
      * @param promise
      */
     @ReactMethod
-    public void ackAddFriendRequest(String messageId, String contactId, boolean pass, String timestamp, final Promise promise) {
+    public void ackAddFriendRequest(String messageId, String contactId, String pass, String timestamp, final Promise promise) {
         LogUtil.i(TAG, "ackAddFriendRequest" + contactId);
         long messageIdLong = 0L;
         try {
@@ -1748,7 +1762,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
             e.printStackTrace();
         }
         if (sysMessageObserver != null)
-            sysMessageObserver.ackAddFriendRequest(messageIdLong, contactId, pass, timestamp, new RequestCallbackWrapper<Void>() {
+            sysMessageObserver.ackAddFriendRequest(messageIdLong, contactId, string2Boolean(pass), timestamp, new RequestCallbackWrapper<Void>() {
                 @Override
                 public void onResult(int code, Void aVoid, Throwable throwable) {
                     if (code == ResponseCode.RES_SUCCESS) {

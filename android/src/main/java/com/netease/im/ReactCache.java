@@ -106,14 +106,14 @@ public class ReactCache {
                 if (contact.getSessionType() == SessionTypeEnum.P2P) {
                     map.putString("teamType", "-1");
                     NimUserInfoCache nimUserInfoCache = NimUserInfoCache.getInstance();
-                    map.putString("avatar", nimUserInfoCache.getAvatar(contactId));
+                    map.putString("imagePath", nimUserInfoCache.getAvatar(contactId));
                     name = nimUserInfoCache.getUserDisplayName(contactId);
                 } else if (contact.getSessionType() == SessionTypeEnum.Team) {
                     Team team = TeamDataCache.getInstance().getTeamById(contactId);
                     if (team != null) {
                         name = team.getName();
                         map.putString("teamType", Integer.toString(team.getType().getValue()));
-                        map.putString("avatar", team.getIcon());
+                        map.putString("imagePath", team.getIcon());
                     }
                 }
                 map.putString("name", name);
@@ -127,7 +127,14 @@ public class ReactCache {
                 String content = contact.getContent();
                 map.putString("time", TimeUtil.getTimeShowString(contact.getTime(), true));
 
-                String fromNick = TextUtils.isEmpty(contact.getFromNick()) ? NimUserInfoCache.getInstance().getUserDisplayName(contact.getFromAccount()) : contact.getFromNick();
+                String fromNick = "";
+                try {
+                    fromNick = contact.getFromNick();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                fromNick =  TextUtils.isEmpty(fromNick) ? NimUserInfoCache.getInstance().getUserDisplayName(contact.getFromAccount()) : fromNick;
                 map.putString("nick", fromNick);
                 String nickName = "";
                 if (contact.getSessionType() == SessionTypeEnum.Team) {
