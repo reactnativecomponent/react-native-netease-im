@@ -62,7 +62,7 @@ public class RecentContactObserver {
         boolean result = false;
         for(RecentContact recent:items) {
             if(recentContactId.equals(recent.getRecentMessageId())) {
-                NIMClient.getService(MsgService.class).deleteRecentContact(recent);
+                NIMClient.getService(MsgService.class).deleteRecentContact2(recent.getContactId(), recent.getSessionType());
                 NIMClient.getService(MsgService.class).clearChattingHistory(recent.getContactId(), recent.getSessionType());
                 result = true;
                 break;

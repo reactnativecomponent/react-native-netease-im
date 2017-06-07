@@ -279,7 +279,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
                     }
                 });
         if (sysMessageObserver != null)
-                sysMessageObserver.deleteSystemMessageById(contactId);
+            sysMessageObserver.deleteSystemMessageById(contactId);
     }
 
     /*************Black 黑名单***********/
@@ -675,7 +675,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
 
                             MessageHelper.getInstance().onCreateTeamMessage(team);
                             WritableMap id = Arguments.createMap();
-                            id.putString("teamId",team.getId());
+                            id.putString("teamId", team.getId());
                             promise.resolve(id);
                         } else if (code == 801) {
                             promise.reject("" + code, reactContext.getString(R.string.over_team_member_capacity, 200));
@@ -851,11 +851,11 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
                 });
     }
 
-    List<String> array2ListString(ReadableArray accounts){
+    List<String> array2ListString(ReadableArray accounts) {
         List<String> memberAccounts = new ArrayList<>();
         if (accounts != null && accounts.size() > 0) {
-            for(int i=0;i<accounts.size();i++){
-                if(accounts.getType(i) == ReadableType.String) {
+            for (int i = 0; i < accounts.size(); i++) {
+                if (accounts.getType(i) == ReadableType.String) {
                     String account = accounts.getString(i);
                     if (TextUtils.isEmpty(account)) {
                         continue;
@@ -866,6 +866,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
         }
         return memberAccounts;
     }
+
     /**
      * 拉人入群
      *
@@ -1332,7 +1333,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
         LogUtil.i(TAG, "deleteRecentContact" + recentContactId);
         boolean result = LoginService.getInstance().deleteRecentContact(recentContactId);
         if (result) {
-            promise.resolve(ResponseCode.RES_SUCCESS);
+            promise.resolve("" + ResponseCode.RES_SUCCESS);
         } else {
             promise.reject("-1", "");
         }
