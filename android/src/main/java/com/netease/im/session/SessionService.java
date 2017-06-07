@@ -523,15 +523,8 @@ public class SessionService {
      */
     public void sendTextMessage(String content, OnSendMessageListener onSendMessageListener) {
 
-        if (sessionTypeEnum == SessionTypeEnum.P2P && content.indexOf("[]") == 0) {
-            for (int i = 0; i < 99; i++) {
-                IMMessage message = MessageBuilder.createTextMessage("abc" + i, sessionTypeEnum, content.substring(2));
-                sendMessage(message, onSendMessageListener);
-            }
-        } else {
-            IMMessage message = MessageBuilder.createTextMessage(sessionId, sessionTypeEnum, content);
-            sendMessage(message, onSendMessageListener);
-        }
+        IMMessage message = MessageBuilder.createTextMessage(sessionId, sessionTypeEnum, content);
+        sendMessage(message, onSendMessageListener);
     }
 
     /**
