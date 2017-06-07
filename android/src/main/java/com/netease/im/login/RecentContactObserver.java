@@ -55,15 +55,16 @@ public class RecentContactObserver {
 
     }
 
-    public boolean deleteRecentContact(String recentContactId) {
-        if(TextUtils.isEmpty(recentContactId)){
+    public boolean deleteRecentContact(String rContactId) {
+        if(TextUtils.isEmpty(rContactId)){
             return false;
         }
         boolean result = false;
         for(RecentContact recent:items) {
-            if(recentContactId.equals(recent.getRecentMessageId())) {
-                NIMClient.getService(MsgService.class).deleteRecentContact2(recent.getContactId(), recent.getSessionType());
-                NIMClient.getService(MsgService.class).clearChattingHistory(recent.getContactId(), recent.getSessionType());
+            String contactId = recent.getContactId();
+            if(rContactId.equals(contactId)) {
+                NIMClient.getService(MsgService.class).deleteRecentContact2(contactId, recent.getSessionType());
+                NIMClient.getService(MsgService.class).clearChattingHistory(contactId, recent.getSessionType());
                 result = true;
                 break;
             }

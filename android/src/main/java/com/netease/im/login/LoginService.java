@@ -109,8 +109,8 @@ public class LoginService {
 //        sysMessageObserver.registerSystemObserver(register);
     }
 
-    public boolean deleteRecentContact(String recentContactId) {
-       return recentContactObserver.deleteRecentContact(recentContactId);
+    public boolean deleteRecentContact(String rContactId) {
+       return recentContactObserver.deleteRecentContact(rContactId);
     }
 
     public void logout() {

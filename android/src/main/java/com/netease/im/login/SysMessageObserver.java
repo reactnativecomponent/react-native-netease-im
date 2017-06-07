@@ -48,7 +48,7 @@ public class SysMessageObserver {
     /**
      * 加载历史消息
      */
-    public void loadMessages() {
+    public void loadMessages(boolean refresh) {
         boolean loadCompleted; // 是否已经加载完成，后续没有数据了or已经满足本次请求数量
         int validMessageCount = 0; // 实际加载的数量（排除被过滤被合并的条目）
         List<String> messageFromAccounts = new ArrayList<>(LOAD_MESSAGE_COUNT);
@@ -97,7 +97,8 @@ public class SysMessageObserver {
         }
         firstLoad = false;
         // 更新数据源，刷新界面
-        refresh();
+        if (refresh)
+            refresh();
 
         // 收集未知用户资料的账号集合并从远程获取
         collectAndRequestUnknownUserInfo(messageFromAccounts);
@@ -221,7 +222,7 @@ public class SysMessageObserver {
     }
 
     public void startSystemMsg() {
-        loadMessages();
+        loadMessages(true);
         registerSystemObserver(true);
     }
 
@@ -238,12 +239,11 @@ public class SysMessageObserver {
                 sysItems.remove(i);
             }
         }
-        refresh();
     }
 
     public void deleteSystemMessage(long messageId) {
-        if(firstLoad){
-            loadMessages();
+        if (firstLoad) {
+            loadMessages(true);
         }
         NIMClient.getService(SystemMessageService.class).deleteSystemMessage(messageId);
         for (int i = sysItems.size() - 1; i >= 0; i--) {

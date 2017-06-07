@@ -278,8 +278,9 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
                         }
                     }
                 });
-        if (sysMessageObserver != null)
-            sysMessageObserver.deleteSystemMessageById(contactId);
+        SysMessageObserver sysMessageObserver = new SysMessageObserver();
+        sysMessageObserver.loadMessages(false);
+        sysMessageObserver.deleteSystemMessageById(contactId);
     }
 
     /*************Black 黑名单***********/
@@ -1325,13 +1326,13 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
     /**
      * 删除最近会话
      *
-     * @param recentContactId
+     * @param rContactId
      * @param promise
      */
     @ReactMethod
-    public void deleteRecentContact(String recentContactId, Promise promise) {
-        LogUtil.i(TAG, "deleteRecentContact" + recentContactId);
-        boolean result = LoginService.getInstance().deleteRecentContact(recentContactId);
+    public void deleteRecentContact(String rContactId, Promise promise) {
+        LogUtil.i(TAG, "deleteRecentContact" + rContactId);
+        boolean result = LoginService.getInstance().deleteRecentContact(rContactId);
         if (result) {
             promise.resolve("" + ResponseCode.RES_SUCCESS);
         } else {
