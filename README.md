@@ -1,5 +1,8 @@
 
 React Native的网易云信插件
+## Demo
+[react-native-chat-demo](https://github.com/reactnativecomponent/react-native-chat-demo)
+
 #### 注意: react-native版本需要0.40.0及以上
 
 ## 如何安装
@@ -11,10 +14,8 @@ npm install react-native-netease-im --save
 ```
 
 ### 2.link
-#### 自动link方法~rnpm requires node version 4.1 or higher
-
 ```bash
-rnpm link react-native-netease-im
+react-native link react-native-netease-im
 ```
 
 #### 手动link~（如果不能够自动link）
@@ -172,5 +173,5 @@ NativeAppEventEmitter.addListener("observeRecentContact",(data)=>{
   console.log(data); //返回内容android和ios有区别
 })；
 ```
-
+更多接口请参阅`index.js`,或者参考Demo
 
