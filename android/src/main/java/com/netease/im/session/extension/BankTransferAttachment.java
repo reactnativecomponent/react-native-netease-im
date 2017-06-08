@@ -32,7 +32,12 @@ public class BankTransferAttachment extends CustomAttachment {
 
     @Override
     protected JSONObject packData() {
-        return null;
+        JSONObject object = new JSONObject();
+        object.put(KEY_VALUE, value);
+        object.put(KEY_EXPLAIN, explain);
+        object.put(KEY_TYPE_TEXT, typeText);
+        object.put(KEY_ID, bankTransferId);
+        return object;
     }
 
     public void setParams(String typeText, String value, String explain, String bankTransferId) {
