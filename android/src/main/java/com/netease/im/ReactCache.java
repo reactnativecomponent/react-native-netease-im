@@ -510,7 +510,7 @@ public class ReactCache {
             writableMap.putString("introduce", team.getIntroduce());
             writableMap.putString("createTime", TimeUtil.getTimeShowString(team.getCreateTime(), true));
             writableMap.putString("creator", team.getCreator());
-            writableMap.putString("mute", boolean2String(team.mute()));
+            writableMap.putString("mute", boolean2String(!team.mute()));
             writableMap.putString("memberCount", Integer.toString(team.getMemberCount()));
             writableMap.putString("memberLimit", Integer.toString(team.getMemberLimit()));
         }

@@ -331,8 +331,8 @@ export default class NIM{
      * min 红包最小金额
      * max 红包最大金额
      * @param type 红包类型 0
-     *          0   随机     总人数  总金额
-     *          1   平均分   总人数  总金额  每个人金额
+     *          0   手气红包    总人数  总金额
+     *          1   普通红包   总人数  总金额  每个人金额
      * @param typeText 红包描述文字 "[红 包]"
      * @param wishText 红包描祝福语 "[恭喜发财，大吉大利]"
      * @param id 红包ID

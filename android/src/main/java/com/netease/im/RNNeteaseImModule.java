@@ -450,7 +450,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
     @ReactMethod
     public void setTeamNotify(String teamId, String mute, final Promise promise) {
 
-        NIMClient.getService(TeamService.class).muteTeam(teamId, string2Boolean(mute))
+        NIMClient.getService(TeamService.class).muteTeam(teamId, !string2Boolean(mute))
                 .setCallback(new RequestCallbackWrapper<Void>() {
                     @Override
                     public void onResult(int code, Void aVoid, Throwable throwable) {
@@ -1064,7 +1064,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
     //5.发送自定义消息
 //    attachment, // 自定义消息附件
 //    config // 自定义消息的参数配置选项
-    @ReactMethod
+//    @ReactMethod
     public void sendExtendsionMessage(String type, String recentValue, ReadableMap extendsion, final Promise promise) {
         int typeInt = 10;
         try {
