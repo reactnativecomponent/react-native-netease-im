@@ -676,7 +676,7 @@ public class ReactCache {
                 WritableMap notiObj = Arguments.createMap();
                 notiObj.putString("tipMsg", text);
                 itemMap.putMap("notiObj", notiObj);
-            } else if (item.getMsgType() == MsgTypeEnum.custom) {
+            } else if (item.getMsgType() == MsgTypeEnum.custom) {//自定义消息
                 try {
                     CustomAttachment customAttachment = (CustomAttachment) attachment;
                     itemMap.putString("custType", Integer.toString(customAttachment.getType()));
@@ -684,13 +684,16 @@ public class ReactCache {
                     if (attachment instanceof RedPackageAttachement) {
                         RedPackageAttachement redPackageAttachement = (RedPackageAttachement) attachment;
                         itemMap.putMap("attachment", ReactExtendsion.createRedPackage(redPackageAttachement));
+
                     } else if (attachment instanceof BankTransferAttachment) {
                         BankTransferAttachment bankTransferAttachment = (BankTransferAttachment) attachment;
                         itemMap.putMap("attachment", ReactExtendsion.createBankTransfer(bankTransferAttachment));
-                    } else if (attachment instanceof ExtendsionAttachment) {
-                        ExtendsionAttachment extendsionAttachment = (ExtendsionAttachment) attachment;
-                        itemMap.putMap("attachment", ReactExtendsion.makeHashMap2WritableMap(extendsionAttachment.getExtendsion()));
                     }
+
+//                    else if (attachment instanceof ExtendsionAttachment) {
+//                        ExtendsionAttachment extendsionAttachment = (ExtendsionAttachment) attachment;
+//                        itemMap.putMap("attachment", ReactExtendsion.makeHashMap2WritableMap(extendsionAttachment.getExtendsion()));
+//                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

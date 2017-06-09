@@ -3,6 +3,8 @@ package com.netease.im.login;
 import android.text.TextUtils;
 
 import com.netease.im.ReactCache;
+import com.netease.im.uikit.cache.SimpleCallback;
+import com.netease.im.uikit.cache.TeamDataCache;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.RequestCallbackWrapper;
@@ -11,8 +13,11 @@ import com.netease.nimlib.sdk.auth.AuthServiceObserver;
 import com.netease.nimlib.sdk.auth.constant.LoginSyncStatus;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
+import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.msg.model.RecentContact;
+import com.netease.nimlib.sdk.team.TeamService;
+import com.netease.nimlib.sdk.team.model.Team;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -55,16 +60,20 @@ public class RecentContactObserver {
 
     }
 
+    private void deleteRecentContact(String contactId, SessionTypeEnum sessionTypeEnum) {
+        NIMClient.getService(MsgService.class).deleteRecentContact2(contactId, sessionTypeEnum);
+        NIMClient.getService(MsgService.class).clearChattingHistory(contactId, sessionTypeEnum);
+    }
+
     public boolean deleteRecentContact(String rContactId) {
-        if(TextUtils.isEmpty(rContactId)){
+        if (TextUtils.isEmpty(rContactId)) {
             return false;
         }
         boolean result = false;
-        for(RecentContact recent:items) {
+        for (RecentContact recent : items) {
             String contactId = recent.getContactId();
-            if(rContactId.equals(contactId)) {
-                NIMClient.getService(MsgService.class).deleteRecentContact2(contactId, recent.getSessionType());
-                NIMClient.getService(MsgService.class).clearChattingHistory(contactId, recent.getSessionType());
+            if (rContactId.equals(contactId)) {
+                deleteRecentContact(contactId, recent.getSessionType());
                 result = true;
                 break;
             }
@@ -88,12 +97,46 @@ public class RecentContactObserver {
                 items.remove(index);
             }
 
-            items.add(r);
+            doAddDeleteQuitTeamMessage(r, true);
+
         }
 
         refreshMessages(true);
     }
+
+    void doAddDeleteQuitTeamMessage(final RecentContact r, boolean isDelete) {
+        if (isDelete && r.getSessionType() == SessionTypeEnum.Team) {
+            final String contactId = r.getContactId();
+            final Team t = NIMClient.getService(TeamService.class).queryTeamBlock(contactId);
+            if (t != null) {
+                TeamDataCache.getInstance().addOrUpdateTeam(t);
+                if (t.isMyTeam()) {
+                    items.add(r);
+                } else {
+                    deleteRecentContact(contactId, r.getSessionType());
+                }
+            } else {
+                TeamDataCache.getInstance().fetchTeamById(contactId, new SimpleCallback<Team>() {
+                    @Override
+                    public void onResult(boolean success, Team result) {
+                        if (success && result != null) {
+                            if (!result.isMyTeam()) {
+                                items.remove(r);
+                                deleteRecentContact(contactId, SessionTypeEnum.Team);
+                                refreshMessages(true);
+                            }
+                        }
+                    }
+                });
+                items.add(r);
+            }
+        } else {
+            items.add(r);
+        }
+    }
+
     int unreadNum = 0;
+
     private void refreshMessages(boolean unreadChanged) {
         sortRecentContacts(items);
 
@@ -152,7 +195,7 @@ public class RecentContactObserver {
     Observer<List<RecentContact>> messageObserver = new Observer<List<RecentContact>>() {
 
         @Override
-        public void onEvent(List<RecentContact> recentContacts) {
+        public void onEvent(List<RecentContact> recentContacts) {//TODO
             onRecentContactChanged(recentContacts);
         }
     };
@@ -187,7 +230,7 @@ public class RecentContactObserver {
 
         @Override
         public void onEvent(LoginSyncStatus loginSyncStatus) {
-            if(loginSyncStatus==LoginSyncStatus.SYNC_COMPLETED) {
+            if (loginSyncStatus == LoginSyncStatus.SYNC_COMPLETED) {
                 refreshMessages(true);
             }
             ReactCache.emit(ReactCache.observeOnlineStatus, Integer.toString(StatusCode.values().length + loginSyncStatus.ordinal()));
