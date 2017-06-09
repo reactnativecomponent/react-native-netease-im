@@ -657,7 +657,7 @@ export default class NIM{
         if(Platform.OS === 'ios'){
             return RNNeteaseIm.ackAddFriendRequest(contactId,pass,timestamp);
         }
-        return RNNeteaseIm.ackAddFriendRequest(messageId,contactId,(pass === "1"?true:false),timestamp);
+        return RNNeteaseIm.ackAddFriendRequest(messageId,contactId,pass,timestamp);
     }
 
     /**
