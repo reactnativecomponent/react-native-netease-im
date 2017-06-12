@@ -63,11 +63,11 @@ RCT_EXPORT_METHOD(getRecentContactList:(RCTPromiseResolveBlock)resolve
   }];
     
 }
-//清空聊天记录
-RCT_EXPORT_METHOD(clearMessage:(nonnull  NSString *)sessionId type:(nonnull  NSString *)type){
-    [[ConversationViewController initWithConversationViewController] clearMsg:sessionId type:type];
-    
-}
+////清空聊天记录
+//RCT_EXPORT_METHOD(clearMessage:(nonnull  NSString *)sessionId type:(nonnull  NSString *)type){
+//    [[ConversationViewController initWithConversationViewController] clearMsg:sessionId type:type];
+//    
+//}
 //获取本地用户资料
 RCT_EXPORT_METHOD(getUserInfo:(nonnull NSString * )contactId  resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject){
@@ -337,8 +337,8 @@ RCT_EXPORT_METHOD(deleteMessage:(nonnull NSString *)messageId){
     [[ConversationViewController initWithConversationViewController]delete:messageId];
 }
 //清空聊天记录
-RCT_EXPORT_METHOD(clearMessage){
-    
+RCT_EXPORT_METHOD(clearMessage:(nonnull  NSString *)sessionId sessionId:(nonnull  NSString *)type){
+    [[ConversationViewController initWithConversationViewController] clearMsg:sessionId type:type];
 }
 //发送文字消息
 RCT_EXPORT_METHOD(sendTextMessage:(nonnull  NSString *)content){
