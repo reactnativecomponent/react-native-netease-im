@@ -83,6 +83,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static android.R.id.message;
 import static com.netease.im.common.ResourceUtil.getString;
 
 public class RNNeteaseImModule extends ReactContextBaseJavaModule implements LifecycleEventListener, ActivityEventListener {
@@ -1074,6 +1075,26 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
         }
         Map extendsionMap = ReactExtendsion.makeReadableMap2HashMap(extendsion, 1, 2);
         sessionService.sendExtendsionMessage(typeInt, recentValue, extendsionMap, new SessionService.OnSendMessageListener() {
+            @Override
+            public int onResult(int code, IMMessage message) {
+                return 0;
+            }
+        });
+    }
+
+    @ReactMethod
+    public void sendDefaultMessage(String type, String typeText, String content, final Promise promise) {
+        sessionService.sendDefaultMessage(type, typeText, content, new SessionService.OnSendMessageListener() {
+            @Override
+            public int onResult(int code, IMMessage message) {
+                return 0;
+            }
+        });
+    }
+
+    @ReactMethod
+    public void sendRedPackageOpenMessage(String sendId, final Promise promise) {
+        sessionService.sendRedPackageOpenMessage(sendId, LoginService.getInstance().getAccount(), new SessionService.OnSendMessageListener() {
             @Override
             public int onResult(int code, IMMessage message) {
                 return 0;

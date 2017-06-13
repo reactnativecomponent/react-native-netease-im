@@ -147,7 +147,7 @@ public class IMApplication {
         options.userInfoProvider = new DefalutUserInfoProvider(context);
 
         // 定制通知栏提醒文案（可选，如果不定制将采用SDK默认文案）
-//        options.messageNotifierCustomization = messageNotifierCustomization;
+        options.messageNotifierCustomization = messageNotifierCustomization;
 
         // 在线多端同步未读数
         options.sessionReadAck = true;

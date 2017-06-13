@@ -7,8 +7,10 @@ import android.text.TextUtils;
 import com.netease.im.ReactCache;
 import com.netease.im.login.LoginService;
 import com.netease.im.session.extension.BankTransferAttachment;
+import com.netease.im.session.extension.DefaultCustomAttachment;
 import com.netease.im.session.extension.ExtendsionAttachment;
 import com.netease.im.session.extension.RedPackageAttachement;
+import com.netease.im.session.extension.RedPackageOpenAttachement;
 import com.netease.im.uikit.common.util.log.LogUtil;
 import com.netease.im.uikit.common.util.string.MD5;
 import com.netease.im.uikit.session.helper.MessageHelper;
@@ -609,6 +611,28 @@ public class SessionService {
         attachment.setRecentValue(recentValue);
         attachment.setExtendsion(extendsion);
         IMMessage message = MessageBuilder.createCustomMessage(sessionId, sessionTypeEnum, recentValue, attachment, config);
+        sendMessage(message, onSendMessageListener);
+    }
+
+    public void sendDefaultMessage(String type, String typeText, String content, OnSendMessageListener onSendMessageListener) {
+        CustomMessageConfig config = new CustomMessageConfig();
+        int typeInt = 0;
+        try {
+            typeInt = Integer.parseInt(type);
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+        DefaultCustomAttachment attachment = new DefaultCustomAttachment(typeInt);
+        attachment.setContent(content);
+        IMMessage message = MessageBuilder.createCustomMessage(sessionId, sessionTypeEnum, typeText, attachment, config);
+        sendMessage(message, onSendMessageListener);
+    }
+
+    public void sendRedPackageOpenMessage(String sendId, String openId, OnSendMessageListener onSendMessageListener) {
+        CustomMessageConfig config = new CustomMessageConfig();
+        RedPackageOpenAttachement attachment = new RedPackageOpenAttachement();
+        attachment.setParams(sendId, openId);
+        IMMessage message = MessageBuilder.createCustomMessage(sessionId, sessionTypeEnum, sendId + ";" + openId, attachment, config);
         sendMessage(message, onSendMessageListener);
     }
 

@@ -9,8 +9,10 @@ public class DefaultCustomAttachment extends CustomAttachment {
 
     private String content;
 
-    public DefaultCustomAttachment() {
-        super(0);
+    private String recentValue;
+
+    public DefaultCustomAttachment(int type) {
+        super(type);
     }
 
     @Override
@@ -27,6 +29,18 @@ public class DefaultCustomAttachment extends CustomAttachment {
 
         }
         return data;
+    }
+
+    public void setRecentValue(String recentValue) {
+        this.recentValue = recentValue;
+    }
+
+    public String getRecentValue() {
+        return recentValue;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public String getContent() {

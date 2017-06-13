@@ -21,28 +21,20 @@ public class CustomAttachParser implements MsgAttachmentParser {
             int type = object.getInteger(KEY_TYPE);
             JSONObject data = object.getJSONObject(KEY_DATA);
             switch (type) {
-                case CustomAttachmentType.Default:
-                    attachment = new DefaultCustomAttachment();
-                    break;
-                case CustomAttachmentType.Guess:
-//                    attachment = new GuessAttachment();
-                    break;
-                case CustomAttachmentType.SnapChat:
-//                    return new SnapChatAttachment(data);
-                case CustomAttachmentType.Sticker:
-//                    attachment = new StickerAttachment();
-                    break;
-                case CustomAttachmentType.RTS:
-//                    attachment = new RTSAttachment();
-                    break;
                 case CustomAttachmentType.RedPackage:
                     attachment = new RedPackageAttachement();
                     break;
                 case CustomAttachmentType.BankTransfer:
                     attachment = new BankTransferAttachment();
                     break;
+                case CustomAttachmentType.BankTransferSystem:
+                    attachment = new BankTransferSystemAttachment();
+                    break;
+                case CustomAttachmentType.RedPackageOpen:
+                    attachment = new RedPackageOpenAttachement();
+                    break;
                 default:
-                    attachment = new ExtendsionAttachment(type);
+                    attachment = new DefaultCustomAttachment(type);
                     break;
             }
 
