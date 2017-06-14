@@ -1,6 +1,8 @@
 package com.netease.im.session.extension;
 
 import com.alibaba.fastjson.JSONObject;
+import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.WritableMap;
 
 /**
  * Created by zhoujianghua on 2015/4/10.
@@ -9,9 +11,7 @@ public class DefaultCustomAttachment extends CustomAttachment {
 
     private String content;
 
-    private String recentValue;
-
-    public DefaultCustomAttachment(int type) {
+    public DefaultCustomAttachment(String type) {
         super(type);
     }
 
@@ -31,19 +31,14 @@ public class DefaultCustomAttachment extends CustomAttachment {
         return data;
     }
 
-    public void setRecentValue(String recentValue) {
-        this.recentValue = recentValue;
-    }
-
-    public String getRecentValue() {
-        return recentValue;
-    }
-
     public void setContent(String content) {
         this.content = content;
     }
 
-    public String getContent() {
-        return content;
+    @Override
+    public WritableMap toReactNative(){
+        WritableMap writableMap = Arguments.createMap();
+        writableMap.putString("content",content);
+        return writableMap;
     }
 }

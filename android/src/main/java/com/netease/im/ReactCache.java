@@ -13,7 +13,7 @@ import com.netease.im.session.extension.BankTransferSystemAttachment;
 import com.netease.im.session.extension.CustomAttachment;
 import com.netease.im.session.extension.CustomAttachmentType;
 import com.netease.im.session.extension.DefaultCustomAttachment;
-import com.netease.im.session.extension.RedPackageAttachement;
+import com.netease.im.session.extension.RedPacketAttachement;
 import com.netease.im.session.extension.RedPackageOpenAttachement;
 import com.netease.im.uikit.cache.FriendDataCache;
 import com.netease.im.uikit.cache.NimUserInfoCache;
@@ -145,21 +145,21 @@ public class ReactCache {
                 MsgAttachment attachment = contact.getAttachment();
                 if (attachment != null) {
                     CustomAttachment customAttachment = (CustomAttachment) attachment;
-                    map.putString("custType", Integer.toString(customAttachment.getType()));
+                    map.putString("custType", customAttachment.getType());
                     switch (customAttachment.getType()) {
-                        case CustomAttachmentType.RedPackage:
-                            if (attachment instanceof RedPackageAttachement) {
-                                content = ((RedPackageAttachement) attachment).getTypeText();
+                        case CustomAttachmentType.RedPacket:
+                            if (attachment instanceof RedPacketAttachement) {
+                                content = "[红包]";
                             }
                             break;
                         case CustomAttachmentType.BankTransfer:
                             if (attachment instanceof BankTransferAttachment) {
-                                content = ((BankTransferAttachment) attachment).getTypeText();
+                                content = "[转账]";
                             }
                             break;
                         case CustomAttachmentType.BankTransferSystem:
                             if (attachment instanceof BankTransferSystemAttachment) {
-                                content = ((BankTransferSystemAttachment) attachment).getTypeText();
+                                content = "[转账凭证]";
                             }
                             break;
                         case CustomAttachmentType.RedPackageOpen:
@@ -169,7 +169,7 @@ public class ReactCache {
                             break;
                         default:
                             if (attachment instanceof DefaultCustomAttachment) {
-//                                content = "[自定义消息]";
+                                content = "[自定义消息]";
                             }
                             break;
                     }
@@ -704,55 +704,38 @@ public class ReactCache {
             } else if (item.getMsgType() == MsgTypeEnum.custom) {//自定义消息
                 try {
                     CustomAttachment customAttachment = (CustomAttachment) attachment;
-                    itemMap.putString("custType", Integer.toString(customAttachment.getType()));
+                    itemMap.putString("custType", customAttachment.getType());
 
                     switch (customAttachment.getType()) {
-                        case CustomAttachmentType.RedPackage:
-                            if (attachment instanceof RedPackageAttachement) {
-                                RedPackageAttachement redPackageAttachement = (RedPackageAttachement) attachment;
-                                itemMap.putMap("redPackageObj", ReactExtendsion.createRedPackage(redPackageAttachement));
+                        case CustomAttachmentType.RedPacket:
+                            if (attachment instanceof RedPacketAttachement) {
+                                RedPacketAttachement redPackageAttachement = (RedPacketAttachement) attachment;
+                                itemMap.putMap("redPacketObj", redPackageAttachement.toReactNative());
                             }
                             break;
 
                         case CustomAttachmentType.BankTransfer:
                             if (attachment instanceof BankTransferAttachment) {
                                 BankTransferAttachment bankTransferAttachment = (BankTransferAttachment) attachment;
-                                itemMap.putMap("bankTransferObj", ReactExtendsion.createBankTransfer(bankTransferAttachment));
+                                itemMap.putMap("bankTransferObj", bankTransferAttachment.toReactNative());
                             }
                             break;
                         case CustomAttachmentType.BankTransferSystem:
                             if (attachment instanceof BankTransferSystemAttachment) {
                                 BankTransferSystemAttachment bankTransferSystemAttachment = (BankTransferSystemAttachment) attachment;
-                                itemMap.putMap("systemObj", ReactExtendsion.createBankTransferSystem(bankTransferSystemAttachment));
+                                itemMap.putMap("systemObj", bankTransferSystemAttachment.toReactNative());
                             }
                             break;
                         case CustomAttachmentType.RedPackageOpen:
                             if (attachment instanceof RedPackageOpenAttachement) {
-                                String self = LoginService.getInstance().getAccount();
-                                RedPackageOpenAttachement redPackageOpenAttachement = (RedPackageOpenAttachement) attachment;
 
-                                if (!TextUtils.equals(self, redPackageOpenAttachement.getSendId()) &&
-                                        !TextUtils.equals(self, redPackageOpenAttachement.getOpenId())) {
-                                    return null;
-                                }
-
-                                WritableMap writableMap = Arguments.createMap();
-
-                                String sender = NimUserInfoCache.getInstance().getUserDisplayNameYou(redPackageOpenAttachement.getSendId());
-                                String opener;
-                                if (TextUtils.equals(redPackageOpenAttachement.getSendId(), redPackageOpenAttachement.getOpenId())) {
-                                    opener = "自己";
-                                } else {
-                                    opener = NimUserInfoCache.getInstance().getUserDisplayNameYou(redPackageOpenAttachement.getOpenId());
-                                }
-                                writableMap.putString("tipMsg", sender + "打开了" + opener + "的红包");
-                                itemMap.putMap("openObj", writableMap);
+                                itemMap.putMap("openObj", ((RedPackageOpenAttachement)attachment).toReactNative());
                             }
                             break;
                         default:
                             if (attachment instanceof DefaultCustomAttachment) {
                                 DefaultCustomAttachment defaultCustomAttachment = (DefaultCustomAttachment) attachment;
-                                itemMap.putMap("defaultObj", ReactExtendsion.createDefault(defaultCustomAttachment));
+                                itemMap.putMap("defaultObj", defaultCustomAttachment.toReactNative());
                             }
                             break;
                     }

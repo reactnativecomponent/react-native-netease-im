@@ -1061,27 +1061,6 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
         });
     }
 
-
-    //5.发送自定义消息
-//    attachment, // 自定义消息附件
-//    config // 自定义消息的参数配置选项
-//    @ReactMethod
-    public void sendExtendsionMessage(String type, String recentValue, ReadableMap extendsion, final Promise promise) {
-        int typeInt = 10;
-        try {
-            typeInt = Integer.parseInt(type);
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-        }
-        Map extendsionMap = ReactExtendsion.makeReadableMap2HashMap(extendsion, 1, 2);
-        sessionService.sendExtendsionMessage(typeInt, recentValue, extendsionMap, new SessionService.OnSendMessageListener() {
-            @Override
-            public int onResult(int code, IMMessage message) {
-                return 0;
-            }
-        });
-    }
-
     @ReactMethod
     public void sendDefaultMessage(String type, String typeText, String content, final Promise promise) {
         sessionService.sendDefaultMessage(type, typeText, content, new SessionService.OnSendMessageListener() {
@@ -1106,8 +1085,8 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
 //    attachment, // 自定义消息附件
 //    config // 自定义消息的参数配置选项
     @ReactMethod
-    public void sendRedPackageMessage(String type, String typeText, String wishText, String id, final Promise promise) {
-        sessionService.sendRedPackageMessage(type, typeText, wishText, id, new SessionService.OnSendMessageListener() {
+    public void sendRedPacketMessage(String type, String comments, String serialNo, final Promise promise) {
+        sessionService.sendRedPacketMessage(type, comments, serialNo, new SessionService.OnSendMessageListener() {
             @Override
             public int onResult(int code, IMMessage message) {
                 return 0;
@@ -1119,8 +1098,8 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
 //    attachment, // 自定义消息附件
 //    config // 自定义消息的参数配置选项
     @ReactMethod
-    public void sendBankTransferMessage(String typeText, String value, String explain, String id, final Promise promise) {
-        sessionService.sendBankTransferMessage(typeText, value, explain, id, new SessionService.OnSendMessageListener() {
+    public void sendBankTransferMessage(String amount, String comments, String serialNo, final Promise promise) {
+        sessionService.sendBankTransferMessage(amount, comments, serialNo, new SessionService.OnSendMessageListener() {
             @Override
             public int onResult(int code, IMMessage message) {
                 return 0;

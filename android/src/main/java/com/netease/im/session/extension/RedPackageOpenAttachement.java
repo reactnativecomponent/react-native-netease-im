@@ -1,6 +1,11 @@
 package com.netease.im.session.extension;
 
+import android.text.TextUtils;
+
 import com.alibaba.fastjson.JSONObject;
+import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.WritableMap;
+import com.netease.im.uikit.cache.NimUserInfoCache;
 
 /**
  * Created by dowin on 2017/6/12.
@@ -35,11 +40,18 @@ public class RedPackageOpenAttachement extends CustomAttachment {
         this.sendId = sendId;
         this.openId = openId;
     }
-    public String getOpenId() {
-        return openId;
-    }
+    @Override
+    public WritableMap toReactNative(){
+        WritableMap writableMap = Arguments.createMap();
 
-    public String getSendId() {
-        return sendId;
+        String sender = NimUserInfoCache.getInstance().getUserDisplayNameYou(sendId);
+        String opener;
+        if (TextUtils.equals(sendId, openId)) {
+            opener = "自己";
+        } else {
+            opener = NimUserInfoCache.getInstance().getUserDisplayNameYou(openId);
+        }
+        writableMap.putString("tipMsg", sender + "打开了" + opener + "的红包");
+        return writableMap;
     }
 }

@@ -3,6 +3,7 @@ package com.netease.im.receiver;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONException;
@@ -18,7 +19,9 @@ public class CustomNotificationReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+
         String action = context.getPackageName() + NimIntent.ACTION_RECEIVE_CUSTOM_NOTIFICATION;
+        printIntent(intent);
         if (action.equals(intent.getAction())) {
 
             // 从intent中取出自定义通知
@@ -41,5 +44,16 @@ public class CustomNotificationReceiver extends BroadcastReceiver {
             // 处理自定义通知消息
             LogUtil.i("CustomNotificationReceiver", "receive custom notification: " + notification.getContent() + " from :" + notification.getSessionId() + "/" + notification.getSessionType());
         }
+    }
+    void printIntent(Intent intent) {
+        LogUtil.d("NimNetease", "--------------------------------------------");
+        LogUtil.d("NimNetease", intent.getAction());
+        Bundle bundle = intent.getExtras();
+        if (bundle != null) {
+            LogUtil.d("NimNetease", "+" + intent);
+        } else {
+            LogUtil.d("NimNetease", "+null");
+        }
+        LogUtil.d("NimNetease", "--------------------------------------------");
     }
 }

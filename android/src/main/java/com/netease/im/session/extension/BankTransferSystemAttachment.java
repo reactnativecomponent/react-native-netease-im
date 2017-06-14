@@ -1,6 +1,8 @@
 package com.netease.im.session.extension;
 
 import com.alibaba.fastjson.JSONObject;
+import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.WritableMap;
 
 /**
  * Created by dowin on 2017/6/8.
@@ -8,25 +10,27 @@ import com.alibaba.fastjson.JSONObject;
 
 public class BankTransferSystemAttachment extends CustomAttachment {
 
-    final static String KEY_VALUE = "value";
-    final static String KEY_EXPLAIN = "explain";
-    final static String KEY_TYPE_TEXT = "typeText";
-    final static String KEY_ID = "id";
+    final static String KEY_FROM = "from";
+    final static String KEY_OPE = "ope";
+    final static String KEY_TO = "to";
+    final static String KEY_TYPE = "type";
+    final static String KEY_BODY = "body";
 
-    final static String KEY_TIME = "time";
-    final static String KEY_RECEIVER = "receiver";
-    final static String KEY_PAY_TYPE = "payType";
-    final static String KEY_PAY_STATUS = "payStatus";
 
-    private String id;
-    private String explain;
-    private String typeText;
-    private String value;
+    final static String KEY_BODY_MSG_TYPE = "msgtype";
+    final static String KEY_BODY_AMOUNT = "amount";
+    final static String KEY_BODY_COMMENTS = "comments";
+    final static String KEY_BODY_SERIAL_NO = "serialNo";
 
-    private String time;
-    private String receiver;
-    private String payType;
-    private String payStatus;
+    private String from;
+    private String ope;
+    private String to;
+    private String attachType;
+
+    private String msgtype;
+    private String amount;
+    private String comments;
+    private String serialNo;
 
     public BankTransferSystemAttachment() {
         super(CustomAttachmentType.BankTransferSystem);
@@ -34,70 +38,58 @@ public class BankTransferSystemAttachment extends CustomAttachment {
 
     @Override
     protected void parseData(JSONObject data) {
-        id = data.getString(KEY_ID);
-        explain = data.getString(KEY_EXPLAIN);
-        typeText = data.getString(KEY_TYPE_TEXT);
-        value = data.getString(KEY_VALUE);
-        time = data.getString(KEY_TIME);
-        receiver = data.getString(KEY_RECEIVER);
-        payType = data.getString(KEY_PAY_TYPE);
-        payStatus = data.getString(KEY_PAY_STATUS);
+        from = data.getString(KEY_FROM);
+        ope = data.getString(KEY_OPE);
+        to = data.getString(KEY_TO);
+        attachType = data.getString(KEY_TYPE);
+
+        JSONObject body = data.getJSONObject(KEY_BODY);
+        msgtype = body.getString(KEY_BODY_MSG_TYPE);
+        amount = body.getString(KEY_BODY_AMOUNT);
+        comments = body.getString(KEY_BODY_COMMENTS);
+        serialNo = body.getString(KEY_BODY_SERIAL_NO);
     }
 
     @Override
     protected JSONObject packData() {
         JSONObject object = new JSONObject();
-        object.put(KEY_ID, id);
-        object.put(KEY_EXPLAIN, explain);
-        object.put(KEY_TYPE_TEXT, typeText);
-        object.put(KEY_VALUE, value);
-        object.put(KEY_TIME, time);
-        object.put(KEY_RECEIVER, receiver);
-        object.put(KEY_PAY_TYPE, payType);
-        object.put(KEY_PAY_STATUS, payStatus);
+        object.put(KEY_FROM,from);
+        object.put(KEY_OPE,ope);
+        object.put(KEY_TO,to);
+        object.put(KEY_TYPE,type);
+
+        JSONObject body = new JSONObject();
+        body.put(KEY_BODY_MSG_TYPE,msgtype);
+        body.put(KEY_BODY_AMOUNT,amount);
+        body.put(KEY_BODY_COMMENTS,comments);
+        body.put(KEY_BODY_SERIAL_NO,serialNo);
+        object.put(KEY_BODY,body);
+
         return object;
     }
 
-    public void setParams(String id, String explain, String typeText, String value, String time, String receiver, String payType, String payStatus) {
-        this.id = id;
-        this.explain = explain;
-        this.typeText = typeText;
-        this.value = value;
-        this.time = time;
-        this.receiver = receiver;
-        this.payType = payType;
-        this.payStatus = payStatus;
+    public void setParams(String from, String ope, String to, String type, String msgtype, String amount, String comments, String serialNo) {
+        this.from = from;
+        this.ope = ope;
+        this.to = to;
+        this.attachType = type;
+        this.msgtype = msgtype;
+        this.amount = amount;
+        this.comments = comments;
+        this.serialNo = serialNo;
     }
+    @Override
+    public WritableMap toReactNative(){
+        WritableMap writableMap = Arguments.createMap();
+        writableMap.putString("from",from);
+        writableMap.putString("ope",ope);
+        writableMap.putString("to",to);
+        writableMap.putString("type",attachType);
 
-    public String getId() {
-        return id;
-    }
-
-    public String getExplain() {
-        return explain;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public String getTime() {
-        return time;
-    }
-
-    public String getReceiver() {
-        return receiver;
-    }
-
-    public String getPayType() {
-        return payType;
-    }
-
-    public String getPayStatus() {
-        return payStatus;
-    }
-
-    public String getTypeText() {
-        return typeText;
+        writableMap.putString("msgtype",msgtype);
+        writableMap.putString("amount",amount);
+        writableMap.putString("comments",comments);
+        writableMap.putString("serialNo",serialNo);
+        return writableMap;
     }
 }

@@ -8,8 +8,7 @@ import com.netease.im.ReactCache;
 import com.netease.im.login.LoginService;
 import com.netease.im.session.extension.BankTransferAttachment;
 import com.netease.im.session.extension.DefaultCustomAttachment;
-import com.netease.im.session.extension.ExtendsionAttachment;
-import com.netease.im.session.extension.RedPackageAttachement;
+import com.netease.im.session.extension.RedPacketAttachement;
 import com.netease.im.session.extension.RedPackageOpenAttachement;
 import com.netease.im.uikit.common.util.log.LogUtil;
 import com.netease.im.uikit.common.util.string.MD5;
@@ -605,24 +604,9 @@ public class SessionService {
         sendMessage(message, onSendMessageListener);
     }
 
-    public void sendExtendsionMessage(int extendType, String recentValue, Map extendsion, OnSendMessageListener onSendMessageListener) {
+      public void sendDefaultMessage(String type, String typeText, String content, OnSendMessageListener onSendMessageListener) {
         CustomMessageConfig config = new CustomMessageConfig();
-        ExtendsionAttachment attachment = new ExtendsionAttachment(extendType);//TODO;
-        attachment.setRecentValue(recentValue);
-        attachment.setExtendsion(extendsion);
-        IMMessage message = MessageBuilder.createCustomMessage(sessionId, sessionTypeEnum, recentValue, attachment, config);
-        sendMessage(message, onSendMessageListener);
-    }
-
-    public void sendDefaultMessage(String type, String typeText, String content, OnSendMessageListener onSendMessageListener) {
-        CustomMessageConfig config = new CustomMessageConfig();
-        int typeInt = 0;
-        try {
-            typeInt = Integer.parseInt(type);
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-        }
-        DefaultCustomAttachment attachment = new DefaultCustomAttachment(typeInt);
+        DefaultCustomAttachment attachment = new DefaultCustomAttachment(typeText);
         attachment.setContent(content);
         IMMessage message = MessageBuilder.createCustomMessage(sessionId, sessionTypeEnum, typeText, attachment, config);
         sendMessage(message, onSendMessageListener);
@@ -636,19 +620,19 @@ public class SessionService {
         sendMessage(message, onSendMessageListener);
     }
 
-    public void sendRedPackageMessage(String type, String typeText, String wishText, String id, OnSendMessageListener onSendMessageListener) {
+    public void sendRedPacketMessage(String type, String comments, String serialNo, OnSendMessageListener onSendMessageListener) {
         CustomMessageConfig config = new CustomMessageConfig();
-        RedPackageAttachement attachment = new RedPackageAttachement();
-        attachment.setParams(type, typeText, wishText, id);
-        IMMessage message = MessageBuilder.createCustomMessage(sessionId, sessionTypeEnum, typeText, attachment, config);
+        RedPacketAttachement attachment = new RedPacketAttachement();
+        attachment.setParams(type, comments, serialNo);
+        IMMessage message = MessageBuilder.createCustomMessage(sessionId, sessionTypeEnum, comments, attachment, config);
         sendMessage(message, onSendMessageListener);
     }
 
-    public void sendBankTransferMessage(String typeText, String value, String explain, String id, OnSendMessageListener onSendMessageListener) {
+    public void sendBankTransferMessage(String amount, String comments, String serialNo, OnSendMessageListener onSendMessageListener) {
         CustomMessageConfig config = new CustomMessageConfig();
         BankTransferAttachment attachment = new BankTransferAttachment();
-        attachment.setParams(typeText, value, explain, id);
-        IMMessage message = MessageBuilder.createCustomMessage(sessionId, sessionTypeEnum, typeText, attachment, config);
+        attachment.setParams(amount, comments, serialNo);
+        IMMessage message = MessageBuilder.createCustomMessage(sessionId, sessionTypeEnum, comments, attachment, config);
         sendMessage(message, onSendMessageListener);
     }
 
@@ -659,7 +643,7 @@ public class SessionService {
             // 接收到的消息，附件没有下载成功，不允许转发
             return true;
         } else if (message.getMsgType() == MsgTypeEnum.custom && message.getAttachment() != null
-                && (message.getAttachment() instanceof RedPackageAttachement
+                && (message.getAttachment() instanceof RedPacketAttachement
                 || message.getAttachment() instanceof BankTransferAttachment)) {
             // 白板消息和阅后即焚消息 不允许转发
             return true;
