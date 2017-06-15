@@ -133,7 +133,7 @@
         //群组名称或者聊天对象名称
         [dic setObject:[NSString stringWithFormat:@"%@", [self nameForRecentSession:recent] ] forKey:@"name"];
         //账号
-        [dic setObject:recent.lastMessage.from forKey:@"account"];
+        [dic setObject:[NSString stringWithFormat:@"%@", recent.lastMessage.from] forKey:@"account"];
         //消息类型
         [dic setObject:[NSString stringWithFormat:@"%ld", recent.lastMessage.messageType] forKey:@"msgType"];
         //消息状态
