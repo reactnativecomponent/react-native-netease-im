@@ -31,7 +31,7 @@
 -(void)addDelegate{
     [[NIMSDK sharedSDK].loginManager addDelegate:self];
     [[NIMSDK sharedSDK].conversationManager addDelegate:self];
-
+    
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -149,39 +149,73 @@
         [sessionList addObject:dic];
     }
     if (sessionList) {
-       suc(sessionList);
+        suc(sessionList);
     }else{
         err(@"网络异常");
     }
-   
+    
 }
 -(void)getResouces{
-  
+    
+    NSString *currentAccout = [[NIMSDK sharedSDK].loginManager currentAccount];
+    
     NSArray *NIMlistArr = [[NIMSDK sharedSDK].conversationManager.allRecentSessions mutableCopy];
     NSMutableArray *sessionList = [NSMutableArray array];
     for (NIMRecentSession *recent in NIMlistArr) {
-        NSMutableDictionary *dic = [NSMutableDictionary dictionary];
-        [dic setObject:recent.session.sessionId forKey:@"contactId"];
-        [dic setObject:[NSString stringWithFormat:@"%ld", recent.session.sessionType] forKey:@"sessionType"];
-        //未读
-        [dic setObject:[NSString stringWithFormat:@"%ld", recent.unreadCount] forKey:@"unreadCount"];
-        //群组名称或者聊天对象名称
-        [dic setObject:[NSString stringWithFormat:@"%@", [self nameForRecentSession:recent] ] forKey:@"name"];
-        //账号
-        [dic setObject:[NSString stringWithFormat:@"%@",recent.lastMessage.from] forKey:@"account"];
-        //消息类型
-        [dic setObject:[NSString stringWithFormat:@"%ld", recent.lastMessage.messageType] forKey:@"msgType"];
-        //消息状态
-        [dic setObject:[NSString stringWithFormat:@"%ld", recent.lastMessage.deliveryState] forKey:@"msgStatus"];
-        //消息ID
-        [dic setObject:[NSString stringWithFormat:@"%@", recent.lastMessage.messageId] forKey:@"messageId"];
-        //消息内容
-        [dic setObject:[NSString stringWithFormat:@"%@", [self contentForRecentSession:recent] ] forKey:@"content"];
-        //发送时间
-        [dic setObject:[NSString stringWithFormat:@"%@", [self timestampDescriptionForRecentSession:recent] ] forKey:@"time"];
         
-        [dic setObject:[NSString stringWithFormat:@"%@", [self imageUrlForRecentSession:recent] ?  [self imageUrlForRecentSession:recent] : @""] forKey:@"imagePath"];
-        [sessionList addObject:dic];
+        
+        if (recent.session.sessionType == NIMSessionTypeP2P) {
+            NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+            [dic setObject:recent.session.sessionId forKey:@"contactId"];
+            [dic setObject:[NSString stringWithFormat:@"%ld", recent.session.sessionType] forKey:@"sessionType"];
+            //未读
+            [dic setObject:[NSString stringWithFormat:@"%ld", recent.unreadCount] forKey:@"unreadCount"];
+            //群组名称或者聊天对象名称
+            [dic setObject:[NSString stringWithFormat:@"%@", [self nameForRecentSession:recent] ] forKey:@"name"];
+            //账号
+            [dic setObject:recent.lastMessage.from forKey:@"account"];
+            //消息类型
+            [dic setObject:[NSString stringWithFormat:@"%ld", recent.lastMessage.messageType] forKey:@"msgType"];
+            //消息状态
+            [dic setObject:[NSString stringWithFormat:@"%ld", recent.lastMessage.deliveryState] forKey:@"msgStatus"];
+            //消息ID
+            [dic setObject:[NSString stringWithFormat:@"%@", recent.lastMessage.messageId] forKey:@"messageId"];
+            //消息内容
+            [dic setObject:[NSString stringWithFormat:@"%@", [self contentForRecentSession:recent] ] forKey:@"content"];
+            //发送时间
+            [dic setObject:[NSString stringWithFormat:@"%@", [self timestampDescriptionForRecentSession:recent] ] forKey:@"time"];
+            
+            [dic setObject:[NSString stringWithFormat:@"%@", [self imageUrlForRecentSession:recent] ?  [self imageUrlForRecentSession:recent] : @""] forKey:@"imagePath"];
+            [sessionList addObject:dic];
+            
+        }
+        else{
+            if ( [[NIMSDK sharedSDK].teamManager isMyTeam:recent.lastMessage.session.sessionId]) {
+                NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+                [dic setObject:recent.session.sessionId forKey:@"contactId"];
+                [dic setObject:[NSString stringWithFormat:@"%ld", recent.session.sessionType] forKey:@"sessionType"];
+                //未读
+                [dic setObject:[NSString stringWithFormat:@"%ld", recent.unreadCount] forKey:@"unreadCount"];
+                //群组名称或者聊天对象名称
+                [dic setObject:[NSString stringWithFormat:@"%@", [self nameForRecentSession:recent] ] forKey:@"name"];
+                //账号
+                [dic setObject:recent.lastMessage.from forKey:@"account"];
+                //消息类型
+                [dic setObject:[NSString stringWithFormat:@"%ld", recent.lastMessage.messageType] forKey:@"msgType"];
+                //消息状态
+                [dic setObject:[NSString stringWithFormat:@"%ld", recent.lastMessage.deliveryState] forKey:@"msgStatus"];
+                //消息ID
+                [dic setObject:[NSString stringWithFormat:@"%@", recent.lastMessage.messageId] forKey:@"messageId"];
+                //消息内容
+                [dic setObject:[NSString stringWithFormat:@"%@", [self contentForRecentSession:recent] ] forKey:@"content"];
+                //发送时间
+                [dic setObject:[NSString stringWithFormat:@"%@", [self timestampDescriptionForRecentSession:recent] ] forKey:@"time"];
+                
+                [dic setObject:[NSString stringWithFormat:@"%@", [self imageUrlForRecentSession:recent] ?  [self imageUrlForRecentSession:recent] : @""] forKey:@"imagePath"];
+                [sessionList addObject:dic];
+                
+            }
+        }
     }
     
     [NIMModel initShareMD].recentListArr = sessionList;

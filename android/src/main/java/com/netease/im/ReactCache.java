@@ -9,10 +9,12 @@ import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.netease.im.login.LoginService;
 import com.netease.im.session.extension.BankTransferAttachment;
+import com.netease.im.session.extension.BankTransferSystemAttachment;
 import com.netease.im.session.extension.CustomAttachment;
 import com.netease.im.session.extension.CustomAttachmentType;
-import com.netease.im.session.extension.ExtendsionAttachment;
-import com.netease.im.session.extension.RedPackageAttachement;
+import com.netease.im.session.extension.DefaultCustomAttachment;
+import com.netease.im.session.extension.RedPacketAttachement;
+import com.netease.im.session.extension.RedPackageOpenAttachement;
 import com.netease.im.uikit.cache.FriendDataCache;
 import com.netease.im.uikit.cache.NimUserInfoCache;
 import com.netease.im.uikit.cache.TeamDataCache;
@@ -92,7 +94,7 @@ public class ReactCache {
         // recents参数即为最近联系人列表（最近会话列表）
         WritableMap writableMap = Arguments.createMap();
         WritableArray array = Arguments.createArray();
-        int unreadNumTotal=0;
+        int unreadNumTotal = 0;
         if (recents != null && recents.size() > 0) {
 
             WritableMap map;
@@ -134,7 +136,7 @@ public class ReactCache {
                     e.printStackTrace();
                 }
 
-                fromNick =  TextUtils.isEmpty(fromNick) ? NimUserInfoCache.getInstance().getUserDisplayName(contact.getFromAccount()) : fromNick;
+                fromNick = TextUtils.isEmpty(fromNick) ? NimUserInfoCache.getInstance().getUserDisplayName(contact.getFromAccount()) : fromNick;
                 map.putString("nick", fromNick);
                 String nickName = "";
                 if (contact.getSessionType() == SessionTypeEnum.Team) {
@@ -142,15 +144,34 @@ public class ReactCache {
                 }
                 MsgAttachment attachment = contact.getAttachment();
                 if (attachment != null) {
-                    if (attachment instanceof RedPackageAttachement) {
-                        map.putInt("custType", CustomAttachmentType.RedPackage);
-                        content = "[红 包]";
-                    } else if (attachment instanceof BankTransferAttachment) {
-                        map.putInt("custType", CustomAttachmentType.RTS);
-                        content = "[转 账]";
-                    } else if (attachment instanceof ExtendsionAttachment) {
-                        ExtendsionAttachment extendsionAttachment = (ExtendsionAttachment) attachment;
-                        content = extendsionAttachment.getRecentValue();
+                    CustomAttachment customAttachment = (CustomAttachment) attachment;
+                    map.putString("custType", customAttachment.getType());
+                    switch (customAttachment.getType()) {
+                        case CustomAttachmentType.RedPacket:
+                            if (attachment instanceof RedPacketAttachement) {
+                                content = "[红包]";
+                            }
+                            break;
+                        case CustomAttachmentType.BankTransfer:
+                            if (attachment instanceof BankTransferAttachment) {
+                                content = "[转账]";
+                            }
+                            break;
+                        case CustomAttachmentType.BankTransferSystem:
+                            if (attachment instanceof BankTransferSystemAttachment) {
+                                content = "[转账凭证]";
+                            }
+                            break;
+                        case CustomAttachmentType.RedPackageOpen:
+                            if (attachment instanceof RedPackageOpenAttachement) {
+                                content = "[拆红包]";
+                            }
+                            break;
+                        default:
+                            if (attachment instanceof DefaultCustomAttachment) {
+                                content = "[自定义消息]";
+                            }
+                            break;
                     }
                 }
                 map.putString("content", nickName + content);
@@ -485,6 +506,10 @@ public class ReactCache {
                     continue;
                 }
                 WritableMap itemMap = createMessage(item);
+
+                if (itemMap == null) {
+                    continue;
+                }
 //                String timeStr = TimeUtil.getTimeShowString(item.getTime(), false);
 //                if (timedItems != null && timedItems.contains(item.getUuid())) {//添加短时间处理，作为一条消息
 //                    itemMap = Arguments.createMap();
@@ -679,21 +704,41 @@ public class ReactCache {
             } else if (item.getMsgType() == MsgTypeEnum.custom) {//自定义消息
                 try {
                     CustomAttachment customAttachment = (CustomAttachment) attachment;
-                    itemMap.putString("custType", Integer.toString(customAttachment.getType()));
+                    itemMap.putString("custType", customAttachment.getType());
 
-                    if (attachment instanceof RedPackageAttachement) {
-                        RedPackageAttachement redPackageAttachement = (RedPackageAttachement) attachment;
-                        itemMap.putMap("attachment", ReactExtendsion.createRedPackage(redPackageAttachement));
+                    switch (customAttachment.getType()) {
+                        case CustomAttachmentType.RedPacket:
+                            if (attachment instanceof RedPacketAttachement) {
+                                RedPacketAttachement redPackageAttachement = (RedPacketAttachement) attachment;
+                                itemMap.putMap("redPacketObj", redPackageAttachement.toReactNative());
+                            }
+                            break;
 
-                    } else if (attachment instanceof BankTransferAttachment) {
-                        BankTransferAttachment bankTransferAttachment = (BankTransferAttachment) attachment;
-                        itemMap.putMap("attachment", ReactExtendsion.createBankTransfer(bankTransferAttachment));
+                        case CustomAttachmentType.BankTransfer:
+                            if (attachment instanceof BankTransferAttachment) {
+                                BankTransferAttachment bankTransferAttachment = (BankTransferAttachment) attachment;
+                                itemMap.putMap("bankTransferObj", bankTransferAttachment.toReactNative());
+                            }
+                            break;
+                        case CustomAttachmentType.BankTransferSystem:
+                            if (attachment instanceof BankTransferSystemAttachment) {
+                                BankTransferSystemAttachment bankTransferSystemAttachment = (BankTransferSystemAttachment) attachment;
+                                itemMap.putMap("systemObj", bankTransferSystemAttachment.toReactNative());
+                            }
+                            break;
+                        case CustomAttachmentType.RedPackageOpen:
+                            if (attachment instanceof RedPackageOpenAttachement) {
+
+                                itemMap.putMap("openObj", ((RedPackageOpenAttachement)attachment).toReactNative());
+                            }
+                            break;
+                        default:
+                            if (attachment instanceof DefaultCustomAttachment) {
+                                DefaultCustomAttachment defaultCustomAttachment = (DefaultCustomAttachment) attachment;
+                                itemMap.putMap("defaultObj", defaultCustomAttachment.toReactNative());
+                            }
+                            break;
                     }
-
-//                    else if (attachment instanceof ExtendsionAttachment) {
-//                        ExtendsionAttachment extendsionAttachment = (ExtendsionAttachment) attachment;
-//                        itemMap.putMap("attachment", ReactExtendsion.makeHashMap2WritableMap(extendsionAttachment.getExtendsion()));
-//                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

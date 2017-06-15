@@ -327,33 +327,29 @@ export default class NIM{
 
     /**
      * 红包
-     *
-     * min 红包最小金额
-     * max 红包最大金额
-     * @param type 红包类型 0
-     *          0   手气红包    总人数  总金额
-     *          1   普通红包   总人数  总金额  每个人金额
-     * @param typeText 红包描述文字 "[红 包]"
-     * @param wishText 红包描祝福语 "[恭喜发财，大吉大利]"
-     * @param id 红包ID
+     * @param type 红包类型
+     *          0   一对一
+     *          1   一对多(固定金额)
+     *          2   一对多(随机金额)
+     * @param comments 红包描祝福语 "[恭喜发财，大吉大利]"
+     * @param serialNo 流水号
      * @returns {*}
      */
-    static sendRedPackageMessage(type,typeText,wishText,id){
-        return RNNeteaseIm.sendRedPackageMessage(type,typeText,wishText,id);
+    static sendRedPacketMessage(type, comments, serialNo){
+        return RNNeteaseIm.sendRedPacketMessage(type, comments, serialNo);
     }
 
     /**
      * 转账
      * min 转账最小金额
      * max 转账最大金额
-     * @param typeText 转账描述文字 "[转 账]"
-     * @param value 转账金额
-     * @param explain 转账说明
-     * @param id 转账ID
+     * @param amount 转账金额
+     * @param comments 转账说明
+     * @param serialNo 流水号
      * @returns {*}
      */
-    static sendBankTransferMessage(typeText,value,explain,id){
-        return RNNeteaseIm.sendBankTransferMessage(typeText,value,explain,id);
+    static sendBankTransferMessage(amount, comments, serialNo){
+        return RNNeteaseIm.sendBankTransferMessage(amount, comments, serialNo);
     }
 
     /** ******************************blackList 黑名单****************************************** **/

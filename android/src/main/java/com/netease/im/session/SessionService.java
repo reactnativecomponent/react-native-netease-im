@@ -4,11 +4,13 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
+import com.netease.im.MessageUtil;
 import com.netease.im.ReactCache;
 import com.netease.im.login.LoginService;
 import com.netease.im.session.extension.BankTransferAttachment;
-import com.netease.im.session.extension.ExtendsionAttachment;
-import com.netease.im.session.extension.RedPackageAttachement;
+import com.netease.im.session.extension.DefaultCustomAttachment;
+import com.netease.im.session.extension.RedPackageOpenAttachement;
+import com.netease.im.session.extension.RedPacketAttachement;
 import com.netease.im.uikit.common.util.log.LogUtil;
 import com.netease.im.uikit.common.util.string.MD5;
 import com.netease.im.uikit.session.helper.MessageHelper;
@@ -603,51 +605,43 @@ public class SessionService {
         sendMessage(message, onSendMessageListener);
     }
 
-    public void sendExtendsionMessage(int extendType, String recentValue, Map extendsion, OnSendMessageListener onSendMessageListener) {
+      public void sendDefaultMessage(String type, String typeText, String content, OnSendMessageListener onSendMessageListener) {
         CustomMessageConfig config = new CustomMessageConfig();
-        ExtendsionAttachment attachment = new ExtendsionAttachment(extendType);//TODO;
-        attachment.setRecentValue(recentValue);
-        attachment.setExtendsion(extendsion);
-        IMMessage message = MessageBuilder.createCustomMessage(sessionId, sessionTypeEnum, recentValue, attachment, config);
-        sendMessage(message, onSendMessageListener);
-    }
-
-    public void sendRedPackageMessage(String type, String typeText, String wishText, String id, OnSendMessageListener onSendMessageListener) {
-        CustomMessageConfig config = new CustomMessageConfig();
-        RedPackageAttachement attachment = new RedPackageAttachement();
-        attachment.setParams(type, typeText, wishText, id);
+        DefaultCustomAttachment attachment = new DefaultCustomAttachment(typeText);
+        attachment.setContent(content);
         IMMessage message = MessageBuilder.createCustomMessage(sessionId, sessionTypeEnum, typeText, attachment, config);
         sendMessage(message, onSendMessageListener);
     }
 
-    public void sendBankTransferMessage(String typeText, String value, String explain, String id, OnSendMessageListener onSendMessageListener) {
+    public void sendRedPackageOpenMessage(String sendId, String openId, OnSendMessageListener onSendMessageListener) {
+        CustomMessageConfig config = new CustomMessageConfig();
+        RedPackageOpenAttachement attachment = new RedPackageOpenAttachement();
+        attachment.setParams(sendId, openId);
+        IMMessage message = MessageBuilder.createCustomMessage(sessionId, sessionTypeEnum, sendId + ";" + openId, attachment, config);
+        sendMessage(message, onSendMessageListener);
+    }
+
+    public void sendRedPacketMessage(String type, String comments, String serialNo, OnSendMessageListener onSendMessageListener) {
+        CustomMessageConfig config = new CustomMessageConfig();
+        RedPacketAttachement attachment = new RedPacketAttachement();
+        attachment.setParams(type, comments, serialNo);
+        IMMessage message = MessageBuilder.createCustomMessage(sessionId, sessionTypeEnum, comments, attachment, config);
+        sendMessage(message, onSendMessageListener);
+    }
+
+    public void sendBankTransferMessage(String amount, String comments, String serialNo, OnSendMessageListener onSendMessageListener) {
         CustomMessageConfig config = new CustomMessageConfig();
         BankTransferAttachment attachment = new BankTransferAttachment();
-        attachment.setParams(typeText, value, explain, id);
-        IMMessage message = MessageBuilder.createCustomMessage(sessionId, sessionTypeEnum, typeText, attachment, config);
+        attachment.setParams(amount, comments, serialNo);
+        IMMessage message = MessageBuilder.createCustomMessage(sessionId, sessionTypeEnum, comments, attachment, config);
         sendMessage(message, onSendMessageListener);
-    }
-
-    public boolean shouldIgnore(IMMessage message) {//TODO;
-        if (message.getDirect() == MsgDirectionEnum.In
-                && (message.getAttachStatus() == AttachStatusEnum.transferring
-                || message.getAttachStatus() == AttachStatusEnum.fail)) {
-            // 接收到的消息，附件没有下载成功，不允许转发
-            return true;
-        } else if (message.getMsgType() == MsgTypeEnum.custom && message.getAttachment() != null
-                && (message.getAttachment() instanceof RedPackageAttachement
-                || message.getAttachment() instanceof BankTransferAttachment)) {
-            // 白板消息和阅后即焚消息 不允许转发
-            return true;
-        }
-        return false;
     }
 
     public int sendForwardMessage(IMMessage selectMessage, final String sessionId, final String sessionType, String content, OnSendMessageListener onSendMessageListener) {
         if (selectMessage == null) {
             return 0;
         }
-        if (shouldIgnore(selectMessage)) {
+        if (MessageUtil.shouldIgnore(selectMessage)) {
             return 1;
         }
         SessionTypeEnum sessionTypeE = SessionUtil.getSessionType(sessionType);

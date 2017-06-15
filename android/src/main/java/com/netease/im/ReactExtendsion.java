@@ -7,8 +7,6 @@ import com.facebook.react.bridge.ReadableMapKeySetIterator;
 import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
-import com.netease.im.session.extension.BankTransferAttachment;
-import com.netease.im.session.extension.RedPackageAttachement;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -115,24 +113,6 @@ public class ReactExtendsion {
                 writableMap.putMap(key, makeHashMap2WritableMap((Map) value));
             }
         }
-        return writableMap;
-    }
-
-    public static WritableMap createRedPackage(RedPackageAttachement attachement) {
-        WritableMap writableMap = Arguments.createMap();
-        writableMap.putString("id",attachement.getRedPackageId());
-        writableMap.putString("typeText",attachement.getTypeText());
-        writableMap.putString("wishText",attachement.getWishText());
-        writableMap.putString("type",attachement.getRedPackageType());
-        return writableMap;
-    }
-
-    public static WritableMap createBankTransfer(BankTransferAttachment attachement) {
-        WritableMap writableMap = Arguments.createMap();
-        writableMap.putString("id",attachement.getBankTransferId());
-        writableMap.putString("typeText",attachement.getTypeText());
-        writableMap.putString("explain",attachement.getExplain());
-        writableMap.putString("value",attachement.getValue());
         return writableMap;
     }
 }

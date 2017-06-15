@@ -10,7 +10,7 @@ import com.netease.nimlib.sdk.msg.attachment.MsgAttachmentParser;
  */
 public class CustomAttachParser implements MsgAttachmentParser {
 
-    private static final String KEY_TYPE = "type";
+    private static final String KEY_TYPE = "msgtype";
     private static final String KEY_DATA = "data";
 
     @Override
@@ -18,31 +18,29 @@ public class CustomAttachParser implements MsgAttachmentParser {
         CustomAttachment attachment = null;
         try {
             JSONObject object = JSON.parseObject(json);
-            int type = object.getInteger(KEY_TYPE);
+            String type = object.getString(KEY_TYPE);
             JSONObject data = object.getJSONObject(KEY_DATA);
             switch (type) {
-                case CustomAttachmentType.Default:
-                    attachment = new DefaultCustomAttachment();
-                    break;
-                case CustomAttachmentType.Guess:
-//                    attachment = new GuessAttachment();
-                    break;
-                case CustomAttachmentType.SnapChat:
-//                    return new SnapChatAttachment(data);
-                case CustomAttachmentType.Sticker:
-//                    attachment = new StickerAttachment();
-                    break;
-                case CustomAttachmentType.RTS:
-//                    attachment = new RTSAttachment();
-                    break;
-                case CustomAttachmentType.RedPackage:
-                    attachment = new RedPackageAttachement();
+                case CustomAttachmentType.RedPacket:
+                    attachment = new RedPacketAttachement();
                     break;
                 case CustomAttachmentType.BankTransfer:
                     attachment = new BankTransferAttachment();
                     break;
+                case CustomAttachmentType.BankTransferSystem:
+                    attachment = new BankTransferSystemAttachment();
+                    break;
+                case CustomAttachmentType.RedPackageOpen:
+                    attachment = new RedPackageOpenAttachement();
+                    break;
+                case CustomAttachmentType.LinkUrl:
+                    attachment = new LinkUrlAttachment();
+                    break;
+                case CustomAttachmentType.AccountNotice:
+                    attachment = new AccountNoticeAttachment();
+                    break;
                 default:
-                    attachment = new ExtendsionAttachment(type);
+                    attachment = new DefaultCustomAttachment(type);
                     break;
             }
 
@@ -56,7 +54,7 @@ public class CustomAttachParser implements MsgAttachmentParser {
         return attachment;
     }
 
-    public static String packData(int type, JSONObject data) {
+    public static String packData(String type, JSONObject data) {
         JSONObject object = new JSONObject();
         object.put(KEY_TYPE, type);
         if (data != null) {

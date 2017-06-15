@@ -1,6 +1,7 @@
 package com.netease.im.session.extension;
 
 import com.alibaba.fastjson.JSONObject;
+import com.facebook.react.bridge.WritableMap;
 import com.netease.nimlib.sdk.msg.attachment.MsgAttachment;
 
 /**
@@ -8,9 +9,9 @@ import com.netease.nimlib.sdk.msg.attachment.MsgAttachment;
  */
 public abstract class CustomAttachment implements MsgAttachment {
 
-    protected int type;
+    protected String type;
 
-    CustomAttachment(int type) {
+    CustomAttachment(String type) {
         this.type = type;
     }
 
@@ -25,12 +26,13 @@ public abstract class CustomAttachment implements MsgAttachment {
         return CustomAttachParser.packData(type, packData());
     }
 
-    public int getType() {
+    public String getType() {
         return type;
     }
 
     protected abstract void parseData(JSONObject data);
     protected abstract JSONObject packData();
+    protected abstract WritableMap toReactNative();
 
 //    protected abstract WritableMap packReactNative();
 //    protected abstract void packReactNative(ReadableMap map);
