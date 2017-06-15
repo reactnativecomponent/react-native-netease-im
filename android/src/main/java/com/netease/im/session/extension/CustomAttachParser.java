@@ -33,6 +33,12 @@ public class CustomAttachParser implements MsgAttachmentParser {
                 case CustomAttachmentType.RedPackageOpen:
                     attachment = new RedPackageOpenAttachement();
                     break;
+                case CustomAttachmentType.LinkUrl:
+                    attachment = new LinkUrlAttachment();
+                    break;
+                case CustomAttachmentType.AccountNotice:
+                    attachment = new AccountNoticeAttachment();
+                    break;
                 default:
                     attachment = new DefaultCustomAttachment(type);
                     break;

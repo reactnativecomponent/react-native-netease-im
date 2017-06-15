@@ -16,4 +16,8 @@ public interface CustomAttachmentType {
     String Collection = "Collection";//收藏
     String SystemImageText = "SystemImageText";//系统富文本消息
 
+
+    String LinkUrl = "url";//链接
+    String AccountNotice = "account_notice";//账户变动通知
+
 }

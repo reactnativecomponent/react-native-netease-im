@@ -4,12 +4,13 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
+import com.netease.im.MessageUtil;
 import com.netease.im.ReactCache;
 import com.netease.im.login.LoginService;
 import com.netease.im.session.extension.BankTransferAttachment;
 import com.netease.im.session.extension.DefaultCustomAttachment;
-import com.netease.im.session.extension.RedPacketAttachement;
 import com.netease.im.session.extension.RedPackageOpenAttachement;
+import com.netease.im.session.extension.RedPacketAttachement;
 import com.netease.im.uikit.common.util.log.LogUtil;
 import com.netease.im.uikit.common.util.string.MD5;
 import com.netease.im.uikit.session.helper.MessageHelper;
@@ -636,26 +637,11 @@ public class SessionService {
         sendMessage(message, onSendMessageListener);
     }
 
-    public boolean shouldIgnore(IMMessage message) {//TODO;
-        if (message.getDirect() == MsgDirectionEnum.In
-                && (message.getAttachStatus() == AttachStatusEnum.transferring
-                || message.getAttachStatus() == AttachStatusEnum.fail)) {
-            // 接收到的消息，附件没有下载成功，不允许转发
-            return true;
-        } else if (message.getMsgType() == MsgTypeEnum.custom && message.getAttachment() != null
-                && (message.getAttachment() instanceof RedPacketAttachement
-                || message.getAttachment() instanceof BankTransferAttachment)) {
-            // 白板消息和阅后即焚消息 不允许转发
-            return true;
-        }
-        return false;
-    }
-
     public int sendForwardMessage(IMMessage selectMessage, final String sessionId, final String sessionType, String content, OnSendMessageListener onSendMessageListener) {
         if (selectMessage == null) {
             return 0;
         }
-        if (shouldIgnore(selectMessage)) {
+        if (MessageUtil.shouldIgnore(selectMessage)) {
             return 1;
         }
         SessionTypeEnum sessionTypeE = SessionUtil.getSessionType(sessionType);

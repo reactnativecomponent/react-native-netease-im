@@ -26,7 +26,7 @@ public class DefaultCustomAttachment extends CustomAttachment {
         try {
             data = JSONObject.parseObject(content);
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
         return data;
     }
