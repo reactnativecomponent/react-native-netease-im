@@ -143,11 +143,15 @@ public class ReactCache {
                 if (contact.getSessionType() == SessionTypeEnum.Team) {
                     nickName = fromNick + "：";
                 }
-                MsgAttachment attachment = contact.getAttachment();
+                CustomAttachment attachment = null;
+                try {
+                    attachment = (CustomAttachment) contact.getAttachment();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 if (attachment != null) {
-                    CustomAttachment customAttachment = (CustomAttachment) attachment;
-                    map.putString("custType", customAttachment.getType());
-                    switch (customAttachment.getType()) {
+                    map.putString("custType", attachment.getType());
+                    switch (attachment.getType()) {
                         case CustomAttachmentType.RedPacket:
                             if (attachment instanceof RedPacketAttachement) {
                                 content = "[红包]";
