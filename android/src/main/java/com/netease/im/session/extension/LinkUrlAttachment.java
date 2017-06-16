@@ -41,8 +41,12 @@ public class LinkUrlAttachment extends CustomAttachment{
         return object;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
     @Override
-    protected WritableMap toReactNative() {
+    public WritableMap toReactNative() {
         WritableMap writableMap = Arguments.createMap();
         writableMap.putString("title",title);
         writableMap.putString("describe",describe);
