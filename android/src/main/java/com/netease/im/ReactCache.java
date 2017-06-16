@@ -10,7 +10,6 @@ import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.netease.im.login.LoginService;
 import com.netease.im.session.extension.AccountNoticeAttachment;
 import com.netease.im.session.extension.BankTransferAttachment;
-import com.netease.im.session.extension.BankTransferSystemAttachment;
 import com.netease.im.session.extension.CustomAttachment;
 import com.netease.im.session.extension.CustomAttachmentType;
 import com.netease.im.session.extension.DefaultCustomAttachment;
@@ -158,14 +157,15 @@ public class ReactCache {
                                 content = "[转账]";
                             }
                             break;
-                        case CustomAttachmentType.BankTransferSystem:
-                            if (attachment instanceof BankTransferSystemAttachment) {
-                                content = "[转账凭证]";
+                        case CustomAttachmentType.AccountNotice:
+                            if (attachment instanceof AccountNoticeAttachment) {
+                                content = "[账号变动通知]";
                             }
                             break;
                         case CustomAttachmentType.RedPacketOpen:
                             if (attachment instanceof RedPacketOpenAttachement) {
                                 content = "[拆红包]";
+                                map.putMap("redpacketOpenObj", ((RedPacketOpenAttachement)attachment).toReactNative());
                             }
                             break;
                         default:
