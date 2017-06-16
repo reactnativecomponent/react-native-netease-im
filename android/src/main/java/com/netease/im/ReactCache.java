@@ -13,6 +13,7 @@ import com.netease.im.session.extension.BankTransferAttachment;
 import com.netease.im.session.extension.CustomAttachment;
 import com.netease.im.session.extension.CustomAttachmentType;
 import com.netease.im.session.extension.DefaultCustomAttachment;
+import com.netease.im.session.extension.LinkUrlAttachment;
 import com.netease.im.session.extension.RedPacketAttachement;
 import com.netease.im.session.extension.RedPacketOpenAttachement;
 import com.netease.im.uikit.cache.FriendDataCache;
@@ -157,14 +158,19 @@ public class ReactCache {
                                 content = "[转账]";
                             }
                             break;
+                        case CustomAttachmentType.LinkUrl:
+                            if (attachment instanceof LinkUrlAttachment) {
+                                content = ((LinkUrlAttachment)attachment).getTitle();
+                            }
+                            break;
                         case CustomAttachmentType.AccountNotice:
                             if (attachment instanceof AccountNoticeAttachment) {
-                                content = "[账号变动通知]";
+                                content = "[账号通知]";
                             }
                             break;
                         case CustomAttachmentType.RedPacketOpen:
                             if (attachment instanceof RedPacketOpenAttachement) {
-                                content = "[拆红包]";
+                                content = "[拆红包通知]";
                                 map.putMap("redpacketOpenObj", ((RedPacketOpenAttachement)attachment).toReactNative());
                             }
                             break;
@@ -725,6 +731,12 @@ public class ReactCache {
                             if (attachment instanceof AccountNoticeAttachment) {
                                 AccountNoticeAttachment accountNoticeAttachment = (AccountNoticeAttachment) attachment;
                                 itemMap.putMap("accountNoticeObj", accountNoticeAttachment.toReactNative());
+                            }
+                            break;
+                        case CustomAttachmentType.LinkUrl:
+                            if (attachment instanceof LinkUrlAttachment) {
+                                LinkUrlAttachment linkUrlAttachment = (LinkUrlAttachment) attachment;
+                                itemMap.putMap("linkUrlObj", linkUrlAttachment.toReactNative());
                             }
                             break;
                         case CustomAttachmentType.RedPacketOpen:
