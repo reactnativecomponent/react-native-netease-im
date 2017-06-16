@@ -10,7 +10,7 @@ public interface CustomAttachmentType {
     String BankTransfer = "transfer";//转账
 
     String BankTransferSystem= "system";//系统消息
-    String RedPackageOpen = "openrp";//拆红包提醒
+    String RedPacketOpen = "redpacketOpen";//拆红包提醒
 
     String ProfileCard = "ProfileCard";//个人名片
     String Collection = "Collection";//收藏

@@ -30,8 +30,8 @@ public class CustomAttachParser implements MsgAttachmentParser {
                 case CustomAttachmentType.BankTransferSystem:
                     attachment = new BankTransferSystemAttachment();
                     break;
-                case CustomAttachmentType.RedPackageOpen:
-                    attachment = new RedPackageOpenAttachement();
+                case CustomAttachmentType.RedPacketOpen:
+                    attachment = new RedPacketOpenAttachement();
                     break;
                 case CustomAttachmentType.LinkUrl:
                     attachment = new LinkUrlAttachment();

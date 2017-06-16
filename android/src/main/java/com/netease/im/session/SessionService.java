@@ -9,7 +9,7 @@ import com.netease.im.ReactCache;
 import com.netease.im.login.LoginService;
 import com.netease.im.session.extension.BankTransferAttachment;
 import com.netease.im.session.extension.DefaultCustomAttachment;
-import com.netease.im.session.extension.RedPackageOpenAttachement;
+import com.netease.im.session.extension.RedPacketOpenAttachement;
 import com.netease.im.session.extension.RedPacketAttachement;
 import com.netease.im.uikit.common.util.log.LogUtil;
 import com.netease.im.uikit.common.util.string.MD5;
@@ -613,10 +613,10 @@ public class SessionService {
         sendMessage(message, onSendMessageListener);
     }
 
-    public void sendRedPackageOpenMessage(String sendId, String openId, OnSendMessageListener onSendMessageListener) {
+    public void sendRedPacketOpenMessage(String sendId, String openId, String hasRedPacket, OnSendMessageListener onSendMessageListener) {
         CustomMessageConfig config = new CustomMessageConfig();
-        RedPackageOpenAttachement attachment = new RedPackageOpenAttachement();
-        attachment.setParams(sendId, openId);
+        RedPacketOpenAttachement attachment = new RedPacketOpenAttachement();
+        attachment.setParams(sendId, openId, hasRedPacket);
         IMMessage message = MessageBuilder.createCustomMessage(sessionId, sessionTypeEnum, sendId + ";" + openId, attachment, config);
         sendMessage(message, onSendMessageListener);
     }

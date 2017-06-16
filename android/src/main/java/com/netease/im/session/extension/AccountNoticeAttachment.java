@@ -57,7 +57,7 @@ public class AccountNoticeAttachment extends CustomAttachment {
     }
 
     @Override
-    protected WritableMap toReactNative() {
+    public WritableMap toReactNative() {
         WritableMap writableMap = Arguments.createMap();
         writableMap.putString("title", title);
         writableMap.putString("time", time);

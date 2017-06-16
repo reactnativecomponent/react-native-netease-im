@@ -8,13 +8,14 @@ import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.netease.im.login.LoginService;
+import com.netease.im.session.extension.AccountNoticeAttachment;
 import com.netease.im.session.extension.BankTransferAttachment;
 import com.netease.im.session.extension.BankTransferSystemAttachment;
 import com.netease.im.session.extension.CustomAttachment;
 import com.netease.im.session.extension.CustomAttachmentType;
 import com.netease.im.session.extension.DefaultCustomAttachment;
 import com.netease.im.session.extension.RedPacketAttachement;
-import com.netease.im.session.extension.RedPackageOpenAttachement;
+import com.netease.im.session.extension.RedPacketOpenAttachement;
 import com.netease.im.uikit.cache.FriendDataCache;
 import com.netease.im.uikit.cache.NimUserInfoCache;
 import com.netease.im.uikit.cache.TeamDataCache;
@@ -162,8 +163,8 @@ public class ReactCache {
                                 content = "[转账凭证]";
                             }
                             break;
-                        case CustomAttachmentType.RedPackageOpen:
-                            if (attachment instanceof RedPackageOpenAttachement) {
+                        case CustomAttachmentType.RedPacketOpen:
+                            if (attachment instanceof RedPacketOpenAttachement) {
                                 content = "[拆红包]";
                             }
                             break;
@@ -720,16 +721,16 @@ public class ReactCache {
                                 itemMap.putMap("bankTransferObj", bankTransferAttachment.toReactNative());
                             }
                             break;
-                        case CustomAttachmentType.BankTransferSystem:
-                            if (attachment instanceof BankTransferSystemAttachment) {
-                                BankTransferSystemAttachment bankTransferSystemAttachment = (BankTransferSystemAttachment) attachment;
-                                itemMap.putMap("systemObj", bankTransferSystemAttachment.toReactNative());
+                        case CustomAttachmentType.AccountNotice:
+                            if (attachment instanceof AccountNoticeAttachment) {
+                                AccountNoticeAttachment accountNoticeAttachment = (AccountNoticeAttachment) attachment;
+                                itemMap.putMap("accountNoticeObj", accountNoticeAttachment.toReactNative());
                             }
                             break;
-                        case CustomAttachmentType.RedPackageOpen:
-                            if (attachment instanceof RedPackageOpenAttachement) {
+                        case CustomAttachmentType.RedPacketOpen:
+                            if (attachment instanceof RedPacketOpenAttachement) {
 
-                                itemMap.putMap("openObj", ((RedPackageOpenAttachement)attachment).toReactNative());
+                                itemMap.putMap("redpacketOpenObj", ((RedPacketOpenAttachement)attachment).toReactNative());
                             }
                             break;
                         default:
