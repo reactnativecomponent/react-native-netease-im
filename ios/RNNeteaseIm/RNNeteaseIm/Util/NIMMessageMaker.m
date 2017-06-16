@@ -58,6 +58,9 @@
         case CustomMessgeTypeAccountNotice:
             text = @"发来了一条账户通知消息";
             break;
+        case CustomMessgeTypeRedPacketOpenMessage:
+            text = @"发来了一条拆红包消息";
+            break;
         default:
             text = @"发来了一条未知消息";
             break;

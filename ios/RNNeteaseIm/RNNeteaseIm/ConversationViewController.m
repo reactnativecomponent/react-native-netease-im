@@ -267,6 +267,12 @@
                         [dic setObject:@"account_notice" forKey:@"custType"];
                     }
                         break;
+                    case CustomMessgeTypeRedPacketOpenMessage: //拆红包消息
+                    {
+                        [dic setObject:obj.dataDict  forKey:@"redpacketOpenObj"];
+                        [dic setObject:@"redpacketOpen" forKey:@"custType"];
+                    }
+                        break;
                     default:
                         break;
                         
@@ -395,6 +401,12 @@
     NSDictionary *dict = @{@"amount":amount,@"comments":comments,@"serialNo":serialNo};
     [self sendCustomMessage:CustomMessgeTypeBankTransfer data:dict];
 }
+
+-(void)sendRedPacketOpenMessage:(NSString *)sendId hasRedPacket:(NSString *)hasRedPacket{
+    NSDictionary *dict = @{@"sendId":sendId,@"hasRedPacket":hasRedPacket};
+    [self sendCustomMessage:CustomMessgeTypeRedPacketOpenMessage data:dict];
+}
+
 //设置好友消息提醒
 -(void)muteMessage:(NSString *)contactId mute:(NSString *)mute Succ:(Success)succ Err:(Errors)err{
     BOOL on;
@@ -784,6 +796,12 @@
                 {
                     [dic2 setObject:obj.dataDict  forKey:@"accountNoticeObj"];
                     [dic2 setObject:@"account_notice" forKey:@"custType"];
+                }
+                    break;
+                case CustomMessgeTypeRedPacketOpenMessage: //拆红包消息
+                {
+                    [dic2 setObject:obj.dataDict  forKey:@"redpacketOpenObj"];
+                    [dic2 setObject:@"redpacketOpen" forKey:@"custType"];
                 }
                     break;
                 default:

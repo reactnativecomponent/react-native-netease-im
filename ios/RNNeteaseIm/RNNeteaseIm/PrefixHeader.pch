@@ -38,5 +38,6 @@ static DDLogLevel ddLogLevel = DDLogLevelInfo;
 #define CustomMessgeTypeBankTransfer  6   //转账类型 transfer
 #define CustomMessgeTypeUrl  7   // 连接类型 url
 #define CustomMessgeTypeAccountNotice  8   //账户通知，与账户金额相关变动 account_notice
+#define CustomMessgeTypeRedPacketOpenMessage  9     //发送拆红白
 
 #endif /* PrefixHeader_pch */
