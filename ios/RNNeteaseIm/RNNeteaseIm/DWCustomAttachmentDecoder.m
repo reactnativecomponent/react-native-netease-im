@@ -32,6 +32,8 @@
                 custType = CustomMessgeTypeUrl;
             }else if([strType isEqualToString:@"account_notice"]){//账户资金变动
                 custType = CustomMessgeTypeAccountNotice;
+            }else if ([strType isEqualToString:@"redpacketOpen"]){//拆红包消息
+                custType = CustomMessgeTypeRedPacketOpenMessage;
             }
             NSDictionary *dataDict = [self jsonDict:@"data" andDict:dict];
             DWCustomAttachment *obj = [[DWCustomAttachment alloc]init];
