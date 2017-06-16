@@ -361,6 +361,15 @@ export default class NIM{
     static sendBankTransferMessage(amount, comments, serialNo){
         return RNNeteaseIm.sendBankTransferMessage(amount, comments, serialNo);
     }
+    /**
+     * 拆红包
+     * @param sendId 发送红包的sessionId
+     * @param hasRedPacket 是否还有红包 1 有 0 已拆完
+     * @returns {*}
+     */
+    static sendRedPacketOpenMessage(sendId, hasRedPacket){
+        return RNNeteaseIm.sendRedPacketOpenMessage(sendId, hasRedPacket);
+    }
 
     /** ******************************blackList 黑名单****************************************** **/
 

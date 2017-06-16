@@ -173,7 +173,7 @@
             //群组名称或者聊天对象名称
             [dic setObject:[NSString stringWithFormat:@"%@", [self nameForRecentSession:recent] ] forKey:@"name"];
             //账号
-            [dic setObject:recent.lastMessage.from forKey:@"account"];
+            [dic setObject:[NSString stringWithFormat:@"%@",recent.lastMessage.from] forKey:@"account"];
             //消息类型
             [dic setObject:[NSString stringWithFormat:@"%ld", recent.lastMessage.messageType] forKey:@"msgType"];
             //消息状态
@@ -314,6 +314,9 @@
                 break;
             case CustomMessgeTypeAccountNotice: //账户通知
                 text = @"[账户通知]";
+                break;
+            case CustomMessgeTypeRedPacketOpenMessage: //拆红包
+                text = @"[拆红包通知]";
                 break;
             default:
                 text = @"[未知消息]";
