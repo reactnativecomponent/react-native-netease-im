@@ -10,6 +10,8 @@
 		4E27A5CB1ED5417100543BFC /* RNNotificationCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E27A5CA1ED5417100543BFC /* RNNotificationCenter.m */; };
 		4E354E871ECBE72700CD6587 /* NIMObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E354E861ECBE72700CD6587 /* NIMObject.m */; };
 		4E354EC01ECC2E3400CD6587 /* NSDictionary+NTESJson.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E354EBF1ECC2E3400CD6587 /* NSDictionary+NTESJson.m */; };
+		4E3DD02E1EF384A900012CB7 /* DWCustomAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E3DD02B1EF384A900012CB7 /* DWCustomAttachment.m */; };
+		4E3DD02F1EF384A900012CB7 /* DWCustomAttachmentDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E3DD02D1EF384A900012CB7 /* DWCustomAttachmentDecoder.m */; };
 		4E5B47781EC1793600D74E72 /* RNNeteaseIm.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E5B47771EC1793600D74E72 /* RNNeteaseIm.m */; };
 		4E5B47C41EC17A0D00D74E72 /* ContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E5B47A61EC17A0D00D74E72 /* ContactViewController.m */; };
 		4E5B47C51EC17A0D00D74E72 /* ConversationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E5B47A81EC17A0D00D74E72 /* ConversationViewController.m */; };
@@ -57,6 +59,10 @@
 		4E354E861ECBE72700CD6587 /* NIMObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMObject.m; sourceTree = "<group>"; };
 		4E354EBE1ECC2E3400CD6587 /* NSDictionary+NTESJson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+NTESJson.h"; sourceTree = "<group>"; };
 		4E354EBF1ECC2E3400CD6587 /* NSDictionary+NTESJson.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+NTESJson.m"; sourceTree = "<group>"; };
+		4E3DD02A1EF384A900012CB7 /* DWCustomAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DWCustomAttachment.h; sourceTree = "<group>"; };
+		4E3DD02B1EF384A900012CB7 /* DWCustomAttachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DWCustomAttachment.m; sourceTree = "<group>"; };
+		4E3DD02C1EF384A900012CB7 /* DWCustomAttachmentDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DWCustomAttachmentDecoder.h; sourceTree = "<group>"; };
+		4E3DD02D1EF384A900012CB7 /* DWCustomAttachmentDecoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DWCustomAttachmentDecoder.m; sourceTree = "<group>"; };
 		4E5B47411EC1788F00D74E72 /* libRNNeteaseIm.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRNNeteaseIm.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		4E5B47761EC1793600D74E72 /* RNNeteaseIm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNNeteaseIm.h; sourceTree = "<group>"; };
 		4E5B47771EC1793600D74E72 /* RNNeteaseIm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNNeteaseIm.m; sourceTree = "<group>"; };
@@ -145,6 +151,10 @@
 		4E5B47431EC1788F00D74E72 /* RNNeteaseIm */ = {
 			isa = PBXGroup;
 			children = (
+				4E3DD02A1EF384A900012CB7 /* DWCustomAttachment.h */,
+				4E3DD02B1EF384A900012CB7 /* DWCustomAttachment.m */,
+				4E3DD02C1EF384A900012CB7 /* DWCustomAttachmentDecoder.h */,
+				4E3DD02D1EF384A900012CB7 /* DWCustomAttachmentDecoder.m */,
 				4E5B47761EC1793600D74E72 /* RNNeteaseIm.h */,
 				4E5B47771EC1793600D74E72 /* RNNeteaseIm.m */,
 				4E5B47A51EC17A0D00D74E72 /* ContactViewController.h */,
@@ -293,6 +303,7 @@
 			files = (
 				4E5B47D01EC17A0D00D74E72 /* NTESSpellingCenter.m in Sources */,
 				4E5B49B71EC1AE5600D74E72 /* NIMKitUtil.m in Sources */,
+				4E3DD02E1EF384A900012CB7 /* DWCustomAttachment.m in Sources */,
 				4E27A5CB1ED5417100543BFC /* RNNotificationCenter.m in Sources */,
 				4E5B47C91EC17A0D00D74E72 /* TeamViewController.m in Sources */,
 				4E5B49D11EC1B34B00D74E72 /* NIMKit.m in Sources */,
@@ -302,6 +313,7 @@
 				4E5B47CE1EC17A0D00D74E72 /* NTESClientUtil.m in Sources */,
 				4E6BA8EC1EC2D23A00630D77 /* NIMKitTimerHolder.m in Sources */,
 				4E5B47CA1EC17A0D00D74E72 /* NTESContactDataMember.m in Sources */,
+				4E3DD02F1EF384A900012CB7 /* DWCustomAttachmentDecoder.m in Sources */,
 				4E5B47781EC1793600D74E72 /* RNNeteaseIm.m in Sources */,
 				4E5B47C61EC17A0D00D74E72 /* NIMModel.m in Sources */,
 				4EC4FCCF1ECA9BDB00F3DA5E /* NSString+NIMKit.m in Sources */,

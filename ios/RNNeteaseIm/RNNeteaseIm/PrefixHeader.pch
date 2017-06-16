@@ -16,6 +16,7 @@
 #import "NIMAVChat.h"
 #import "NIMKit.h"
 #import "NIMObject.h"
+#import "DWCustomAttachment.h"
 #define NTESNotifyID        @"id"
 #define NTESCustomContent  @"content"
 
@@ -32,5 +33,10 @@ static DDLogLevel ddLogLevel = DDLogLevelInfo;
 #define NTES_FORBID_INTERACTIVE_POP - (BOOL)forbidInteractivePop{return YES;}
 // Include any system framework and library headers here that should be included in all compilation units.
 // You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
+#define CustomMessgeTypeRedpacket  5  //红包类型 redpacket
+#define CustomMessgeTypeBankTransfer  6   //转账类型 transfer
+#define CustomMessgeTypeUrl  7   // 连接类型 url
+#define CustomMessgeTypeAccountNotice  8   //账户通知，与账户金额相关变动 account_notice
 
 #endif /* PrefixHeader_pch */

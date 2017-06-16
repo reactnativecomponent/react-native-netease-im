@@ -41,6 +41,11 @@ typedef void(^Errors)(id erro);
 -(void)sendLocationMessage:(  NSString *)latitude longitude:(  NSString *)longitude address:(  NSString *)address;
 //发送提醒消息
 -(void)sendTipMessage:( NSString *)content;
+//发送红包消息
+- (void)sendRedPacketMessage:(NSString *)type comments:(NSString *)comments serialNo:(NSString *)serialNo;
+//发送转账消息
+- (void)sendBankTransferMessage:(NSString *)amount comments:(NSString *)comments serialNo:(NSString *)serialNo;
+
 //转发消息
 -(void)forwardMessage:(NSString *)messageId sessionId:(NSString *)sessionId sessionType:(NSString *)sessionType content:(NSString *)content success:(Success)succe;
 //本地历史记录

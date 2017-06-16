@@ -282,6 +282,10 @@
         case NIMMessageTypeTip:
             text = lastMessage.text;
             break;
+        case NIMMessageTypeCustom:{
+            text = [self getCustomType:lastMessage];
+        }
+            break;
         default:
             text = @"[未知消息]";
     }
@@ -292,6 +296,34 @@
         return nickName.length ? [nickName stringByAppendingFormat:@" : %@",text] : @"";
     }
 }
+//获得数据类型
+- (NSString *)getCustomType:(NIMMessage *)message{
+    NIMCustomObject *customObject = message.messageObject;
+    DWCustomAttachment *obj = customObject.attachment;
+    NSString *text = @"[未知消息]";
+    if (obj) {
+        switch (obj.custType) {
+            case CustomMessgeTypeRedpacket: //红包
+                text = @"[红包]";
+                break;
+            case CustomMessgeTypeBankTransfer: //转账
+                text = @"[转账]";
+                break;
+            case CustomMessgeTypeUrl: //链接
+                text = @"[链接]";
+                break;
+            case CustomMessgeTypeAccountNotice: //账户通知
+                text = @"[账户通知]";
+                break;
+            default:
+                text = @"[未知消息]";
+                break;
+        }
+    }
+    return text;
+}
+
+
 - (NSString *)notificationMessageContent:(NIMMessage *)lastMessage{
     NIMNotificationObject *object = lastMessage.messageObject;
     if (object.notificationType == NIMNotificationTypeNetCall) {

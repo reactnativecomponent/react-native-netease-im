@@ -29,7 +29,7 @@
 }
 + (NIMMessage*)msgWithCustom:(NIMObject *)attachment
 {
-
+    
     NIMMessage *message               = [[NIMMessage alloc] init];
     NIMCustomObject *customObject     = [[NIMCustomObject alloc] init];
     customObject.attachment           = attachment;
@@ -37,6 +37,36 @@
     message.apnsContent = @"发来了一条未知消息";
     return message;
 }
++ (NIMMessage*)msgWithCustomAttachment:(DWCustomAttachment *)attachment
+{
+    
+    NIMMessage *message               = [[NIMMessage alloc] init];
+    NIMCustomObject *customObject     = [[NIMCustomObject alloc] init];
+    customObject.attachment           = attachment;
+    message.messageObject             = customObject;
+    NSString *text = @"";
+    switch (attachment.custType) {
+        case CustomMessgeTypeRedpacket:
+            text = @"发来了一条红包消息";
+            break;
+        case CustomMessgeTypeBankTransfer:
+            text = @"发来了一条转账消息";
+            break;
+        case CustomMessgeTypeUrl:
+            text = @"发来了一条链接消息";
+            break;
+        case CustomMessgeTypeAccountNotice:
+            text = @"发来了一条账户通知消息";
+            break;
+        default:
+            text = @"发来了一条未知消息";
+            break;
+    }
+    
+    message.apnsContent = text;
+    return message;
+}
+
 + (NIMMessage*)msgWithVideo:(NSString*)filePath
 {
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
@@ -62,7 +92,7 @@
 {
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm"];
-     NSString *dateString = [dateFormatter stringFromDate:[NSDate date]];
+    NSString *dateString = [dateFormatter stringFromDate:[NSDate date]];
     NIMImageObject * imageObject = [[NIMImageObject alloc] initWithFilepath:path];
     imageObject.displayName = [NSString stringWithFormat:@"图片发送于%@",dateString];
     NIMMessage *message     = [[NIMMessage alloc] init];

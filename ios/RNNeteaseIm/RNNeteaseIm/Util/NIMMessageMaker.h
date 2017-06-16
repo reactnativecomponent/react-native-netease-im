@@ -26,4 +26,6 @@
 + (NIMMessage *)msgWithLocation:(NIMKitLocationPoint*)locationPoint;
 
 + (NIMMessage*)msgWithCustom:(NIMObject *)attachment;
+
++ (NIMMessage*)msgWithCustomAttachment:(DWCustomAttachment *)attachment;
 @end

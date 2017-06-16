@@ -393,6 +393,17 @@ RCT_EXPORT_METHOD(stopPlay){
     [[ConversationViewController initWithConversationViewController]stopPlay];
 }
 
+//发送红包消息
+RCT_EXPORT_METHOD(sendRedPacketMessage:(NSString *)type comments:(NSString *)comments serialNo:(NSString *)serialNo){
+    [[ConversationViewController initWithConversationViewController] sendRedPacketMessage:type comments:comments serialNo:serialNo];
+}
+
+//发送转账消息
+RCT_EXPORT_METHOD(sendBankTransferMessage:(NSString *)amount comments:(NSString *)comments serialNo:(NSString *)serialNo){
+    [[ConversationViewController initWithConversationViewController] sendBankTransferMessage:amount comments:comments serialNo:serialNo];
+}
+
+
 //发送提醒消息
 RCT_EXPORT_METHOD(sendTipMessage:(nonnull  NSString *)content){
     [[ConversationViewController initWithConversationViewController]sendMessage:content];
