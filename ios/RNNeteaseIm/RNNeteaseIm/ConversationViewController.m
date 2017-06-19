@@ -9,6 +9,7 @@
 #import "ConversationViewController.h"
 #import <Photos/PhotosTypes.h>
 #import "NIMMessageMaker.h"
+#import "ContactViewController.h"
 #import "NIMKitLocationPoint.h"
 #import <AVFoundation/AVFoundation.h>
 #define NTESNotifyID        @"id"
@@ -267,6 +268,12 @@
                         [dic setObject:@"account_notice" forKey:@"custType"];
                     }
                         break;
+                    case CustomMessgeTypeRedPacketOpenMessage: //拆红包消息
+                    {
+                        [dic setObject:obj.dataDict  forKey:@"redpacketOpenObj"];
+                        [dic setObject:@"redpacketOpen" forKey:@"custType"];
+                    }
+                        break;
                     default:
                         break;
                         
@@ -395,6 +402,31 @@
     NSDictionary *dict = @{@"amount":amount,@"comments":comments,@"serialNo":serialNo};
     [self sendCustomMessage:CustomMessgeTypeBankTransfer data:dict];
 }
+//发送拆红包消息
+-(void)sendRedPacketOpenMessage:(NSString *)sendId hasRedPacket:(NSString *)hasRedPacket{
+    NSString *strMyId = [NIMSDK sharedSDK].loginManager.currentAccount;
+    BOOL isMe = [sendId isEqualToString:strMyId];
+    if (isMe) {//如果是自己
+        NSString *strSendName = @"自己";
+        NSString *strOpenName =@"你";
+        NSDictionary *dict = @{@"sendId":sendId,@"sendName":strSendName,@"openId":strMyId,@"openName":strOpenName,@"hasRedPacket":hasRedPacket};
+        [self sendCustomMessage:CustomMessgeTypeRedPacketOpenMessage data:dict];
+    }else{
+        __weak typeof(self)weakSelf = self;
+        NIMUserInfo *myUserInfo = [[NIMSDK sharedSDK].userManager userInfo:strMyId].userInfo;
+        NSString *strOpenName = myUserInfo.nickName;
+        [[ContactViewController initWithContactViewController]fetchUserInfos:sendId Success:^(id param) {
+            NSDictionary *jsonDict = (NSDictionary *)param;
+            NSString *strSendName = [jsonDict objectForKey:@"name"];//发送红包人的名字
+            NSDictionary *dict = @{@"sendId":sendId,@"sendName":strSendName,@"openId":strMyId,@"openName":strOpenName,@"hasRedPacket":hasRedPacket};
+            [weakSelf sendCustomMessage:CustomMessgeTypeRedPacketOpenMessage data:dict];
+        } error:^(NSString *error) {
+            NSLog(@"%@",error);
+        }];
+    }
+}
+
+
 //设置好友消息提醒
 -(void)muteMessage:(NSString *)contactId mute:(NSString *)mute Succ:(Success)succ Err:(Errors)err{
     BOOL on;
@@ -784,6 +816,12 @@
                 {
                     [dic2 setObject:obj.dataDict  forKey:@"accountNoticeObj"];
                     [dic2 setObject:@"account_notice" forKey:@"custType"];
+                }
+                    break;
+                case CustomMessgeTypeRedPacketOpenMessage: //拆红包消息
+                {
+                    [dic2 setObject:obj.dataDict  forKey:@"redpacketOpenObj"];
+                    [dic2 setObject:@"redpacketOpen" forKey:@"custType"];
                 }
                     break;
                 default:

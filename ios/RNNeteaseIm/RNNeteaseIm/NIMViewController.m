@@ -310,10 +310,15 @@
                 text = @"[转账]";
                 break;
             case CustomMessgeTypeUrl: //链接
-                text = @"[链接]";
+            {
+               text = [obj.dataDict objectForKey:@"title"];
+            }
                 break;
             case CustomMessgeTypeAccountNotice: //账户通知
                 text = @"[账户通知]";
+                break;
+            case CustomMessgeTypeRedPacketOpenMessage: //拆红包
+                text = @"[拆红包通知]";
                 break;
             default:
                 text = @"[未知消息]";

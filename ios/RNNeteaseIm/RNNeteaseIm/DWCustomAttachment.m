@@ -25,6 +25,9 @@
         case CustomMessgeTypeAccountNotice:
             strType = @"account_notice";
             break;
+        case CustomMessgeTypeRedPacketOpenMessage:
+            strType = @"redpacketOpen";
+            break;
         default:
             break;
     }
