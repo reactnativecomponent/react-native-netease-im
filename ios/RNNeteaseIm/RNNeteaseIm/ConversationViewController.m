@@ -402,6 +402,7 @@
     NSDictionary *dict = @{@"amount":amount,@"comments":comments,@"serialNo":serialNo};
     [self sendCustomMessage:CustomMessgeTypeBankTransfer data:dict];
 }
+
 //发送拆红包消息
 -(void)sendRedPacketOpenMessage:(NSString *)sendId hasRedPacket:(NSString *)hasRedPacket{
     NSString *strMyId = [NIMSDK sharedSDK].loginManager.currentAccount;
@@ -425,7 +426,6 @@
         }];
     }
 }
-
 
 //设置好友消息提醒
 -(void)muteMessage:(NSString *)contactId mute:(NSString *)mute Succ:(Success)succ Err:(Errors)err{

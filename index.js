@@ -339,6 +339,16 @@ export default class NIM{
         return RNNeteaseIm.sendRedPacketMessage(type, comments, serialNo);
     }
 
+
+    /**
+     * 拆红包
+     * @param sendId 发送红包的sessionId
+     * @param hasRedPacket 是否还有红包 '1' '0'已经拆完
+     * @returns {*}
+     */
+    static sendRedPacketOpenMessage(sendId,hasRedPacket){
+        return RNNeteaseIm.sendRedPacketOpenMessage(sendId,hasRedPacket);
+    }
     /**
      * 转账
      * min 转账最小金额
