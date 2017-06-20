@@ -117,6 +117,7 @@ public class ReactCache {
                         name = team.getName();
                         map.putString("teamType", Integer.toString(team.getType().getValue()));
                         map.putString("imagePath", team.getIcon());
+                        map.putString("memberCount", Integer.toString(team.getMemberCount()));
                     }
                 }
                 map.putString("name", name);
