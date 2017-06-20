@@ -615,9 +615,13 @@ public class SessionService {
 
     public void sendRedPacketOpenMessage(String sendId, String openId, String hasRedPacket, OnSendMessageListener onSendMessageListener) {
         CustomMessageConfig config = new CustomMessageConfig();
+        config.enableUnreadCount = false;
+        config.enablePush = false;
         RedPacketOpenAttachement attachment = new RedPacketOpenAttachement();
         attachment.setParams(sendId, openId, hasRedPacket);
         IMMessage message = MessageBuilder.createCustomMessage(sessionId, sessionTypeEnum, sendId + ";" + openId, attachment, config);
+
+//        message.
         sendMessage(message, onSendMessageListener);
     }
 
