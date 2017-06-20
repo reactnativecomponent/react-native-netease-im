@@ -36,6 +36,10 @@ public class RedPacketAttachement extends CustomAttachment {
         serialNo = data.getString(KEY_SERIAL_NO);
     }
 
+    public String getComments() {
+        return comments;
+    }
+
     @Override
     protected JSONObject packData() {
         JSONObject object = new JSONObject();

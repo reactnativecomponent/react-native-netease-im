@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import com.alibaba.fastjson.JSONObject;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableMap;
+import com.netease.im.login.LoginService;
 import com.netease.im.uikit.cache.NimUserInfoCache;
 
 /**
@@ -47,23 +48,35 @@ public class RedPacketOpenAttachement extends CustomAttachment {
         this.hasRedPacket = hasRedPacket;
     }
 
+    public boolean isSelf() {
+        String self = LoginService.getInstance().getAccount();
+        return TextUtils.equals(self, sendId) || TextUtils.equals(self, openId);
+    }
+
+    public String getTipMsg() {
+        String openName = NimUserInfoCache.getInstance().getUserDisplayNameYou(openId);
+        String sendName;
+        if (TextUtils.equals(sendId, openId)) {
+            sendName = "自己发";
+        } else {
+            sendName = NimUserInfoCache.getInstance().getUserDisplayNameYou(sendId);
+        }
+        String end = "";
+        if ("0".equals(hasRedPacket) && TextUtils.equals(LoginService.getInstance().getAccount(), sendId)) {
+            end = "，你的红包已被领完";
+        }
+        return openName + "领取了" + sendName + "的红包" + end;
+    }
+
     @Override
     public WritableMap toReactNative() {
         WritableMap writableMap = Arguments.createMap();
-
-        String sendName = NimUserInfoCache.getInstance().getUserDisplayNameYou(sendId);
-        String openName;
-        if (TextUtils.equals(sendId, openId)) {
-            openName = "自己";
-        } else {
-            openName = NimUserInfoCache.getInstance().getUserDisplayNameYou(openId);
-        }
-        writableMap.putString("sendId", sendId);
-        writableMap.putString("sendName", sendName);
-        writableMap.putString("openId", openId);
-        writableMap.putString("openName", openName);
+//        writableMap.putString("sendId", sendId);
+//        writableMap.putString("sendName", sendName);
+//        writableMap.putString("openId", openId);
+//        writableMap.putString("openName", openName);
         writableMap.putString("hasRedPacket", hasRedPacket);
-        writableMap.putString("tipMsg", sendName + "打开了" + openName + "的红包");
+        writableMap.putString("tipMsg", getTipMsg());
         return writableMap;
     }
 }

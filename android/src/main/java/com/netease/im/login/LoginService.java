@@ -45,7 +45,7 @@ public class LoginService {
     }
 
     public String getAccount() {
-        return null;
+        return account;
     }
 
     public LoginInfo getLoginInfo(Context context) {

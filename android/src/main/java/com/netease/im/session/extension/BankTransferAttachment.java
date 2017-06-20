@@ -43,6 +43,11 @@ public class BankTransferAttachment extends CustomAttachment {
         this.comments = comments;
         this.serialNo = serialNo;
     }
+
+    public String getComments() {
+        return comments;
+    }
+
     @Override
     public WritableMap toReactNative() {
         WritableMap writableMap = Arguments.createMap();

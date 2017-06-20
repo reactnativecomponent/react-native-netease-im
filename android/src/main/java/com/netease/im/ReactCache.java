@@ -117,6 +117,7 @@ public class ReactCache {
                         name = team.getName();
                         map.putString("teamType", Integer.toString(team.getType().getValue()));
                         map.putString("imagePath", team.getIcon());
+                        map.putString("memberCount", Integer.toString(team.getMemberCount()));
                     }
                 }
                 map.putString("name", name);
@@ -154,28 +155,31 @@ public class ReactCache {
                     switch (attachment.getType()) {
                         case CustomAttachmentType.RedPacket:
                             if (attachment instanceof RedPacketAttachement) {
-                                content = "[红包]";
+                                content = "[红包] " + ((RedPacketAttachement) attachment).getComments();
                             }
                             break;
                         case CustomAttachmentType.BankTransfer:
                             if (attachment instanceof BankTransferAttachment) {
-                                content = "[转账]";
+                                content = "[转账] "+((BankTransferAttachment)attachment).getComments();
                             }
                             break;
                         case CustomAttachmentType.LinkUrl:
                             if (attachment instanceof LinkUrlAttachment) {
-                                content = ((LinkUrlAttachment)attachment).getTitle();
+                                content = ((LinkUrlAttachment) attachment).getTitle();
                             }
                             break;
                         case CustomAttachmentType.AccountNotice:
                             if (attachment instanceof AccountNoticeAttachment) {
-                                content = "[账号通知]";
+                                content = ((AccountNoticeAttachment) attachment).getTitle();
                             }
                             break;
                         case CustomAttachmentType.RedPacketOpen:
                             if (attachment instanceof RedPacketOpenAttachement) {
-                                content = "[拆红包通知]";
-                                map.putMap("redpacketOpenObj", ((RedPacketOpenAttachement)attachment).toReactNative());
+                                RedPacketOpenAttachement rpOpen = (RedPacketOpenAttachement) attachment;
+                                if (!rpOpen.isSelf()) {
+                                    continue;
+                                }
+                                content = rpOpen.getTipMsg();
                             }
                             break;
                         default:
@@ -745,8 +749,11 @@ public class ReactCache {
                             break;
                         case CustomAttachmentType.RedPacketOpen:
                             if (attachment instanceof RedPacketOpenAttachement) {
-
-                                itemMap.putMap("redpacketOpenObj", ((RedPacketOpenAttachement)attachment).toReactNative());
+                                RedPacketOpenAttachement rpOpen = (RedPacketOpenAttachement) attachment;
+                                if (!rpOpen.isSelf()) {
+                                    return null;
+                                }
+                                itemMap.putMap("redpacketOpenObj", rpOpen.toReactNative());
                             }
                             break;
                         default:

@@ -123,7 +123,7 @@
         [dic setObject:[NSString stringWithFormat:@"%f", message.timestamp] forKey:@"createdAt"];
         [dic setObject:[NSString stringWithFormat:@"%@", message.messageId] forKey:@"_id"];
         [dic setObject:[NSString stringWithFormat:@"%d",message.isRemoteRead] forKey:@"isRemoteRead"];
-        
+      
         NSArray *keys = [dic allKeys];
         for (NSString *tem  in keys) {
             if ([[dic objectForKey:tem] isEqualToString:@"(null)"]) {
