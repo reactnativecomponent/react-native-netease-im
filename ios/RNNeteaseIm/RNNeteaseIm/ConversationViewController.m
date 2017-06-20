@@ -123,10 +123,7 @@
         [dic setObject:[NSString stringWithFormat:@"%f", message.timestamp] forKey:@"createdAt"];
         [dic setObject:[NSString stringWithFormat:@"%@", message.messageId] forKey:@"_id"];
         [dic setObject:[NSString stringWithFormat:@"%d",message.isRemoteRead] forKey:@"isRemoteRead"];
-        if (message.session.sessionType == 1) {
-            NIMTeam *team = [[[NIMSDK sharedSDK] teamManager]teamById:message.session.sessionId];
-            [dic setObject:[NSString stringWithFormat:@"%ld",team.memberNumber] forKey:@"memberCount"];
-        }
+      
         NSArray *keys = [dic allKeys];
         for (NSString *tem  in keys) {
             if ([[dic objectForKey:tem] isEqualToString:@"(null)"]) {
@@ -685,10 +682,6 @@
     [dic2 setObject:[NSString stringWithFormat:@"%f", message.timestamp] forKey:@"createdAt"];
     [dic2 setObject:[NSString stringWithFormat:@"%@", message.messageId] forKey:@"_id"];
     [dic2 setObject:[NSString stringWithFormat:@"%d",message.isRemoteRead] forKey:@"isRemoteRead"];
-    if (message.session.sessionType == 1) {
-        NIMTeam *team = [[[NIMSDK sharedSDK] teamManager]teamById:message.session.sessionId];
-        [dic2 setObject:[NSString stringWithFormat:@"%ld",team.memberNumber] forKey:@"memberCount"];
-    }
     NSArray *keys = [dic2 allKeys];
     for (NSString *tem  in keys) {
         if ([[dic2 objectForKey:tem] isEqualToString:@"(null)"]) {
