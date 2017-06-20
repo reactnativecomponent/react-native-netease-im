@@ -70,6 +70,7 @@ public class SysMessageObserver {
 
                 // 同一个账号的好友申请仅保留最近一条
                 if (addFriendVerifyFilter(m)) {
+                    NIMClient.getService(SystemMessageService.class).deleteSystemMessage(m.getMessageId());//删除旧的加好友通知
                     continue;
                 }
 
@@ -131,6 +132,7 @@ public class SysMessageObserver {
                     AddFriendNotify attachData = (AddFriendNotify) m.getAttachObject();
                     if (attachData != null && attachData.getEvent() == AddFriendNotify.Event.RECV_ADD_FRIEND_VERIFY_REQUEST) {
                         del = m;
+                        NIMClient.getService(SystemMessageService.class).deleteSystemMessage(m.getMessageId());//删除旧的加好友通知
                         break;
                     }
                 }
