@@ -855,7 +855,7 @@
     NSString *strContent;
     NSString *lastString = @"";
     NSInteger hasRedPacket = [[dict objectForKey:@"hasRedPacket"] integerValue];
-    if (hasRedPacket == 0) {
+    if (hasRedPacket == 1) {//红包已领完
         lastString = @"，你的红包已被领完";
     }
     if ([strOpenId isEqualToString:strMyId]&&[strSendId isEqualToString:strMyId]) {
