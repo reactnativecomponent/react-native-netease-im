@@ -62,7 +62,7 @@ public class RedPacketOpenAttachement extends CustomAttachment {
             sendName = NimUserInfoCache.getInstance().getUserDisplayNameYou(sendId);
         }
         String end = "";
-        if ("0".equals(hasRedPacket) && TextUtils.equals(LoginService.getInstance().getAccount(), sendId)) {
+        if ("1".equals(hasRedPacket) && TextUtils.equals(LoginService.getInstance().getAccount(), sendId)) {
             end = "，你的红包已被领完";
         }
         return openName + "领取了" + sendName + "的红包" + end;
