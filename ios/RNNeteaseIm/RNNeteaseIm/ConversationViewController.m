@@ -422,7 +422,7 @@
         [[ContactViewController initWithContactViewController]fetchUserInfos:sendId Success:^(id param) {
             NSDictionary *jsonDict = (NSDictionary *)param;
             NSString *strSendName = [jsonDict objectForKey:@"name"];//发送红包人的名字
-            NSDictionary *dict = @{@"sendId":sendId,@"sendName":strSendName,@"openId":@"100010078",@"openName":myName,@"hasRedPacket":hasRedPacket};
+            NSDictionary *dict = @{@"sendId":sendId,@"sendName":strSendName,@"openId":strMyId,@"openName":myName,@"hasRedPacket":hasRedPacket};
             [weakSelf sendCustomMessage:CustomMessgeTypeRedPacketOpenMessage data:dict];
         } error:^(NSString *error) {
             NSLog(@"%@",error);
