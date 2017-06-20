@@ -275,6 +275,8 @@
                             [dic setObject:dataDict  forKey:@"redpacketOpenObj"];
                             [dic setObject:@"redpacketOpen" forKey:@"custType"];
                         }else{
+                            
+                            
                             continue;//终止本次循环
                         }
                     }
