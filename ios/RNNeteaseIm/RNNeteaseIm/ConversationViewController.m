@@ -270,8 +270,13 @@
                         break;
                     case CustomMessgeTypeRedPacketOpenMessage: //拆红包消息
                     {
-                        [dic setObject:obj.dataDict  forKey:@"redpacketOpenObj"];
-                        [dic setObject:@"redpacketOpen" forKey:@"custType"];
+                        NSDictionary *dataDict = [self dealWithData:obj.dataDict];
+                        if (dataDict) {
+                            [dic setObject:dataDict  forKey:@"redpacketOpenObj"];
+                            [dic setObject:@"redpacketOpen" forKey:@"custType"];
+                        }else{
+                            continue;//终止本次循环
+                        }
                     }
                         break;
                     default:
@@ -407,19 +412,17 @@
 -(void)sendRedPacketOpenMessage:(NSString *)sendId hasRedPacket:(NSString *)hasRedPacket{
     NSString *strMyId = [NIMSDK sharedSDK].loginManager.currentAccount;
     BOOL isMe = [sendId isEqualToString:strMyId];
+    NIMUserInfo *myUserInfo = [[NIMSDK sharedSDK].userManager userInfo:strMyId].userInfo;
+    NSString *myName = myUserInfo.nickName;
     if (isMe) {//如果是自己
-        NSString *strSendName = @"自己";
-        NSString *strOpenName =@"你";
-        NSDictionary *dict = @{@"sendId":sendId,@"sendName":strSendName,@"openId":strMyId,@"openName":strOpenName,@"hasRedPacket":hasRedPacket};
+        NSDictionary *dict = @{@"sendId":sendId,@"sendName":myName,@"openId":strMyId,@"openName":myName,@"hasRedPacket":hasRedPacket};
         [self sendCustomMessage:CustomMessgeTypeRedPacketOpenMessage data:dict];
     }else{
         __weak typeof(self)weakSelf = self;
-        NIMUserInfo *myUserInfo = [[NIMSDK sharedSDK].userManager userInfo:strMyId].userInfo;
-        NSString *strOpenName = myUserInfo.nickName;
         [[ContactViewController initWithContactViewController]fetchUserInfos:sendId Success:^(id param) {
             NSDictionary *jsonDict = (NSDictionary *)param;
             NSString *strSendName = [jsonDict objectForKey:@"name"];//发送红包人的名字
-            NSDictionary *dict = @{@"sendId":sendId,@"sendName":strSendName,@"openId":strMyId,@"openName":strOpenName,@"hasRedPacket":hasRedPacket};
+            NSDictionary *dict = @{@"sendId":sendId,@"sendName":strSendName,@"openId":@"100010078",@"openName":myName,@"hasRedPacket":hasRedPacket};
             [weakSelf sendCustomMessage:CustomMessgeTypeRedPacketOpenMessage data:dict];
         } error:^(NSString *error) {
             NSLog(@"%@",error);
@@ -820,8 +823,13 @@
                     break;
                 case CustomMessgeTypeRedPacketOpenMessage: //拆红包消息
                 {
-                    [dic2 setObject:obj.dataDict  forKey:@"redpacketOpenObj"];
-                    [dic2 setObject:@"redpacketOpen" forKey:@"custType"];
+                    NSDictionary *dataDict = [self dealWithData:obj.dataDict];
+                    if (dataDict) {
+                        [dic2 setObject:dataDict  forKey:@"redpacketOpenObj"];
+                        [dic2 setObject:@"redpacketOpen" forKey:@"custType"];
+                    }else{
+                        return;
+                    }
                 }
                     break;
                 default:
@@ -838,10 +846,34 @@
         //发送消息
         model.sendState = messageArr;
     }
-    
-    
-    
 }
+//处理拆红包消息
+- (NSDictionary *)dealWithData:(NSDictionary *)dict{
+    NSString *strOpenId = [dict objectForKey:@"openId"];
+    NSString *strSendId = [dict objectForKey:@"sendId"];
+    NSString *strMyId = [NIMSDK sharedSDK].loginManager.currentAccount;
+    NSString *strContent;
+    NSString *lastString = @"";
+    NSInteger hasRedPacket = [[dict objectForKey:@"hasRedPacket"] integerValue];
+    if (hasRedPacket == 0) {
+        lastString = @"，你的红包已被领完";
+    }
+    if ([strOpenId isEqualToString:strMyId]&&[strSendId isEqualToString:strMyId]) {
+        strContent = [NSString stringWithFormat:@"你领取了自己发的红包%@",lastString ];
+    }else if ([strOpenId isEqualToString:strMyId]){
+        NSString *strSendName = [dict objectForKey:@"sendName"];
+        strContent = [NSString stringWithFormat:@"你领取了%@的红包",strSendName];
+    }else if([strSendId isEqualToString:strMyId]){
+        NSString *strOpenName = [dict objectForKey:@"openName"];
+        strContent = [NSString stringWithFormat:@"%@领取了你的红包%@",strOpenName,lastString];
+    }else{//别人发的别人领的
+        return nil;
+    }
+    NSDictionary *dataDict = @{@"tipMsg":strContent};
+    return dataDict;
+}
+
+
 //转发消息
 -(void)forwardMessage:(NSString *)messageId sessionId:(NSString *)sessionId sessionType:(NSString *)sessionType content:(NSString *)content success:(Success)succe{
     NIMSession *session = [NIMSession session:sessionId type:[sessionType integerValue]];

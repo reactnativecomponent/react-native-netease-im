@@ -398,7 +398,7 @@ RCT_EXPORT_METHOD(sendRedPacketMessage:(NSString *)type comments:(NSString *)com
     [[ConversationViewController initWithConversationViewController] sendRedPacketMessage:type comments:comments serialNo:serialNo];
 }
 
-//发送红包消息
+//发送拆红包消息
 RCT_EXPORT_METHOD(sendRedPacketOpenMessage:(NSString *)sendId hasRedPacket:(NSString *)hasRedPacket){
     [[ConversationViewController initWithConversationViewController] sendRedPacketOpenMessage:sendId hasRedPacket:hasRedPacket];
 }

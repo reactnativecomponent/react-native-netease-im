@@ -58,14 +58,18 @@
         case CustomMessgeTypeAccountNotice:
             text = @"发来了一条账户通知消息";
             break;
-        case CustomMessgeTypeRedPacketOpenMessage:
-            text = @"发来了一条拆红包消息";
+        case CustomMessgeTypeRedPacketOpenMessage:{
+            text = @"";
+            NIMMessageSetting *seting = [[NIMMessageSetting alloc]init];
+            seting.apnsEnabled = NO;
+            seting.shouldBeCounted = NO;
+            message.setting = seting;
+        }
             break;
         default:
             text = @"发来了一条未知消息";
             break;
     }
-    
     message.apnsContent = text;
     return message;
 }
