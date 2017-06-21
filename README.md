@@ -116,8 +116,8 @@ Run `pod install`
 在你工程的`AppDelegate.m`文件中添加如下代码：
 
 ```
-#import <NIMSDK/NIMSDK.h>
-#import "RCTLinkingManager.h"
+...
+#import <NIMSDK/NIMS
 #import "NTESSDKConfigDelegate.h"
 @interface AppDelegate ()
 @property (nonatomic,strong) NTESSDKConfigDelegate *sdkConfigDelegate;
