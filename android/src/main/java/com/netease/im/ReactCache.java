@@ -125,8 +125,9 @@ public class ReactCache {
                 map.putString("msgType", Integer.toString(contact.getMsgType().getValue()));
                 map.putString("msgStatus", Integer.toString(contact.getMsgStatus().getValue()));
                 map.putString("messageId", contact.getRecentMessageId());
-//
-                map.putString("fromAccount", contact.getFromAccount());
+
+                String fromAccount = contact.getFromAccount();
+                map.putString("fromAccount", fromAccount);
 
                 String content = contact.getContent();
                 map.putString("time", TimeUtil.getTimeShowString(contact.getTime(), true));
@@ -138,11 +139,13 @@ public class ReactCache {
                     e.printStackTrace();
                 }
 
-                fromNick = TextUtils.isEmpty(fromNick) ? NimUserInfoCache.getInstance().getUserDisplayName(contact.getFromAccount()) : fromNick;
+                fromNick = TextUtils.isEmpty(fromNick) ? NimUserInfoCache.getInstance().getUserDisplayName(fromAccount) : fromNick;
                 map.putString("nick", fromNick);
                 String nickName = "";
-                if (contact.getSessionType() == SessionTypeEnum.Team) {
-                    nickName = fromNick + "：";
+                if (contact.getSessionType() == SessionTypeEnum.Team && !TextUtils.equals(LoginService.getInstance().getAccount(), fromAccount)) {
+                    if (!TextUtils.isEmpty(fromNick)) {
+                        nickName = fromNick + "：";
+                    }
                 }
                 CustomAttachment attachment = null;
                 try {
