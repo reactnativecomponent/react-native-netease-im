@@ -311,10 +311,14 @@
     if (obj) {
         switch (obj.custType) {
             case CustomMessgeTypeRedpacket: //红包
-                text = @"[红包]";
+            {
+                text = [NSString stringWithFormat:@"[红包]%@", [obj.dataDict objectForKey:@"comments"]];
+            }
                 break;
             case CustomMessgeTypeBankTransfer: //转账
-                text = @"[转账]";
+            {
+                text = [NSString stringWithFormat:@"[转账]%@", [obj.dataDict objectForKey:@"comments"]];
+            }
                 break;
             case CustomMessgeTypeUrl: //链接
             {
@@ -322,10 +326,14 @@
             }
                 break;
             case CustomMessgeTypeAccountNotice: //账户通知
-                text = @"[账户通知]";
+            {
+                text = [obj.dataDict objectForKey:@"title"];
+            }
                 break;
             case CustomMessgeTypeRedPacketOpenMessage: //拆红包
-                text = @"[拆红包通知]";
+            {
+                text = [self dealWithData:obj.dataDict];
+            }
                 break;
             default:
                 text = @"[未知消息]";
@@ -335,6 +343,28 @@
     return text;
 }
 
+//处理拆红包消息
+- (NSString *)dealWithData:(NSDictionary *)dict{
+    NSString *strOpenId = [dict objectForKey:@"openId"];
+    NSString *strSendId = [dict objectForKey:@"sendId"];
+    NSString *strMyId = [NIMSDK sharedSDK].loginManager.currentAccount;
+    NSString *strContent = @"";
+    NSString *lastString = @"";
+    NSInteger hasRedPacket = [[dict objectForKey:@"hasRedPacket"] integerValue];
+    if (hasRedPacket == 1) {//红包已领完
+        lastString = @"，你的红包已被领完";
+    }
+    if ([strOpenId isEqualToString:strMyId]&&[strSendId isEqualToString:strMyId]) {
+        strContent = [NSString stringWithFormat:@"你领取了自己发的红包%@",lastString ];
+    }else if ([strOpenId isEqualToString:strMyId]){
+        NSString *strSendName = [dict objectForKey:@"sendName"];
+        strContent = [NSString stringWithFormat:@"你领取了%@的红包",strSendName];
+    }else if([strSendId isEqualToString:strMyId]){
+        NSString *strOpenName = [dict objectForKey:@"openName"];
+        strContent = [NSString stringWithFormat:@"%@领取了你的红包%@",strOpenName,lastString];
+    }
+    return strContent;
+}
 
 - (NSString *)notificationMessageContent:(NIMMessage *)lastMessage{
     NIMNotificationObject *object = lastMessage.messageObject;

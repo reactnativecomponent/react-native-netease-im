@@ -275,6 +275,8 @@
                             [dic setObject:dataDict  forKey:@"redpacketOpenObj"];
                             [dic setObject:@"redpacketOpen" forKey:@"custType"];
                         }else{
+                            
+                            
                             continue;//终止本次循环
                         }
                     }
@@ -409,20 +411,23 @@
 }
 
 //发送拆红包消息
--(void)sendRedPacketOpenMessage:(NSString *)sendId hasRedPacket:(NSString *)hasRedPacket{
+-(void)sendRedPacketOpenMessage:(NSString *)sendId hasRedPacket:(NSString *)hasRedPacket serialNo:(NSString *)serialNo{
     NSString *strMyId = [NIMSDK sharedSDK].loginManager.currentAccount;
     BOOL isMe = [sendId isEqualToString:strMyId];
     NIMUserInfo *myUserInfo = [[NIMSDK sharedSDK].userManager userInfo:strMyId].userInfo;
     NSString *myName = myUserInfo.nickName;
     if (isMe) {//如果是自己
-        NSDictionary *dict = @{@"sendId":sendId,@"sendName":myName,@"openId":strMyId,@"openName":myName,@"hasRedPacket":hasRedPacket};
+        NSDictionary *dict = @{@"sendId":sendId,@"sendName":myName,@"openId":strMyId,@"openName":myName,@"hasRedPacket":hasRedPacket,@"serialNo":serialNo};
         [self sendCustomMessage:CustomMessgeTypeRedPacketOpenMessage data:dict];
     }else{
         __weak typeof(self)weakSelf = self;
         [[ContactViewController initWithContactViewController]fetchUserInfos:sendId Success:^(id param) {
             NSDictionary *jsonDict = (NSDictionary *)param;
             NSString *strSendName = [jsonDict objectForKey:@"name"];//发送红包人的名字
-            NSDictionary *dict = @{@"sendId":sendId,@"sendName":strSendName,@"openId":strMyId,@"openName":myName,@"hasRedPacket":hasRedPacket};
+            if (!strSendName) {
+                strSendName = @" ";
+            }
+            NSDictionary *dict = @{@"sendId":sendId,@"sendName":strSendName,@"openId":strMyId,@"openName":myName,@"hasRedPacket":hasRedPacket,@"serialNo":serialNo};
             [weakSelf sendCustomMessage:CustomMessgeTypeRedPacketOpenMessage data:dict];
         } error:^(NSString *error) {
             NSLog(@"%@",error);
@@ -851,6 +856,7 @@
 - (NSDictionary *)dealWithData:(NSDictionary *)dict{
     NSString *strOpenId = [dict objectForKey:@"openId"];
     NSString *strSendId = [dict objectForKey:@"sendId"];
+    NSString *strID = [dict objectForKey:@"serialNo"];
     NSString *strMyId = [NIMSDK sharedSDK].loginManager.currentAccount;
     NSString *strContent;
     NSString *lastString = @"";
@@ -869,7 +875,7 @@
     }else{//别人发的别人领的
         return nil;
     }
-    NSDictionary *dataDict = @{@"tipMsg":strContent};
+    NSDictionary *dataDict = @{@"tipMsg":strContent,@"serialNo":strID};
     return dataDict;
 }
 

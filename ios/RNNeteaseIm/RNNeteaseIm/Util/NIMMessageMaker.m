@@ -47,16 +47,16 @@
     NSString *text = @"";
     switch (attachment.custType) {
         case CustomMessgeTypeRedpacket:
-            text = @"发来了一条红包消息";
+            text = [NSString stringWithFormat:@"[红包]%@", [attachment.dataDict objectForKey:@"comments"]];
             break;
         case CustomMessgeTypeBankTransfer:
-            text = @"发来了一条转账消息";
+            text = [NSString stringWithFormat:@"[转账]%@", [attachment.dataDict objectForKey:@"comments"]];
             break;
         case CustomMessgeTypeUrl:
-            text = @"发来了一条链接消息";
+            text = [attachment.dataDict objectForKey:@"title"];
             break;
         case CustomMessgeTypeAccountNotice:
-            text = @"发来了一条账户通知消息";
+            text = [attachment.dataDict objectForKey:@"title"];
             break;
         case CustomMessgeTypeRedPacketOpenMessage:{
             text = @"";

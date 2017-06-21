@@ -399,8 +399,8 @@ RCT_EXPORT_METHOD(sendRedPacketMessage:(NSString *)type comments:(NSString *)com
 }
 
 //发送拆红包消息
-RCT_EXPORT_METHOD(sendRedPacketOpenMessage:(NSString *)sendId hasRedPacket:(NSString *)hasRedPacket){
-    [[ConversationViewController initWithConversationViewController] sendRedPacketOpenMessage:sendId hasRedPacket:hasRedPacket];
+RCT_EXPORT_METHOD(sendRedPacketOpenMessage:(NSString *)sendId hasRedPacket:(NSString *)hasRedPacket serialNo:(NSString *)serialNo){
+    [[ConversationViewController initWithConversationViewController] sendRedPacketOpenMessage:sendId hasRedPacket:hasRedPacket serialNo:serialNo];
 }
 
 //发送转账消息
