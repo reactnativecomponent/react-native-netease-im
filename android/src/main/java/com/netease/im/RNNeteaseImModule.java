@@ -21,6 +21,7 @@ import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.bridge.WritableMap;
+import com.netease.im.common.ResourceUtil;
 import com.netease.im.contact.BlackListObserver;
 import com.netease.im.contact.FriendListService;
 import com.netease.im.contact.FriendObserver;
@@ -153,9 +154,9 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
             public void onFailed(int code) {
                 String msg;
                 if (code == 302 || code == 404) {
-                    msg = getString(R.string.login_failed);
+                    msg = ResourceUtil.getString(R.string.login_failed);
                 } else {
-                    msg = getString(R.string.login_erro) + code;
+                    msg = ResourceUtil.getString(R.string.login_erro) + code;
                 }
                 promise.reject(Integer.toString(code), msg);
             }
@@ -1071,8 +1072,8 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
     }
 
     @ReactMethod
-    public void sendRedPacketOpenMessage(String sendId, String hasRedPacket,final Promise promise) {
-        sessionService.sendRedPacketOpenMessage(sendId, LoginService.getInstance().getAccount(),hasRedPacket, new SessionService.OnSendMessageListener() {
+    public void sendRedPacketOpenMessage(String sendId, String hasRedPacket,String serialNo,final Promise promise) {
+        sessionService.sendRedPacketOpenMessage(sendId, LoginService.getInstance().getAccount(),hasRedPacket, serialNo, new SessionService.OnSendMessageListener() {
             @Override
             public int onResult(int code, IMMessage message) {
                 return 0;

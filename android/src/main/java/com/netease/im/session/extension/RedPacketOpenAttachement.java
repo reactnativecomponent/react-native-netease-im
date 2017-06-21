@@ -17,10 +17,12 @@ public class RedPacketOpenAttachement extends CustomAttachment {
     private final static String KEY_SEND_ID = "sendId";
     private final static String KEY_OPEN_ID = "openId";
     private final static String KEY_HAS_REDPACKET = "hasRedPacket";
+    private final static String KEY_SERIAL_NO = "serialNo";
 
     private String sendId;
     private String openId;
     private String hasRedPacket;
+    private String serialNo;
 
     public RedPacketOpenAttachement() {
         super(CustomAttachmentType.RedPacketOpen);
@@ -31,6 +33,7 @@ public class RedPacketOpenAttachement extends CustomAttachment {
         sendId = data.getString(KEY_SEND_ID);
         openId = data.getString(KEY_OPEN_ID);
         hasRedPacket = data.getString(KEY_HAS_REDPACKET);
+        serialNo = data.getString(KEY_SERIAL_NO);
     }
 
     @Override
@@ -39,13 +42,15 @@ public class RedPacketOpenAttachement extends CustomAttachment {
         data.put(KEY_SEND_ID, sendId);
         data.put(KEY_OPEN_ID, openId);
         data.put(KEY_HAS_REDPACKET, hasRedPacket);
+        data.put(KEY_SERIAL_NO, serialNo);
         return data;
     }
 
-    public void setParams(String sendId, String openId, String hasRedPacket) {
+    public void setParams(String sendId, String openId, String hasRedPacket, String serialNo) {
         this.sendId = sendId;
         this.openId = openId;
         this.hasRedPacket = hasRedPacket;
+        this.serialNo = serialNo;
     }
 
     public boolean isSelf() {
@@ -76,6 +81,7 @@ public class RedPacketOpenAttachement extends CustomAttachment {
 //        writableMap.putString("openId", openId);
 //        writableMap.putString("openName", openName);
         writableMap.putString("hasRedPacket", hasRedPacket);
+        writableMap.putString("serialNo", serialNo);
         writableMap.putString("tipMsg", getTipMsg());
         return writableMap;
     }
