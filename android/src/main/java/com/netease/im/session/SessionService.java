@@ -613,12 +613,12 @@ public class SessionService {
         sendMessage(message, onSendMessageListener);
     }
 
-    public void sendRedPacketOpenMessage(String sendId, String openId, String hasRedPacket, OnSendMessageListener onSendMessageListener) {
+    public void sendRedPacketOpenMessage(String sendId, String openId, String hasRedPacket, String serialNo, OnSendMessageListener onSendMessageListener) {
         CustomMessageConfig config = new CustomMessageConfig();
         config.enableUnreadCount = false;
         config.enablePush = false;
         RedPacketOpenAttachement attachment = new RedPacketOpenAttachement();
-        attachment.setParams(sendId, openId, hasRedPacket);
+        attachment.setParams(sendId, openId, hasRedPacket,serialNo);
         IMMessage message = MessageBuilder.createCustomMessage(sessionId, sessionTypeEnum, sendId + ";" + openId, attachment, config);
 
 //        message.

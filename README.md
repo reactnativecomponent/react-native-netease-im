@@ -100,14 +100,14 @@ public class MainApplication extends Application implements ReactApplication {
 ### 3.工程配置
 #### iOS配置
 install with CocoaPods
-1、
+```
 pod 'NIMSDK'
 pod 'SSZipArchive', '~> 1.2'
 pod 'Reachability', '~> 3.1.1'
 pod 'CocoaLumberjack', '~> 2.0.0-rc2'
 pod 'FMDB', '~>2.5' 
-2、
-Run pod install
+```
+Run `pod install`
 
 在工程target的`Build Phases->Link Binary with Libraries`中加入`、libsqlite3.tbd、libc++、libz.tbd、CoreTelephony.framework`
 
@@ -116,29 +116,20 @@ Run pod install
 在你工程的`AppDelegate.m`文件中添加如下代码：
 
 ```
-#import <NIMSDK/NIMSDK.h>
-#import "OpenManager.h"
-#import "RCTLinkingManager.h"
+...
+#import <NIMSDK/NIMS
 #import "NTESSDKConfigDelegate.h"
+@interface AppDelegate ()
+@property (nonatomic,strong) NTESSDKConfigDelegate *sdkConfigDelegate;
+@end
+@implementation AppDelegate
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+...
 [self setupNIMSDK];
 [self registerAPNs];
-
-NSURL *jsCodeLocation;
-
-jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index.ios" fallbackResource:nil];
-
-RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
-moduleName:@"NIM_RN_PROJECT"
-initialProperties:nil
-launchOptions:launchOptions];
-self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-UIViewController *rootViewController = [UIViewController new];
-rootViewController.view = rootView;
-self.window.rootViewController = rootViewController;
-[self.window makeKeyAndVisible];
-
+...
 return YES;
 }
 - (void)setupNIMSDK
@@ -147,23 +138,17 @@ return YES;
 self.sdkConfigDelegate = [[NTESSDKConfigDelegate alloc] init];
 [[NIMSDKConfig sharedConfig] setDelegate:self.sdkConfigDelegate];
 [[NIMSDKConfig sharedConfig] setShouldSyncUnreadCount:YES];
-
 //appkey 是应用的标识，不同应用之间的数据（用户、消息、群组等）是完全隔离的。
-//如需打网易云信 Demo 包，请勿修改 appkey ，开发自己的应用时，请替换为自己的 appkey 。
-//并请对应更换 Demo 代码中的获取好友列表、个人信息等网易云信 SDK 未提供的接口。
 //注册APP，请将 NIMSDKAppKey 换成您自己申请的App Key
-[[NIMSDK sharedSDK] registerWithAppID:APPKEY
-cerName:@""];
+[[NIMSDK sharedSDK] registerWithAppID:@"appkey" cerName:@"证书名称"];
 }
 
 #pragma mark - misc
 - (void)registerAPNs
 {
 [[UIApplication sharedApplication] registerForRemoteNotifications];
-
 UIUserNotificationType types = UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert;
-UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:types
-categories:nil];
+UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:types categories:nil];
 [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
 }
 
@@ -180,7 +165,6 @@ NSLog(@"receive remote notification:  %@", userInfo);
 {
 NSLog(@"fail to get apns token :%@",error);
 }
-
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
   return [RCTLinkingManager application:application openURL:url sourceApplication:sourceApplication annotation:annotation];
