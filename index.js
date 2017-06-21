@@ -642,7 +642,7 @@ export default class NIM{
      * @param timestamp
      * @returns {*}
      */
-    static onSystemNotificationDeal(type,messageId,targetId,contactId,pass,timestamp){
+    static onSystemNotificationDeal(type,messageId,targetId,fromAccount,pass,timestamp){
         if(type==='0'){
             return RNNeteaseIm.passApply(messageId, targetId,fromAccount,pass,timestamp);
         }else if(type==='2'){
