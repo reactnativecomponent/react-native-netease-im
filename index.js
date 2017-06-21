@@ -346,8 +346,8 @@ export default class NIM{
      * @param hasRedPacket 是否还有红包 '0' '1'是已经拆完
      * @returns {*}
      */
-    static sendRedPacketOpenMessage(sendId,hasRedPacket){
-        return RNNeteaseIm.sendRedPacketOpenMessage(sendId,hasRedPacket);
+    static sendRedPacketOpenMessage(sendId,hasRedPacket,serialNo){
+        return RNNeteaseIm.sendRedPacketOpenMessage(sendId,hasRedPacket,serialNo);
     }
     /**
      * 转账
