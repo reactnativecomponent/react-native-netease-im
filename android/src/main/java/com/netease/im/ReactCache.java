@@ -160,7 +160,7 @@ public class ReactCache {
                             break;
                         case CustomAttachmentType.BankTransfer:
                             if (attachment instanceof BankTransferAttachment) {
-                                content = "[转账] "+((BankTransferAttachment)attachment).getComments();
+                                content = "[转账] " + ((BankTransferAttachment) attachment).getComments();
                             }
                             break;
                         case CustomAttachmentType.LinkUrl:
@@ -177,9 +177,10 @@ public class ReactCache {
                             if (attachment instanceof RedPacketOpenAttachement) {
                                 RedPacketOpenAttachement rpOpen = (RedPacketOpenAttachement) attachment;
                                 if (!rpOpen.isSelf()) {
-                                    continue;
+                                    content = "";
+                                } else {
+                                    content = rpOpen.getTipMsg();
                                 }
-                                content = rpOpen.getTipMsg();
                             }
                             break;
                         default:
