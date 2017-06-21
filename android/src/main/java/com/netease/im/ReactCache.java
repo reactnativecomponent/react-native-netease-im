@@ -179,10 +179,11 @@ public class ReactCache {
                         case CustomAttachmentType.RedPacketOpen:
                             if (attachment instanceof RedPacketOpenAttachement) {
                                 RedPacketOpenAttachement rpOpen = (RedPacketOpenAttachement) attachment;
+                                nickName = "";
                                 if (!rpOpen.isSelf()) {
                                     content = "";
                                 } else {
-                                    content = rpOpen.getTipMsg();
+                                    content = rpOpen.getTipMsg(false);
                                 }
                             }
                             break;
