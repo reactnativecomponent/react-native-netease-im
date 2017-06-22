@@ -162,8 +162,8 @@
 }
 -(void)getResouces{
     
-    NSString *currentAccout = [[NIMSDK sharedSDK].loginManager currentAccount];
-    
+//    NSString *currentAccout = [[NIMSDK sharedSDK].loginManager currentAccount];
+    NSInteger allUnreadNum = 0;
     NSArray *NIMlistArr = [[NIMSDK sharedSDK].conversationManager.allRecentSessions mutableCopy];
     NSMutableArray *sessionList = [NSMutableArray array];
     for (NIMRecentSession *recent in NIMlistArr) {
@@ -174,7 +174,9 @@
             [dic setObject:recent.session.sessionId forKey:@"contactId"];
             [dic setObject:[NSString stringWithFormat:@"%ld", recent.session.sessionType] forKey:@"sessionType"];
             //未读
-            [dic setObject:[NSString stringWithFormat:@"%ld", recent.unreadCount] forKey:@"unreadCount"];
+            NSString *strUnreadCount = [NSString stringWithFormat:@"%ld", recent.unreadCount];
+            allUnreadNum = allUnreadNum + [strUnreadCount integerValue];
+            [dic setObject:strUnreadCount forKey:@"unreadCount"];
             //群组名称或者聊天对象名称
             [dic setObject:[NSString stringWithFormat:@"%@", [self nameForRecentSession:recent] ] forKey:@"name"];
             //账号
@@ -200,7 +202,9 @@
                 [dic setObject:recent.session.sessionId forKey:@"contactId"];
                 [dic setObject:[NSString stringWithFormat:@"%ld", recent.session.sessionType] forKey:@"sessionType"];
                 //未读
-                [dic setObject:[NSString stringWithFormat:@"%ld", recent.unreadCount] forKey:@"unreadCount"];
+                NSString *strUnreadCount = [NSString stringWithFormat:@"%ld", recent.unreadCount];
+                allUnreadNum = allUnreadNum + [strUnreadCount integerValue];
+                [dic setObject:strUnreadCount forKey:@"unreadCount"];
                 //群组名称或者聊天对象名称
                 [dic setObject:[NSString stringWithFormat:@"%@", [self nameForRecentSession:recent] ] forKey:@"name"];
                 //账号
@@ -225,7 +229,9 @@
         }
     }
     
-    [NIMModel initShareMD].recentListArr = sessionList;
+//    [NIMModel initShareMD].recentListArr = sessionList;
+    NSDictionary *recentDict = @{@"recents":sessionList,@"unreadCount":[NSString stringWithFormat:@"%zd",allUnreadNum]};
+    [NIMModel initShareMD].recentDict = recentDict;
 }
 //会话标题
 - (NSString *)nameForRecentSession:(NIMRecentSession *)recent{

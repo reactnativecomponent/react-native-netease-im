@@ -447,7 +447,8 @@ RCT_EXPORT_METHOD(removeFromBlackList:(nonnull NSString *)contactId  resolve:(RC
                 break;
             case 1:
                 //最近会话列表
-                [_bridge.eventDispatcher sendDeviceEventWithName:@"observeRecentContact" body:@{@"sessionList":param}];
+//                [_bridge.eventDispatcher sendDeviceEventWithName:@"observeRecentContact" body:@{@"sessionList":param}];
+                [_bridge.eventDispatcher sendDeviceEventWithName:@"observeRecentContact" body:(NSDictionary *)param];
                 break;
             case 2:
                 //被踢出

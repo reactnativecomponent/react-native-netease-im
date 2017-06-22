@@ -18,12 +18,20 @@
     return nimModel;
 }
 
--(void)setRecentListArr:(NSMutableArray *)recentListArr{
-    if (_recentListArr != recentListArr) {
-        _recentListArr = recentListArr;
-        self.myBlock(1, recentListArr);
+//-(void)setRecentListArr:(NSMutableArray *)recentListArr{
+//    if (_recentListArr != recentListArr) {
+//        _recentListArr = recentListArr;
+//        self.myBlock(1, recentListArr);
+//    }
+//}
+
+- (void)setRecentDict:(NSDictionary *)recentDict{
+    if (_recentDict != recentDict) {
+        _recentDict = recentDict;
+        self.myBlock(1, recentDict);
     }
 }
+
 -(void)setNetStatus:(NSString *)NetStatus{
     if (_NetStatus != NetStatus) {
         _NetStatus = NetStatus;
