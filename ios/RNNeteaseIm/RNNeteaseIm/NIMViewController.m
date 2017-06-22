@@ -204,7 +204,7 @@
                 //群组名称或者聊天对象名称
                 [dic setObject:[NSString stringWithFormat:@"%@", [self nameForRecentSession:recent] ] forKey:@"name"];
                 //账号
-                [dic setObject:recent.lastMessage.from forKey:@"account"];
+                [dic setObject:[NSString stringWithFormat:@"%@", recent.lastMessage.from] forKey:@"account"];
                 //消息类型
                 [dic setObject:[NSString stringWithFormat:@"%ld", recent.lastMessage.messageType] forKey:@"msgType"];
                 //消息状态
@@ -296,7 +296,7 @@
         default:
             text = @"[未知消息]";
     }
-    if (lastMessage.session.sessionType == NIMSessionTypeP2P || lastMessage.messageType == NIMMessageTypeTip) {
+    if (lastMessage.session.sessionType == NIMSessionTypeP2P || lastMessage.messageType == NIMMessageTypeTip || lastMessage.messageType == NIMMessageTypeCustom) {
         return text;
     }else{
         NSString *nickName = [NIMKitUtil showNick:lastMessage.from inSession:lastMessage.session];
@@ -345,26 +345,28 @@
 
 //处理拆红包消息
 - (NSString *)dealWithData:(NSDictionary *)dict{
-    NSString *strOpenId = [dict objectForKey:@"openId"];
-    NSString *strSendId = [dict objectForKey:@"sendId"];
+    NSString *strOpenId = [self stringFromKey:@"openId" andDict:dict];
+    NSString *strSendId = [self stringFromKey:@"sendId" andDict:dict];
     NSString *strMyId = [NIMSDK sharedSDK].loginManager.currentAccount;
     NSString *strContent = @"";
-    NSString *lastString = @"";
-    NSInteger hasRedPacket = [[dict objectForKey:@"hasRedPacket"] integerValue];
-    if (hasRedPacket == 1) {//红包已领完
-        lastString = @"，你的红包已被领完";
-    }
+
     if ([strOpenId isEqualToString:strMyId]&&[strSendId isEqualToString:strMyId]) {
-        strContent = [NSString stringWithFormat:@"你领取了自己发的红包%@",lastString ];
+        strContent = [NSString stringWithFormat:@"你领取了自己发的红包" ];
     }else if ([strOpenId isEqualToString:strMyId]){
-        NSString *strSendName = [dict objectForKey:@"sendName"];
+        NSString *strSendName = [self stringFromKey:@"sendName" andDict:dict];
         strContent = [NSString stringWithFormat:@"你领取了%@的红包",strSendName];
     }else if([strSendId isEqualToString:strMyId]){
-        NSString *strOpenName = [dict objectForKey:@"openName"];
-        strContent = [NSString stringWithFormat:@"%@领取了你的红包%@",strOpenName,lastString];
+        NSString *strOpenName = [self stringFromKey:@"openName" andDict:dict];
+        strContent = [NSString stringWithFormat:@"%@领取了你的红包",strOpenName];
     }
     return strContent;
 }
+
+- (NSString *)stringFromKey:(NSString *)strKey andDict:(NSDictionary *)dict{
+    NSString *text = [dict objectForKey:strKey];
+    return text?text:@" ";
+}
+
 
 - (NSString *)notificationMessageContent:(NIMMessage *)lastMessage{
     NIMNotificationObject *object = lastMessage.messageObject;
