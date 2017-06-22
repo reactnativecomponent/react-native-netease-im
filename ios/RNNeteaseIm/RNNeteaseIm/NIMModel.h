@@ -12,7 +12,8 @@ typedef void(^onSuccess)(NSInteger index,id param);
 @interface NIMModel : NSObject
 +(instancetype)initShareMD;
 @property(nonatomic,strong)onSuccess myBlock;
-@property(nonatomic,strong)NSMutableArray *recentListArr;
+//@property(nonatomic,strong)NSMutableArray *recentListArr;
+@property (strong, nonatomic) NSDictionary *recentDict;//最近会话对象
 @property(nonatomic,strong)NSString *NetStatus;
 @property(nonatomic,strong)NSString *NIMKick;
 @property(nonatomic,strong)NSMutableDictionary *contactList;

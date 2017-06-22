@@ -275,8 +275,7 @@
                             [dic setObject:dataDict  forKey:@"redpacketOpenObj"];
                             [dic setObject:@"redpacketOpen" forKey:@"custType"];
                         }else{
-                            
-                            
+
                             continue;//终止本次循环
                         }
                     }
@@ -828,6 +827,7 @@
                     break;
                 case CustomMessgeTypeRedPacketOpenMessage: //拆红包消息
                 {
+                    NSLog(@"-------refrashMessage");
                     NSDictionary *dataDict = [self dealWithData:obj.dataDict];
                     if (dataDict) {
                         [dic2 setObject:dataDict  forKey:@"redpacketOpenObj"];
@@ -854,9 +854,9 @@
 }
 //处理拆红包消息
 - (NSDictionary *)dealWithData:(NSDictionary *)dict{
-    NSString *strOpenId = [dict objectForKey:@"openId"];
-    NSString *strSendId = [dict objectForKey:@"sendId"];
-    NSString *strID = [dict objectForKey:@"serialNo"];
+    NSString *strOpenId = [self stringFromKey:@"openId" andDict:dict];
+    NSString *strSendId = [self stringFromKey:@"sendId" andDict:dict];
+    NSString *strID = [self stringFromKey:@"serialNo" andDict:dict];
     NSString *strMyId = [NIMSDK sharedSDK].loginManager.currentAccount;
     NSString *strContent;
     NSString *lastString = @"";
@@ -867,10 +867,10 @@
     if ([strOpenId isEqualToString:strMyId]&&[strSendId isEqualToString:strMyId]) {
         strContent = [NSString stringWithFormat:@"你领取了自己发的红包%@",lastString ];
     }else if ([strOpenId isEqualToString:strMyId]){
-        NSString *strSendName = [dict objectForKey:@"sendName"];
+        NSString *strSendName = [self stringFromKey:@"sendName" andDict:dict];
         strContent = [NSString stringWithFormat:@"你领取了%@的红包",strSendName];
     }else if([strSendId isEqualToString:strMyId]){
-        NSString *strOpenName = [dict objectForKey:@"openName"];
+        NSString *strOpenName = [self stringFromKey:@"openName" andDict:dict];
         strContent = [NSString stringWithFormat:@"%@领取了你的红包%@",strOpenName,lastString];
     }else{//别人发的别人领的
         return nil;
@@ -879,6 +879,10 @@
     return dataDict;
 }
 
+- (NSString *)stringFromKey:(NSString *)strKey andDict:(NSDictionary *)dict{
+    NSString *text = [dict objectForKey:strKey];
+    return text?text:@" ";
+}
 
 //转发消息
 -(void)forwardMessage:(NSString *)messageId sessionId:(NSString *)sessionId sessionType:(NSString *)sessionType content:(NSString *)content success:(Success)succe{
