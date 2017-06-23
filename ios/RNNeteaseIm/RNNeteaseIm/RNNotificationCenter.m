@@ -116,7 +116,10 @@
     }
 }
 
-
+//接收系统消息
+- (void)onReceiveSystemNotification:(NIMSystemNotification *)notification{
+    NSLog(@"----%@",notification);
+}
 
 
 @end

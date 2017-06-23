@@ -306,6 +306,7 @@
 }
 //添加好友
 -(void)adduserId:(NSString *)userId andMag:(NSString *)msg Friends:(Error)err  Success:(Error )success{
+    __weak typeof(self)weakSelf = self;
     NIMUserRequest *request = [[NIMUserRequest alloc] init];
     request.userId = userId;
     request.message = msg;
@@ -315,11 +316,21 @@
         [[NIMSDK sharedSDK].userManager requestFriend:request completion:^(NSError *error) {
             if (!error) {
                 success(successText);
+                [weakSelf sendCustomNotificationContent:msg andSessionID:userId];
                // [self refresh];
             }else{
                 err(failedText);
             }
         }];
+}
+//发送自定义通知
+- (void)sendCustomNotificationContent:(NSString *)content andSessionID:(NSString *)sessionID{
+    NIMSession *session = [NIMSession session:sessionID type:NIMSessionTypeP2P];
+    NIMCustomSystemNotification *notifi = [[NIMCustomSystemNotification alloc]initWithContent:content];
+    NSString *myID = [NIMSDK sharedSDK].loginManager.currentAccount;
+    NIMUser *user = [[NIMSDK sharedSDK].userManager userInfo:myID];
+    notifi.apnsContent = [NSString stringWithFormat:@"%@ 请求加为好友",user.userInfo.nickName];
+    [[NIMSDK sharedSDK].systemNotificationManager sendCustomNotification:notifi toSession:session completion:nil];//发送自定义通知
 }
 
 - (void)onLogin:(NIMLoginStep)step

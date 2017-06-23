@@ -7,6 +7,7 @@
 //
 
 #import "NIMViewController.h"
+#import "ContactViewController.h"
 
 @interface NIMViewController ()<NIMLoginManagerDelegate,NIMConversationManagerDelegate>
 
@@ -359,13 +360,31 @@
     if ([strOpenId isEqualToString:strMyId]&&[strSendId isEqualToString:strMyId]) {
         strContent = [NSString stringWithFormat:@"你领取了自己发的红包" ];
     }else if ([strOpenId isEqualToString:strMyId]){
-        NSString *strSendName = [self stringFromKey:@"sendName" andDict:dict];
+        NSString *strSendName = [self getUserName:strSendId];
         strContent = [NSString stringWithFormat:@"你领取了%@的红包",strSendName];
     }else if([strSendId isEqualToString:strMyId]){
-        NSString *strOpenName = [self stringFromKey:@"openName" andDict:dict];
+        NSString *strOpenName = [self getUserName:strOpenId];
         strContent = [NSString stringWithFormat:@"%@领取了你的红包",strOpenName];
     }
     return strContent;
+}
+
+- (NSString *)getUserName:(NSString *)userID{
+    NSString *strTmpName = @"";
+    NIMUser *user = [[NIMSDK sharedSDK].userManager userInfo:userID];
+    strTmpName = user.alias;
+    if (![strTmpName length]) {
+        strTmpName = user.userInfo.nickName;
+    }
+    if (![strTmpName length]) {//从服务器获取
+        [[ContactViewController initWithContactViewController]fetchUserInfos:userID Success:^(id param) {
+
+        } error:^(NSString *error) {
+            
+        }];
+        strTmpName = userID;
+    }
+    return strTmpName;
 }
 
 - (NSString *)stringFromKey:(NSString *)strKey andDict:(NSDictionary *)dict{
