@@ -605,11 +605,12 @@ public class SessionService {
         sendMessage(message, onSendMessageListener);
     }
 
-      public void sendDefaultMessage(String type, String typeText, String content, OnSendMessageListener onSendMessageListener) {
+    public void sendDefaultMessage(String type, String digst, String content, OnSendMessageListener onSendMessageListener) {
         CustomMessageConfig config = new CustomMessageConfig();
-        DefaultCustomAttachment attachment = new DefaultCustomAttachment(typeText);
+        DefaultCustomAttachment attachment = new DefaultCustomAttachment(type);
+        attachment.setDigst(digst);
         attachment.setContent(content);
-        IMMessage message = MessageBuilder.createCustomMessage(sessionId, sessionTypeEnum, typeText, attachment, config);
+        IMMessage message = MessageBuilder.createCustomMessage(sessionId, sessionTypeEnum, digst, attachment, config);
         sendMessage(message, onSendMessageListener);
     }
 
@@ -618,7 +619,7 @@ public class SessionService {
         config.enableUnreadCount = false;
         config.enablePush = false;
         RedPacketOpenAttachement attachment = new RedPacketOpenAttachement();
-        attachment.setParams(sendId, openId, hasRedPacket,serialNo);
+        attachment.setParams(sendId, openId, hasRedPacket, serialNo);
         IMMessage message = MessageBuilder.createCustomMessage(sessionId, sessionTypeEnum, sendId + ";" + openId, attachment, config);
 
 //        message.

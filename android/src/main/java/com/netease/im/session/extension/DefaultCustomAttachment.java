@@ -9,7 +9,9 @@ import com.facebook.react.bridge.WritableMap;
  */
 public class DefaultCustomAttachment extends CustomAttachment {
 
+    final static String KEY_DIGST = "digst";
     private String content;
+    private String digst;
 
     public DefaultCustomAttachment(String type) {
         super(type);
@@ -17,6 +19,7 @@ public class DefaultCustomAttachment extends CustomAttachment {
 
     @Override
     protected void parseData(JSONObject data) {
+        digst = data.getString(KEY_DIGST);
         content = data.toJSONString();
     }
 
@@ -25,6 +28,10 @@ public class DefaultCustomAttachment extends CustomAttachment {
         JSONObject data = null;
         try {
             data = JSONObject.parseObject(content);
+            if(data == null){
+                data = new JSONObject();
+            }
+            data.put(KEY_DIGST, digst);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -35,10 +42,19 @@ public class DefaultCustomAttachment extends CustomAttachment {
         this.content = content;
     }
 
+    public void setDigst(String digst) {
+        this.digst = digst;
+    }
+
+    public String getDigst() {
+        return digst;
+    }
+
     @Override
-    public WritableMap toReactNative(){
+    public WritableMap toReactNative() {
         WritableMap writableMap = Arguments.createMap();
-        writableMap.putString("content",content);
+        writableMap.putString("digst", digst);
+        writableMap.putString("content", content);
         return writableMap;
     }
 }

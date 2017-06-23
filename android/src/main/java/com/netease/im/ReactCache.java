@@ -106,12 +106,13 @@ public class ReactCache {
                 map.putString("contactId", contactId);
                 map.putString("unreadCount", String.valueOf(contact.getUnreadCount()));
                 String name = "";
-                if (contact.getSessionType() == SessionTypeEnum.P2P) {
+                SessionTypeEnum sessionType = contact.getSessionType();
+                if (sessionType == SessionTypeEnum.P2P) {
                     map.putString("teamType", "-1");
                     NimUserInfoCache nimUserInfoCache = NimUserInfoCache.getInstance();
                     map.putString("imagePath", nimUserInfoCache.getAvatar(contactId));
                     name = nimUserInfoCache.getUserDisplayName(contactId);
-                } else if (contact.getSessionType() == SessionTypeEnum.Team) {
+                } else if (sessionType == SessionTypeEnum.Team) {
                     Team team = TeamDataCache.getInstance().getTeamById(contactId);
                     if (team != null) {
                         name = team.getName();
@@ -180,7 +181,7 @@ public class ReactCache {
                             if (attachment instanceof RedPacketOpenAttachement) {
                                 RedPacketOpenAttachement rpOpen = (RedPacketOpenAttachement) attachment;
                                 nickName = "";
-                                if (!rpOpen.isSelf()) {
+                                if (sessionType == SessionTypeEnum.Team && !rpOpen.isSelf()) {
                                     content = "";
                                 } else {
                                     content = rpOpen.getTipMsg(false);
@@ -189,7 +190,10 @@ public class ReactCache {
                             break;
                         default:
                             if (attachment instanceof DefaultCustomAttachment) {
-                                content = "[自定义消息]";
+                                content = ((DefaultCustomAttachment) attachment).getDigst();
+                                if(TextUtils.isEmpty(content)){
+                                    content="[自定义消息]";
+                                }
                             }
                             break;
                     }
