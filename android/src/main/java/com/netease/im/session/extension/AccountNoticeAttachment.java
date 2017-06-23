@@ -4,6 +4,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableMap;
 
+import java.util.Map;
+import java.util.Set;
+
 /**
  * Created by dowin on 2017/6/14.
  */
@@ -21,7 +24,7 @@ public class AccountNoticeAttachment extends CustomAttachment {
     private String date;
     private String time;
     private String amount;
-    private String body;
+    private Map<String, Object> body;
     private String serialNo;
 
     public AccountNoticeAttachment() {
@@ -35,7 +38,7 @@ public class AccountNoticeAttachment extends CustomAttachment {
         date = data.getString(KEY_DATE);
         amount = data.getString(KEY_AMOUNT);
 
-        body = data.getJSONObject(KEY_BODY).toJSONString();
+        body = data.getJSONObject(KEY_BODY);
         serialNo = data.getString(KEY_SERIAL_NO);
     }
 
@@ -48,11 +51,16 @@ public class AccountNoticeAttachment extends CustomAttachment {
         object.put(KEY_DATE, date);
         object.put(KEY_AMOUNT, amount);
         object.put(KEY_SERIAL_NO, serialNo);
-        try {
-            object.put(KEY_BODY, JSONObject.parseObject(body));
-        } catch (Exception e) {
-            e.printStackTrace();
+        JSONObject bodyJson = new JSONObject();
+        if (body != null && !body.isEmpty()) {
+
+            Set<Map.Entry<String, Object>> entrySet = body.entrySet();
+            for (Map.Entry<String, Object> entry : entrySet) {
+                bodyJson.put(entry.getKey(), entry.getValue());
+            }
+
         }
+        object.put(KEY_BODY, bodyJson);
         return object;
     }
 
@@ -68,7 +76,14 @@ public class AccountNoticeAttachment extends CustomAttachment {
         writableMap.putString("date", date);
         writableMap.putString("amount", amount);
         writableMap.putString("serialNo", serialNo);
-        writableMap.putString("body", body);
+        WritableMap bodyMap = Arguments.createMap();
+        if (body != null && !body.isEmpty()) {
+            Set<Map.Entry<String, Object>> entrySet = body.entrySet();
+            for (Map.Entry<String, Object> entry : entrySet) {
+                bodyMap.putString(entry.getKey(), String.valueOf(entry.getValue()));
+            }
+        }
+        writableMap.putMap("body", bodyMap);
         return writableMap;
     }
 }

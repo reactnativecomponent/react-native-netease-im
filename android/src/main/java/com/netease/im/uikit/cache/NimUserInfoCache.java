@@ -77,7 +77,7 @@ public class NimUserInfoCache {
 
             @Override
             public void onResult(int code, List<NimUserInfo> users, Throwable exception) {
-                if (exception != null) {
+                if (exception != null&&callback != null) {
                     callback.onException(exception);
                     return;
                 }
@@ -162,8 +162,9 @@ public class NimUserInfoCache {
     }
 
     public NimUserInfo getUserInfo(String account) {
-        if (TextUtils.isEmpty(account) || account2UserMap == null) {
+        if (!hasUser(account)) {
             LogUtil.e(TAG, "getUserInfo null, account=" + account + ", account2UserMap=" + account2UserMap);
+            getUserInfoFromRemote(account, null);
             return null;
         }
 
