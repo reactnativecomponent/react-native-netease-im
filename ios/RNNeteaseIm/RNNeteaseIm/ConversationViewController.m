@@ -412,27 +412,12 @@
 //发送拆红包消息
 -(void)sendRedPacketOpenMessage:(NSString *)sendId hasRedPacket:(NSString *)hasRedPacket serialNo:(NSString *)serialNo{
     NSString *strMyId = [NIMSDK sharedSDK].loginManager.currentAccount;
-    BOOL isMe = [sendId isEqualToString:strMyId];
-    NIMUserInfo *myUserInfo = [[NIMSDK sharedSDK].userManager userInfo:strMyId].userInfo;
-    NSString *myName = myUserInfo.nickName;
-    if (isMe) {//如果是自己
-        NSDictionary *dict = @{@"sendId":sendId,@"sendName":myName,@"openId":strMyId,@"openName":myName,@"hasRedPacket":hasRedPacket,@"serialNo":serialNo};
-        [self sendCustomMessage:CustomMessgeTypeRedPacketOpenMessage data:dict];
-    }else{
-        __weak typeof(self)weakSelf = self;
-        [[ContactViewController initWithContactViewController]fetchUserInfos:sendId Success:^(id param) {
-            NSDictionary *jsonDict = (NSDictionary *)param;
-            NSString *strSendName = [jsonDict objectForKey:@"name"];//发送红包人的名字
-            if (!strSendName) {
-                strSendName = @" ";
-            }
-            NSDictionary *dict = @{@"sendId":sendId,@"sendName":strSendName,@"openId":strMyId,@"openName":myName,@"hasRedPacket":hasRedPacket,@"serialNo":serialNo};
-            [weakSelf sendCustomMessage:CustomMessgeTypeRedPacketOpenMessage data:dict];
-        } error:^(NSString *error) {
-            NSLog(@"%@",error);
-        }];
-    }
+    NSDictionary *dict = @{@"sendId":sendId,@"openId":strMyId,@"hasRedPacket":hasRedPacket,@"serialNo":serialNo};
+    [self sendCustomMessage:CustomMessgeTypeRedPacketOpenMessage data:dict];
+
 }
+
+
 
 //设置好友消息提醒
 -(void)muteMessage:(NSString *)contactId mute:(NSString *)mute Succ:(Success)succ Err:(Errors)err{
@@ -827,7 +812,6 @@
                     break;
                 case CustomMessgeTypeRedPacketOpenMessage: //拆红包消息
                 {
-                    NSLog(@"-------refrashMessage");
                     NSDictionary *dataDict = [self dealWithData:obj.dataDict];
                     if (dataDict) {
                         [dic2 setObject:dataDict  forKey:@"redpacketOpenObj"];
@@ -856,7 +840,7 @@
 - (NSDictionary *)dealWithData:(NSDictionary *)dict{
     NSString *strOpenId = [self stringFromKey:@"openId" andDict:dict];
     NSString *strSendId = [self stringFromKey:@"sendId" andDict:dict];
-    NSString *strID = [self stringFromKey:@"serialNo" andDict:dict];
+    NSString *strNo = [self stringFromKey:@"serialNo" andDict:dict];
     NSString *strMyId = [NIMSDK sharedSDK].loginManager.currentAccount;
     NSString *strContent;
     NSString *lastString = @"";
@@ -867,17 +851,36 @@
     if ([strOpenId isEqualToString:strMyId]&&[strSendId isEqualToString:strMyId]) {
         strContent = [NSString stringWithFormat:@"你领取了自己发的红包%@",lastString ];
     }else if ([strOpenId isEqualToString:strMyId]){
-        NSString *strSendName = [self stringFromKey:@"sendName" andDict:dict];
+        NSString *strSendName = [self getUserName:strSendId];
         strContent = [NSString stringWithFormat:@"你领取了%@的红包",strSendName];
     }else if([strSendId isEqualToString:strMyId]){
-        NSString *strOpenName = [self stringFromKey:@"openName" andDict:dict];
+        NSString *strOpenName = [self getUserName:strOpenId];
         strContent = [NSString stringWithFormat:@"%@领取了你的红包%@",strOpenName,lastString];
     }else{//别人发的别人领的
         return nil;
     }
-    NSDictionary *dataDict = @{@"tipMsg":strContent,@"serialNo":strID};
+    NSDictionary *dataDict = @{@"tipMsg":strContent,@"serialNo":strNo};
     return dataDict;
 }
+
+- (NSString *)getUserName:(NSString *)userID{
+    NSString *strTmpName = @"";
+    NIMUser *user = [[NIMSDK sharedSDK].userManager userInfo:userID];
+    strTmpName = user.alias;
+    if (![strTmpName length]) {
+            strTmpName = user.userInfo.nickName;
+    }
+    if (![strTmpName length]) {//从服务器获取
+        [[ContactViewController initWithContactViewController]fetchUserInfos:userID Success:^(id param) {
+
+        } error:^(NSString *error) {
+
+        }];
+        strTmpName = userID;
+    }
+    return strTmpName;
+}
+
 
 - (NSString *)stringFromKey:(NSString *)strKey andDict:(NSDictionary *)dict{
     NSString *text = [dict objectForKey:strKey];
