@@ -306,20 +306,34 @@
 }
 //添加好友
 -(void)adduserId:(NSString *)userId andMag:(NSString *)msg Friends:(Error)err  Success:(Error )success{
+    __weak typeof(self)weakSelf = self;
     NIMUserRequest *request = [[NIMUserRequest alloc] init];
     request.userId = userId;
     request.message = msg;
     request.operation = NIMUserOperationRequest;
     NSString *successText = request.operation == NIMUserOperationAdd ? @"添加成功" : @"请求成功";
     NSString *failedText =  request.operation == NIMUserOperationAdd ? @"添加失败" : @"请求失败";
+    NSString *myID = [NIMSDK sharedSDK].loginManager.currentAccount;
+    NIMUser *user = [[NIMSDK sharedSDK].userManager userInfo:myID];
+    NSString *apnsContent = [NSString stringWithFormat:@"%@ 请求加为好友",user.userInfo.nickName];
+    NSDictionary *dataDict = @{@"type":@"1",@"data":@{@"content":msg}};
         [[NIMSDK sharedSDK].userManager requestFriend:request completion:^(NSError *error) {
             if (!error) {
                 success(successText);
+                [weakSelf sendCustomNotificationContent:msg andSessionID:userId andApnsContent:apnsContent AndData:dataDict];
                // [self refresh];
             }else{
                 err(failedText);
             }
         }];
+}
+//发送自定义通知
+- (void)sendCustomNotificationContent:(NSString *)content andSessionID:(NSString *)sessionID andApnsContent:(NSString *)strApns AndData:(NSDictionary *)dict{
+    NIMSession *session = [NIMSession session:sessionID type:NIMSessionTypeP2P];
+    NIMCustomSystemNotification *notifi = [[NIMCustomSystemNotification alloc]initWithContent:content];
+    notifi.apnsContent = strApns;
+    notifi.apnsPayload = dict;
+    [[NIMSDK sharedSDK].systemNotificationManager sendCustomNotification:notifi toSession:session completion:nil];//发送自定义通知
 }
 
 - (void)onLogin:(NIMLoginStep)step
