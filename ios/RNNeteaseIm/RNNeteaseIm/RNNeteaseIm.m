@@ -102,7 +102,15 @@ RCT_EXPORT_METHOD(updateMyUserInfo:(nonnull  NSDictionary *)userInFo resolve:(RC
 }
 //添加好友
 RCT_EXPORT_METHOD(addFriend:(nonnull  NSString * )contactId msg:(nonnull  NSString * )msg resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
-    [[ContactViewController initWithContactViewController] adduserId:contactId andMag:msg Friends:^(NSString *error) {
+    [[ContactViewController initWithContactViewController] adduserId:contactId andVerifyType:@"0" andMag:msg Friends:^(NSString *error) {
+        reject(@"-1",error, nil);
+    } Success:^(NSString *error) {
+        resolve(error);
+    }];
+}
+//添加好友，添加验证与否
+RCT_EXPORT_METHOD(addFriendWithType:(nonnull  NSString *)contactId verifyType:(nonnull  NSString *)verifyType msg:(nonnull  NSString *)msg resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
+    [[ContactViewController initWithContactViewController] adduserId:contactId andVerifyType:verifyType andMag:msg Friends:^(NSString *error) {
         reject(@"-1",error, nil);
     } Success:^(NSString *error) {
         resolve(error);
@@ -435,7 +443,6 @@ RCT_EXPORT_METHOD(removeFromBlackList:(nonnull NSString *)contactId  resolve:(RC
         reject(@"-1",erro, nil);
     }];
 }
-
 
 -(void)setSendState{
     NIMModel *mod = [NIMModel initShareMD];

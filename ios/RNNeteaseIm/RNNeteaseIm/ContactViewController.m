@@ -305,17 +305,19 @@
 
 }
 //添加好友
--(void)adduserId:(NSString *)userId andMag:(NSString *)msg Friends:(Error)err  Success:(Error )success{
+-(void)adduserId:(NSString *)userId andVerifyType:(NSString *)strType andMag:(NSString *)msg Friends:(Error)err  Success:(Error )success{
     __weak typeof(self)weakSelf = self;
     NIMUserRequest *request = [[NIMUserRequest alloc] init];
     request.userId = userId;
     request.message = msg;
-    request.operation = NIMUserOperationRequest;
+    NSInteger type = [strType integerValue];
+    request.operation = (type == 1)?NIMUserOperationAdd:NIMUserOperationRequest;
+    NSString *apnsText = (type == 1)?@"添加你为好友":@"请求加为好友";
     NSString *successText = request.operation == NIMUserOperationAdd ? @"添加成功" : @"请求成功";
     NSString *failedText =  request.operation == NIMUserOperationAdd ? @"添加失败" : @"请求失败";
     NSString *myID = [NIMSDK sharedSDK].loginManager.currentAccount;
     NIMUser *user = [[NIMSDK sharedSDK].userManager userInfo:myID];
-    NSString *apnsContent = [NSString stringWithFormat:@"%@ 请求加为好友",user.userInfo.nickName];
+    NSString *apnsContent = [NSString stringWithFormat:@"%@ %@",user.userInfo.nickName,apnsText];
     NSDictionary *dataDict = @{@"type":@"1",@"data":@{@"content":msg}};
         [[NIMSDK sharedSDK].userManager requestFriend:request completion:^(NSError *error) {
             if (!error) {

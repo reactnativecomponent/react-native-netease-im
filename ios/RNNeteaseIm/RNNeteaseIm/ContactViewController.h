@@ -15,7 +15,7 @@ typedef void(^Success)(id param);
 +(instancetype)initWithContactViewController;
 -(void)initWithDelegate;
 -(void)getAllContactFriends;
--(void)adduserId:(NSString *)userId andMag:(NSString *)msg Friends:(Error)err Success:(Error )success;
+-(void)adduserId:(NSString *)userId andVerifyType:(NSString *)strType andMag:(NSString *)msg Friends:(Error)err  Success:(Error )success;
 -(void)getUserInFo:(NSString *)userId Success:(Success )success;
 -(void)fetchUserInfos:(NSString *)userId Success:(Success )success error:(Error )error;
 -(void)deleteFriends:(NSString *)userId Success:(Success )success error:(Error )err;

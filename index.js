@@ -727,5 +727,16 @@ export default class NIM{
         return RNNeteaseIm.downloadAttachment(messageId,'0');
     }
 
+    /**
+     * 添加好友 可设置验证
+     * @param contactId
+     * @param verifyType "1"直接添加 其他 验证添加
+     * @param msg 备注
+     * @returns {*}
+     */
+    static addFriendWithType(contactId,verifyType,msg){
+        return RNNeteaseIm.addFriendWithType(contactId,verifyType,msg);
+    }
+
 }
 //export default RNNeteaseIm;
