@@ -114,7 +114,9 @@ public class IMApplication {
         return context;
     }
 
-
+    public static int getNotify_msg_drawable_id() {
+        return notify_msg_drawable_id;
+    }
 
     public static Class getMainActivityClass() {
         return mainActivityClass;

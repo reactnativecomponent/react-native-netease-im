@@ -1,15 +1,29 @@
 package com.netease.im.login;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
+import android.support.v4.app.NotificationCompat;
 
+import com.netease.im.IMApplication;
+import com.netease.im.session.SessionUtil;
 import com.netease.im.team.TeamListService;
 import com.netease.im.uikit.LoginSyncDataStatusObserver;
 import com.netease.im.uikit.cache.DataCacheManager;
 import com.netease.nimlib.sdk.AbortableFuture;
 import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.auth.LoginInfo;
+import com.netease.nimlib.sdk.friend.model.AddFriendNotify;
+import com.netease.nimlib.sdk.msg.MsgServiceObserve;
+import com.netease.nimlib.sdk.msg.constant.SystemMessageType;
+import com.netease.nimlib.sdk.msg.model.CustomNotification;
+import com.netease.nimlib.sdk.msg.model.SystemMessage;
+
+import java.util.Map;
 
 /**
  * Created by dowin on 2017/4/28.
@@ -107,10 +121,54 @@ public class LoginService {
 
         recentContactObserver.registerRecentContactObserver(register);
 //        sysMessageObserver.registerSystemObserver(register);
+//        NIMClient.getService(SystemMessageObserver.class).observeReceiveSystemMsg(systemMessageObserver, register);
+        NIMClient.getService(MsgServiceObserve.class).observeCustomNotification(notificationObserver, register);
     }
 
+    private NotificationManager notificationManager;
+    private Observer<CustomNotification> notificationObserver = new Observer<CustomNotification>() {
+        @Override
+        public void onEvent(CustomNotification customNotification) {
+
+            Map<String, Object> map = customNotification.getPushPayload();
+            if (map != null && map.containsKey("type")) {
+                String type = (String) map.get("type");
+                if (SessionUtil.CUSTOM_Notification.equals(type)) {
+                    NotificationCompat.Builder builder = new NotificationCompat.Builder(IMApplication.getContext());
+                    builder.setContentTitle("请求加为好友");
+                    builder.setContentText(customNotification.getApnsText());
+                    builder.setAutoCancel(true);
+                    PendingIntent contentIntent = PendingIntent.getActivity(
+                            IMApplication.getContext(), 0, new Intent(IMApplication.getContext(), IMApplication.getMainActivityClass()), 0);
+                    builder.setContentIntent(contentIntent);
+                    builder.setSmallIcon(IMApplication.getNotify_msg_drawable_id());
+                    getNotificationManager().notify((int) System.currentTimeMillis(),builder.build());
+                }
+            }
+        }
+    };
+
+    public NotificationManager getNotificationManager() {
+        if (notificationManager == null) {
+            notificationManager = (NotificationManager) IMApplication.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        }
+        return notificationManager;
+    }
+
+    private Observer<SystemMessage> systemMessageObserver = new Observer<SystemMessage>() {
+        @Override
+        public void onEvent(SystemMessage systemMessage) {
+            if (systemMessage.getType() == SystemMessageType.AddFriend) {
+                AddFriendNotify attachData = (AddFriendNotify) systemMessage.getAttachObject();
+                if (attachData != null && attachData.getEvent() == AddFriendNotify.Event.RECV_ADD_FRIEND_VERIFY_REQUEST) {//TODO
+
+                }
+            }
+        }
+    };
+
     public boolean deleteRecentContact(String rContactId) {
-       return recentContactObserver.deleteRecentContact(rContactId);
+        return recentContactObserver.deleteRecentContact(rContactId);
     }
 
     public void logout() {

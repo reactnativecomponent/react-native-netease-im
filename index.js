@@ -99,6 +99,17 @@ export default class NIM{
     }
 
     /**
+     * 添加好友
+     * @param contactId
+     * @param verifyType "1" 直接添加 其他 验证添加
+     * @param msg 备注
+     * @returns {*}
+     */
+    static addFriendWithType(contactId,verifyType,msg){
+        return RNNeteaseIm.addFriendWithType(contactId,verifyType,msg);
+    }
+
+    /**
      * 删除好友
      * @param contactId
      * @returns {*}
@@ -725,17 +736,6 @@ export default class NIM{
      */
     static downloadAttachment(messageId){
         return RNNeteaseIm.downloadAttachment(messageId,'0');
-    }
-
-    /**
-     * 添加好友 可设置验证
-     * @param contactId
-     * @param verifyType "1"直接添加 其他 验证添加
-     * @param msg 备注
-     * @returns {*}
-     */
-    static addFriendWithType(contactId,verifyType,msg){
-        return RNNeteaseIm.addFriendWithType(contactId,verifyType,msg);
     }
 
 }
