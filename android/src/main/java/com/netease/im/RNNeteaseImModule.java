@@ -236,6 +236,35 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
         });
     }
 
+
+    /**
+     * 添加好友
+     * @param contactId
+     * @param verifyType 1 直接添加
+     * @param msg 备注
+     * @param promise
+     */
+    @ReactMethod
+    public void addFriendWithType(final String contactId, String verifyType, String msg, final Promise promise) {
+        VerifyType verifyTypeAdd = VerifyType.VERIFY_REQUEST;
+        if("1".equals(verifyType)){
+            verifyTypeAdd =  VerifyType.DIRECT_ADD;
+        }
+        LogUtil.i(TAG, "addFriend" + contactId);
+        NIMClient.getService(FriendService.class).addFriend(new AddFriendData(contactId, verifyTypeAdd, msg))
+                .setCallback(new RequestCallbackWrapper<Void>() {
+                    @Override
+                    public void onResult(int code, Void aVoid, Throwable throwable) {
+                        if (code == ResponseCode.RES_SUCCESS) {
+                            String name = NimUserInfoCache.getInstance().getUserName(LoginService.getInstance().getAccount());
+                            SessionUtil.sendAddFriendNotification(contactId, name + " 请求加为好友");
+                            promise.resolve("" + code);
+                        } else {
+                            promise.reject("" + code, "");
+                        }
+                    }
+                });
+    }
     /**
      * 添加好友
      *
