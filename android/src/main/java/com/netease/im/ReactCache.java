@@ -753,7 +753,7 @@ public class ReactCache {
                         case CustomAttachmentType.LinkUrl:
                             if (attachment instanceof LinkUrlAttachment) {
                                 LinkUrlAttachment linkUrlAttachment = (LinkUrlAttachment) attachment;
-                                itemMap.putMap("linkUrlObj", linkUrlAttachment.toReactNative());
+                                itemMap.putMap("urlObj", linkUrlAttachment.toReactNative());
                             }
                             break;
                         case CustomAttachmentType.RedPacketOpen:
@@ -826,7 +826,7 @@ public class ReactCache {
         result.putString("recordType", recordType == null ? "" : recordType.getFileSuffix());
         return result;
     }
-
+    
     public static Object createAttachmentProgress(AttachmentProgress attachmentProgress) {
         WritableMap result = Arguments.createMap();
         result.putString("_id", attachmentProgress.getUuid());
