@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4E2149D61F01E87F00B2DF47 /* DWRecordButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E2149D51F01E87F00B2DF47 /* DWRecordButton.m */; };
-		4E214A2F1F023F8700B2DF47 /* RecordView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E214A2E1F023F8700B2DF47 /* RecordView.m */; };
 		4E27A5CB1ED5417100543BFC /* RNNotificationCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E27A5CA1ED5417100543BFC /* RNNotificationCenter.m */; };
 		4E354E871ECBE72700CD6587 /* NIMObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E354E861ECBE72700CD6587 /* NIMObject.m */; };
 		4E354EC01ECC2E3400CD6587 /* NSDictionary+NTESJson.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E354EBF1ECC2E3400CD6587 /* NSDictionary+NTESJson.m */; };
@@ -55,10 +53,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		4E2149D41F01E87F00B2DF47 /* DWRecordButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DWRecordButton.h; sourceTree = "<group>"; };
-		4E2149D51F01E87F00B2DF47 /* DWRecordButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DWRecordButton.m; sourceTree = "<group>"; };
-		4E214A2D1F023F8700B2DF47 /* RecordView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordView.h; sourceTree = "<group>"; };
-		4E214A2E1F023F8700B2DF47 /* RecordView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordView.m; sourceTree = "<group>"; };
 		4E27A5C91ED5417100543BFC /* RNNotificationCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNNotificationCenter.h; sourceTree = "<group>"; };
 		4E27A5CA1ED5417100543BFC /* RNNotificationCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNNotificationCenter.m; sourceTree = "<group>"; };
 		4E354E851ECBE72700CD6587 /* NIMObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMObject.h; sourceTree = "<group>"; };
@@ -138,17 +132,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		4E2149D31F01E86A00B2DF47 /* View */ = {
-			isa = PBXGroup;
-			children = (
-				4E2149D41F01E87F00B2DF47 /* DWRecordButton.h */,
-				4E2149D51F01E87F00B2DF47 /* DWRecordButton.m */,
-				4E214A2D1F023F8700B2DF47 /* RecordView.h */,
-				4E214A2E1F023F8700B2DF47 /* RecordView.m */,
-			);
-			path = View;
-			sourceTree = "<group>";
-		};
 		4E5B47381EC1788F00D74E72 = {
 			isa = PBXGroup;
 			children = (
@@ -192,7 +175,6 @@
 				4EBD0A9B1EC565D2000C77B8 /* BankListViewController.h */,
 				4EBD0A9C1EC565D2000C77B8 /* BankListViewController.m */,
 				4E5B47D71EC1952A00D74E72 /* PrefixHeader.pch */,
-				4E2149D31F01E86A00B2DF47 /* View */,
 				4E5B47B31EC17A0D00D74E72 /* Util */,
 				4E27A5C91ED5417100543BFC /* RNNotificationCenter.h */,
 				4E27A5CA1ED5417100543BFC /* RNNotificationCenter.m */,
@@ -320,7 +302,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				4E5B47D01EC17A0D00D74E72 /* NTESSpellingCenter.m in Sources */,
-				4E2149D61F01E87F00B2DF47 /* DWRecordButton.m in Sources */,
 				4E5B49B71EC1AE5600D74E72 /* NIMKitUtil.m in Sources */,
 				4E3DD02E1EF384A900012CB7 /* DWCustomAttachment.m in Sources */,
 				4E27A5CB1ED5417100543BFC /* RNNotificationCenter.m in Sources */,
@@ -333,7 +314,6 @@
 				4E6BA8EC1EC2D23A00630D77 /* NIMKitTimerHolder.m in Sources */,
 				4E5B47CA1EC17A0D00D74E72 /* NTESContactDataMember.m in Sources */,
 				4E3DD02F1EF384A900012CB7 /* DWCustomAttachmentDecoder.m in Sources */,
-				4E214A2F1F023F8700B2DF47 /* RecordView.m in Sources */,
 				4E5B47781EC1793600D74E72 /* RNNeteaseIm.m in Sources */,
 				4E5B47C61EC17A0D00D74E72 /* NIMModel.m in Sources */,
 				4EC4FCCF1ECA9BDB00F3DA5E /* NSString+NIMKit.m in Sources */,
