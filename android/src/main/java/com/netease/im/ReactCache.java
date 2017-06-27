@@ -111,6 +111,7 @@ public class ReactCache {
                     map.putString("teamType", "-1");
                     NimUserInfoCache nimUserInfoCache = NimUserInfoCache.getInstance();
                     map.putString("imagePath", nimUserInfoCache.getAvatar(contactId));
+                    map.putString("mute", boolean2String(NIMClient.getService(FriendService.class).isNeedMessageNotify(contactId)));
                     name = nimUserInfoCache.getUserDisplayName(contactId);
                 } else if (sessionType == SessionTypeEnum.Team) {
                     Team team = TeamDataCache.getInstance().getTeamById(contactId);
@@ -119,6 +120,7 @@ public class ReactCache {
                         map.putString("teamType", Integer.toString(team.getType().getValue()));
                         map.putString("imagePath", team.getIcon());
                         map.putString("memberCount", Integer.toString(team.getMemberCount()));
+                        map.putString("mute", boolean2String(!team.mute()));
                     }
                 }
                 map.putString("name", name);
@@ -753,7 +755,7 @@ public class ReactCache {
                         case CustomAttachmentType.LinkUrl:
                             if (attachment instanceof LinkUrlAttachment) {
                                 LinkUrlAttachment linkUrlAttachment = (LinkUrlAttachment) attachment;
-                                itemMap.putMap("linkUrlObj", linkUrlAttachment.toReactNative());
+                                itemMap.putMap("urlObj", linkUrlAttachment.toReactNative());
                             }
                             break;
                         case CustomAttachmentType.RedPacketOpen:
