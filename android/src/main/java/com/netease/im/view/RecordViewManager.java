@@ -1,7 +1,9 @@
 package com.netease.im.view;
 
+import android.app.Activity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 
 import com.facebook.react.bridge.Arguments;
@@ -107,8 +109,9 @@ public class RecordViewManager extends SimpleViewManager<Button> {
     }
 
     private void onStartAudioRecord() {
-//        container.activity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
-//                WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        Activity act = context.getCurrentActivity();
+        if (act != null)
+            act.getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 //        audioMessageHelper.startRecord();
 //        cancelled = false;
         if (text.length > 1) {
@@ -135,7 +138,9 @@ public class RecordViewManager extends SimpleViewManager<Button> {
      */
     private void onEndAudioRecord(boolean cancel) {
 //        started = false;
-//        container.activity.getWindow().setFlags(0, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        Activity act = context.getCurrentActivity();
+        if (act != null)
+            act.getWindow().setFlags(0, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 //
 //        audioMessageHelper.completeRecord(cancel);
         if (text.length > 0) {
