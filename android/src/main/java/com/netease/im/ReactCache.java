@@ -111,6 +111,7 @@ public class ReactCache {
                     map.putString("teamType", "-1");
                     NimUserInfoCache nimUserInfoCache = NimUserInfoCache.getInstance();
                     map.putString("imagePath", nimUserInfoCache.getAvatar(contactId));
+                    map.putString("mute", boolean2String(NIMClient.getService(FriendService.class).isNeedMessageNotify(contactId)));
                     name = nimUserInfoCache.getUserDisplayName(contactId);
                 } else if (sessionType == SessionTypeEnum.Team) {
                     Team team = TeamDataCache.getInstance().getTeamById(contactId);
@@ -119,6 +120,7 @@ public class ReactCache {
                         map.putString("teamType", Integer.toString(team.getType().getValue()));
                         map.putString("imagePath", team.getIcon());
                         map.putString("memberCount", Integer.toString(team.getMemberCount()));
+                        map.putString("mute", boolean2String(!team.mute()));
                     }
                 }
                 map.putString("name", name);
@@ -826,7 +828,7 @@ public class ReactCache {
         result.putString("recordType", recordType == null ? "" : recordType.getFileSuffix());
         return result;
     }
-    
+
     public static Object createAttachmentProgress(AttachmentProgress attachmentProgress) {
         WritableMap result = Arguments.createMap();
         result.putString("_id", attachmentProgress.getUuid());
