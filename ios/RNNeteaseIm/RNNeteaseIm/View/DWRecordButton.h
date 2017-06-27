@@ -31,5 +31,6 @@
 @property (copy, nonatomic) NSArray *textArr;
 - (void)setButtonStateWithRecording;
 - (void)setButtonStateWithNormal;
+- (void)setButtonStateWithCancel;
 
 @end

@@ -71,6 +71,7 @@ RCT_EXPORT_VIEW_PROPERTY(textArr, NSArray);
 //中间状态  从 TouchDragOutside ---> TouchDragInside
 - (void)recordTouchDragEnterAction:(DWRecordButton *)btn{
     NSLog(@"继续录音");
+    [btn setButtonStateWithRecording];
     if (!btn.onChange) {
         return;
     }
@@ -79,6 +80,7 @@ RCT_EXPORT_VIEW_PROPERTY(textArr, NSArray);
 //中间状态  从 TouchDragInside ---> TouchDragOutside
 - (void)recordTouchDragExitAction:(DWRecordButton *)btn{
     NSLog(@"将要取消录音");
+    [btn setButtonStateWithCancel];
     if (!btn.onChange) {
         return;
     }

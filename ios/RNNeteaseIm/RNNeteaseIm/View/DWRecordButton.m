@@ -60,6 +60,12 @@
     [self setTitle:strNormal forState:UIControlStateNormal];
 }
 
+- (void)setButtonStateWithCancel
+{
+    self.backgroundColor = kGetColor(214, 215, 220);
+    NSString *strCancel = (_textArr.count>2)?_textArr[2]:@"";
+    [self setTitle:strCancel forState:UIControlStateNormal];
+}
 
 #pragma mark -- 事件方法回调
 - (void)recordTouchDown

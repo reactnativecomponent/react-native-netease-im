@@ -24,5 +24,6 @@ export default class RCTRecordView extends Component {
 RCTRecordView.propTypes = {
     ...View.propTypes,
     textArr: PropTypes.arrayOf(PropTypes.string),
+    onChange: PropTypes.func,
 };
 const RecordView = requireNativeComponent('RecordView', RCTRecordView);
