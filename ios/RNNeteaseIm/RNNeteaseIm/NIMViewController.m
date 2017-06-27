@@ -194,6 +194,9 @@
             [dic setObject:[NSString stringWithFormat:@"%@", [self timestampDescriptionForRecentSession:recent] ] forKey:@"time"];
             
             [dic setObject:[NSString stringWithFormat:@"%@", [self imageUrlForRecentSession:recent] ?  [self imageUrlForRecentSession:recent] : @""] forKey:@"imagePath"];
+            NIMUser *user = [[NIMSDK sharedSDK].userManager userInfo:recent.lastMessage.from];
+            NSString *strMute = user.notifyForNewMsg?@"1":@"0";
+            [dic setObject:strMute forKey:@"mute"];
             [sessionList addObject:dic];
             
         }
@@ -224,6 +227,8 @@
                 [dic setObject:[NSString stringWithFormat:@"%@", [self imageUrlForRecentSession:recent] ?  [self imageUrlForRecentSession:recent] : @""] forKey:@"imagePath"];
                 NIMTeam *team = [[[NIMSDK sharedSDK] teamManager]teamById:recent.lastMessage.session.sessionId];
                 [dic setObject:[NSString stringWithFormat:@"%ld",team.memberNumber] forKey:@"memberCount"];
+                NSString *strMute = team.notifyForNewMsg?@"1":@"0";
+                [dic setObject:strMute forKey:@"mute"];
                 [sessionList addObject:dic];
                 
             }
