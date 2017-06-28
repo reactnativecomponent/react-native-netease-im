@@ -1,6 +1,8 @@
 package com.netease.im.session;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Message;
 import android.widget.Toast;
 
 import com.netease.im.R;
@@ -17,10 +19,16 @@ import java.io.File;
 
 public class AudioMessageService implements IAudioRecordCallback {
 
+    interface OnAudioListener{
+
+        int onProgress(File file, int currentTime,int db);
+    }
     protected AudioRecorder audioMessageHelper;
     private boolean started = false;
     private int currMaxTime = 0;
     SessionService sessionService;
+    private Handler handler;
+    private long currentTime;
 
     private AudioMessageService() {
     }
@@ -34,11 +42,35 @@ public class AudioMessageService implements IAudioRecordCallback {
     }
 
 
-    public void startAudioRecord(Context context) {
+    public void startAudioRecord(Context context,int maxTime) {
         if (audioMessageHelper == null) {
-            audioMessageHelper = new AudioRecorder(context, RecordType.AAC, AudioRecorder.DEFAULT_MAX_AUDIO_RECORD_TIME_SECOND, this);
+            audioMessageHelper = new AudioRecorder(context, RecordType.AAC, maxTime, this);
+        }
+        if (handler == null) {
+            handler = new Handler() {
+                @Override
+                public void handleMessage(Message msg) {
+                    if (msg.what == 1) {
+                        if (audioMessageHelper == null || !audioMessageHelper.isRecording()) {
+                            return;
+                        }
+                        double db = (double) audioMessageHelper.getCurrentRecordMaxAmplitude() / 1;
+                        if (db > 1) {
+                            db = 20 * Math.log10(db);
+                        }
+                        onRefresh((File) msg.obj,db,msg.arg1);
+                        try {
+                            Message t = Message.obtain(this, msg.what, (int) (System.currentTimeMillis() - currentTime), msg.arg2, msg.obj);
+                            sendMessageDelayed(t, 300);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            };
         }
         audioMessageHelper.startRecord();
+        handler.removeMessages(1);
     }
 
     public void endAudioRecord(SessionService sessionService) {
@@ -47,7 +79,7 @@ public class AudioMessageService implements IAudioRecordCallback {
             return;
         }
         started = false;
-        if (currMaxTime < AudioRecorder.DEFAULT_MAX_AUDIO_RECORD_TIME_SECOND*1000) {
+        if (currMaxTime < AudioRecorder.DEFAULT_MAX_AUDIO_RECORD_TIME_SECOND * 1000) {
             audioMessageHelper.completeRecord(false);
         } else {
             audioMessageHelper.handleEndRecord(true, currMaxTime);
@@ -70,7 +102,7 @@ public class AudioMessageService implements IAudioRecordCallback {
 
     @Override
     public void onRecordReady() {
-        ReactCache.emit(ReactCache.observeAudioRecord, ReactCache.createAudioRecord("ready", null, 0L, null));
+        currentTime = System.currentTimeMillis();
     }
 
     public boolean isRecording() {
@@ -88,23 +120,32 @@ public class AudioMessageService implements IAudioRecordCallback {
     public void onRecordStart(File file, RecordType recordType) {
         started = true;
         currMaxTime = 0;
-        ReactCache.emit(ReactCache.observeAudioRecord, ReactCache.createAudioRecord("start", file, 0L, recordType));
+
+        Message msg = Message.obtain(handler);
+        msg.obj = file;
+        msg.what = 1;
+        msg.arg1 = (int) (System.currentTimeMillis() - currentTime);
+        handler.sendMessageDelayed(msg, 300);
     }
 
     @Override
     public void onRecordSuccess(File audioFile, long audioLength, RecordType recordType) {
-        ReactCache.emit(ReactCache.observeAudioRecord, ReactCache.createAudioRecord("success", audioFile, audioLength, recordType));
+
+        double db = (double) audioMessageHelper.getCurrentRecordMaxAmplitude() / 1;
+        if (db > 1) {
+            db = 20 * Math.log10(db);
+        }
+        onRefresh(audioFile, (int) db, audioLength);
         if (audioLength < 2000L) {
             return;
         }
 //        currMaxTime = (int) audioLength;
-        if(sessionService!=null)
-        sessionService.sendAudioMessage(audioFile.getAbsolutePath(), audioLength, null);
+        if (sessionService != null)
+            sessionService.sendAudioMessage(audioFile.getAbsolutePath(), audioLength, null);
     }
 
     @Override
     public void onRecordFail() {
-        ReactCache.emit(ReactCache.observeAudioRecord, ReactCache.createAudioRecord("fail", null, 0L, null));
         if (started) {
             Toast.makeText(ReactCache.getReactContext(), R.string.recording_error, Toast.LENGTH_SHORT).show();
         }
@@ -112,13 +153,14 @@ public class AudioMessageService implements IAudioRecordCallback {
 
     @Override
     public void onRecordCancel() {
-        ReactCache.emit(ReactCache.observeAudioRecord, ReactCache.createAudioRecord("cancel", null, 0L, null));
     }
 
     @Override
     public void onRecordReachedMaxTime(int maxTime) {
-        ReactCache.emit(ReactCache.observeAudioRecord, ReactCache.createAudioRecord("maxTime", null, maxTime, null));
         currMaxTime = maxTime;
     }
 
+    void onRefresh(File file, double recordPower, long currentTime){
+        ReactCache.emit(ReactCache.observeAudioRecord, ReactCache.createAudioRecord((int) recordPower, currentTime));
+    }
 }

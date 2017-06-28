@@ -30,7 +30,6 @@ import com.netease.im.uikit.session.helper.TeamNotificationHelper;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.friend.FriendService;
 import com.netease.nimlib.sdk.friend.model.AddFriendNotify;
-import com.netease.nimlib.sdk.media.record.RecordType;
 import com.netease.nimlib.sdk.msg.attachment.AudioAttachment;
 import com.netease.nimlib.sdk.msg.attachment.ImageAttachment;
 import com.netease.nimlib.sdk.msg.attachment.LocationAttachment;
@@ -50,7 +49,6 @@ import com.netease.nimlib.sdk.team.model.TeamMember;
 import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -819,13 +817,11 @@ public class ReactCache {
         return result;
     }
 
-    public static Object createAudioRecord(String type, File audioFile, long duration, RecordType recordType) {
+    public static Object createAudioRecord(int recordPower, long currentTime) {
         WritableMap result = Arguments.createMap();
-        result.putString("type", "record");
-        result.putString("status", type);
-        result.putString("audioFile", audioFile == null ? "" : audioFile.getAbsolutePath());
-        result.putString("currentTime", Long.toString(duration));
-        result.putString("recordType", recordType == null ? "" : recordType.getFileSuffix());
+
+        result.putString("currentTime", Long.toString(currentTime));
+        result.putString("recordPower", Integer.toString(recordPower));
         return result;
     }
 
