@@ -6,7 +6,6 @@ import com.facebook.react.bridge.JavaScriptModule;
 import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.uimanager.ViewManager;
-import com.netease.im.view.RecordViewManager;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -24,6 +23,6 @@ public class RNNeteaseImPackage implements ReactPackage {
 
     @Override
     public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
-      return Arrays.<ViewManager>asList(new RecordViewManager());
+      return Collections.emptyList();
     }
 }
