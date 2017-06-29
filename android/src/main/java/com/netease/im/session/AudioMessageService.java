@@ -27,7 +27,7 @@ public class AudioMessageService implements IAudioRecordCallback {
 
     protected AudioRecorder audioMessageHelper;
     private boolean started = false;
-    private int currMaxTime = 60;
+    private final int currMaxTime = 60;
     private int currTime = 0;
     SessionService sessionService;
     private Handler handler;
@@ -47,7 +47,9 @@ public class AudioMessageService implements IAudioRecordCallback {
 
     public void startAudioRecord(Context context) {
 
-        audioMessageHelper = new AudioRecorder(context, RecordType.AAC, currMaxTime, this);
+        if (audioMessageHelper == null) {
+            audioMessageHelper = new AudioRecorder(context, RecordType.AAC, currMaxTime, this);
+        }
         if (handler == null) {
             handler = new Handler() {
                 @Override
@@ -161,7 +163,7 @@ public class AudioMessageService implements IAudioRecordCallback {
     }
 
     void onRefresh(File file, double recordPower, long milliseconds) {
-        int seconds = new BigDecimal((float) ((float) milliseconds / (float) 1000)).setScale(0,BigDecimal.ROUND_HALF_UP).intValue();
+        int seconds = new BigDecimal((float) ((float) milliseconds / (float) 1000)).setScale(0, BigDecimal.ROUND_HALF_UP).intValue();
         ReactCache.emit(ReactCache.observeAudioRecord, ReactCache.createAudioRecord((int) recordPower, seconds));
     }
 }
