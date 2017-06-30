@@ -130,7 +130,7 @@ public class IMApplication {
         SDKOptions options = new SDKOptions();
 
         // 如果将新消息通知提醒托管给SDK完成，需要添加以下配置。
-        initStatusBarNotificationConfig(options);
+        initStatusBarNotificationConfig(options,context);
 
         // 配置保存图片，文件，log等数据的目录
         String sdkPath = Environment.getExternalStorageDirectory() + "/" + context.getPackageName() + "/nim";
@@ -157,14 +157,14 @@ public class IMApplication {
         return options;
     }
     // 这里开发者可以自定义该应用初始的 StatusBarNotificationConfig
-    private static StatusBarNotificationConfig loadStatusBarNotificationConfig() {
+    private static StatusBarNotificationConfig loadStatusBarNotificationConfig(Context context) {
         StatusBarNotificationConfig config = new StatusBarNotificationConfig();
         // 点击通知需要跳转到的界面
         config.notificationEntrance = mainActivityClass;
         config.notificationSmallIconId = notify_msg_drawable_id;
 
         // 通知铃声的uri字符串
-        config.notificationSound = "android.resource://com.netease.im/raw/msg";
+        config.notificationSound = "android.resource://"+context.getPackageName()+"/raw/msg";
 
         // 呼吸灯配置
         config.ledARGB = Color.GREEN;
@@ -175,9 +175,9 @@ public class IMApplication {
         setStatusBarNotificationConfig(config);
         return config;
     }
-    private static void initStatusBarNotificationConfig(SDKOptions options) {
+    private static void initStatusBarNotificationConfig(SDKOptions options, Context context) {
         // load 应用的状态栏配置
-        StatusBarNotificationConfig config = loadStatusBarNotificationConfig();
+        StatusBarNotificationConfig config = loadStatusBarNotificationConfig(context);
 
         // load 用户的 StatusBarNotificationConfig 设置项
         StatusBarNotificationConfig userConfig = null;//UserPreferences.getStatusConfig();

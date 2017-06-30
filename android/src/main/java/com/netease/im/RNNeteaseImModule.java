@@ -1566,7 +1566,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
     }
 
     @ReactMethod
-    public void startAudioRecord(int maxTime, Promise promise) {
+    public void startAudioRecord(Promise promise) {
         handler.post(new Runnable() {
             @Override
             public void run() {
@@ -1574,7 +1574,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
                         WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             }
         });
-        audioMessageService.startAudioRecord(reactContext, maxTime);
+        audioMessageService.startAudioRecord(reactContext);
     }
 
     @ReactMethod
@@ -1621,7 +1621,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
      */
     @ReactMethod
     public void stopPlay(Promise promise) {
-        audioPlayService.stopPlay(handler);
+        audioPlayService.stopPlay(handler,reactContext);
     }
 
     /**
