@@ -17,6 +17,7 @@ import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.ImageSize;
 import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
 import com.nostra13.universalimageloader.core.download.ImageDownloader;
 import com.nostra13.universalimageloader.utils.MemoryCacheUtils;
@@ -170,7 +171,7 @@ public class ImageLoaderKit {
 
         String key = getAvatarCacheKey(url);
 
-        // DiskCacheUtils.findInCache(uri, ImageLoader.getInstance().getDiskCache() 查询磁盘缓存示例
+//         DiskCacheUtils.findInCache(uri, ImageLoader.getInstance().getDiskCache() 查询磁盘缓存示例
         List<Bitmap> bitmaps = MemoryCacheUtils.findCachedBitmapsForImageUri(key, ImageLoader.getInstance().getMemoryCache());
         if (bitmaps.size() > 0) {
             return bitmaps.get(0);
@@ -187,10 +188,10 @@ public class ImageLoaderKit {
             return;
         }
 
-//        String key = HeadImageView.getAvatarCacheKey(url);
-//        ImageLoader.getInstance().loadImage(key,
-//                new ImageSize(HeadImageView.DEFAULT_AVATAR_THUMB_SIZE, HeadImageView.DEFAULT_AVATAR_THUMB_SIZE),
-//                avatarLoadOption, null);
+        String key = getAvatarCacheKey(url);
+        ImageLoader.getInstance().loadImage(key,
+                new ImageSize(DEFAULT_AVATAR_THUMB_SIZE, DEFAULT_AVATAR_THUMB_SIZE),
+                avatarLoadOption, null);
     }
 
     /**
