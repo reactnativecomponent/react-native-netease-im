@@ -7,6 +7,7 @@ import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
+import com.netease.im.common.ImageLoaderKit;
 import com.netease.im.login.LoginService;
 import com.netease.im.session.extension.AccountNoticeAttachment;
 import com.netease.im.session.extension.BankTransferAttachment;
@@ -72,6 +73,7 @@ public class ReactCache {
     public final static String observeUnreadCountChange = "observeUnreadCountChange";//'未读数变化'
     public final static String observeBlackList = "observeBlackList";//'黑名单'
     public final static String observeAttachmentProgress = "observeAttachmentProgress";//'上传下载进度'
+    public final static String observeOnKick = "observeOnKick";//'被提出'
 
     final static String TAG = "ReactCache";
     private static ReactContext reactContext;
@@ -191,8 +193,8 @@ public class ReactCache {
                         default:
                             if (attachment instanceof DefaultCustomAttachment) {
                                 content = ((DefaultCustomAttachment) attachment).getDigst();
-                                if(TextUtils.isEmpty(content)){
-                                    content="[自定义消息]";
+                                if (TextUtils.isEmpty(content)) {
+                                    content = "[自定义消息]";
                                 }
                             }
                             break;
@@ -257,7 +259,9 @@ public class ReactCache {
                     map.putString("alias", contact.getDisplayName());
                     map.putString("type", Integer.toString(contact.getContactType()));
                     map.putString("name", NimUserInfoCache.getInstance().getUserName(contactId));
-                    map.putString("avatar", NimUserInfoCache.getInstance().getAvatar(contactId));
+                    String avatar = NimUserInfoCache.getInstance().getAvatar(contactId);
+                    map.putString("avatar", avatar);
+                    map.putString("avatarLocal", ImageLoaderKit.getAvatarCacheKey(avatar));
                     array.pushMap(map);
 //                } else {
 //                map.putString("itemType", Integer.toString(item.getItemType()));
@@ -296,7 +300,9 @@ public class ReactCache {
                     map.putString("alias", contact.getDisplayName());
                     map.putString("type", Integer.toString(contact.getContactType()));
                     map.putString("name", NimUserInfoCache.getInstance().getUserName(contact.getContactId()));
-                    map.putString("avatar", NimUserInfoCache.getInstance().getAvatar(contact.getContactId()));
+                    String avatar = NimUserInfoCache.getInstance().getAvatar(contact.getContactId());
+                    map.putString("avatar", avatar);
+                    map.putString("avatarLocal", ImageLoaderKit.getAvatarCacheKey(avatar));
                     WritableArray array = listHashMap.get(belongs);
                     if (array == null) {
                         array = Arguments.createArray();
@@ -345,7 +351,9 @@ public class ReactCache {
                         }
                         map.putString("name", teamContact.getDisplayName());
                         map.putString("type", Integer.toString(teamContact.getContactType()));
-                        map.putString("avatar", NimUserInfoCache.getInstance().getAvatar(teamContact.getContactId()));
+                        String avatar = NimUserInfoCache.getInstance().getAvatar(teamContact.getContactId());
+                        map.putString("avatar", avatar);
+                        map.putString("avatarLocal", ImageLoaderKit.getAvatarCacheKey(avatar));
                         writableArray.pushMap(map);
                     }
 //                } else {
@@ -384,6 +392,7 @@ public class ReactCache {
             writableMap.putString("name", userInfo.getName());
             writableMap.putString("alias", NimUserInfoCache.getInstance().getUserDisplayName(userInfo.getAccount()));
             writableMap.putString("avatar", userInfo.getAvatar());
+            writableMap.putString("avatarLocal", ImageLoaderKit.getAvatarCacheKey(userInfo.getAvatar()));
             writableMap.putString("signature", userInfo.getSignature());
             writableMap.putString("gender", Integer.toString(userInfo.getGenderEnum().getValue()));
             writableMap.putString("email", userInfo.getEmail());
@@ -405,7 +414,9 @@ public class ReactCache {
                 map.putString("type", Integer.toString(message.getType().getValue()));
                 map.putString("targetId", message.getTargetId());
                 map.putString("fromAccount", message.getFromAccount());
-                map.putString("avatar", nimUserInfoCache.getAvatar(message.getFromAccount()));
+                String avatar = nimUserInfoCache.getAvatar(message.getFromAccount());
+                map.putString("avatar", avatar);
+                map.putString("avatarLocal", ImageLoaderKit.getAvatarCacheKey(avatar));
                 map.putString("name", nimUserInfoCache.getUserDisplayNameEx(message.getFromAccount()));//alias
                 map.putString("time", Long.toString(message.getTime() / 1000));
                 map.putString("isVerify", String.valueOf(verify));
@@ -504,6 +515,7 @@ public class ReactCache {
                     writableMap.putString("contactId", userInfo.getAccount());
                     writableMap.putString("name", userInfo.getName());
                     writableMap.putString("avatar", userInfo.getAvatar());
+                    writableMap.putString("avatarLocal", ImageLoaderKit.getAvatarCacheKey(userInfo.getAvatar()));
                     array.pushMap(writableMap);
                 }
             }
@@ -555,6 +567,7 @@ public class ReactCache {
             writableMap.putString("teamId", team.getId());
             writableMap.putString("name", team.getName());
             writableMap.putString("avatar", team.getIcon());
+            writableMap.putString("avatarLocal", ImageLoaderKit.getAvatarCacheKey(team.getIcon()));
             writableMap.putString("type", Integer.toString(team.getType().getValue()));
             writableMap.putString("introduce", team.getIntroduce());
             writableMap.putString("createTime", TimeUtil.getTimeShowString(team.getCreateTime(), true));
@@ -582,8 +595,9 @@ public class ReactCache {
             writableMap.putString("alias", NimUserInfoCache.getInstance().getUserDisplayName(teamMember.getAccount()));
             writableMap.putString("name", TeamDataCache.getInstance().getTeamMemberDisplayName(teamMember.getTid(), teamMember.getAccount()));
             writableMap.putString("joinTime", TimeUtil.getTimeShowString(teamMember.getJoinTime(), true));
-            writableMap.putString("avatar", NimUserInfoCache.getInstance().getAvatar(teamMember.getAccount()));
-
+            String avatar = NimUserInfoCache.getInstance().getAvatar(teamMember.getAccount());
+            writableMap.putString("avatar", avatar);
+            writableMap.putString("avatarLocal", ImageLoaderKit.getAvatarCacheKey(avatar));
             writableMap.putString("isInTeam", boolean2String(teamMember.isInTeam()));
             writableMap.putString("isMute", boolean2String(teamMember.isMute()));
             writableMap.putString("teamId", teamMember.getTid());
@@ -657,9 +671,13 @@ public class ReactCache {
         itemMap.putString("isRemoteRead", boolean2String(receiveReceiptCheck(item)));
 
         WritableMap user = Arguments.createMap();
-        user.putString("_id", item.getFromAccount());
-        user.putString("name", NimUserInfoCache.getInstance().getUserDisplayName(item.getFromAccount()));
-        user.putString("avatar", NimUserInfoCache.getInstance().getAvatar(item.getFromAccount()));
+        String fromAccount = item.getFromAccount();
+        String fromNick = item.getFromNick();
+        user.putString("_id", fromAccount);
+        user.putString("name", !TextUtils.isEmpty(fromNick) ? fromNick : NimUserInfoCache.getInstance().getUserDisplayName(fromAccount));
+        String avatar = NimUserInfoCache.getInstance().getAvatar(fromAccount);
+        user.putString("avatar", avatar);
+        user.putString("avatarLocal", ImageLoaderKit.getAvatarCacheKey(avatar));
         itemMap.putMap("user", user);
 
         MsgAttachment attachment = item.getAttachment();
