@@ -43,25 +43,25 @@
 - (void)onLogin:(NIMLoginStep)step{
     switch (step) {
         case NIMLoginStepLinkFailed:
-            [NIMModel initShareMD].NIMKick = @"未连接";
+            [NIMModel initShareMD].NetStatus = @"未连接";
             break;
         case NIMLoginStepLinking:
-            [NIMModel initShareMD].NIMKick = @"连接中";
+            [NIMModel initShareMD].NetStatus = @"连接中";
             break;
         case NIMLoginStepLinkOK:
         case NIMLoginStepSyncOK:
             [self getResouces];
-            [NIMModel initShareMD].NIMKick = @"飞马钱包";
+            [NIMModel initShareMD].NetStatus = @"飞马钱包";
             break;
         case NIMLoginStepSyncing:
             [self getResouces];
-            [NIMModel initShareMD].NIMKick = @"同步数据";
+            [NIMModel initShareMD].NetStatus = @"同步数据";
             break;
         case  NIMLoginStepLoseConnection:
-            [NIMModel initShareMD].NIMKick = @"连接断开";
+            [NIMModel initShareMD].NetStatus = @"连接断开";
             break;
         case  NIMLoginStepNetChanged:
-            [NIMModel initShareMD].NIMKick = @"网络切换";
+            [NIMModel initShareMD].NetStatus = @"网络切换";
             break;
         default:
             break;
