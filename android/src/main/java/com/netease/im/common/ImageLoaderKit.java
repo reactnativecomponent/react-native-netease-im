@@ -3,6 +3,7 @@ package com.netease.im.common;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
+import android.view.View;
 
 import com.netease.im.IMApplication;
 import com.netease.im.R;
@@ -17,9 +18,11 @@ import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageSize;
 import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
 import com.nostra13.universalimageloader.core.download.ImageDownloader;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nostra13.universalimageloader.utils.DiskCacheUtils;
 import com.nostra13.universalimageloader.utils.MemoryCacheUtils;
 import com.nostra13.universalimageloader.utils.StorageUtils;
@@ -27,7 +30,9 @@ import com.nostra13.universalimageloader.utils.StorageUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 图片加载、缓存、管理组件
@@ -181,19 +186,20 @@ public class ImageLoaderKit {
         return null;
     }
 
-    private static String getMemoryCachedAvatar(String url) {
+    public static String getMemoryCachedAvatar(String url) {
         if (url == null || !isImageUriValid(url)) {
             return "";
         }
-//        String key = getAvatarCacheKey(url);
+        String key = getAvatarCacheKey(url);
 
-        File file = DiskCacheUtils.findInCache(url, ImageLoader.getInstance().getDiskCache());// 查询磁盘缓存示例
+        File file = DiskCacheUtils.findInCache(key, ImageLoader.getInstance().getDiskCache());// 查询磁盘缓存示例
         if (file == null) {
             asyncLoadAvatarBitmapToCache(url);
         }
         return file == null ? "" : file.getAbsolutePath();
     }
 
+    private static Set<String> cacheLoad = new HashSet<>();
     /**
      * 异步加载头像位图到ImageLoader内存缓存
      */
@@ -203,9 +209,34 @@ public class ImageLoaderKit {
         }
 
         String key = getAvatarCacheKey(url);
+        if(cacheLoad.contains(key)){
+            return;
+        }
+        cacheLoad.add(key);
+        ImageLoadingListener listener = new ImageLoadingListener() {
+            @Override
+            public void onLoadingStarted(String s, View view) {
+
+            }
+
+            @Override
+            public void onLoadingFailed(String s, View view, FailReason failReason) {
+
+            }
+
+            @Override
+            public void onLoadingComplete(String s, View view, Bitmap bitmap) {
+                cacheLoad.remove(s);
+            }
+
+            @Override
+            public void onLoadingCancelled(String s, View view) {
+
+            }
+        };
         ImageLoader.getInstance().loadImage(key,
                 new ImageSize(DEFAULT_AVATAR_THUMB_SIZE, DEFAULT_AVATAR_THUMB_SIZE),
-                avatarLoadOption, null);
+                avatarLoadOption, listener);
     }
 
     /**

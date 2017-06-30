@@ -107,10 +107,12 @@ public class ReactCache {
                 map.putString("unreadCount", String.valueOf(contact.getUnreadCount()));
                 String name = "";
                 SessionTypeEnum sessionType = contact.getSessionType();
+                String imagePath = "";
                 if (sessionType == SessionTypeEnum.P2P) {
                     map.putString("teamType", "-1");
                     NimUserInfoCache nimUserInfoCache = NimUserInfoCache.getInstance();
-                    map.putString("imagePath", nimUserInfoCache.getAvatar(contactId));
+                    imagePath = nimUserInfoCache.getAvatar(contactId);
+
                     map.putString("mute", boolean2String(NIMClient.getService(FriendService.class).isNeedMessageNotify(contactId)));
                     name = nimUserInfoCache.getUserDisplayName(contactId);
                 } else if (sessionType == SessionTypeEnum.Team) {
@@ -118,11 +120,13 @@ public class ReactCache {
                     if (team != null) {
                         name = team.getName();
                         map.putString("teamType", Integer.toString(team.getType().getValue()));
-                        map.putString("imagePath", team.getIcon());
+                        imagePath = team.getIcon();
                         map.putString("memberCount", Integer.toString(team.getMemberCount()));
                         map.putString("mute", boolean2String(!team.mute()));
                     }
                 }
+                map.putString("imagePath", imagePath);
+                map.putString("imageLocal", ImageLoaderKit.getMemoryCachedAvatar(imagePath));
                 map.putString("name", name);
                 map.putString("sessionType", Integer.toString(contact.getSessionType().getValue()));
                 map.putString("msgType", Integer.toString(contact.getMsgType().getValue()));
@@ -261,7 +265,7 @@ public class ReactCache {
                     map.putString("name", NimUserInfoCache.getInstance().getUserName(contactId));
                     String avatar = NimUserInfoCache.getInstance().getAvatar(contactId);
                     map.putString("avatar", avatar);
-                    map.putString("avatarLocal", ImageLoaderKit.getAvatarCacheKey(avatar));
+                    map.putString("avatarLocal", ImageLoaderKit.getMemoryCachedAvatar(avatar));
                     array.pushMap(map);
 //                } else {
 //                map.putString("itemType", Integer.toString(item.getItemType()));
@@ -302,7 +306,7 @@ public class ReactCache {
                     map.putString("name", NimUserInfoCache.getInstance().getUserName(contact.getContactId()));
                     String avatar = NimUserInfoCache.getInstance().getAvatar(contact.getContactId());
                     map.putString("avatar", avatar);
-                    map.putString("avatarLocal", ImageLoaderKit.getAvatarCacheKey(avatar));
+                    map.putString("avatarLocal", ImageLoaderKit.getMemoryCachedAvatar(avatar));
                     WritableArray array = listHashMap.get(belongs);
                     if (array == null) {
                         array = Arguments.createArray();
@@ -353,7 +357,7 @@ public class ReactCache {
                         map.putString("type", Integer.toString(teamContact.getContactType()));
                         String avatar = NimUserInfoCache.getInstance().getAvatar(teamContact.getContactId());
                         map.putString("avatar", avatar);
-                        map.putString("avatarLocal", ImageLoaderKit.getAvatarCacheKey(avatar));
+                        map.putString("avatarLocal", ImageLoaderKit.getMemoryCachedAvatar(avatar));
                         writableArray.pushMap(map);
                     }
 //                } else {
@@ -392,7 +396,7 @@ public class ReactCache {
             writableMap.putString("name", userInfo.getName());
             writableMap.putString("alias", NimUserInfoCache.getInstance().getUserDisplayName(userInfo.getAccount()));
             writableMap.putString("avatar", userInfo.getAvatar());
-            writableMap.putString("avatarLocal", ImageLoaderKit.getAvatarCacheKey(userInfo.getAvatar()));
+            writableMap.putString("avatarLocal", ImageLoaderKit.getMemoryCachedAvatar(userInfo.getAvatar()));
             writableMap.putString("signature", userInfo.getSignature());
             writableMap.putString("gender", Integer.toString(userInfo.getGenderEnum().getValue()));
             writableMap.putString("email", userInfo.getEmail());
@@ -416,7 +420,7 @@ public class ReactCache {
                 map.putString("fromAccount", message.getFromAccount());
                 String avatar = nimUserInfoCache.getAvatar(message.getFromAccount());
                 map.putString("avatar", avatar);
-                map.putString("avatarLocal", ImageLoaderKit.getAvatarCacheKey(avatar));
+                map.putString("avatarLocal", ImageLoaderKit.getMemoryCachedAvatar(avatar));
                 map.putString("name", nimUserInfoCache.getUserDisplayNameEx(message.getFromAccount()));//alias
                 map.putString("time", Long.toString(message.getTime() / 1000));
                 map.putString("isVerify", String.valueOf(verify));
@@ -515,7 +519,7 @@ public class ReactCache {
                     writableMap.putString("contactId", userInfo.getAccount());
                     writableMap.putString("name", userInfo.getName());
                     writableMap.putString("avatar", userInfo.getAvatar());
-                    writableMap.putString("avatarLocal", ImageLoaderKit.getAvatarCacheKey(userInfo.getAvatar()));
+                    writableMap.putString("avatarLocal", ImageLoaderKit.getMemoryCachedAvatar(userInfo.getAvatar()));
                     array.pushMap(writableMap);
                 }
             }
@@ -567,7 +571,7 @@ public class ReactCache {
             writableMap.putString("teamId", team.getId());
             writableMap.putString("name", team.getName());
             writableMap.putString("avatar", team.getIcon());
-            writableMap.putString("avatarLocal", ImageLoaderKit.getAvatarCacheKey(team.getIcon()));
+            writableMap.putString("avatarLocal", ImageLoaderKit.getMemoryCachedAvatar(team.getIcon()));
             writableMap.putString("type", Integer.toString(team.getType().getValue()));
             writableMap.putString("introduce", team.getIntroduce());
             writableMap.putString("createTime", TimeUtil.getTimeShowString(team.getCreateTime(), true));
@@ -597,7 +601,7 @@ public class ReactCache {
             writableMap.putString("joinTime", TimeUtil.getTimeShowString(teamMember.getJoinTime(), true));
             String avatar = NimUserInfoCache.getInstance().getAvatar(teamMember.getAccount());
             writableMap.putString("avatar", avatar);
-            writableMap.putString("avatarLocal", ImageLoaderKit.getAvatarCacheKey(avatar));
+            writableMap.putString("avatarLocal", ImageLoaderKit.getMemoryCachedAvatar(avatar));
             writableMap.putString("isInTeam", boolean2String(teamMember.isInTeam()));
             writableMap.putString("isMute", boolean2String(teamMember.isMute()));
             writableMap.putString("teamId", teamMember.getTid());
@@ -677,7 +681,7 @@ public class ReactCache {
         user.putString("name", !TextUtils.isEmpty(fromNick) ? fromNick : NimUserInfoCache.getInstance().getUserDisplayName(fromAccount));
         String avatar = NimUserInfoCache.getInstance().getAvatar(fromAccount);
         user.putString("avatar", avatar);
-        user.putString("avatarLocal", ImageLoaderKit.getAvatarCacheKey(avatar));
+        user.putString("avatarLocal", ImageLoaderKit.getMemoryCachedAvatar(avatar));
         itemMap.putMap("user", user);
 
         MsgAttachment attachment = item.getAttachment();
