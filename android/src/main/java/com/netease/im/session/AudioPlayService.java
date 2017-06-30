@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.text.TextUtils;
 
 import com.facebook.react.bridge.ReactContext;
+import com.netease.im.ReactCache;
 import com.netease.im.uikit.common.util.log.LogUtil;
 import com.netease.nimlib.sdk.media.player.AudioPlayer;
 import com.netease.nimlib.sdk.media.player.OnPlayListener;
@@ -221,19 +222,19 @@ public class AudioPlayService implements SensorEventListener {
         @Override
         public void onCompletion() {
             state = AudioControllerState.stop;
-//            ReactCache.emit(ReactCache.observeAudioRecord, ReactCache.createAudioPlay("completion", position));
+            ReactCache.emit(ReactCache.observeAudioRecord, ReactCache.createAudioPlay("completion", position));
         }
 
         @Override
         public void onInterrupt() {
             state = AudioControllerState.stop;
-//            ReactCache.emit(ReactCache.observeAudioRecord, ReactCache.createAudioPlay("stop", position));
+            ReactCache.emit(ReactCache.observeAudioRecord, ReactCache.createAudioPlay("stop", position));
         }
 
         @Override
         public void onError(String s) {
             state = AudioControllerState.stop;
-//            ReactCache.emit(ReactCache.observeAudioRecord, ReactCache.createAudioPlay("error", position));
+            ReactCache.emit(ReactCache.observeAudioRecord, ReactCache.createAudioPlay("error", position));
         }
 
         @Override
