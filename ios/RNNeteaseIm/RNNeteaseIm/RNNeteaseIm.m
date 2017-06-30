@@ -458,8 +458,8 @@ RCT_EXPORT_METHOD(removeFromBlackList:(nonnull NSString *)contactId  resolve:(RC
                 [_bridge.eventDispatcher sendDeviceEventWithName:@"observeRecentContact" body:(NSDictionary *)param];
                 break;
             case 2:
-                //被踢出
-                [_bridge.eventDispatcher sendDeviceEventWithName:@"observeOnKick" body:@{@"reason":param}];
+                //被踢出 status：1是被挤下线，2是被服务器踢下线，3是另一个客户端手动踢下线（这是在支持多客户端登录的情况下）
+                [_bridge.eventDispatcher sendDeviceEventWithName:@"observeOnKick" body:@{@"status":param}];
                 break;
             case 3:
                 //通讯录
