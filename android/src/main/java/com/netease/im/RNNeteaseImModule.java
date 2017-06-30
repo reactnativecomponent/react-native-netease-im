@@ -1621,7 +1621,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
      */
     @ReactMethod
     public void stopPlay(Promise promise) {
-        audioPlayService.stopPlay(handler);
+        audioPlayService.stopPlay(handler,reactContext);
     }
 
     /**

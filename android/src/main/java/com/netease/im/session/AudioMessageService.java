@@ -73,8 +73,10 @@ public class AudioMessageService implements IAudioRecordCallback {
                 }
             };
         }
+        if(isRecording()){
+            cancelAudioRecord();
+        }
         audioMessageHelper.startRecord();
-        handler.removeMessages(1);
     }
 
     public void endAudioRecord(SessionService sessionService) {
