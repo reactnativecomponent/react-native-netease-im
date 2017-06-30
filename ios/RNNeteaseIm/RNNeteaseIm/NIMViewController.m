@@ -43,25 +43,25 @@
 - (void)onLogin:(NIMLoginStep)step{
     switch (step) {
         case NIMLoginStepLinkFailed:
-            [NIMModel initShareMD].NIMKick = @"未连接";
+            [NIMModel initShareMD].NetStatus = @"未连接";
             break;
         case NIMLoginStepLinking:
-            [NIMModel initShareMD].NIMKick = @"连接中";
+            [NIMModel initShareMD].NetStatus = @"连接中";
             break;
         case NIMLoginStepLinkOK:
         case NIMLoginStepSyncOK:
             [self getResouces];
-            [NIMModel initShareMD].NIMKick = @"飞马钱包";
+            [NIMModel initShareMD].NetStatus = @"飞马钱包";
             break;
         case NIMLoginStepSyncing:
             [self getResouces];
-            [NIMModel initShareMD].NIMKick = @"同步数据";
+            [NIMModel initShareMD].NetStatus = @"同步数据";
             break;
         case  NIMLoginStepLoseConnection:
-            [NIMModel initShareMD].NIMKick = @"连接断开";
+            [NIMModel initShareMD].NetStatus = @"连接断开";
             break;
         case  NIMLoginStepNetChanged:
-            [NIMModel initShareMD].NIMKick = @"网络切换";
+            [NIMModel initShareMD].NetStatus = @"网络切换";
             break;
         default:
             break;
@@ -83,19 +83,18 @@
 #pragma NIMLoginManagerDelegate
 -(void)onKick:(NIMKickReason)code clientType:(NIMLoginClientType)clientType
 {
-    NSString *reason = @"你被踢下线";
-    
     switch (code) {
-        case NIMKickReasonByClient:
-        case NIMKickReasonByClientManually:{
-            NSString *clientName = [NTESClientUtil clientName:clientType];
-            reason = clientName.length ? [NSString stringWithFormat:@"你的帐号被%@端踢出下线，请注意帐号信息安全",clientName] : @"你的帐号被踢出下线，请注意帐号信息安全";
-            [NIMModel initShareMD].NIMKick = reason;
-            break;
+        case NIMKickReasonByClient:{//被另外一个客户端踢下线 (互斥客户端一端登录挤掉上一个登录中的客户端)
+            [NIMModel initShareMD].NIMKick = @"1";
         }
-        case NIMKickReasonByServer:
-            reason = @"你被服务器踢下线";
-            [NIMModel initShareMD].NIMKick = reason;
+            break;
+        case NIMKickReasonByClientManually:{//被另外一个客户端手动选择踢下线
+            [NIMModel initShareMD].NIMKick = @"3";
+        }
+            break;
+        case NIMKickReasonByServer:{//你被服务器踢下线
+            [NIMModel initShareMD].NIMKick = @"2";
+        }
             break;
         default:
             break;

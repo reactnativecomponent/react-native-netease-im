@@ -552,7 +552,8 @@
 //监听录音状态
 - (void)recordAudioProgress:(NSTimeInterval)currentTime{
     NIMModel *model = [NIMModel initShareMD];
-    NSDictionary *Audic = @{@"currentTime":[NSString stringWithFormat:@"%f",currentTime],@"recordPower":[NSString stringWithFormat:@"%f",[[NIMSDK sharedSDK].mediaManager recordAveragePower]]};
+    NSDictionary *Audic = @{@"currentTime":[NSString stringWithFormat:@"%f",currentTime],@"recordPower":[NSString stringWithFormat:@"%f",[[NIMSDK sharedSDK].mediaManager recordPeakPower]]};
+    NSLog(@"---------%@",Audic);
     model.audioDic = Audic;
 }
 
