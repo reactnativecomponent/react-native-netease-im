@@ -2,6 +2,8 @@ package com.netease.im.login;
 
 import android.text.TextUtils;
 
+import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.WritableMap;
 import com.netease.im.ReactCache;
 import com.netease.im.uikit.cache.SimpleCallback;
 import com.netease.im.uikit.cache.TeamDataCache;
@@ -240,7 +242,26 @@ public class RecentContactObserver {
 
         @Override
         public void onEvent(StatusCode code) {
-            ReactCache.emit(ReactCache.observeOnlineStatus, Integer.toString(code.getValue()));
+            if (code != StatusCode.PWD_ERROR && code.wontAutoLogin()) {
+                WritableMap r = Arguments.createMap();
+                String status = "";
+                switch (code) {
+                    case KICKOUT:
+                        status = "1";
+                        break;
+                    case KICK_BY_OTHER_CLIENT:
+                        status = "3";
+                        break;
+                    case FORBIDDEN:
+                        status = "2";
+                        break;
+                }
+                r.putString("status", status);
+                ReactCache.emit(ReactCache.observeOnKick, r);
+            }
+            WritableMap r = Arguments.createMap();
+            r.putString("status", Integer.toString(code.getValue()));
+            ReactCache.emit(ReactCache.observeOnlineStatus, r);
         }
     };
 }
