@@ -64,12 +64,14 @@
     _index = index;
     [[NIMSDK sharedSDK].conversationManager markAllMessagesReadInSession:_session];
     if (currentMessageID.length != 0) {
+        
         NSArray *currentMessage = [[[NIMSDK sharedSDK] conversationManager] messagesInSession:_session messageIds:@[currentMessageID] ];
         NIMMessage *currentM = currentMessage[0];
         NSArray *messageArr =  [[[NIMSDK sharedSDK] conversationManager]messagesInSession:_session message:currentM limit: index];
         if (messageArr.count != 0) {
             succe([self setTimeArr:messageArr]);
         }else{
+           
             err(@"暂无更多");
         }
         

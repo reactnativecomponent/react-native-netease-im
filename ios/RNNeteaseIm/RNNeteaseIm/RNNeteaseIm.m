@@ -29,6 +29,7 @@ RCT_EXPORT_METHOD(login:(nonnull NSString *)account token:(nonnull NSString *)to
             [self setSendState];
             [[NIMViewController initWithController] addDelegate];
             [[RNNotificationCenter sharedCenter] start];
+            [[NoticeViewController initWithNoticeViewController]initWithDelegate];
             resolve(account);
         }else{
             reject(@"-1",error, nil);

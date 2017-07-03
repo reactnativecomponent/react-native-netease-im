@@ -710,6 +710,7 @@ export default class NIM{
      * @returns {*}
      */
     static deleteSystemMessage(messageId,timestamp){
+        console.info('卡接收到',messageId,timestamp);
         return RNNeteaseIm.deleteSystemMessage(messageId,timestamp);
     }
 
