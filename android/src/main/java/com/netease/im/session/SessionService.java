@@ -4,6 +4,8 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
+import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.WritableMap;
 import com.netease.im.MessageUtil;
 import com.netease.im.ReactCache;
 import com.netease.im.login.LoginService;
@@ -371,7 +373,8 @@ public class SessionService {
             }
 
             deleteItem(message, false);
-            MessageHelper.getInstance().onRevokeMessage(message);
+            revokMessage(message);
+//            MessageHelper.getInstance().onRevokeMessage(message);
         }
     };
     private UserInfoObservable.UserInfoObserver uinfoObserver;
@@ -701,6 +704,11 @@ public class SessionService {
         return 2;
     }
 
+    void revokMessage(IMMessage message){
+        WritableMap msg = Arguments.createMap();
+        msg.putString("_id", message.getUuid());
+        ReactCache.emit(ReactCache.observeDeleteMessage,msg);
+    }
     public int revokeMessage(final IMMessage selectMessage, final OnSendMessageListener onSendMessageListener) {
         if (selectMessage == null) {
             return 0;
@@ -710,6 +718,7 @@ public class SessionService {
             public void onResult(int code, Void aVoid, Throwable throwable) {
                 if (code == ResponseCode.RES_SUCCESS) {
                     deleteItem(selectMessage, false);
+                    revokMessage(selectMessage);
                     MessageHelper.getInstance().onRevokeMessage(selectMessage);
                 }
                 if (onSendMessageListener != null) {

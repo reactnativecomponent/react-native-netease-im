@@ -67,6 +67,8 @@ public class ReactCache {
     public final static String observeFriend = "observeFriend";//'联系人'
     public final static String observeTeam = "observeTeam";//'群组'
     public final static String observeReceiveMessage = "observeReceiveMessage";//'接收消息'
+
+    public final static String observeDeleteMessage = "observeDeleteMessage";//'撤销后删除消息'
     public final static String observeReceiveSystemMsg = "observeReceiveSystemMsg";//'系统通知'
     public final static String observeMsgStatus = "observeMsgStatus";//'发送消息状态变化'
     public final static String observeAudioRecord = "observeAudioRecord";//'录音状态'

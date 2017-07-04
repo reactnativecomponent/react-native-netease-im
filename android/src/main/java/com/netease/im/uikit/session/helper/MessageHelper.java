@@ -42,6 +42,7 @@ public class MessageHelper {
             nick = item.getFromAccount().equals(LoginService.getInstance().getAccount()) ? "你" : "对方";
         }
         message.setContent(nick + "撤回了一条消息");
+//        message.setPushContent(nick + "撤回了一条消息");
         message.setStatus(MsgStatusEnum.success);
         CustomMessageConfig config = new CustomMessageConfig();
         config.enableUnreadCount = false;
