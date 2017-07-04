@@ -1031,13 +1031,27 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
     /**
      * 发送文本消息
      *
-     * @param content 文本内容
+     * @param content   文本内容
+     * @param atUserIds
      * @param promise
      */
     @ReactMethod
+    public void sendTextMessage(String content, ReadableArray atUserIds, final Promise promise) {
+        LogUtil.i(TAG, "sendTextMessage" + content);
+
+        List<String> atUserIdList = array2ListString(atUserIds);
+        sessionService.sendTextMessage(content, atUserIdList, new SessionService.OnSendMessageListener() {
+            @Override
+            public int onResult(int code, IMMessage message) {
+//                promise.resolve(ReactCache.createMessage(message,null));
+                return 0;
+            }
+        });
+    }
+
     public void sendTextMessage(String content, final Promise promise) {
         LogUtil.i(TAG, "sendTextMessage" + content);
-        sessionService.sendTextMessage(content, new SessionService.OnSendMessageListener() {
+        sessionService.sendTextMessage(content, null, new SessionService.OnSendMessageListener() {
             @Override
             public int onResult(int code, IMMessage message) {
 //                promise.resolve(ReactCache.createMessage(message,null));
