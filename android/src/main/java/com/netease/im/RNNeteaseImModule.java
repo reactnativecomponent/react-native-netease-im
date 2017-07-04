@@ -37,7 +37,6 @@ import com.netease.im.uikit.cache.NimUserInfoCache;
 import com.netease.im.uikit.cache.SimpleCallback;
 import com.netease.im.uikit.cache.TeamDataCache;
 import com.netease.im.uikit.common.util.log.LogUtil;
-import com.netease.im.uikit.common.util.string.MD5;
 import com.netease.im.uikit.contact.core.model.ContactDataList;
 import com.netease.im.uikit.permission.MPermission;
 import com.netease.im.uikit.permission.annotation.OnMPermissionDenied;
@@ -140,9 +139,9 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
      */
     @ReactMethod
     public void login(String contactId, String token, final Promise promise) {
-        LogUtil.i(TAG, "contactId:" + contactId);
-        LogUtil.i(TAG, "token:" + token);
-        LogUtil.i(TAG, "md5:" + MD5.getStringMD5(token));
+//        LogUtil.i(TAG, "contactId:" + contactId);
+//        LogUtil.i(TAG, "token:" + token);
+//        LogUtil.i(TAG, "md5:" + MD5.getStringMD5(token));
         LoginService.getInstance().login(new LoginInfo(contactId, token), new RequestCallback<LoginInfo>() {
             @Override
             public void onSuccess(LoginInfo loginInfo) {
@@ -1031,13 +1030,27 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
     /**
      * 发送文本消息
      *
-     * @param content 文本内容
+     * @param content   文本内容
+     * @param atUserIds
      * @param promise
      */
     @ReactMethod
+    public void sendTextMessage(String content, ReadableArray atUserIds, final Promise promise) {
+        LogUtil.i(TAG, "sendTextMessage" + content);
+
+        List<String> atUserIdList = array2ListString(atUserIds);
+        sessionService.sendTextMessage(content, atUserIdList, new SessionService.OnSendMessageListener() {
+            @Override
+            public int onResult(int code, IMMessage message) {
+//                promise.resolve(ReactCache.createMessage(message,null));
+                return 0;
+            }
+        });
+    }
+
     public void sendTextMessage(String content, final Promise promise) {
         LogUtil.i(TAG, "sendTextMessage" + content);
-        sessionService.sendTextMessage(content, new SessionService.OnSendMessageListener() {
+        sessionService.sendTextMessage(content, null, new SessionService.OnSendMessageListener() {
             @Override
             public int onResult(int code, IMMessage message) {
 //                promise.resolve(ReactCache.createMessage(message,null));

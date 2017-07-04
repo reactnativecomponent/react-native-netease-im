@@ -34,6 +34,7 @@ import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.AttachmentProgress;
 import com.netease.nimlib.sdk.msg.model.CustomMessageConfig;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
+import com.netease.nimlib.sdk.msg.model.MemberPushOption;
 import com.netease.nimlib.sdk.msg.model.MessageReceipt;
 import com.netease.nimlib.sdk.msg.model.QueryDirectionEnum;
 
@@ -558,9 +559,14 @@ public class SessionService {
     /**
      * @param content
      */
-    public void sendTextMessage(String content, OnSendMessageListener onSendMessageListener) {
+    public void sendTextMessage(String content, List<String> selectedMembers, OnSendMessageListener onSendMessageListener) {
 
         IMMessage message = MessageBuilder.createTextMessage(sessionId, sessionTypeEnum, content);
+
+        if (selectedMembers != null && !selectedMembers.isEmpty()) {
+            MemberPushOption option = createMemPushOption(selectedMembers, message);
+            message.setMemberPushOption(option);
+        }
         sendMessage(message, onSendMessageListener);
     }
 
@@ -770,6 +776,18 @@ public class SessionService {
 //        }
     }
 
+    private MemberPushOption createMemPushOption(List<String> selectedMembers, IMMessage message) {
+
+        if (selectedMembers.isEmpty()) {
+            return null;
+        }
+
+        MemberPushOption memberPushOption = new MemberPushOption();
+        memberPushOption.setForcePush(true);
+        memberPushOption.setForcePushContent(message.getContent());
+        memberPushOption.setForcePushList(selectedMembers);
+        return memberPushOption;
+    }
     private boolean isOriginImageHasDownloaded(final IMMessage message) {
 
         if (message.getAttachStatus() == AttachStatusEnum.transferred) {

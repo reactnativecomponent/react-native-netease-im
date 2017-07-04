@@ -276,6 +276,7 @@ export default class NIM{
     /**
      *1.发送文本消息
      * @param content 文本内容
+     * @param atUserIds @的群成员ID ["abc","abc12"]
      */
     static sendTextMessage(content,atUserIds){
         return RNNeteaseIm.sendTextMessage(content,atUserIds);
