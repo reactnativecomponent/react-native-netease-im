@@ -37,7 +37,6 @@ import com.netease.im.uikit.cache.NimUserInfoCache;
 import com.netease.im.uikit.cache.SimpleCallback;
 import com.netease.im.uikit.cache.TeamDataCache;
 import com.netease.im.uikit.common.util.log.LogUtil;
-import com.netease.im.uikit.common.util.string.MD5;
 import com.netease.im.uikit.contact.core.model.ContactDataList;
 import com.netease.im.uikit.permission.MPermission;
 import com.netease.im.uikit.permission.annotation.OnMPermissionDenied;
@@ -140,9 +139,9 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
      */
     @ReactMethod
     public void login(String contactId, String token, final Promise promise) {
-        LogUtil.i(TAG, "contactId:" + contactId);
-        LogUtil.i(TAG, "token:" + token);
-        LogUtil.i(TAG, "md5:" + MD5.getStringMD5(token));
+//        LogUtil.i(TAG, "contactId:" + contactId);
+//        LogUtil.i(TAG, "token:" + token);
+//        LogUtil.i(TAG, "md5:" + MD5.getStringMD5(token));
         LoginService.getInstance().login(new LoginInfo(contactId, token), new RequestCallback<LoginInfo>() {
             @Override
             public void onSuccess(LoginInfo loginInfo) {
