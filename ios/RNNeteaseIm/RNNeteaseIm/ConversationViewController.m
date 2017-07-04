@@ -352,8 +352,9 @@
 }
 //发送图片
 -(void)sendImageMessages:(  NSString *)path  displayName:(  NSString *)displayName{
-    
-    NIMMessage *message = [NIMMessageMaker msgWithImagePath:path];
+    UIImage *img = [[UIImage alloc]initWithContentsOfFile:path];
+    NIMMessage *message = [NIMMessageMaker msgWithImage:img];
+//    NIMMessage *message = [NIMMessageMaker msgWithImagePath:path];
     [[NIMSDK sharedSDK].chatManager sendMessage:message toSession:_session error:nil];
 }
 
