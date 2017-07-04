@@ -57,6 +57,9 @@ public class SysMessageObserver {
             List<SystemMessage> temps = NIMClient.getService(SystemMessageService.class)
                     .querySystemMessagesBlock(loadOffset, LOAD_MESSAGE_COUNT);
 
+            if (temps == null) {
+                break;
+            }
             loadOffset += temps.size();
             loadCompleted = temps.size() < LOAD_MESSAGE_COUNT;
 

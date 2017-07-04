@@ -4,6 +4,8 @@ package com.netease.im;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
@@ -142,6 +144,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
 //        LogUtil.i(TAG, "contactId:" + contactId);
 //        LogUtil.i(TAG, "token:" + token);
 //        LogUtil.i(TAG, "md5:" + MD5.getStringMD5(token));
+//        NIMClient.getService(AuthService.class).openLocalCache(contactId);
         LoginService.getInstance().login(new LoginInfo(contactId, token), new RequestCallback<LoginInfo>() {
             @Override
             public void onSuccess(LoginInfo loginInfo) {
@@ -1598,7 +1601,15 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
                         WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             }
         });
-        audioMessageService.startAudioRecord(reactContext);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (getCurrentActivity().checkSelfPermission(Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
+                audioMessageService.startAudioRecord(reactContext);
+            } else {
+                requestBasicPermission();
+            }
+        } else {
+            audioMessageService.startAudioRecord(reactContext);
+        }
     }
 
     @ReactMethod

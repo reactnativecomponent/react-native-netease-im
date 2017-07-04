@@ -4,6 +4,7 @@ import android.app.NotificationManager;
 import android.content.Context;
 
 import com.netease.im.IMApplication;
+import com.netease.im.session.SessionUtil;
 import com.netease.im.team.TeamListService;
 import com.netease.im.uikit.LoginSyncDataStatusObserver;
 import com.netease.im.uikit.cache.DataCacheManager;
@@ -14,6 +15,7 @@ import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.netease.nimlib.sdk.friend.model.AddFriendNotify;
+import com.netease.nimlib.sdk.msg.MsgServiceObserve;
 import com.netease.nimlib.sdk.msg.constant.SystemMessageType;
 import com.netease.nimlib.sdk.msg.model.CustomNotification;
 import com.netease.nimlib.sdk.msg.model.SystemMessage;
@@ -115,7 +117,7 @@ public class LoginService {
         recentContactObserver.registerRecentContactObserver(register);
 //        sysMessageObserver.registerSystemObserver(register);
 //        NIMClient.getService(SystemMessageObserver.class).observeReceiveSystemMsg(systemMessageObserver, register);
-//        NIMClient.getService(MsgServiceObserve.class).observeCustomNotification(notificationObserver, register);
+        NIMClient.getService(MsgServiceObserve.class).observeCustomNotification(notificationObserver, register);
     }
 
     private NotificationManager notificationManager;
@@ -123,7 +125,7 @@ public class LoginService {
         @Override
         public void onEvent(CustomNotification customNotification) {
 
-//            SessionUtil.receiver(getNotificationManager(),customNotification);
+            SessionUtil.receiver(getNotificationManager(),customNotification);
         }
     };
 
