@@ -1,5 +1,6 @@
 package com.netease.im;
 
+import android.app.NotificationManager;
 import android.content.Context;
 import android.graphics.Color;
 import android.location.LocationProvider;
@@ -14,6 +15,7 @@ import com.netease.im.common.sys.SystemUtil;
 import com.netease.im.contact.DefalutUserInfoProvider;
 import com.netease.im.contact.DefaultContactProvider;
 import com.netease.im.login.LoginService;
+import com.netease.im.session.SessionUtil;
 import com.netease.im.session.extension.CustomAttachParser;
 import com.netease.im.uikit.LoginSyncDataStatusObserver;
 import com.netease.im.uikit.cache.DataCacheManager;
@@ -25,12 +27,15 @@ import com.netease.im.uikit.common.util.sys.ScreenUtil;
 import com.netease.im.uikit.contact.core.ContactProvider;
 import com.netease.im.uikit.contact.core.query.PinYin;
 import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.SDKOptions;
 import com.netease.nimlib.sdk.StatusBarNotificationConfig;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.netease.nimlib.sdk.mixpush.NIMPushClient;
 import com.netease.nimlib.sdk.msg.MessageNotifierCustomization;
 import com.netease.nimlib.sdk.msg.MsgService;
+import com.netease.nimlib.sdk.msg.MsgServiceObserve;
+import com.netease.nimlib.sdk.msg.model.CustomNotification;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
 
@@ -39,8 +44,6 @@ import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
  */
 
 public class IMApplication {
-
-
 
 
     public static class MiPushConfig {
@@ -78,7 +81,7 @@ public class IMApplication {
     private static ImageLoaderKit imageLoaderKit;
     private static StatusBarNotificationConfig statusBarNotificationConfig;
 
-    public static void init(Context context, Class mainActivityClass,@DrawableRes int notify_msg_drawable_id, MiPushConfig miPushConfig) {
+    public static void init(Context context, Class mainActivityClass, @DrawableRes int notify_msg_drawable_id, MiPushConfig miPushConfig) {
         IMApplication.context = context.getApplicationContext();
         IMApplication.mainActivityClass = mainActivityClass;
         IMApplication.notify_msg_drawable_id = notify_msg_drawable_id;
@@ -101,7 +104,16 @@ public class IMApplication {
             initKit();
 
         }
+        NIMClient.getService(MsgServiceObserve.class).observeCustomNotification(notificationObserver, true);
     }
+
+    private static Observer<CustomNotification> notificationObserver = new Observer<CustomNotification>() {
+        @Override
+        public void onEvent(CustomNotification customNotification) {
+            NotificationManager notificationManager = (NotificationManager) IMApplication.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+            SessionUtil.receiver(notificationManager,customNotification);
+        }
+    };
 
     private static boolean inMainProcess(Context context) {
         String packageName = context.getPackageName();
@@ -130,7 +142,7 @@ public class IMApplication {
         SDKOptions options = new SDKOptions();
 
         // 如果将新消息通知提醒托管给SDK完成，需要添加以下配置。
-        initStatusBarNotificationConfig(options,context);
+        initStatusBarNotificationConfig(options, context);
 
         // 配置保存图片，文件，log等数据的目录
         String sdkPath = Environment.getExternalStorageDirectory() + "/" + context.getPackageName() + "/nim";
@@ -156,6 +168,7 @@ public class IMApplication {
 
         return options;
     }
+
     // 这里开发者可以自定义该应用初始的 StatusBarNotificationConfig
     private static StatusBarNotificationConfig loadStatusBarNotificationConfig(Context context) {
         StatusBarNotificationConfig config = new StatusBarNotificationConfig();
@@ -164,7 +177,7 @@ public class IMApplication {
         config.notificationSmallIconId = notify_msg_drawable_id;
 
         // 通知铃声的uri字符串
-        config.notificationSound = "android.resource://"+context.getPackageName()+"/raw/msg";
+        config.notificationSound = "android.resource://" + context.getPackageName() + "/raw/msg";
 
         // 呼吸灯配置
         config.ledARGB = Color.GREEN;
@@ -175,6 +188,7 @@ public class IMApplication {
         setStatusBarNotificationConfig(config);
         return config;
     }
+
     private static void initStatusBarNotificationConfig(SDKOptions options, Context context) {
         // load 应用的状态栏配置
         StatusBarNotificationConfig config = loadStatusBarNotificationConfig(context);
@@ -194,6 +208,7 @@ public class IMApplication {
         // SDK statusBarNotificationConfig 生效
         options.statusBarNotificationConfig = userConfig;
     }
+
     private static MessageNotifierCustomization messageNotifierCustomization = new MessageNotifierCustomization() {
         @Override
         public String makeNotifyContent(String nick, IMMessage message) {
@@ -207,10 +222,8 @@ public class IMApplication {
     };
 
 
-
-
     /*********************/
-    public static void initKit(){
+    public static void initKit() {
         NIMClient.getService(MsgService.class).registerCustomAttachmentParser(new CustomAttachParser());
         initUserInfoProvider(userInfoProvider);
         initContactProvider(contactProvider);
@@ -236,6 +249,7 @@ public class IMApplication {
 
 
     }
+
     // 初始化用户信息提供者
     private static void initUserInfoProvider(UserInfoProvider userInfoProvider) {
 
@@ -255,6 +269,7 @@ public class IMApplication {
 
         IMApplication.contactProvider = contactProvider;
     }
+
     public static UserInfoProvider getUserInfoProvider() {
         return userInfoProvider;
     }
@@ -262,6 +277,7 @@ public class IMApplication {
     public static ContactProvider getContactProvider() {
         return contactProvider;
     }
+
     public static ImageLoaderKit getImageLoaderKit() {
         return imageLoaderKit;
     }

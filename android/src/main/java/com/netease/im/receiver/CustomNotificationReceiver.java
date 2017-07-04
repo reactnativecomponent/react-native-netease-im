@@ -7,10 +7,8 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.netease.im.IMApplication;
-import com.netease.im.session.SessionUtil;
 import com.netease.im.uikit.common.util.log.LogUtil;
 import com.netease.nimlib.sdk.NimIntent;
-import com.netease.nimlib.sdk.msg.model.CustomNotification;
 
 /**
  * 自定义通知消息广播接收器
@@ -26,12 +24,12 @@ public class CustomNotificationReceiver extends BroadcastReceiver {
         if (action.equals(intent.getAction())) {
 
             // 从intent中取出自定义通知
-            try {
-                CustomNotification notification = (CustomNotification) intent.getSerializableExtra(NimIntent.EXTRA_BROADCAST_MSG);
-                SessionUtil.receiver(getNotificationManager(), notification);
-            } catch (Exception e) {
-                LogUtil.e("CustomNotificationReceiver", e.getMessage());
-            }
+//            try {
+//                CustomNotification notification = (CustomNotification) intent.getSerializableExtra(NimIntent.EXTRA_BROADCAST_MSG);
+//                SessionUtil.receiver(getNotificationManager(), notification);
+//            } catch (Exception e) {
+//                LogUtil.e("CustomNotificationReceiver", e.getMessage());
+//            }
         }
     }
     public NotificationManager getNotificationManager() {
