@@ -83,35 +83,13 @@
    }
 
 #pragma mark - NIMSystemNotificationManagerDelegate
-- (void)onReceiveCustomSystemNotification:(NIMCustomSystemNotification *)notification{
+- (void)onReceiveCustomSystemNotification:(NIMCustomSystemNotification *)notification{//接收自定义通知
     
     NSString *content = notification.content;
-
-    NSData *data = [content dataUsingEncoding:NSUTF8StringEncoding];
-    if (data)
-    {
-        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data
-                                                             options:0
-                                                               error:nil];
-         NSLog(@"收到------消息%@",[dict jsonString:NTESCustomContent]);
-        if ([dict isKindOfClass:[NSDictionary class]])
-        {
-            if ([dict jsonInteger:NTESNotifyID] == NTESCustom)
-            {
-                NSLog(@"收到消息%@",notification);
-//                //SDK并不会存储自定义的系统通知，需要上层结合业务逻辑考虑是否做存储。这里给出一个存储的例子。
-//                NTESCustomNotificationObject *object = [[NTESCustomNotificationObject alloc] initWithNotification:notification];
-//                //这里只负责存储可离线的自定义通知，推荐上层应用也这么处理，需要持久化的通知都走可离线通知
-//                if (!notification.sendToOnlineUsersOnly) {
-//                    [[NTESCustomNotificationDB sharedInstance] saveNotification:object];
-//                }
-//                if (notification.setting.shouldBeCounted) {
-//                    [[NSNotificationCenter defaultCenter] postNotificationName:NTESCustomNotificationCountChanged object:nil];
-//                }
-                NSString *content  = [dict jsonString:NTESCustomContent];
-                 NSLog(@"收到消息%@",content);
-//                [[NTESMainTabController instance].selectedViewController.view makeToast:content duration:2.0 position:CSToastPositionCenter];
-            }
+    NSDictionary *notiDict = notification.apnsPayload;
+    if (notiDict){
+        if ([[notiDict objectForKey:@"type"] integerValue]==1) {//加好友
+            
         }
     }
 }

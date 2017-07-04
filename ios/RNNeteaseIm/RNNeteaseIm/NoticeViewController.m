@@ -41,19 +41,43 @@
     _notiArr = [NSMutableArray array];
     if ([notifications count])
     {
+//        for (int i = 0; i < notifications.count - 1; i++) {
+//            NIMSystemNotification *notices = [notifications objectAtIndex:i];
+//            NIMSystemNotification *notices1 = [notifications objectAtIndex:i+1];
+//           NSLog(@"555555555555555%@",notices.sourceID);
+//            if ([notices.sourceID isEqualToString:notices1.sourceID]) {
+//                
+//                [[NIMSDK sharedSDK].systemNotificationManager markNotificationsAsRead:notices];
+//                [[[NIMSDK sharedSDK] systemNotificationManager] deleteNotification:notices];
+//            }
+//        }
         for (int i = 0; i < notifications.count - 1; i++) {
-            NIMSystemNotification *notices = [notifications objectAtIndex:i];
-            NIMSystemNotification *notices1 = [notifications objectAtIndex:i+1];
-            if ([notices.sourceID isEqualToString:notices1.sourceID]) {
-                [[[NIMSDK sharedSDK] systemNotificationManager] deleteNotification:notices];
+            for (int j = i+ 1; j <  notifications.count; j++) {
+                NIMSystemNotification *notices = [notifications objectAtIndex:i];
+                NIMSystemNotification *notices1 = [notifications objectAtIndex:j];
+                if ([notices.sourceID isEqualToString:notices1.sourceID]) {
+                    
+                    [[NIMSDK sharedSDK].systemNotificationManager markNotificationsAsRead:notices];
+                    [[[NIMSDK sharedSDK] systemNotificationManager] deleteNotification:notices];
+                }
+
             }
-            
         }
+        
+        
     }
     
+    [self ReFrash];
+  
+}
+-(void)ReFrash{
+    id<NIMSystemNotificationManager> systemNotificationManager = [[NIMSDK sharedSDK] systemNotificationManager];
+
     NSArray *Secnotifications = [systemNotificationManager fetchSystemNotifications:nil
                                                                               limit:MaxNotificationCount];
     if(Secnotifications.count){
+        [_notiArr removeAllObjects];
+        [_notifications removeAllObjects];
         [_notifications addObjectsFromArray:Secnotifications];
         for (NIMSystemNotification *notices in _notifications) {
             NIMKitInfo *sourceMember = [[NIMKit sharedKit] infoByUser:notices.sourceID option:nil];
@@ -61,10 +85,9 @@
         }
         [self refrash];
     }
-    
-    
-    
 }
+
+
 - (void)stopSystemMsg{
     [[[NIMSDK sharedSDK] systemNotificationManager] removeDelegate:self];
     [[[NIMSDK sharedSDK] userManager] removeDelegate:self];
@@ -74,6 +97,8 @@
 {
     NIMModel *mode = [NIMModel initShareMD];
     mode.unreadCount = unreadCount;
+
+
 }
 - (void)onReceiveSystemNotification:(NIMSystemNotification *)notification{
     
@@ -81,7 +106,7 @@
         for (NIMSystemNotification *notices in _notifications) {
             
             if ([notices.sourceID isEqualToString:notification.sourceID]) {
-                
+
                 [[[NIMSDK sharedSDK] systemNotificationManager] deleteNotification:notices];
                 [_notifications removeObject:notices];
                 
@@ -91,6 +116,7 @@
     [_notifications insertObject:notification atIndex:0];
     
     _shouldMarkAsRead = YES;
+    [_notiArr removeAllObjects];
     for (NIMSystemNotification *notices in _notifications) {
         NIMKitInfo *sourceMember = [[NIMKit sharedKit] infoByUser:notices.sourceID option:nil];
         [self updateSourceMember:sourceMember andNoti:notices];
@@ -100,7 +126,7 @@
 
 
 - (void)updateSourceMember:(NIMKitInfo *)sourceMember andNoti:(NIMSystemNotification *)noti{
-    [_notiArr removeAllObjects];
+    
     NSMutableDictionary *dic = [NSMutableDictionary dictionary];
     BOOL isVerify = false;
     NIMSystemNotificationType type = noti.type;
@@ -178,7 +204,9 @@
     [dic setObject:[NSString stringWithFormat:@"%@",url] forKey:@"avatar"];
     [dic setObject:[NSString stringWithFormat:@"%ld",noti.handleStatus] forKey:@"status"];
     [dic setObject:[NSString stringWithFormat:@"%f",noti.timestamp] forKey:@"time"];
+    
     [_notiArr addObject:dic];
+
 }
 //加载更多
 - (void)loadMore:(id)sender
@@ -193,17 +221,14 @@
 }
 //删除信息
 -(void)deleteNotice:(NSString *)targetID timestamp:(NSString *)timestamp{
+  
     for (int i = 0; i < _notifications.count; i++) {
         NIMSystemNotification *notices =_notifications[i];
-        if ([targetID isEqualToString:notices.targetID]) {
-            if ([timestamp isEqualToString:[NSString stringWithFormat:@"%.f",notices.timestamp]]) {
+        if ([targetID isEqualToString:notices.sourceID]) {
                 [[[NIMSDK sharedSDK] systemNotificationManager] deleteNotification:notices];
-                [_notiArr removeObjectAtIndex:i];
-                
-            }
         }
     }
-    [self refrash];
+    [self ReFrash];
 }
 //删除所有
 -(void)deleAllNotic{

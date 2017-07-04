@@ -43,9 +43,9 @@
     [[[NIMSDK sharedSDK] systemNotificationManager] addDelegate:self];
     [[[NIMSDK sharedSDK] userManager] addDelegate:self];
     
-    id<NIMSystemNotificationManager> systemNotificationManager = [[NIMSDK sharedSDK] systemNotificationManager];
-    [systemNotificationManager addDelegate:self];
-    notifications = [systemNotificationManager fetchSystemNotifications:nil limit:20];
+//    id<NIMSystemNotificationManager> systemNotificationManager = [[NIMSDK sharedSDK] systemNotificationManager];
+//    [systemNotificationManager addDelegate:self];
+//    notifications = [systemNotificationManager fetchSystemNotifications:nil limit:20];
 }
 
 - (void)disealloc{
@@ -348,12 +348,16 @@
 }
 
 #pragma mark - NIMSDK Delegate
-- (void)onSystemNotificationCountChanged:(NSInteger)unreadCount
+- (void)onSystemNotificationCountChanged:(NSInteger)unreadCount//加好友未读条数
 {
     NIMModel *mode = [NIMModel initShareMD];
     mode.unreadCount = unreadCount;
+    NSLog(@"-----------unreadCount:%zd",unreadCount);
 }
 
+- (void)onReceiveSystemNotification:(NIMSystemNotification *)notification{
+    NSLog(@"----notification:%@",notification);
+}
 
 - (void)onUserInfoChanged:(NIMUser *)user
 {
