@@ -349,9 +349,9 @@ RCT_EXPORT_METHOD(deleteMessage:(nonnull NSString *)messageId){
 RCT_EXPORT_METHOD(clearMessage:(nonnull  NSString *)sessionId sessionId:(nonnull  NSString *)type){
     [[ConversationViewController initWithConversationViewController] clearMsg:sessionId type:type];
 }
-//发送文字消息
-RCT_EXPORT_METHOD(sendTextMessage:(nonnull  NSString *)content){
-    [[ConversationViewController initWithConversationViewController]sendMessage:content];
+//发送文字消息,atUserIds为@用户名单，@功能仅适用于群组
+RCT_EXPORT_METHOD(sendTextMessage:(nonnull  NSString *)content atUserIds:(NSArray *)atUserIds){
+    [[ConversationViewController initWithConversationViewController]sendMessage:content andApnsMembers:atUserIds];
 }
 //发送图片消息
 RCT_EXPORT_METHOD(sendImageMessages:(nonnull  NSString *)file  displayName:(nonnull  NSString *)displayName){
@@ -420,7 +420,7 @@ RCT_EXPORT_METHOD(sendBankTransferMessage:(NSString *)amount comments:(NSString 
 
 //发送提醒消息
 RCT_EXPORT_METHOD(sendTipMessage:(nonnull  NSString *)content){
-    [[ConversationViewController initWithConversationViewController]sendMessage:content];
+//    [[ConversationViewController initWithConversationViewController]sendMessage:content];
 }
 //获取黑名单列表
 RCT_EXPORT_METHOD(startBlackList){

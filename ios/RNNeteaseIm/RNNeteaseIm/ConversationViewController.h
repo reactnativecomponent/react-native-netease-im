@@ -27,8 +27,8 @@ typedef void(^Errors)(id erro);
 - (void)onStopRecording;
 //开始录音
 - (void)onStartRecording;
-
--(void)sendMessage:(NSString *)mess;
+//发送文本，并指定@用户（@仅适用于群组）
+-(void)sendMessage:(NSString *)mess andApnsMembers:(NSArray *)members;
 //发送图片
 -(void)sendImageMessages:(  NSString *)path   displayName:(  NSString *)displayName;
 //发送音频

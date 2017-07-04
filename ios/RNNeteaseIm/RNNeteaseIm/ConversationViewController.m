@@ -336,10 +336,17 @@
     }
 }
 //发送文字消息
--(void)sendMessage:(NSString *)mess{
+-(void)sendMessage:(NSString *)mess andApnsMembers:(NSArray *)members{
     NIMMessage *message = [[NIMMessage alloc] init];
     message.text    = mess;
     message.apnsContent = mess;
+    if (members.count) {
+        NIMMessageApnsMemberOption *apnsMemberOption = [[NIMMessageApnsMemberOption alloc]init];
+        apnsMemberOption.userIds = members;
+        apnsMemberOption.forcePush = YES;
+        message.apnsMemberOption = apnsMemberOption;
+        message.apnsContent = @"有人@了你";
+    }
     //发送消息
     [[NIMSDK sharedSDK].chatManager sendMessage:message toSession:_session error:nil];
 }
