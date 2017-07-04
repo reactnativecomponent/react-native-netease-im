@@ -860,7 +860,9 @@
         NSString *strOpenName = [self getUserName:strOpenId];
         strContent = [NSString stringWithFormat:@"%@领取了你的红包%@",strOpenName,lastString];
     }else{//别人发的别人领的
-        return nil;
+        NSString *strSenderName = [self getUserName:strSendId];
+        NSString *strOpenName = [self getUserName:strOpenId];
+        strContent = [NSString stringWithFormat:@"%@领取了%@的红包",strOpenName,strSenderName];
     }
     NSDictionary *dataDict = @{@"tipMsg":strContent,@"serialNo":strNo};
     return dataDict;

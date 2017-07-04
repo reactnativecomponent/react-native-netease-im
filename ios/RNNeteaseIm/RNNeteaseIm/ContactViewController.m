@@ -86,7 +86,7 @@
         [groupedMembers addObject:dic];
         [tmp setObject:groupedMembers forKey:groupTitle];
     }
-    if (tmp) {
+    if (tmp.count) {
         success(tmp);
     }else{
         error(@"网络错误");
@@ -285,7 +285,9 @@
     }
 
     NIMModel *model = [NIMModel initShareMD];
-    model.contactList = tmp;
+    if (tmp.count) {
+        model.contactList = tmp;
+    }
 }
 
 //通讯录删除好友
