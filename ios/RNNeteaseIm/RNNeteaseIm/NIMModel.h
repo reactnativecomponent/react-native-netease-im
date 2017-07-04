@@ -28,5 +28,6 @@ typedef void(^onSuccess)(NSInteger index,id param);
 @property(nonatomic,strong)NSString *receipt;
 @property(nonatomic,strong)NSMutableArray *bankList;
 @property(nonatomic,strong)NSDictionary *audioDic;
+@property (strong, nonatomic) NSDictionary *deleteMessDict;//撤销时删除的消息ID
 - (void)insertMessages:(NSArray *)messages;
 @end
