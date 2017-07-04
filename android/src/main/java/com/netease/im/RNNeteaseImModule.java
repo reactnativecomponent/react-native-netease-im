@@ -239,16 +239,17 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
 
     /**
      * 添加好友
+     *
      * @param contactId
      * @param verifyType 1 直接添加
-     * @param msg 备注
+     * @param msg        备注
      * @param promise
      */
     @ReactMethod
     public void addFriendWithType(final String contactId, String verifyType, String msg, final Promise promise) {
         VerifyType verifyTypeAdd = VerifyType.VERIFY_REQUEST;
-        if("1".equals(verifyType)){
-            verifyTypeAdd =  VerifyType.DIRECT_ADD;
+        if ("1".equals(verifyType)) {
+            verifyTypeAdd = VerifyType.DIRECT_ADD;
         }
         LogUtil.i(TAG, "addFriend" + contactId);
         NIMClient.getService(FriendService.class).addFriend(new AddFriendData(contactId, verifyTypeAdd, msg))
@@ -265,6 +266,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
                     }
                 });
     }
+
     /**
      * 添加好友
      *
@@ -1474,8 +1476,12 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
                     public void onResult(int code, List<IMMessage> result, Throwable exception) {
                         if (code == ResponseCode.RES_SUCCESS) {
                             if (result != null && result.size() > 0) {
-                                promise.resolve(ReactCache.createMessageList(result));
-                                return;
+                                Object a = ReactCache.createMessageList(result);
+                                if (a != null) {
+                                    promise.resolve(a);
+                                    return;
+                                }
+
                             }
                         }
                         promise.reject("" + code, "");
@@ -1502,7 +1508,12 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
                         if (messageList == null || messageList.isEmpty()) {
                             promise.reject("" + code, "");
                         } else {
-                            promise.resolve(ReactCache.createMessageList(messageList));
+                            Object a = ReactCache.createMessageList(messageList);
+                            if (a != null) {
+                                promise.resolve(a);
+                            } else {
+                                promise.reject("" + code, "");
+                            }
                         }
                         return 0;
                     }
@@ -1621,7 +1632,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
      */
     @ReactMethod
     public void stopPlay(Promise promise) {
-        audioPlayService.stopPlay(handler,reactContext);
+        audioPlayService.stopPlay(handler, reactContext);
     }
 
     /**
@@ -1809,20 +1820,14 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
     /**
      * 删除系统通知
      *
-     * @param messageId
+     * @param fromAccount
      * @param timestamp
      * @param promise
      */
     @ReactMethod
-    public void deleteSystemMessage(String messageId, String timestamp, final Promise promise) {
-        long messageIdLong = 0L;
-        try {
-            messageIdLong = Long.parseLong(messageId);
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-        }
+    public void deleteSystemMessage(String fromAccount, String timestamp, final Promise promise) {
         if (sysMessageObserver != null)
-            sysMessageObserver.deleteSystemMessage(messageIdLong);
+            sysMessageObserver.deleteSystemMessageById(fromAccount);
     }
 
     /**

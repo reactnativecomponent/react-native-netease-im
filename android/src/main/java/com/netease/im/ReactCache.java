@@ -187,11 +187,11 @@ public class ReactCache {
                             if (attachment instanceof RedPacketOpenAttachement) {
                                 RedPacketOpenAttachement rpOpen = (RedPacketOpenAttachement) attachment;
                                 nickName = "";
-                                if (sessionType == SessionTypeEnum.Team && !rpOpen.isSelf()) {
-                                    content = "";
-                                } else {
+//                                if (sessionType == SessionTypeEnum.Team && !rpOpen.isSelf()) {
+//                                    content = "";
+//                                } else {
                                     content = rpOpen.getTipMsg(false);
-                                }
+//                                }
                             }
                             break;
                         default:
@@ -541,28 +541,17 @@ public class ReactCache {
         if (messageList != null) {
             int size = messageList.size();
             for (int i = 0; i < size; i++) {
+
                 IMMessage item = messageList.get(i);
-                if (item == null) {
-                    continue;
+                if (item != null) {
+                    WritableMap itemMap = createMessage(item);
+                    if (itemMap != null) {
+                        writableArray.pushMap(itemMap);
+                    }
                 }
-                WritableMap itemMap = createMessage(item);
-
-                if (itemMap == null) {
-                    continue;
-                }
-//                String timeStr = TimeUtil.getTimeShowString(item.getTime(), false);
-//                if (timedItems != null && timedItems.contains(item.getUuid())) {//添加短时间处理，作为一条消息
-//                    itemMap = Arguments.createMap();
-//                    itemMap.putString("msgType", Integer.toString(MsgTypeEnum.tip.getValue() + 1));
-//                    itemMap.putString("time", timeStr);
-//                    writableArray.pushMap(itemMap);
-//                }
-
-
-                writableArray.pushMap(itemMap);
             }
         }
-        return writableArray;
+        return writableArray.size() > 0 ? writableArray : null;
     }
 
     public static Object createTeamInfo(Team team) {
@@ -781,9 +770,9 @@ public class ReactCache {
                         case CustomAttachmentType.RedPacketOpen:
                             if (attachment instanceof RedPacketOpenAttachement) {
                                 RedPacketOpenAttachement rpOpen = (RedPacketOpenAttachement) attachment;
-                                if (!rpOpen.isSelf()) {
-                                    return null;
-                                }
+//                                if (!rpOpen.isSelf()) {
+//                                    return null;
+//                                }
                                 itemMap.putMap("redpacketOpenObj", rpOpen.toReactNative());
                             }
                             break;
