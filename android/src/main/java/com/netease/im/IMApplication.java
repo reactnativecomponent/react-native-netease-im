@@ -26,6 +26,7 @@ import com.netease.im.uikit.common.util.storage.StorageUtil;
 import com.netease.im.uikit.common.util.sys.ScreenUtil;
 import com.netease.im.uikit.contact.core.ContactProvider;
 import com.netease.im.uikit.contact.core.query.PinYin;
+import com.netease.im.uikit.session.helper.MessageHelper;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.SDKOptions;
@@ -104,7 +105,7 @@ public class IMApplication {
             initKit();
 
         }
-        NIMClient.getService(MsgServiceObserve.class).observeCustomNotification(notificationObserver, true);
+
     }
 
     private static Observer<CustomNotification> notificationObserver = new Observer<CustomNotification>() {
@@ -243,6 +244,11 @@ public class IMApplication {
         StorageUtil.init(context, null);
         ScreenUtil.init(context);
 
+        // 注册消息撤回监听器
+        registerMsgRevokeObserver();
+
+//        NIMClient.getService(MsgServiceObserve.class).observeCustomNotification(notificationObserver, true);
+
         // init log
         String path = StorageUtil.getDirectoryByDirType(StorageType.TYPE_LOG);
         LogUtil.init(path, Log.DEBUG);
@@ -250,6 +256,18 @@ public class IMApplication {
 
     }
 
+    private static void registerMsgRevokeObserver() {
+        NIMClient.getService(MsgServiceObserve.class).observeRevokeMessage(new Observer<IMMessage>() {
+            @Override
+            public void onEvent(IMMessage message) {
+                if (message == null) {
+                    return;
+                }
+
+                MessageHelper.getInstance().onRevokeMessage(message);
+            }
+        }, true);
+    }
     // 初始化用户信息提供者
     private static void initUserInfoProvider(UserInfoProvider userInfoProvider) {
 

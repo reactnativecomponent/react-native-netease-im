@@ -371,6 +371,7 @@ public class SessionService {
             }
 
             deleteItem(message, false);
+            MessageHelper.getInstance().onRevokeMessage(message);
         }
     };
     private UserInfoObservable.UserInfoObserver uinfoObserver;
@@ -565,6 +566,7 @@ public class SessionService {
 
         if (selectedMembers != null && !selectedMembers.isEmpty()) {
             MemberPushOption option = createMemPushOption(selectedMembers, message);
+            message.setPushContent("有人@了你");
             message.setMemberPushOption(option);
         }
         sendMessage(message, onSendMessageListener);
