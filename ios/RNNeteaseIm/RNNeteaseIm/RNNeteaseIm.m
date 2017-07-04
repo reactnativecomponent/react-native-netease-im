@@ -510,6 +510,10 @@ RCT_EXPORT_METHOD(removeFromBlackList:(nonnull NSString *)contactId  resolve:(RC
                 //录音进度 分贝
                 [_bridge.eventDispatcher sendDeviceEventWithName:@"observeAudioRecord" body:param];
                 break;
+            case 15:
+                //删除撤销消息通知
+                [_bridge.eventDispatcher sendDeviceEventWithName:@"observeDeleteMessage" body:param];
+                break;
             default:
                 break;
         }

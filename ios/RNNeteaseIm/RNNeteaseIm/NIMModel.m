@@ -95,4 +95,9 @@
    
     self.myBlock(14, audioDic);
 }
+
+- (void)setDeleteMessDict:(NSDictionary *)deleteMessDict{
+    self.myBlock(15, deleteMessDict);
+}
+
 @end
