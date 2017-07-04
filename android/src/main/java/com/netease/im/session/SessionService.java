@@ -9,8 +9,8 @@ import com.netease.im.ReactCache;
 import com.netease.im.login.LoginService;
 import com.netease.im.session.extension.BankTransferAttachment;
 import com.netease.im.session.extension.DefaultCustomAttachment;
-import com.netease.im.session.extension.RedPacketOpenAttachement;
 import com.netease.im.session.extension.RedPacketAttachement;
+import com.netease.im.session.extension.RedPacketOpenAttachement;
 import com.netease.im.uikit.common.util.log.LogUtil;
 import com.netease.im.uikit.common.util.string.MD5;
 import com.netease.im.uikit.session.helper.MessageHelper;
@@ -138,13 +138,13 @@ public class SessionService {
      * @param isQuery
      */
     public void updateShowTimeItem(List<IMMessage> items, boolean isQuery) {
-        IMMessage anchor = isQuery ? items.get(0) : lastMessage;
-
-        for (IMMessage message : items) {
-            if (setShowTimeFlag(message, anchor)) {
-                anchor = message;
-            }
-        }
+//        IMMessage anchor = isQuery ? items.get(0) : lastMessage;
+//
+//        for (IMMessage message : items) {
+//            if (setShowTimeFlag(message, anchor)) {
+//                anchor = message;
+//            }
+//        }
 
         if (!isQuery && fistMessage != null) {
             fistMessage = items.get(0);
@@ -304,7 +304,9 @@ public class SessionService {
         if (isMyMessage(message)) {
             List<IMMessage> list = new ArrayList<>(1);
             list.add(message);
-            ReactCache.emit(ReactCache.observeMsgStatus, ReactCache.createMessageList(list));
+            Object a = ReactCache.createMessageList(list);
+            if (a != null)
+                ReactCache.emit(ReactCache.observeMsgStatus, a);
         }
     }
 
@@ -403,7 +405,7 @@ public class SessionService {
      * @param anchor
      * @param limit  查询结果的条数限制
      */
-    public void queryMessageListEx(IMMessage anchor, final QueryDirectionEnum direction, int limit, final OnMessageQueryListListener onMessageQueryListListener) {
+    public void queryMessageListEx(IMMessage anchor, final QueryDirectionEnum direction, final int limit, final OnMessageQueryListListener onMessageQueryListListener) {
 
         if (anchor == null) {
             anchor = MessageBuilder.createEmptyMessage(sessionId, sessionTypeEnum, 0);
@@ -418,13 +420,44 @@ public class SessionService {
                                 fistMessage = result.get(0);
                                 updateShowTimeItem(result, true);
 
-                                onMessageQueryListListener.onResult(code, result, timedItems);
+                                final int size = result.size();
+                                boolean isLimit = size >= limit;
+                                List<IMMessage> r = onQuery(result);
+                                if (result.size() < size && isLimit) {
+                                    fistMessage = result.get(0);
+                                    queryMessageListEx(fistMessage, direction, result.size() - size, onMessageQueryListListener);
+                                }
+                                onMessageQueryListListener.onResult(code, r, timedItems);
                                 return;
                             }
                         }
                         onMessageQueryListListener.onResult(code, null, null);
                     }
                 });
+    }
+
+    List<IMMessage> onQuery(List<IMMessage> result) {//TODO
+
+
+//        for (int i = result.size() - 1; i >= 0; i--) {
+//            IMMessage message = result.get(i);
+//            if (message == null) {
+//                result.remove(i);
+//            }
+//            MsgAttachment attachment = message.getAttachment();
+//            if (attachment != null) {
+//                if (message.getMsgType() == MsgTypeEnum.custom) {
+//                    CustomAttachment customAttachment = (CustomAttachment) attachment;
+//                    if (customAttachment.getType() == CustomAttachmentType.RedPacketOpen) {
+//                        RedPacketOpenAttachement rpOpen = (RedPacketOpenAttachement) attachment;
+//                        if (!rpOpen.isSelf()) {
+//                            result.remove(i);
+//                        }
+//                    }
+//                }
+//            }
+//        }
+        return result;
     }
 
     boolean hasRegister;
@@ -497,7 +530,9 @@ public class SessionService {
         if (messageList == null || messageList.isEmpty()) {
             return;
         }
-        ReactCache.emit(ReactCache.observeReceiveMessage, ReactCache.createMessageList(messageList));
+        Object a = ReactCache.createMessageList(messageList);
+        if (a != null)
+            ReactCache.emit(ReactCache.observeReceiveMessage, a);
     }
 
     /**

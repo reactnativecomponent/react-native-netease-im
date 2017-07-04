@@ -78,6 +78,7 @@ public class ImageLoaderKit {
 
     public void clear() {
         ImageLoader.getInstance().clearMemoryCache();
+        cacheLoad.clear();
     }
 
     private ImageLoaderConfiguration getDefaultConfig() throws IOException {

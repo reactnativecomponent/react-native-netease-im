@@ -1,5 +1,11 @@
 package com.netease.im.session;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Intent;
+import android.support.v4.app.NotificationCompat;
+
+import com.netease.im.IMApplication;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
@@ -74,6 +80,23 @@ public class SessionUtil {
         sendCustomNotification(account, SessionTypeEnum.P2P, CUSTOM_Notification, content);
     }
 
+    public static void receiver(NotificationManager manager, CustomNotification customNotification){
+        Map<String, Object> map = customNotification.getPushPayload();
+        if (map != null && map.containsKey("type")) {
+            String type = (String) map.get("type");
+            if (SessionUtil.CUSTOM_Notification.equals(type)) {
+                NotificationCompat.Builder builder = new NotificationCompat.Builder(IMApplication.getContext());
+                builder.setContentTitle("请求加为好友");
+                builder.setContentText(customNotification.getApnsText());
+                builder.setAutoCancel(true);
+                PendingIntent contentIntent = PendingIntent.getActivity(
+                        IMApplication.getContext(), 0, new Intent(IMApplication.getContext(), IMApplication.getMainActivityClass()), 0);
+                builder.setContentIntent(contentIntent);
+                builder.setSmallIcon(IMApplication.getNotify_msg_drawable_id());
+                manager.notify((int) System.currentTimeMillis(),builder.build());
+            }
+        }
+    }
     /**
      * @param account
      * @param sessionType

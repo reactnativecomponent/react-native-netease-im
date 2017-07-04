@@ -169,9 +169,9 @@ public class SysMessageObserver {
             return true; // 过滤
         }
 
-        if (attachData.getEvent() != AddFriendNotify.Event.RECV_ADD_FRIEND_VERIFY_REQUEST) {
-            return false; // 不过滤
-        }
+//        if (attachData.getEvent() != AddFriendNotify.Event.RECV_ADD_FRIEND_VERIFY_REQUEST) {
+//            return false; // 不过滤
+//        }
 
         if (addFriendVerifyRequestAccounts.contains(msg.getFromAccount())) {
             return true; // 过滤

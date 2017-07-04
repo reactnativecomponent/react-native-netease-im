@@ -705,13 +705,12 @@ export default class NIM{
     }
     /**
      * 删除系统通知
-     * @param messageId
+     * @param fromAccount
      * @param timestamp
      * @returns {*}
      */
-    static deleteSystemMessage(messageId,timestamp){
-        console.info('卡接收到',messageId,timestamp);
-        return RNNeteaseIm.deleteSystemMessage(messageId,timestamp);
+    static deleteSystemMessage(fromAccount,timestamp){
+        return RNNeteaseIm.deleteSystemMessage(fromAccount,timestamp);
     }
 
     /**
