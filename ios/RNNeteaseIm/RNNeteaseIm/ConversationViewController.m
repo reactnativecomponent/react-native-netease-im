@@ -95,7 +95,8 @@
         NSMutableDictionary *user = [NSMutableDictionary dictionary];
         NIMUser   *messageUser = [[NIMSDK sharedSDK].userManager userInfo:message.from];
         [user setObject:[NSString stringWithFormat:@"%@",messageUser.userInfo.avatarUrl] forKey:@"avatar"];
-        [user setObject:[NSString stringWithFormat:@"%@", message.senderName] forKey:@"fromNick"];
+//        [user setObject:[NSString stringWithFormat:@"%@", message.senderName] forKey:@"fromNick"];
+        [user setObject:[NSString stringWithFormat:@"%@",messageUser.userInfo.nickName] forKey:@"name"];
         [user setObject:[NSString stringWithFormat:@"%@", message.from] forKey:@"_id"];
         NSArray *key = [user allKeys];
         for (NSString *tem  in key) {
@@ -657,7 +658,8 @@
     NIMUser   *user = [[NIMSDK sharedSDK].userManager userInfo:message.from];
     NSMutableDictionary *dources = [NSMutableDictionary dictionary];
     [dources setObject:[NSString stringWithFormat:@"%@",user.userInfo.avatarUrl] forKey:@"avatar"];
-    [dources setObject:[NSString stringWithFormat:@"%@", message.senderName] forKey:@"fromNick"];
+//    [dources setObject:[NSString stringWithFormat:@"%@", message.senderName] forKey:@"fromNick"];
+    [dources setObject:[NSString stringWithFormat:@"%@",user.userInfo.nickName] forKey:@"name"];
     [dources setObject:[NSString stringWithFormat:@"%@", message.from] forKey:@"_id"];
     NSArray *key = [dources allKeys];
     for (NSString *tem  in key) {
