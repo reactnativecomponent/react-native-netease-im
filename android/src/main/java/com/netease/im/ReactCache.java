@@ -27,6 +27,7 @@ import com.netease.im.uikit.contact.core.item.ContactItem;
 import com.netease.im.uikit.contact.core.model.ContactDataList;
 import com.netease.im.uikit.contact.core.model.IContact;
 import com.netease.im.uikit.contact.core.model.TeamContact;
+import com.netease.im.uikit.session.emoji.AitHelper;
 import com.netease.im.uikit.session.helper.TeamNotificationHelper;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.friend.FriendService;
@@ -182,10 +183,20 @@ public class ReactCache {
 
                 fromNick = TextUtils.isEmpty(fromNick) ? NimUserInfoCache.getInstance().getUserDisplayName(fromAccount) : fromNick;
                 map.putString("nick", fromNick);
-                String nickName = "";
+                String teamNick = "";
                 if (contact.getSessionType() == SessionTypeEnum.Team && !TextUtils.equals(LoginService.getInstance().getAccount(), fromAccount)) {
-                    if (!TextUtils.isEmpty(fromNick)) {
-                        nickName = fromNick + "：";
+
+                    if ((contact.getAttachment() instanceof NotificationAttachment)) {
+                        String tid = contact.getContactId();
+                        teamNick = getTeamUserDisplayName(tid, fromAccount);
+                        teamNick += ": ";
+                        if (AitHelper.hasAitExtention(contact)) {
+                            if (contact.getUnreadCount() == 0) {
+                                AitHelper.clearRecentContactAited(contact);
+                            } else {
+                                content = AitHelper.getAitAlertString(content);
+                            }
+                        }
                     }
                 }
                 CustomAttachment attachment = null;
@@ -219,13 +230,13 @@ public class ReactCache {
                             break;
                         case CustomAttachmentType.RedPacketOpen:
                             if (attachment instanceof RedPacketOpenAttachement) {
+                                teamNick = "";
                                 RedPacketOpenAttachement rpOpen = (RedPacketOpenAttachement) attachment;
-                                nickName = "";
-//                                if (sessionType == SessionTypeEnum.Team && !rpOpen.isSelf()) {
-//                                    content = "";
-//                                } else {
-                                content = rpOpen.getTipMsg(false);
-//                                }
+                                if (sessionType == SessionTypeEnum.Team && !rpOpen.isSelf()) {
+                                    content = "";
+                                } else {
+                                    content = rpOpen.getTipMsg(false);
+                                }
                             }
                             break;
                         default:
@@ -238,7 +249,8 @@ public class ReactCache {
                             break;
                     }
                 }
-                map.putString("content", nickName + content);
+                content = teamNick + content;
+                map.putString("content", content);
                 array.pushMap(map);
             }
             LogUtil.i(TAG, array + "");
@@ -246,6 +258,10 @@ public class ReactCache {
         writableMap.putArray("recents", array);
         writableMap.putString("unreadCount", Integer.toString(unreadNumTotal));
         return writableMap;
+    }
+
+    private static String getTeamUserDisplayName(String tid, String account) {
+        return TeamDataCache.getInstance().getTeamMemberDisplayName(tid, account);
     }
 
     static Pattern pattern = Pattern.compile("\\d{5}");
@@ -585,7 +601,7 @@ public class ReactCache {
                 }
             }
         }
-        return writableArray.size() > 0 ? writableArray : null;
+        return writableArray;
     }
 
     public static Object createTeamInfo(Team team) {
@@ -701,7 +717,12 @@ public class ReactCache {
         String fromAccount = item.getFromAccount();
         String fromNick = item.getFromNick();
         user.putString("_id", fromAccount);
-        user.putString("name", !TextUtils.isEmpty(fromNick) ? fromNick : NimUserInfoCache.getInstance().getUserDisplayName(fromAccount));
+
+        if (item.getSessionType() == SessionTypeEnum.Team && !TextUtils.equals(LoginService.getInstance().getAccount(), fromAccount)) {
+            user.putString("name", getTeamUserDisplayName(item.getSessionId(), fromAccount));
+        } else {
+            user.putString("name", !TextUtils.isEmpty(fromNick) ? fromNick : NimUserInfoCache.getInstance().getUserDisplayName(fromAccount));
+        }
         String avatar = NimUserInfoCache.getInstance().getAvatar(fromAccount);
         user.putString("avatar", avatar);
         user.putString("avatarLocal", ImageLoaderKit.getMemoryCachedAvatar(avatar));
