@@ -29,4 +29,13 @@ public class MessageUtil {
         return false;
     }
 
+    public static boolean shouldIgnoreRevoke(IMMessage message) {//TODO;
+        if (message.getMsgType() == MsgTypeEnum.custom && message.getAttachment() != null
+                && (message.getAttachment() instanceof RedPacketAttachement
+                || message.getAttachment() instanceof BankTransferAttachment)) {
+            // 红包 转账  不允许转发
+            return true;
+        }
+        return false;
+    }
 }

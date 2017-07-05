@@ -1232,7 +1232,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
                 if (result == 0) {
                     showTip("请选择消息");
                 } else if (result == 1) {
-                    showTip("该类型不支持转发");
+                    showTip("该类型消息不支持转发");
                 } else {
                     promise.resolve(ResponseCode.RES_SUCCESS + "");
                 }
@@ -1270,6 +1270,8 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
                 });
                 if (result == 0) {
                     showTip("请选择消息");
+                }else if (result == 1) {
+                    showTip("该类型消息不支持撤销");
                 }
                 return 0;
             }

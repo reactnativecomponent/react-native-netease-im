@@ -125,8 +125,8 @@ public class SessionService {
         if (addedListItems.size() > 0) {
             updateShowTimeItem(addedListItems, false);
         }
-
-        refreshMessageList(addedListItems);
+        List<IMMessage> r = onQuery(messages);
+        refreshMessageList(r);
 
     }
 
@@ -721,6 +721,9 @@ public class SessionService {
     public int revokeMessage(final IMMessage selectMessage, final OnSendMessageListener onSendMessageListener) {
         if (selectMessage == null) {
             return 0;
+        }
+        if (MessageUtil.shouldIgnoreRevoke(selectMessage)) {
+            return 1;
         }
         getMsgService().revokeMessage(selectMessage).setCallback(new RequestCallbackWrapper<Void>() {
             @Override
