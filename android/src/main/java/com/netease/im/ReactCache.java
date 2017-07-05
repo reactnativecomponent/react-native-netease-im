@@ -145,15 +145,20 @@ public class ReactCache {
                 String content = contact.getContent();
                 switch (contact.getMsgType()) {
                     case text:
-                        return contact.getContent();
+                        content = contact.getContent();
+                        break;
                     case image:
-                        return "[图片]";
+                        content = "[图片]";
+                        break;
                     case video:
-                        return "[视频]";
+                        content = "[视频]";
+                        break;
                     case audio:
-                        return "[语音消息]";
+                        content = "[语音消息]";
+                        break;
                     case location:
-                        return "[位置]";
+                        content = "[位置]";
+                        break;
                     case tip:
                         List<String> uuids = new ArrayList<>();
                         uuids.add(contact.getRecentMessageId());

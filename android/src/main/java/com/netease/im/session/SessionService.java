@@ -10,6 +10,8 @@ import com.netease.im.MessageUtil;
 import com.netease.im.ReactCache;
 import com.netease.im.login.LoginService;
 import com.netease.im.session.extension.BankTransferAttachment;
+import com.netease.im.session.extension.CustomAttachment;
+import com.netease.im.session.extension.CustomAttachmentType;
 import com.netease.im.session.extension.DefaultCustomAttachment;
 import com.netease.im.session.extension.RedPacketAttachement;
 import com.netease.im.session.extension.RedPacketOpenAttachement;
@@ -28,6 +30,7 @@ import com.netease.nimlib.sdk.msg.MessageBuilder;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
 import com.netease.nimlib.sdk.msg.attachment.FileAttachment;
+import com.netease.nimlib.sdk.msg.attachment.MsgAttachment;
 import com.netease.nimlib.sdk.msg.constant.AttachStatusEnum;
 import com.netease.nimlib.sdk.msg.constant.MsgDirectionEnum;
 import com.netease.nimlib.sdk.msg.constant.MsgStatusEnum;
@@ -308,8 +311,7 @@ public class SessionService {
             List<IMMessage> list = new ArrayList<>(1);
             list.add(message);
             Object a = ReactCache.createMessageList(list);
-            if (a != null)
-                ReactCache.emit(ReactCache.observeMsgStatus, a);
+            ReactCache.emit(ReactCache.observeMsgStatus, a);
         }
     }
 
@@ -428,11 +430,18 @@ public class SessionService {
                                 final int size = result.size();
                                 boolean isLimit = size >= limit;
                                 List<IMMessage> r = onQuery(result);
-                                if (result.size() < size && isLimit) {
-                                    fistMessage = result.get(0);
-                                    queryMessageListEx(fistMessage, direction, result.size() - size, onMessageQueryListListener);
+
+                                if (r.size() == 0) {
+                                    queryMessageListEx(fistMessage, direction, size - r.size(), onMessageQueryListListener);
+                                } else {
+                                    onMessageQueryListListener.onResult(code, r, timedItems);
+
+                                    if (r.size() < size && isLimit) {
+                                        fistMessage = result.get(0);
+//                                    queryMessageListEx(fistMessage, direction, size - r.size(), onMessageQueryListListener);
+                                    }
                                 }
-                                onMessageQueryListListener.onResult(code, r, timedItems);
+
                                 return;
                             }
                         }
@@ -444,24 +453,24 @@ public class SessionService {
     List<IMMessage> onQuery(List<IMMessage> result) {//TODO
 
 
-//        for (int i = result.size() - 1; i >= 0; i--) {
-//            IMMessage message = result.get(i);
-//            if (message == null) {
-//                result.remove(i);
-//            }
-//            MsgAttachment attachment = message.getAttachment();
-//            if (attachment != null) {
-//                if (message.getMsgType() == MsgTypeEnum.custom) {
-//                    CustomAttachment customAttachment = (CustomAttachment) attachment;
-//                    if (customAttachment.getType() == CustomAttachmentType.RedPacketOpen) {
-//                        RedPacketOpenAttachement rpOpen = (RedPacketOpenAttachement) attachment;
-//                        if (!rpOpen.isSelf()) {
-//                            result.remove(i);
-//                        }
-//                    }
-//                }
-//            }
-//        }
+        for (int i = result.size() - 1; i >= 0; i--) {
+            IMMessage message = result.get(i);
+            if (message == null) {
+                result.remove(i);
+            }
+            MsgAttachment attachment = message.getAttachment();
+            if (attachment != null) {
+                if (message.getMsgType() == MsgTypeEnum.custom) {
+                    CustomAttachment customAttachment = (CustomAttachment) attachment;
+                    if (customAttachment.getType() == CustomAttachmentType.RedPacketOpen) {
+                        RedPacketOpenAttachement rpOpen = (RedPacketOpenAttachement) attachment;
+                        if (!rpOpen.isSelf()) {
+                            result.remove(i);
+                        }
+                    }
+                }
+            }
+        }
         return result;
     }
 
@@ -536,8 +545,7 @@ public class SessionService {
             return;
         }
         Object a = ReactCache.createMessageList(messageList);
-        if (a != null)
-            ReactCache.emit(ReactCache.observeReceiveMessage, a);
+        ReactCache.emit(ReactCache.observeReceiveMessage, a);
     }
 
     /**
@@ -704,11 +712,12 @@ public class SessionService {
         return 2;
     }
 
-    void revokMessage(IMMessage message){
+    void revokMessage(IMMessage message) {
         WritableMap msg = Arguments.createMap();
         msg.putString("_id", message.getUuid());
-        ReactCache.emit(ReactCache.observeDeleteMessage,msg);
+        ReactCache.emit(ReactCache.observeDeleteMessage, msg);
     }
+
     public int revokeMessage(final IMMessage selectMessage, final OnSendMessageListener onSendMessageListener) {
         if (selectMessage == null) {
             return 0;
@@ -799,6 +808,7 @@ public class SessionService {
         memberPushOption.setForcePushList(selectedMembers);
         return memberPushOption;
     }
+
     private boolean isOriginImageHasDownloaded(final IMMessage message) {
 
         if (message.getAttachStatus() == AttachStatusEnum.transferred) {
