@@ -31,10 +31,12 @@ import com.netease.im.uikit.session.helper.TeamNotificationHelper;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.friend.FriendService;
 import com.netease.nimlib.sdk.friend.model.AddFriendNotify;
+import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.attachment.AudioAttachment;
 import com.netease.nimlib.sdk.msg.attachment.ImageAttachment;
 import com.netease.nimlib.sdk.msg.attachment.LocationAttachment;
 import com.netease.nimlib.sdk.msg.attachment.MsgAttachment;
+import com.netease.nimlib.sdk.msg.attachment.NotificationAttachment;
 import com.netease.nimlib.sdk.msg.attachment.VideoAttachment;
 import com.netease.nimlib.sdk.msg.constant.MsgDirectionEnum;
 import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
@@ -50,6 +52,7 @@ import com.netease.nimlib.sdk.team.model.TeamMember;
 import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -67,6 +70,8 @@ public class ReactCache {
     public final static String observeFriend = "observeFriend";//'联系人'
     public final static String observeTeam = "observeTeam";//'群组'
     public final static String observeReceiveMessage = "observeReceiveMessage";//'接收消息'
+
+    public final static String observeDeleteMessage = "observeDeleteMessage";//'撤销后删除消息'
     public final static String observeReceiveSystemMsg = "observeReceiveSystemMsg";//'系统通知'
     public final static String observeMsgStatus = "observeMsgStatus";//'发送消息状态变化'
     public final static String observeAudioRecord = "observeAudioRecord";//'录音状态'
@@ -137,6 +142,35 @@ public class ReactCache {
                 map.putString("fromAccount", fromAccount);
 
                 String content = contact.getContent();
+                switch (contact.getMsgType()) {
+                    case text:
+                        return contact.getContent();
+                    case image:
+                        return "[图片]";
+                    case video:
+                        return "[视频]";
+                    case audio:
+                        return "[语音消息]";
+                    case location:
+                        return "[位置]";
+                    case tip:
+                        List<String> uuids = new ArrayList<>();
+                        uuids.add(contact.getRecentMessageId());
+                        List<IMMessage> messages = NIMClient.getService(MsgService.class).queryMessageListByUuidBlock(uuids);
+                        if (messages != null && messages.size() > 0) {
+                            content = messages.get(0).getContent();
+                        }
+                        break;
+                    case notification:
+                        if (sessionType == SessionTypeEnum.Team) {
+                            content = TeamNotificationHelper.getTeamNotificationText(contact.getContactId(),
+                                    contact.getFromAccount(),
+                                    (NotificationAttachment) contact.getAttachment());
+                        }
+                        break;
+                    default:
+                        break;
+                }
                 map.putString("time", TimeUtil.getTimeShowString(contact.getTime(), true));
 
                 String fromNick = "";
@@ -190,7 +224,7 @@ public class ReactCache {
 //                                if (sessionType == SessionTypeEnum.Team && !rpOpen.isSelf()) {
 //                                    content = "";
 //                                } else {
-                                    content = rpOpen.getTipMsg(false);
+                                content = rpOpen.getTipMsg(false);
 //                                }
                             }
                             break;
