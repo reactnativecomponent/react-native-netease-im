@@ -369,11 +369,12 @@
     }else if([strSendId isEqualToString:strMyId]){
         NSString *strOpenName = [self getUserName:strOpenId];
         strContent = [NSString stringWithFormat:@"%@领取了你的红包",strOpenName];
-    }else{
-        NSString *strSenderName = [self getUserName:strSendId];
-        NSString *strOpenName = [self getUserName:strOpenId];
-        strContent = [NSString stringWithFormat:@"%@领取了%@的红包",strOpenName,strSenderName];
     }
+//    else{
+//        NSString *strSenderName = [self getUserName:strSendId];
+//        NSString *strOpenName = [self getUserName:strOpenId];
+//        strContent = [NSString stringWithFormat:@"%@领取了%@的红包",strOpenName,strSenderName];
+//    }
     return strContent;
 }
 
