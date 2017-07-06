@@ -9,6 +9,7 @@
 #import "RNNotificationCenter.h"
 #import <AVFoundation/AVFoundation.h>
 #import "NSDictionary+NTESJson.h"
+#import "NIMMessageMaker.h"
 @interface RNNotificationCenter () <NIMSystemNotificationManagerDelegate,NIMChatManagerDelegate>
 @property (nonatomic,strong) AVAudioPlayer *player; //播放提示音
 @end
@@ -84,15 +85,39 @@
 
 #pragma mark - NIMSystemNotificationManagerDelegate
 - (void)onReceiveCustomSystemNotification:(NIMCustomSystemNotification *)notification{//接收自定义通知
-    
-    NSString *content = notification.content;
+//    NSString *content = notification.content;
     NSDictionary *notiDict = notification.apnsPayload;
     if (notiDict){
-        if ([[notiDict objectForKey:@"type"] integerValue]==1) {//加好友
-            
+        NSInteger notiType = [[notiDict objectForKey:@"type"] integerValue];
+        switch (notiType) {
+            case 1://加好友
+                
+                break;
+            case 2://拆红包消息
+            {
+                [self saveTheRedPacketOpenMsg:[notiDict objectForKey:@"data"]];
+            }
+                break;
+                
+            default:
+                break;
         }
     }
 }
-
+//保存拆红包消息到本地
+- (void)saveTheRedPacketOpenMsg:(NSDictionary *)dict{
+    NSDictionary *datatDict = [dict objectForKey:@"dict"];
+    NSTimeInterval timestamp = [[dict objectForKey:@"timestamp"] doubleValue];
+    NSString *sessionId = [dict objectForKey:@"sessionId"];
+    NSInteger sessionType = [[dict objectForKey:@"sessionType"] integerValue];
+    NIMSession *session = [NIMSession session:sessionId type:sessionType];
+    NIMMessage *message;
+    DWCustomAttachment *obj = [[DWCustomAttachment alloc]init];
+    obj.custType = CustomMessgeTypeRedPacketOpenMessage;
+    obj.dataDict = datatDict;
+    message = [NIMMessageMaker msgWithCustomAttachment:obj];
+    message.timestamp = timestamp;
+    [[NIMSDK sharedSDK].conversationManager saveMessage:message forSession:session completion:nil];
+}
 
 @end

@@ -335,8 +335,12 @@
 - (void)sendCustomNotificationContent:(NSString *)content andSessionID:(NSString *)sessionID andApnsContent:(NSString *)strApns AndData:(NSDictionary *)dict{
     NIMSession *session = [NIMSession session:sessionID type:NIMSessionTypeP2P];
     NIMCustomSystemNotification *notifi = [[NIMCustomSystemNotification alloc]initWithContent:content];
+    NIMCustomSystemNotificationSetting *setting = [[NIMCustomSystemNotificationSetting alloc]init];
+    setting.apnsEnabled = YES;
     notifi.apnsContent = strApns;
     notifi.apnsPayload = dict;
+    notifi.sendToOnlineUsersOnly = NO;
+    notifi.setting = setting;
     [[NIMSDK sharedSDK].systemNotificationManager sendCustomNotification:notifi toSession:session completion:nil];//发送自定义通知
 }
 

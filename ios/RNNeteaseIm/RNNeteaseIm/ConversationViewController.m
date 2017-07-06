@@ -424,8 +424,26 @@
 -(void)sendRedPacketOpenMessage:(NSString *)sendId hasRedPacket:(NSString *)hasRedPacket serialNo:(NSString *)serialNo{
     NSString *strMyId = [NIMSDK sharedSDK].loginManager.currentAccount;
     NSDictionary *dict = @{@"sendId":sendId,@"openId":strMyId,@"hasRedPacket":hasRedPacket,@"serialNo":serialNo};
-    [self sendCustomMessage:CustomMessgeTypeRedPacketOpenMessage data:dict];
-
+    NIMMessage *message;
+    DWCustomAttachment *obj = [[DWCustomAttachment alloc]init];
+    obj.custType = CustomMessgeTypeRedPacketOpenMessage;
+    obj.dataDict = dict;
+    message = [NIMMessageMaker msgWithCustomAttachment:obj];
+    NSTimeInterval timestamp = [[NSDate date] timeIntervalSince1970];
+    message.timestamp = timestamp;
+    if(![sendId isEqualToString:strMyId]){
+        NSDictionary *dataDict = @{@"type":@"2",@"data":@{@"dict":dict,@"timestamp":[NSString stringWithFormat:@"%f",timestamp],@"sessionId":_session.sessionId,@"sessionType":[NSString stringWithFormat:@"%zd",_session.sessionType]}};
+        NIMSession *redSession = [NIMSession session:sendId type:NIMSessionTypeP2P];
+        NIMCustomSystemNotification *notifi = [[NIMCustomSystemNotification alloc]initWithContent:@""];
+        notifi.sendToOnlineUsersOnly = NO;
+        NIMCustomSystemNotificationSetting *setting = [[NIMCustomSystemNotificationSetting alloc]init];
+        setting.shouldBeCounted = NO;
+        setting.apnsEnabled = NO;
+        notifi.setting = setting;
+        notifi.apnsPayload = dataDict;
+        [[NIMSDK sharedSDK].systemNotificationManager sendCustomNotification:notifi toSession:redSession completion:nil];//发送自定义通知
+    }
+    [[NIMSDK sharedSDK].conversationManager saveMessage:message forSession:_session completion:nil];
 }
 
 
