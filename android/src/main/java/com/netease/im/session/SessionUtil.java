@@ -6,9 +6,13 @@ import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 
 import com.netease.im.IMApplication;
+import com.netease.im.session.extension.RedPacketOpenAttachement;
 import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.msg.MessageBuilder;
 import com.netease.nimlib.sdk.msg.MsgService;
+import com.netease.nimlib.sdk.msg.constant.MsgStatusEnum;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
+import com.netease.nimlib.sdk.msg.model.CustomMessageConfig;
 import com.netease.nimlib.sdk.msg.model.CustomNotification;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 
@@ -22,6 +26,7 @@ import java.util.Map;
 public class SessionUtil {
 
     public final static String CUSTOM_Notification = "1";
+    public final static String CUSTOM_Notification_redpacket_open = "2";
 
     public static SessionTypeEnum getSessionType(String sessionType) {
         SessionTypeEnum sessionTypeE = SessionTypeEnum.None;
@@ -80,7 +85,7 @@ public class SessionUtil {
         sendCustomNotification(account, SessionTypeEnum.P2P, CUSTOM_Notification, content);
     }
 
-    public static void receiver(NotificationManager manager, CustomNotification customNotification){
+    public static void receiver(NotificationManager manager, CustomNotification customNotification) {
         Map<String, Object> map = customNotification.getPushPayload();
         if (map != null && map.containsKey("type")) {
             String type = (String) map.get("type");
@@ -93,10 +98,34 @@ public class SessionUtil {
                         IMApplication.getContext(), 0, new Intent(IMApplication.getContext(), IMApplication.getMainActivityClass()), 0);
                 builder.setContentIntent(contentIntent);
                 builder.setSmallIcon(IMApplication.getNotify_msg_drawable_id());
-                manager.notify((int) System.currentTimeMillis(),builder.build());
+                manager.notify((int) System.currentTimeMillis(), builder.build());
+            } else if (SessionUtil.CUSTOM_Notification_redpacket_open.equals(type)) {
+                Map<String, Object> data = (Map<String, Object>) map.get("data");
+
+                Map<String, Object> dict = (Map<String, Object>) data.get("dict");
+                String sendId = (String) dict.get("sendId");
+                String openId = (String) dict.get("openId");
+                String hasRedPacket = (String) dict.get("hasRedPacket");
+                String serialNo = (String) dict.get("serialNo");
+
+                String timestamp = (String) data.get("timestamp");
+                long t = 0L;
+                try {
+                    t = Long.parseLong(timestamp);
+                } catch (NumberFormatException e) {
+                    t = System.currentTimeMillis()/1000;
+                    e.printStackTrace();
+                }
+//                LogUtil.i("timestamp","timestamp:"+timestamp);
+//                LogUtil.i("timestamp","t:"+t);
+//                LogUtil.i("timestamp",""+data);
+                String sessionId = (String) data.get("sessionId");
+                String sessionType = (String) data.get("sessionType");
+                sendRedPacketOpenLocal(sessionId, getSessionType(sessionType), sendId, openId, hasRedPacket, serialNo, t);
             }
         }
     }
+
     /**
      * @param account
      * @param sessionType
@@ -115,6 +144,50 @@ public class SessionUtil {
         Map<String, Object> pushPayload = new HashMap<>();
         pushPayload.put("type", type);
         pushPayload.put("content", content);
+        notification.setPushPayload(pushPayload);
+
+        NIMClient.getService(MsgService.class).sendCustomNotification(notification);
+    }
+
+    public static void sendRedPacketOpenLocal(String sessionId, SessionTypeEnum sessionType,
+                                              String sendId, String openId, String hasRedPacket, String serialNo, long timestamp) {
+
+        CustomMessageConfig config = new CustomMessageConfig();
+        config.enableUnreadCount = false;
+        config.enablePush = false;
+        RedPacketOpenAttachement attachment = new RedPacketOpenAttachement();
+        attachment.setParams(sendId, openId, hasRedPacket, serialNo);
+        IMMessage message = MessageBuilder.createCustomMessage(sessionId, sessionType, attachment.getTipMsg(true), attachment, config);
+        message.setStatus(MsgStatusEnum.success);
+
+        message.setConfig(config);
+        NIMClient.getService(MsgService.class).saveMessageToLocalEx(message, true, timestamp * 1000);
+    }
+
+    public static void sendRedPacketOpenNotification(String sessionId, SessionTypeEnum sessionType,
+                                                     String sendId, String openId, String hasRedPacket, String serialNo, long timestamp) {
+
+        Map<String, Object> data = new HashMap<>();
+        Map<String, String> dict = new HashMap<>();
+        dict.put("sendId", sendId);
+        dict.put("openId", openId);
+        dict.put("hasRedPacket", hasRedPacket);
+        dict.put("serialNo", serialNo);
+
+        data.put("dict", dict);
+        data.put("timestamp", Long.toString(timestamp));
+        data.put("sessionId", sessionId);
+        data.put("sessionType", Integer.toString(sessionType.getValue()));
+
+        CustomNotification notification = new CustomNotification();
+        notification.setSessionId(sessionId);
+        notification.setSessionType(sessionType);
+
+        notification.setSendToOnlineUserOnly(false);
+
+        Map<String, Object> pushPayload = new HashMap<>();
+        pushPayload.put("type", CUSTOM_Notification_redpacket_open);
+        pushPayload.put("data", data);
         notification.setPushPayload(pushPayload);
 
         NIMClient.getService(MsgService.class).sendCustomNotification(notification);

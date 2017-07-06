@@ -16,11 +16,12 @@ import com.netease.nimlib.sdk.NimIntent;
 public class CustomNotificationReceiver extends BroadcastReceiver {
 
     private NotificationManager notificationManager;
+
     @Override
     public void onReceive(Context context, Intent intent) {
 
         String action = context.getPackageName() + NimIntent.ACTION_RECEIVE_CUSTOM_NOTIFICATION;
-//        printIntent(intent);
+//        printIntent(action, intent);
         if (action.equals(intent.getAction())) {
 
             // 从intent中取出自定义通知
@@ -32,14 +33,17 @@ public class CustomNotificationReceiver extends BroadcastReceiver {
 //            }
         }
     }
+
     public NotificationManager getNotificationManager() {
         if (notificationManager == null) {
             notificationManager = (NotificationManager) IMApplication.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
         }
         return notificationManager;
     }
-    void printIntent(Intent intent) {
+
+    void printIntent(String action, Intent intent) {
         LogUtil.d("NimNetease", "--------------------------------------------");
+        LogUtil.d("NimNetease", "action" + action);
         LogUtil.d("NimNetease", intent.getAction());
         Bundle bundle = intent.getExtras();
         if (bundle != null) {

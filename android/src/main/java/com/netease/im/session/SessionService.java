@@ -47,6 +47,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -669,15 +670,18 @@ public class SessionService {
     }
 
     public void sendRedPacketOpenMessage(String sendId, String openId, String hasRedPacket, String serialNo, OnSendMessageListener onSendMessageListener) {
-        CustomMessageConfig config = new CustomMessageConfig();
-        config.enableUnreadCount = false;
-        config.enablePush = false;
-        RedPacketOpenAttachement attachment = new RedPacketOpenAttachement();
-        attachment.setParams(sendId, openId, hasRedPacket, serialNo);
-        IMMessage message = MessageBuilder.createCustomMessage(sessionId, sessionTypeEnum, sendId + ";" + openId, attachment, config);
-
-//        message.
-        sendMessage(message, onSendMessageListener);
+//        CustomMessageConfig config = new CustomMessageConfig();
+//        config.enableUnreadCount = false;
+//        config.enablePush = false;
+//        RedPacketOpenAttachement attachment = new RedPacketOpenAttachement();
+//        attachment.setParams(sendId, openId, hasRedPacket, serialNo);
+//        IMMessage message = MessageBuilder.createCustomMessage(sessionId, sessionTypeEnum, sendId + ";" + openId, attachment, config);
+//
+////        message.
+//        sendMessage(message, onSendMessageListener);
+        long timestamp = new Date().getTime() / 1000;
+        SessionUtil.sendRedPacketOpenNotification(sessionId, sessionTypeEnum, sendId, openId, hasRedPacket, serialNo, timestamp);
+        SessionUtil.sendRedPacketOpenLocal(sessionId, sessionTypeEnum, sendId, openId, hasRedPacket, serialNo, timestamp);
     }
 
     public void sendRedPacketMessage(String type, String comments, String serialNo, OnSendMessageListener onSendMessageListener) {
