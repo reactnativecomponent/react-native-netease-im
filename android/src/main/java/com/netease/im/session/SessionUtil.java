@@ -14,6 +14,7 @@ import com.netease.nimlib.sdk.msg.constant.MsgStatusEnum;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.CustomMessageConfig;
 import com.netease.nimlib.sdk.msg.model.CustomNotification;
+import com.netease.nimlib.sdk.msg.model.CustomNotificationConfig;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 
 import java.util.HashMap;
@@ -182,6 +183,10 @@ public class SessionUtil {
         CustomNotification notification = new CustomNotification();
         notification.setSessionId(sessionId);
         notification.setSessionType(sessionType);
+        CustomNotificationConfig config = new CustomNotificationConfig();
+        config.enablePush = false;
+        config.enableUnreadCount = false;
+        notification.setConfig(config);
 
         notification.setSendToOnlineUserOnly(false);
 
