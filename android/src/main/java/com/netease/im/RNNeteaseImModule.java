@@ -1232,7 +1232,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
                 if (result == 0) {
                     showTip("请选择消息");
                 } else if (result == 1) {
-                    showTip("该类型不支持转发");
+                    showTip("该类型消息不支持转发");
                 } else {
                     promise.resolve(ResponseCode.RES_SUCCESS + "");
                 }
@@ -1247,6 +1247,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
      * @param messageId
      * @param promise
      */
+    @ReactMethod
     public void revokeMessage(String messageId, final Promise promise) {
         LogUtil.i(TAG, "revokeMessage" + messageId);
         sessionService.queryMessage(messageId, new SessionService.OnMessageQueryListener() {
@@ -1269,6 +1270,8 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
                 });
                 if (result == 0) {
                     showTip("请选择消息");
+                }else if (result == 1) {
+                    showTip("该类型消息不支持撤销");
                 }
                 return 0;
             }
@@ -1493,10 +1496,8 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
                         if (code == ResponseCode.RES_SUCCESS) {
                             if (result != null && result.size() > 0) {
                                 Object a = ReactCache.createMessageList(result);
-                                if (a != null) {
-                                    promise.resolve(a);
-                                    return;
-                                }
+                                promise.resolve(a);
+                                return;
 
                             }
                         }
@@ -1525,11 +1526,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
                             promise.reject("" + code, "");
                         } else {
                             Object a = ReactCache.createMessageList(messageList);
-                            if (a != null) {
-                                promise.resolve(a);
-                            } else {
-                                promise.reject("" + code, "");
-                            }
+                            promise.resolve(a);
                         }
                         return 0;
                     }
