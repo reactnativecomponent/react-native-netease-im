@@ -343,7 +343,7 @@ RCT_EXPORT_METHOD(revokeMessage:(nonnull NSString *)messageId  resolve:(RCTPromi
 }
 //删除会话内容
 RCT_EXPORT_METHOD(deleteMessage:(nonnull NSString *)messageId){
-    [[ConversationViewController initWithConversationViewController]delete:messageId];
+    [[ConversationViewController initWithConversationViewController]deleteMsg:messageId];
 }
 //清空聊天记录
 RCT_EXPORT_METHOD(clearMessage:(nonnull  NSString *)sessionId sessionId:(nonnull  NSString *)type){
