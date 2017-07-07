@@ -126,7 +126,7 @@ public class SessionService {
         if (addedListItems.size() > 0) {
             updateShowTimeItem(addedListItems, false);
         }
-        List<IMMessage> r = onQuery(messages);
+        List<IMMessage> r = onQuery(addedListItems);
         refreshMessageList(r);
 
     }
