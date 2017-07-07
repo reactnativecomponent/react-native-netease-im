@@ -181,7 +181,7 @@ public class SessionUtil {
         data.put("sessionType", Integer.toString(sessionType.getValue()));
 
         CustomNotification notification = new CustomNotification();
-        notification.setSessionId(sessionId);
+        notification.setSessionId(sendId);
         notification.setSessionType(sessionType);
         CustomNotificationConfig config = new CustomNotificationConfig();
         config.enablePush = false;
