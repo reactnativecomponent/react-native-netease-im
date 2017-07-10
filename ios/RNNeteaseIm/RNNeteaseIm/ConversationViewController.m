@@ -516,7 +516,7 @@
 
 - (void)fetchMessageAttachment:(NIMMessage *)message progress:(float)progress
 {
-    NSLog(@"55555555555");
+    NSLog(@"下载图片");
     //    if ([message.session isEqual:_session]) {
     //        [self.interactor updateMessage:message];
     //    }
@@ -524,7 +524,8 @@
 
 - (void)fetchMessageAttachment:(NIMMessage *)message didCompleteWithError:(NSError *)error
 {
-    NSLog(@"66666666666");
+    NSLog(@"完成下载图片");
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"RNNeteaseimDidCompletePic" object:nil];
     //    if ([message.session isEqual:_session]) {
     //        NIMMessageModel *model = [self.interactor findMessageModel:message];
     //        //下完缩略图之后，因为比例有变化，重新刷下宽高。
