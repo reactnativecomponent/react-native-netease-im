@@ -740,8 +740,13 @@ public class ReactCache {
                 WritableMap imageObj = Arguments.createMap();
                 if (attachment instanceof ImageAttachment) {
                     ImageAttachment imageAttachment = (ImageAttachment) attachment;
-                    imageObj.putString("thumbPath", imageAttachment.getThumbPathForSave());
-                    imageObj.putString("thumbPath2", imageAttachment.getThumbPath());
+                    if (item.getDirect() == MsgDirectionEnum.Out) {
+                        imageObj.putString("thumbPath", imageAttachment.getPathForSave());
+                        imageObj.putString("thumbPath2", imageAttachment.getPath());
+                    } else {
+                        imageObj.putString("thumbPath", imageAttachment.getThumbPathForSave());
+                       imageObj.putString("thumbPath2", imageAttachment.getThumbPath());
+                    }
                     imageObj.putString("path", imageAttachment.getPathForSave());
                     imageObj.putString("path2", imageAttachment.getPath());
                     imageObj.putString("url", imageAttachment.getUrl());
