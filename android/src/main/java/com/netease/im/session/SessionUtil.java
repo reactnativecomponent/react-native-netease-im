@@ -4,6 +4,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
+import android.text.TextUtils;
 
 import com.netease.im.IMApplication;
 import com.netease.im.session.extension.RedPacketOpenAttachement;
@@ -114,7 +115,7 @@ public class SessionUtil {
                 try {
                     t = Long.parseLong(timestamp);
                 } catch (NumberFormatException e) {
-                    t = System.currentTimeMillis()/1000;
+                    t = System.currentTimeMillis() / 1000;
                     e.printStackTrace();
                 }
 //                LogUtil.i("timestamp","timestamp:"+timestamp);
@@ -168,6 +169,9 @@ public class SessionUtil {
     public static void sendRedPacketOpenNotification(String sessionId, SessionTypeEnum sessionType,
                                                      String sendId, String openId, String hasRedPacket, String serialNo, long timestamp) {
 
+        if (TextUtils.equals(sendId, openId)) {
+            return;
+        }
         Map<String, Object> data = new HashMap<>();
         Map<String, String> dict = new HashMap<>();
         dict.put("sendId", sendId);
@@ -181,8 +185,8 @@ public class SessionUtil {
         data.put("sessionType", Integer.toString(sessionType.getValue()));
 
         CustomNotification notification = new CustomNotification();
-        notification.setSessionId(sessionId);
-        notification.setSessionType(sessionType);
+        notification.setSessionId(sendId);
+        notification.setSessionType(SessionTypeEnum.P2P);
         CustomNotificationConfig config = new CustomNotificationConfig();
         config.enablePush = false;
         config.enableUnreadCount = false;
