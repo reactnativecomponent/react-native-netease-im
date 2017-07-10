@@ -741,14 +741,14 @@ public class ReactCache {
                 if (attachment instanceof ImageAttachment) {
                     ImageAttachment imageAttachment = (ImageAttachment) attachment;
                     if (item.getDirect() == MsgDirectionEnum.Out) {
-                        imageObj.putString("thumbPath", imageAttachment.getPathForSave());
-                        imageObj.putString("thumbPath2", imageAttachment.getPath());
+                        imageObj.putString("thumbPath2", imageAttachment.getPathForSave());
+                        imageObj.putString("thumbPath", imageAttachment.getPath());
                     } else {
-                        imageObj.putString("thumbPath", imageAttachment.getThumbPathForSave());
-                       imageObj.putString("thumbPath2", imageAttachment.getThumbPath());
+                        imageObj.putString("thumbPath2", imageAttachment.getThumbPathForSave());
+                       imageObj.putString("thumbPath", imageAttachment.getThumbPath());
                     }
-                    imageObj.putString("path", imageAttachment.getPathForSave());
-                    imageObj.putString("path2", imageAttachment.getPath());
+                    imageObj.putString("path2", imageAttachment.getPathForSave());
+                    imageObj.putString("path", imageAttachment.getPath());
                     imageObj.putString("url", imageAttachment.getUrl());
                     imageObj.putString("displayName", imageAttachment.getDisplayName());
                     imageObj.putString("imageHeight", Integer.toString(imageAttachment.getHeight()));
@@ -771,8 +771,8 @@ public class ReactCache {
                 if (attachment instanceof VideoAttachment) {
                     VideoAttachment videoAttachment = (VideoAttachment) attachment;
                     videoDic.putString("url", videoAttachment.getUrl());
-                    videoDic.putString("path", videoAttachment.getPathForSave());
-                    videoDic.putString("path2", videoAttachment.getPath());
+                    videoDic.putString("path2", videoAttachment.getPathForSave());
+                    videoDic.putString("path", videoAttachment.getPath());
                     videoDic.putString("displayName", videoAttachment.getDisplayName());
                     videoDic.putString("coverSizeHeight", Integer.toString(videoAttachment.getHeight()));
                     videoDic.putString("coverSizeWidth", Integer.toString(videoAttachment.getWidth()));
