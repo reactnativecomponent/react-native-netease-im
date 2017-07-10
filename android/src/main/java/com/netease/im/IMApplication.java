@@ -139,6 +139,9 @@ public class IMApplication {
         return LoginService.getInstance().getLoginInfo(context);
     }
 
+    public static String getSdkStorageRooPath(){
+        return Environment.getExternalStorageDirectory() + "/" + context.getPackageName() + "/nim";
+    }
     private static SDKOptions getOptions(Context context) {
         SDKOptions options = new SDKOptions();
 
@@ -146,8 +149,8 @@ public class IMApplication {
         initStatusBarNotificationConfig(options, context);
 
         // 配置保存图片，文件，log等数据的目录
-        String sdkPath = Environment.getExternalStorageDirectory() + "/" + context.getPackageName() + "/nim";
-        options.sdkStorageRootPath = sdkPath;
+
+        options.sdkStorageRootPath = getSdkStorageRooPath();
 
         // 配置数据库加密秘钥
         options.databaseEncryptKey = "NETEASE";

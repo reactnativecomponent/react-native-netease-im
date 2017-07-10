@@ -81,9 +81,18 @@ public class ImageLoaderKit {
         cacheLoad.clear();
     }
 
+    public void clearCache(){
+//        clear();
+        ImageLoader.getInstance().clearDiskCache();
+    }
+
+    public File getChacheDir(){
+       return StorageUtils.getOwnCacheDirectory(context, context.getPackageName() + "/cache/image/");
+    }
+
     private ImageLoaderConfiguration getDefaultConfig() throws IOException {
         int MAX_CACHE_MEMORY_SIZE = (int) (Runtime.getRuntime().maxMemory() / 8);
-        File cacheDir = StorageUtils.getOwnCacheDirectory(context, context.getPackageName() + "/cache/image/");
+        File cacheDir = getChacheDir();
 
         LogUtil.i(TAG, "ImageLoader memory cache size = " + MAX_CACHE_MEMORY_SIZE / M + "M");
         LogUtil.i(TAG, "ImageLoader disk cache directory = " + cacheDir.getAbsolutePath());
@@ -94,7 +103,7 @@ public class ImageLoaderKit {
                 .threadPriority(Thread.NORM_PRIORITY - 2) // 降低线程的优先级，减小对UI主线程的影响
                 .denyCacheImageMultipleSizesInMemory()
                 .memoryCache(new LruMemoryCache(MAX_CACHE_MEMORY_SIZE))
-                .discCache(new LruDiskCache(cacheDir, new Md5FileNameGenerator(), 0))
+                .diskCache(new LruDiskCache(cacheDir, new Md5FileNameGenerator(), 0))
                 .defaultDisplayImageOptions(DisplayImageOptions.createSimple())
                 .imageDownloader(new BaseImageDownloader(context, 5 * 1000, 30 * 1000)) // connectTimeout (5 s), readTimeout (30 s)超时时间
                 .writeDebugLogs()
@@ -195,7 +204,7 @@ public class ImageLoaderKit {
 
         File file = DiskCacheUtils.findInCache(key, ImageLoader.getInstance().getDiskCache());// 查询磁盘缓存示例
         if (file == null) {
-            asyncLoadAvatarBitmapToCache(url);
+//            asyncLoadAvatarBitmapToCache(url);
         }
         return file == null ? "" : file.getAbsolutePath();
     }
