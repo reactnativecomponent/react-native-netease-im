@@ -159,7 +159,8 @@ public class SessionUtil {
         config.enablePush = false;
         RedPacketOpenAttachement attachment = new RedPacketOpenAttachement();
         attachment.setParams(sendId, openId, hasRedPacket, serialNo);
-        IMMessage message = MessageBuilder.createCustomMessage(sessionId, sessionType, attachment.getTipMsg(true), attachment, config);
+        final String id = sessionType == SessionTypeEnum.P2P ? openId : sessionId;
+        IMMessage message = MessageBuilder.createCustomMessage(id, sessionType, attachment.getTipMsg(true), attachment, config);
         message.setStatus(MsgStatusEnum.success);
 
         message.setConfig(config);
