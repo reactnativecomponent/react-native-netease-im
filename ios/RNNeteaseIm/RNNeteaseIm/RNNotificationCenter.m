@@ -110,6 +110,9 @@
     NSTimeInterval timestamp = [[dict objectForKey:@"timestamp"] doubleValue];
     NSString *sessionId = [dict objectForKey:@"sessionId"];
     NSInteger sessionType = [[dict objectForKey:@"sessionType"] integerValue];
+    if (sessionType == NIMSessionTypeP2P) {//点对点
+        sessionId = [datatDict objectForKey:@"openId"];
+    }
     NIMSession *session = [NIMSession session:sessionId type:sessionType];
     NIMMessage *message;
     DWCustomAttachment *obj = [[DWCustomAttachment alloc]init];
