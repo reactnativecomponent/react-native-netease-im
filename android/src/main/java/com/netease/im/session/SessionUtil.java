@@ -123,7 +123,8 @@ public class SessionUtil {
 //                LogUtil.i("timestamp",""+data);
                 String sessionId = (String) data.get("sessionId");
                 String sessionType = (String) data.get("sessionType");
-                sendRedPacketOpenLocal(sessionId, getSessionType(sessionType), sendId, openId, hasRedPacket, serialNo, t);
+                final String id = getSessionType(sessionType) == SessionTypeEnum.P2P ? openId : sessionId;
+                sendRedPacketOpenLocal(id, getSessionType(sessionType), sendId, openId, hasRedPacket, serialNo, t);
             }
         }
     }
@@ -159,8 +160,7 @@ public class SessionUtil {
         config.enablePush = false;
         RedPacketOpenAttachement attachment = new RedPacketOpenAttachement();
         attachment.setParams(sendId, openId, hasRedPacket, serialNo);
-        final String id = sessionType == SessionTypeEnum.P2P ? openId : sessionId;
-        IMMessage message = MessageBuilder.createCustomMessage(id, sessionType, attachment.getTipMsg(true), attachment, config);
+        IMMessage message = MessageBuilder.createCustomMessage(sessionId, sessionType, attachment.getTipMsg(true), attachment, config);
         message.setStatus(MsgStatusEnum.success);
 
         message.setConfig(config);
