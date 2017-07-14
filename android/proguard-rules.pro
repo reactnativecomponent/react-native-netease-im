@@ -111,3 +111,6 @@
  *;
 
 }
+### 清理缓存
+-dontwarn android.content.pm.**
+-keep class android.content.pm.** { *; }
