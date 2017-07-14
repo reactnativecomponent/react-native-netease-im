@@ -118,14 +118,14 @@ public class SessionUtil {
                 String hasRedPacket = dict.getString("hasRedPacket");
                 String serialNo = dict.getString("serialNo");
 
-                String timestamp = data.getString("timestamp");
-                long t = 0L;
-                try {
-                    t = Long.parseLong(timestamp);
-                } catch (NumberFormatException e) {
-                    t = System.currentTimeMillis() / 1000;
-                    e.printStackTrace();
-                }
+//                String timestamp = data.getString("timestamp");
+                long t = customNotification.getTime() / 1000;
+//                try {
+//                    t = Long.parseLong(timestamp);
+//                } catch (NumberFormatException e) {
+//                    t = System.currentTimeMillis() / 1000;
+//                    e.printStackTrace();
+//                }
 //                LogUtil.i("timestamp","timestamp:"+timestamp);
 //                LogUtil.i("timestamp","t:"+t);
 //                LogUtil.i("timestamp",""+data);
