@@ -728,7 +728,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
                 });
     }
 
-    //    @ReactMethod
+    @ReactMethod
     public void upload(String file, final Promise promise) {
         if (TextUtils.isEmpty(file)) {
             return;
@@ -1650,7 +1650,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
     }
 
     @ReactMethod
-    public void playLocal(String resourceFile,String type, Promise promise) {
+    public void playLocal(String resourceFile, String type, Promise promise) {
 
         Uri uri = Uri.parse(resourceFile);
         audioPlayService.playAudio(handler, reactContext, AudioManager.STREAM_MUSIC, uri.getScheme(), uri.getPath());
