@@ -87,7 +87,8 @@
 #pragma mark - NIMSystemNotificationManagerDelegate
 - (void)onReceiveCustomSystemNotification:(NIMCustomSystemNotification *)notification{//接收自定义通知
 //    NSString *content = notification.content;
-    NSDictionary *notiDict = notification.apnsPayload;
+    NSDictionary *notiDict = [self jsonDictWithString:notification.content];
+    NSTimeInterval timestamp = notification.timestamp;
     if (notiDict){
         NSInteger notiType = [[notiDict objectForKey:@"type"] integerValue];
         switch (notiType) {
@@ -96,7 +97,7 @@
                 break;
             case 2://拆红包消息
             {
-                [self saveTheRedPacketOpenMsg:[notiDict objectForKey:@"data"]];
+                [self saveTheRedPacketOpenMsg:[notiDict objectForKey:@"data"] andTime:timestamp];
             }
                 break;
                 
@@ -106,9 +107,9 @@
     }
 }
 //保存拆红包消息到本地
-- (void)saveTheRedPacketOpenMsg:(NSDictionary *)dict{
+- (void)saveTheRedPacketOpenMsg:(NSDictionary *)dict andTime:(NSTimeInterval)times{
     NSDictionary *datatDict = [dict objectForKey:@"dict"];
-    NSTimeInterval timestamp = [[dict objectForKey:@"timestamp"] doubleValue];
+    NSTimeInterval timestamp = times;
     NSString *sessionId = [dict objectForKey:@"sessionId"];
     NSInteger sessionType = [[dict objectForKey:@"sessionType"] integerValue];
     if (sessionType == NIMSessionTypeP2P) {//点对点
@@ -122,6 +123,24 @@
     message = [NIMMessageMaker msgWithCustomAttachment:obj];
     message.timestamp = timestamp;
     [[NIMSDK sharedSDK].conversationManager saveMessage:message forSession:session completion:nil];
+}
+
+// json字符串转dict字典
+- (NSDictionary *)jsonDictWithString:(NSString *)string
+{
+    if (string && 0 != string.length)
+    {
+        NSError *error;
+        NSData *jsonData = [string dataUsingEncoding:NSUTF8StringEncoding];
+        NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&error];
+        if (error)
+        {
+            NSLog(@"json解析失败：%@", error);
+            return nil;
+        }
+        return jsonDict;
+    }
+    return nil;
 }
 
 @end
