@@ -43,6 +43,17 @@
 #pragma mark - NIMLoginManagerDelegate
 - (void)onLogin:(NIMLoginStep)step{
     NSString *strStatus = [NSString stringWithFormat:@"%zd",step];
+    switch (step) {
+        case NIMLoginStepLinkOK:
+        case NIMLoginStepSyncOK:
+        case NIMLoginStepSyncing:
+            [self getResouces];
+            break;
+            
+        default:
+            break;
+    }
+    
     [NIMModel initShareMD].NetStatus = strStatus;
 }
 //删除一行
