@@ -551,6 +551,7 @@
         DWCustomAttachment *obj = customObject.attachment;
         if (obj.custType == CustomMessgeTypeRedPacketOpenMessage) return;
     }
+    if (message.messageType == NIMMessageTypeNotification) return;
     if (message.session.sessionType == NIMSessionTypeP2P) {//个人
         NIMUser *user = [[NIMSDK sharedSDK].userManager userInfo:message.from];
         needToPlay = user.notifyForNewMsg;
