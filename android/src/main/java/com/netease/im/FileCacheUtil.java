@@ -79,7 +79,7 @@ public class FileCacheUtil {
                         result += pStats.externalCacheSize;
 //                        LogUtil.i(TAG, "result" + ":" + FileUtil.formatFileSize(result));
                         if (observer != null) {
-                            observer.onGetCacheSize(FileUtil.formatFileSize(result));
+                            observer.onGetCacheSize(Long.toString(result / (1024 * 1024)));
                         }
                     }
                 });
