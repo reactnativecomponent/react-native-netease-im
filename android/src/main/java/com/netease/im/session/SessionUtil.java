@@ -91,7 +91,7 @@ public class SessionUtil {
     }
 
     public static void receiver(NotificationManager manager, CustomNotification customNotification) {
-        LogUtil.i("SessionUtil", customNotification.getFromAccount());
+        LogUtil.i("SessionUtil", customNotification.getContent());
         Map<String, Object> map = customNotification.getPushPayload();
         if (map != null && map.containsKey("type")) {
             String type = (String) map.get("type");
@@ -105,34 +105,34 @@ public class SessionUtil {
                 builder.setContentIntent(contentIntent);
                 builder.setSmallIcon(IMApplication.getNotify_msg_drawable_id());
                 manager.notify((int) System.currentTimeMillis(), builder.build());
-            } else {
-                String content = customNotification.getContent();
-                if (!TextUtils.isEmpty(content)) {
-                    JSONObject object = JSON.parseObject(content);
-                    JSONObject data = object.getJSONObject("data");
+            }
+        } else {
+            String content = customNotification.getContent();
+            if (!TextUtils.isEmpty(content)) {
+                JSONObject object = JSON.parseObject(content);
+                JSONObject data = object.getJSONObject("data");
 
-                    JSONObject dict = data.getJSONObject("dict");
-                    String sendId = dict.getString("sendId");
-                    String openId = dict.getString("openId");
-                    String hasRedPacket = dict.getString("hasRedPacket");
-                    String serialNo = dict.getString("serialNo");
+                JSONObject dict = data.getJSONObject("dict");
+                String sendId = dict.getString("sendId");
+                String openId = dict.getString("openId");
+                String hasRedPacket = dict.getString("hasRedPacket");
+                String serialNo = dict.getString("serialNo");
 
-                    String timestamp = data.getString("timestamp");
-                    long t = 0L;
-                    try {
-                        t = Long.parseLong(timestamp);
-                    } catch (NumberFormatException e) {
-                        t = System.currentTimeMillis() / 1000;
-                        e.printStackTrace();
-                    }
+                String timestamp = data.getString("timestamp");
+                long t = 0L;
+                try {
+                    t = Long.parseLong(timestamp);
+                } catch (NumberFormatException e) {
+                    t = System.currentTimeMillis() / 1000;
+                    e.printStackTrace();
+                }
 //                LogUtil.i("timestamp","timestamp:"+timestamp);
 //                LogUtil.i("timestamp","t:"+t);
 //                LogUtil.i("timestamp",""+data);
-                    String sessionId = (String) data.get("sessionId");
-                    String sessionType = (String) data.get("sessionType");
-                    final String id = getSessionType(sessionType) == SessionTypeEnum.P2P ? openId : sessionId;
-                    sendRedPacketOpenLocal(id, getSessionType(sessionType), sendId, openId, hasRedPacket, serialNo, t);
-                }
+                String sessionId = data.getString("sessionId");
+                String sessionType = data.getString("sessionType");
+                final String id = getSessionType(sessionType) == SessionTypeEnum.P2P ? openId : sessionId;
+                sendRedPacketOpenLocal(id, getSessionType(sessionType), sendId, openId, hasRedPacket, serialNo, t);
             }
         }
 
