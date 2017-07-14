@@ -154,7 +154,7 @@ public class SessionService {
 
     boolean showMsg(IMMessage m) {
         return !(m.getMsgType() == MsgTypeEnum.notification || m.getMsgType() == MsgTypeEnum.tip
-                || (m.getAttachment() != null && (m.getAttachment() instanceof RedPacketOpenAttachement);
+                || (m.getAttachment() != null && (m.getAttachment() instanceof RedPacketOpenAttachement)));
     }
 
     public boolean isMyMessage(IMMessage message) {
