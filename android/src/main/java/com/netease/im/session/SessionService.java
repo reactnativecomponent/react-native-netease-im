@@ -135,8 +135,14 @@ public class SessionService {
             updateShowTimeItem(addedListItems, false);
         }
         List<IMMessage> r = onQuery(addedListItems);
-        if (!this.mute && r.size() > 0) {
-            AudioPlayService.getInstance().playAudio(handler, ReactCache.getReactContext(), AudioManager.STREAM_RING, "raw", "msg");
+        if (r.size() > 0) {
+            IMMessage m = messages.get(0);
+            if (!this.mute && m.getDirect() == MsgDirectionEnum.In) {
+                if(!(m.getMsgType() == MsgTypeEnum.notification||m.getMsgType() == MsgTypeEnum.tip)){
+                    AudioPlayService.getInstance().playAudio(handler, ReactCache.getReactContext(), AudioManager.STREAM_RING, "raw", "msg");
+                }
+
+            }
         }
         refreshMessageList(r);
 
