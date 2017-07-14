@@ -30,6 +30,7 @@ import com.netease.im.contact.BlackListObserver;
 import com.netease.im.contact.FriendListService;
 import com.netease.im.contact.FriendObserver;
 import com.netease.im.login.LoginService;
+import com.netease.im.login.RecentContactObserver;
 import com.netease.im.login.SysMessageObserver;
 import com.netease.im.session.AudioMessageService;
 import com.netease.im.session.AudioPlayService;
@@ -471,6 +472,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
                     @Override
                     public void onResult(int code, Void aVoid, Throwable throwable) {
                         if (code == ResponseCode.RES_SUCCESS) {
+                            RecentContactObserver.getInstance().refreshMessages(true);
                             promise.resolve("" + code);
                         } else {
                             promise.reject("" + code, "");
@@ -494,6 +496,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
                     @Override
                     public void onResult(int code, Void aVoid, Throwable throwable) {
                         if (code == ResponseCode.RES_SUCCESS) {
+                            RecentContactObserver.getInstance().refreshMessages(true);
                             promise.resolve("" + code);
                         } else {
                             promise.reject("" + code, "");

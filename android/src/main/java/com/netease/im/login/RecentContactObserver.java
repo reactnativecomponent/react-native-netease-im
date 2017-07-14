@@ -32,6 +32,18 @@ import java.util.List;
 
 public class RecentContactObserver {
     final static String TAG = "RecentContactObserver";
+
+    private RecentContactObserver() {
+
+    }
+
+    static class InstanceHolder {
+        final static RecentContactObserver instance = new RecentContactObserver();
+    }
+
+    public static RecentContactObserver getInstance() {
+        return InstanceHolder.instance;
+    }
     /*******************************最近会话********************************/
 
     private List<RecentContact> items = new ArrayList<>();
@@ -139,7 +151,7 @@ public class RecentContactObserver {
 
     int unreadNum = 0;
 
-    private void refreshMessages(boolean unreadChanged) {
+    public void refreshMessages(boolean unreadChanged) {
         sortRecentContacts(items);
 
 
