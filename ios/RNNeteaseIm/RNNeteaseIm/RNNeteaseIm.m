@@ -219,20 +219,30 @@ RCT_EXPORT_METHOD(fetchTeamMemberList:(nonnull NSString *)teamId resolve:(RCTPro
 }
 //开启/关闭群组消息提醒
 RCT_EXPORT_METHOD(setTeamNotify:(nonnull NSString *)teamId needNotify:(nonnull NSString *)needNotify resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
+    __weak typeof(self)weakSelf = self;
     [[TeamViewController initWithTeamViewController]muteTeam:teamId mute:needNotify Succ:^(id param) {
         resolve(param);
+        [weakSelf updateMessageList];
     } Err:^(id erro) {
         reject(@"-1",erro,nil);
     }];
 }
 //好友消息提醒开关
 RCT_EXPORT_METHOD(setMessageNotify:(nonnull NSString *)contactId needNotify:(nonnull NSString *)needNotify resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
+    __weak typeof(self)weakSelf = self;
     [[ConversationViewController initWithConversationViewController]muteMessage:contactId mute:needNotify Succ:^(id param) {
         resolve(param);
+        [weakSelf updateMessageList];
     } Err:^(id erro) {
         reject(@"-1",erro,nil);
     }];
 }
+//刷新最近会话列表
+- (void)updateMessageList{
+    [[NIMViewController initWithController]getResouces];
+    NSLog(@"---updateMessageList");
+}
+
 //解散群
 RCT_EXPORT_METHOD(dismissTeam:(nonnull NSString *)teamId resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
     [[TeamViewController initWithTeamViewController] dismissTeam:teamId Succ:^(id param) {
@@ -398,7 +408,7 @@ RCT_EXPORT_METHOD(play:(nonnull NSString *)filepath){
     [[ConversationViewController initWithConversationViewController]play:filepath];
 }
 //播放本地资源录音
-RCT_EXPORT_METHOD(playLocacl:(nonnull NSString *)name type:(nonnull NSString *)type){
+RCT_EXPORT_METHOD(playLocal:(nonnull NSString *)name type:(nonnull NSString *)type){
     NSString *path = [[NSBundle mainBundle] pathForResource:name ofType:type];
     [[ConversationViewController initWithConversationViewController]play:path];
 }
@@ -479,8 +489,7 @@ RCT_EXPORT_METHOD(getCacheSize:(RCTPromiseResolveBlock)resolve reject:(RCTPromis
     
     NSString *allSize = [NSString stringWithFormat:@"%f",docSize+libSize+tmpNimSize+tmpPickSize];
     NSLog(@"allSize:%@   documentPath:%@",allSize,documentPath);
-    NSArray *events = @[allSize];
-    resolve(events);
+    resolve(allSize);
 }
 
 //清除数据缓存

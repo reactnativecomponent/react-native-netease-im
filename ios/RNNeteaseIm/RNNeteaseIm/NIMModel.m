@@ -54,7 +54,9 @@
         self.myBlock(5, notiArr);
 }
 -(void)setTeamArr:(NSMutableArray *)teamArr{
-    self.myBlock(4, teamArr);
+    if (teamArr.count) {
+        self.myBlock(4, teamArr);
+    }
 }
 //未读条数
 -(void)setUnreadCount:(NSInteger)unreadCount{
