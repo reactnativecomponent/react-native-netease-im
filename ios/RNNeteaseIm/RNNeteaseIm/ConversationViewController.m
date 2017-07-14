@@ -26,6 +26,7 @@
     NSMutableArray *_sessionArr;
     
 }
+@property (nonatomic,strong) AVAudioPlayer *player; //播放提示音
 
 @end
 
@@ -34,6 +35,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
 }
 
 +(instancetype)initWithConversationViewController{
@@ -44,6 +46,15 @@
         
     });
     return conVC;
+}
+
+- (instancetype)init {
+    self = [super init];
+    if(self) {
+        NSURL *url = [[NSBundle mainBundle] URLForResource:@"message" withExtension:@"wav"];
+        _player = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:nil];
+    }
+    return self;
 }
 
 -(void)startSession:(NSString *)sessionID withType:(NSString *)type{
@@ -509,8 +520,10 @@
                                                   completion:nil];
         //标记已读消息
         [[NIMSDK sharedSDK].conversationManager markAllMessagesReadInSession:_session];
+        [self.player stop];
+        [[AVAudioSession sharedInstance] setCategory: AVAudioSessionCategoryAmbient error:nil];
+        [self.player play];
     }
-    
 }
 
 

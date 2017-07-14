@@ -81,7 +81,8 @@
 
 - (void)checkMessageAt:(NSArray *)messages
 {
-   }
+   
+}
 
 #pragma mark - NIMSystemNotificationManagerDelegate
 - (void)onReceiveCustomSystemNotification:(NIMCustomSystemNotification *)notification{//接收自定义通知
