@@ -1660,6 +1660,9 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
         String filePath = uri.getPath();
         if(filePath.startsWith("/")){
             filePath = filePath.substring(1);
+            if (filePath.indexOf(".") == -1) {
+                filePath = filePath + "." + type;
+            }
         }
         LogUtil.i(TAG, "path:" + filePath);
         audioPlayService.playAudio(handler, reactContext, AudioManager.STREAM_RING, uri.getScheme(), filePath);
