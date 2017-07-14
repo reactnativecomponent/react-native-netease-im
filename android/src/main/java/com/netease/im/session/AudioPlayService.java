@@ -11,7 +11,6 @@ import android.text.TextUtils;
 import com.facebook.react.bridge.ReactContext;
 import com.netease.im.ReactCache;
 import com.netease.im.uikit.common.util.log.LogUtil;
-import com.netease.nimlib.sdk.media.player.AudioPlayer;
 import com.netease.nimlib.sdk.media.player.OnPlayListener;
 
 import static android.content.Context.SENSOR_SERVICE;
@@ -22,7 +21,10 @@ import static android.content.Context.SENSOR_SERVICE;
 
 public class AudioPlayService implements SensorEventListener {
 
-    AudioPlayer currentAudioPlayer;
+    final static String SCHEME_FILE = "file";
+    final static String SCHEME_RAW = "raw";
+    final static String SCHEME_ASSETS = "assets";
+    AudioPlayerM currentAudioPlayer;
     private String currentFile;
     private int state;
     private int currentAudioStreamType = AudioManager.STREAM_VOICE_CALL;
@@ -42,12 +44,18 @@ public class AudioPlayService implements SensorEventListener {
     }
 
     public void play(Handler handler, ReactContext context, String filePath) {
+        playAudio(handler, context, -1, SCHEME_FILE, filePath);
+    }
+
+    public void playAudio(Handler handler, ReactContext context, int audioStreamType, String type, String filePath) {
 
         if (TextUtils.isEmpty(filePath)) {
             return;
         }
 
-        register(context, true);
+        if (audioStreamType == -1) {
+            register(context, true);
+        }
         if (isPlayingAudio()) {
             stopAudio(handler);
             if (currentFile != null && currentFile.equals(filePath)) {
@@ -58,12 +66,18 @@ public class AudioPlayService implements SensorEventListener {
         currentFile = filePath;
 
         if (currentAudioPlayer == null) {
-            currentAudioPlayer = new AudioPlayer(context);
+            currentAudioPlayer = new AudioPlayerM(context);
         }
 //        ReactCache.emit(ReactCache.observeAudioRecord, ReactCache.createAudioPlay("Volume", context.getCurrentActivity().getVolumeControlStream()));
 
         context.getCurrentActivity().setVolumeControlStream(currentAudioStreamType); // 默认使用听筒播放
-        currentAudioPlayer.setDataSource(filePath);
+        if (TextUtils.equals(type, SCHEME_FILE)) {
+            currentAudioPlayer.setDataSource(filePath);
+        } else if (TextUtils.equals(type, SCHEME_RAW)) {
+            currentAudioPlayer.setDataSource(AudioPlayerM.Type.raw, filePath);
+        } else if (TextUtils.equals(type, SCHEME_ASSETS)) {
+            currentAudioPlayer.setDataSource(AudioPlayerM.Type.assets, filePath);
+        }
 
         currentAudioPlayer.setOnPlayListener(new BasePlayerListener(currentAudioPlayer));
 
@@ -78,17 +92,24 @@ public class AudioPlayService implements SensorEventListener {
 
     private SensorManager sensorManager;
     private Sensor sensor;
+    private boolean hasRegister;
 
     void register(ReactContext context, boolean register) {
+
+        if (hasRegister && register) {
+            return;
+        }
+
         if (sensorManager == null) {
             sensorManager = (SensorManager) context.getSystemService(SENSOR_SERVICE);
             sensor = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
         }
         if (register) {
             sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
-        } else {
+        } else if (hasRegister && !register) {
             sensorManager.unregisterListener(this, sensor);
         }
+        hasRegister = register;
     }
 
     @Override
@@ -189,10 +210,10 @@ public class AudioPlayService implements SensorEventListener {
 
     public class BasePlayerListener implements OnPlayListener {
 
-        protected AudioPlayer listenerPlayingAudioPlayer;
+        protected AudioPlayerM listenerPlayingAudioPlayer;
         private long position = -1;
 
-        public BasePlayerListener(AudioPlayer playingAudioPlayer) {
+        public BasePlayerListener(AudioPlayerM playingAudioPlayer) {
             listenerPlayingAudioPlayer = playingAudioPlayer;
         }
 

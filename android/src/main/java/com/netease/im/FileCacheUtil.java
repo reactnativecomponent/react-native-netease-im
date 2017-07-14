@@ -17,12 +17,10 @@ import com.netease.im.uikit.common.util.storage.StorageType;
 import com.netease.im.uikit.common.util.storage.StorageUtil;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.msg.MsgService;
-import com.netease.nimlib.sdk.msg.model.RecentContact;
 
 import java.io.File;
 import java.lang.reflect.Method;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -40,7 +38,15 @@ public class FileCacheUtil {
 
     final static String TAG = "FileCacheUtil";
 
-    public static void getCacheSie() {
+    interface OnObserverGet {
+        void onGetCacheSize(String size);
+    }
+
+    interface OnObserverClean {
+        void onCleanCache(boolean succeeded);
+    }
+
+    public static void getCacheSie(final OnObserverGet observer) {
 
         new AsyncTask<Void, Void, Void>() {
 
@@ -70,8 +76,11 @@ public class FileCacheUtil {
 //                        LogUtil.i(TAG, "externalObbSize" + ":" + FileUtil.formatFileSize(pStats.externalObbSize));
                         long result = finalAllLength;
                         result += pStats.cacheSize;
-                        result += pStats.cacheSize;
-                        LogUtil.i(TAG, "result" + ":" + FileUtil.formatFileSize(result));
+                        result += pStats.externalCacheSize;
+//                        LogUtil.i(TAG, "result" + ":" + FileUtil.formatFileSize(result));
+                        if (observer != null) {
+                            observer.onGetCacheSize(FileUtil.formatFileSize(result));
+                        }
                     }
                 });
                 return null;
@@ -79,26 +88,26 @@ public class FileCacheUtil {
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    public static void clearCache() {
+    public static void cleanCache(final OnObserverClean observer) {
         new AsyncTask<Void, Void, Void>() {
 
             @Override
             protected Void doInBackground(Void... params) {
-//        IMApplication.getImageLoaderKit().clearCache();
+                IMApplication.getImageLoaderKit().clearCache();
                 Set<String> pathList = getCacheDir();
                 for (String s : pathList) {
-//                    deleteDir(new File(s));
+                    deleteDir(new File(s));
                 }
-                List<RecentContact> recentContacts = NIMClient.getService(MsgService.class).queryRecentContactsBlock();
-                if (recentContacts != null && !recentContacts.isEmpty()) {
-//                    NIMClient.getService(MsgService.class).clearMsgDatabase(true);
-                }
+                NIMClient.getService(MsgService.class).clearMsgDatabase(true);
                 freeStorageAndNotify(new IPackageDataObserver.Stub() {
 
                     @Override
                     public void onRemoveCompleted(String packageName, boolean succeeded) throws RemoteException {
                         LogUtil.i(TAG, "result" + ":" + packageName);
                         LogUtil.i(TAG, "result" + ":" + succeeded);
+                        if (observer != null) {
+                            observer.onCleanCache(succeeded);
+                        }
                     }
                 });
                 return null;
@@ -106,7 +115,7 @@ public class FileCacheUtil {
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    static void deleteDir(File file) {
+    private static void deleteDir(File file) {
         if (file == null || !file.exists()) {
             return;
         }
@@ -125,7 +134,7 @@ public class FileCacheUtil {
         }
     }
 
-    static long makeDirSize(File file) {
+    private static long makeDirSize(File file) {
 
         if (file == null || !file.exists()) {
             return 0L;
@@ -147,7 +156,7 @@ public class FileCacheUtil {
         return all;
     }
 
-    static void getCacheSize(IPackageStatsObserver.Stub observer) {
+    private static void getCacheSize(IPackageStatsObserver.Stub observer) {
         Context context = IMApplication.getContext();
         String pkg = context.getPackageName();
         PackageManager pm = context.getPackageManager();
@@ -212,6 +221,4 @@ public class FileCacheUtil {
             e.printStackTrace();
         }
     }
-
-
 }

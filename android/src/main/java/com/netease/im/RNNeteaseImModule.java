@@ -5,6 +5,8 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.media.AudioManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
@@ -50,6 +52,7 @@ import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.RequestCallbackWrapper;
 import com.netease.nimlib.sdk.ResponseCode;
+import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.netease.nimlib.sdk.friend.FriendService;
 import com.netease.nimlib.sdk.friend.constant.FriendFieldEnum;
@@ -144,7 +147,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
 //        LogUtil.i(TAG, "contactId:" + contactId);
 //        LogUtil.i(TAG, "token:" + token);
 //        LogUtil.i(TAG, "md5:" + MD5.getStringMD5(token));
-//        NIMClient.getService(AuthService.class).openLocalCache(contactId);
+        NIMClient.getService(AuthService.class).openLocalCache(contactId);
         LoginService.getInstance().login(new LoginInfo(contactId, token), new RequestCallback<LoginInfo>() {
             @Override
             public void onSuccess(LoginInfo loginInfo) {
@@ -725,7 +728,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
                 });
     }
 
-    //    @ReactMethod
+    @ReactMethod
     public void upload(String file, final Promise promise) {
         if (TextUtils.isEmpty(file)) {
             return;
@@ -1270,7 +1273,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
                 });
                 if (result == 0) {
                     showTip("请选择消息");
-                }else if (result == 1) {
+                } else if (result == 1) {
                     showTip("该类型消息不支持撤销");
                 }
                 return 0;
@@ -1644,6 +1647,13 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
     @ReactMethod
     public void play(String audioFile, Promise promise) {
         audioPlayService.play(handler, reactContext, audioFile);
+    }
+
+    @ReactMethod
+    public void playLocal(String resourceFile, String type, Promise promise) {
+
+        Uri uri = Uri.parse(resourceFile);
+        audioPlayService.playAudio(handler, reactContext, AudioManager.STREAM_MUSIC, uri.getScheme(), uri.getPath());
     }
 
     /**
