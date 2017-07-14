@@ -155,7 +155,10 @@ export default class NIM{
      * @returns {*}
      */
     static playLocacl(name,type){
-        return RNNeteaseIm.playLocacl(name,type);
+        if(Platform.OS === 'ios'){
+            return RNNeteaseIm.playLocacl(name,type);
+        }
+        return RNNeteaseIm.playLocacl("assets://"+name,type);
     }
     /**
      * 停止播放录音
@@ -542,6 +545,22 @@ export default class NIM{
      */
     static createTeam(fields, type, accounts){
         return RNNeteaseIm.createTeam(fields, type, accounts);
+    }
+    /**
+     * 更新群资料
+     * verifyType 验证类型 0 允许任何人加入 1 需要身份验证2 不允许任何人申请加入
+     * inviteMode 邀请他人类型 0管理员邀请 1所有人邀请
+     * beInviteMode 被邀请人权限 0需要验证 1不需要验证
+     * teamUpdateMode 群资料修改权限 0管理员修改 1所有人修改
+     *
+     * @param teamId
+     * @param fieldType:name(群组名称) icon(头像) introduce(群组介绍) announcement(群组公告)
+     *                             verifyType(验证类型) inviteMode(邀请他人类型) beInviteMode(被邀请人权限) teamUpdateMode(群资料修改权限)
+     * @param value
+     * @param promise
+     */
+    static updateTeam(teamId, fieldType, value){
+        return RNNeteaseIm.updateTeam(teamId, fieldType, value);
     }
 
     /**
