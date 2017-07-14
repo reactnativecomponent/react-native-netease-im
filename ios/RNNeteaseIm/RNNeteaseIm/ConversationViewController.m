@@ -520,12 +520,32 @@
                                                   completion:nil];
         //标记已读消息
         [[NIMSDK sharedSDK].conversationManager markAllMessagesReadInSession:_session];
+        [self playTipsMusicWithMessage:message];
+    }
+}
+
+- (void)playTipsMusicWithMessage:(NIMMessage *)message{
+    BOOL needToPlay = NO;
+    if (message.messageType == 100) {
+        NIMCustomObject *customObject = message.messageObject;
+        DWCustomAttachment *obj = customObject.attachment;
+        if (obj.custType == CustomMessgeTypeRedPacketOpenMessage) return;
+    }
+    if (message.session.sessionType == NIMSessionTypeP2P) {//个人
+        NIMUser *user = [[NIMSDK sharedSDK].userManager userInfo:message.from];
+        needToPlay = user.notifyForNewMsg;
+        
+    }else if(message.session.sessionType == NIMSessionTypeTeam){//群
+        
+        NIMTeam *team = [[[NIMSDK sharedSDK] teamManager]teamById:message.session.sessionId];
+        needToPlay = team.notifyForNewMsg;
+    }
+    if (needToPlay) {
         [self.player stop];
         [[AVAudioSession sharedInstance] setCategory: AVAudioSessionCategoryAmbient error:nil];
         [self.player play];
     }
 }
-
 
 - (void)fetchMessageAttachment:(NIMMessage *)message progress:(float)progress
 {
