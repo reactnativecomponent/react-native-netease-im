@@ -398,7 +398,7 @@ RCT_EXPORT_METHOD(play:(nonnull NSString *)filepath){
     [[ConversationViewController initWithConversationViewController]play:filepath];
 }
 //播放本地资源录音
-RCT_EXPORT_METHOD(playLocacl:(nonnull NSString *)name type:(nonnull NSString *)type){
+RCT_EXPORT_METHOD(playLocal:(nonnull NSString *)name type:(nonnull NSString *)type){
     NSString *path = [[NSBundle mainBundle] pathForResource:name ofType:type];
     [[ConversationViewController initWithConversationViewController]play:path];
 }

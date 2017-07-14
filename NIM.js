@@ -156,9 +156,9 @@ export default class NIM{
      */
     static playLocacl(name,type){
         if(Platform.OS === 'ios'){
-            return RNNeteaseIm.playLocacl(name,type);
+            return RNNeteaseIm.playLocal(name,type);
         }
-        return RNNeteaseIm.playLocacl("assets://"+name,type);
+        return RNNeteaseIm.playLocal("assets://"+name,type);
     }
     /**
      * 停止播放录音
