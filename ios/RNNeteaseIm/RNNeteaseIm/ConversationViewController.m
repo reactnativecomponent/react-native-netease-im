@@ -27,6 +27,7 @@
     
 }
 @property (nonatomic,strong) AVAudioPlayer *player; //播放提示音
+@property (nonatomic,strong) AVAudioPlayer *redPacketPlayer; //播放提示音
 
 @end
 
@@ -53,6 +54,8 @@
     if(self) {
         NSURL *url = [[NSBundle mainBundle] URLForResource:@"message" withExtension:@"wav"];
         _player = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:nil];
+        NSURL *redPackUrl = [[NSBundle mainBundle] URLForResource:@"packet_tip" withExtension:@"wav"];
+        _redPacketPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:redPackUrl error:nil];
     }
     return self;
 }
@@ -549,7 +552,15 @@
     if (message.messageType == 100) {
         NIMCustomObject *customObject = message.messageObject;
         DWCustomAttachment *obj = customObject.attachment;
-        if (obj.custType == CustomMessgeTypeRedPacketOpenMessage) return;
+        if (obj.custType == CustomMessgeTypeRedPacketOpenMessage){
+            return;
+        }else if(obj.custType == CustomMessgeTypeRedpacket){//红包消息
+            [self.player stop];
+            [self.redPacketPlayer stop];
+            [[AVAudioSession sharedInstance] setCategory: AVAudioSessionCategoryAmbient error:nil];
+            [self.redPacketPlayer play];
+            return;
+        }
     }
     if (message.messageType == NIMMessageTypeNotification) return;
     if (message.session.sessionType == NIMSessionTypeP2P) {//个人
@@ -563,6 +574,7 @@
     }
     if (needToPlay) {
         [self.player stop];
+        [self.redPacketPlayer stop];
         [[AVAudioSession sharedInstance] setCategory: AVAudioSessionCategoryAmbient error:nil];
         [self.player play];
     }
