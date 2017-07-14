@@ -479,8 +479,7 @@ RCT_EXPORT_METHOD(getCacheSize:(RCTPromiseResolveBlock)resolve reject:(RCTPromis
     
     NSString *allSize = [NSString stringWithFormat:@"%f",docSize+libSize+tmpNimSize+tmpPickSize];
     NSLog(@"allSize:%@   documentPath:%@",allSize,documentPath);
-    NSArray *events = @[allSize];
-    resolve(events);
+    resolve(allSize);
 }
 
 //清除数据缓存
