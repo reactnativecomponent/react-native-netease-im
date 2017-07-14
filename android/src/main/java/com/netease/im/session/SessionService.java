@@ -138,8 +138,12 @@ public class SessionService {
         if (r.size() > 0) {
             IMMessage m = messages.get(0);
             if (!this.mute && m.getDirect() == MsgDirectionEnum.In) {
-                if(!(m.getMsgType() == MsgTypeEnum.notification||m.getMsgType() == MsgTypeEnum.tip)){
-                    AudioPlayService.getInstance().playAudio(handler, ReactCache.getReactContext(), AudioManager.STREAM_RING, "raw", "msg");
+                if (showMsg(m)) {
+                    if (m.getAttachment() != null && (m.getAttachment() instanceof RedPacketAttachement)) {
+                        AudioPlayService.getInstance().playAudio(handler, ReactCache.getReactContext(), AudioManager.STREAM_RING, "raw", "rp");
+                    } else {
+                        AudioPlayService.getInstance().playAudio(handler, ReactCache.getReactContext(), AudioManager.STREAM_RING, "raw", "msg");
+                    }
                 }
 
             }
@@ -148,6 +152,10 @@ public class SessionService {
 
     }
 
+    boolean showMsg(IMMessage m) {
+        return !(m.getMsgType() == MsgTypeEnum.notification || m.getMsgType() == MsgTypeEnum.tip
+                || (m.getAttachment() != null && (m.getAttachment() instanceof RedPacketOpenAttachement);
+    }
 
     public boolean isMyMessage(IMMessage message) {
         return message.getSessionType() == sessionTypeEnum
