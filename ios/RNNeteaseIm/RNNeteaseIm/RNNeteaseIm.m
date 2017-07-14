@@ -25,7 +25,7 @@ RCT_EXPORT_METHOD(login:(nonnull NSString *)account token:(nonnull NSString *)to
     //请将 NIMMyAccount 以及 NIMMyToken 替换成您自己提交到此App下的账号和密码
     [[NIMSDK sharedSDK].loginManager login:account token:token completion:^(NSError *error) {
         if (!error) {
-        
+            
             [self setSendState];
             [[NIMViewController initWithController] addDelegate];
             [[RNNotificationCenter sharedCenter] start];
@@ -57,17 +57,17 @@ RCT_EXPORT_METHOD(deleteRecentContact:(nonnull NSString * )recentContactId  reso
 //回调最近聊天列表
 RCT_EXPORT_METHOD(getRecentContactList:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject){
-  [[NIMViewController initWithController]getRecentContactListsuccess:^(id param) {
-      resolve(param);
-  } andError:^(NSString *error) {
-      reject(@"-1",error,nil);
-  }];
+    [[NIMViewController initWithController]getRecentContactListsuccess:^(id param) {
+        resolve(param);
+    } andError:^(NSString *error) {
+        reject(@"-1",error,nil);
+    }];
     
 }
 ////清空聊天记录
 //RCT_EXPORT_METHOD(clearMessage:(nonnull  NSString *)sessionId type:(nonnull  NSString *)type){
 //    [[ConversationViewController initWithConversationViewController] clearMsg:sessionId type:type];
-//    
+//
 //}
 //获取本地用户资料
 RCT_EXPORT_METHOD(getUserInfo:(nonnull NSString * )contactId  resolve:(RCTPromiseResolveBlock)resolve
@@ -123,13 +123,13 @@ RCT_EXPORT_METHOD(ackAddFriendRequest:(nonnull  NSString *)targetId msg:(nonnull
         [[NoticeViewController initWithNoticeViewController]onAccept:targetId timestamp:timestamp sucess:^(id param) {
             resolve(param);
         } error:^(id erro) {
-             reject(@"-1",erro, nil);
+            reject(@"-1",erro, nil);
         }];
     }else{
-   [[NoticeViewController initWithNoticeViewController]onRefuse:targetId timestamp:timestamp sucess:^(id param) {
+        [[NoticeViewController initWithNoticeViewController]onRefuse:targetId timestamp:timestamp sucess:^(id param) {
             resolve(param);
         } error:^(id erro) {
-             reject(@"-1",erro, nil);
+            reject(@"-1",erro, nil);
         }];
     }
 }
@@ -203,27 +203,27 @@ RCT_EXPORT_METHOD(getTeamInfo:(nonnull NSString *)teamId resolve:(RCTPromiseReso
 }
 //获取远程群资料
 RCT_EXPORT_METHOD(fetchTeamInfo:(nonnull NSString *)teamId resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
-   [[TeamViewController initWithTeamViewController]fetchTeamInfo:teamId Succ:^(id param) {
-       resolve(param);
-   } Err:^(id erro) {
-       reject(@"-1",erro,nil);
-   }];
+    [[TeamViewController initWithTeamViewController]fetchTeamInfo:teamId Succ:^(id param) {
+        resolve(param);
+    } Err:^(id erro) {
+        reject(@"-1",erro,nil);
+    }];
 }
 //获取群成员
 RCT_EXPORT_METHOD(fetchTeamMemberList:(nonnull NSString *)teamId resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
-   [[TeamViewController initWithTeamViewController] getTeamMemberList:teamId Succ:^(id param) {
-    resolve(param);
-   } Err:^(id erro) {
-    reject(@"-1",erro,nil);
-   }];
+    [[TeamViewController initWithTeamViewController] getTeamMemberList:teamId Succ:^(id param) {
+        resolve(param);
+    } Err:^(id erro) {
+        reject(@"-1",erro,nil);
+    }];
 }
 //开启/关闭群组消息提醒
 RCT_EXPORT_METHOD(setTeamNotify:(nonnull NSString *)teamId needNotify:(nonnull NSString *)needNotify resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
-   [[TeamViewController initWithTeamViewController]muteTeam:teamId mute:needNotify Succ:^(id param) {
-       resolve(param);
-   } Err:^(id erro) {
-       reject(@"-1",erro,nil);
-   }];
+    [[TeamViewController initWithTeamViewController]muteTeam:teamId mute:needNotify Succ:^(id param) {
+        resolve(param);
+    } Err:^(id erro) {
+        reject(@"-1",erro,nil);
+    }];
 }
 //好友消息提醒开关
 RCT_EXPORT_METHOD(setMessageNotify:(nonnull NSString *)contactId needNotify:(nonnull NSString *)needNotify resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
@@ -243,11 +243,11 @@ RCT_EXPORT_METHOD(dismissTeam:(nonnull NSString *)teamId resolve:(RCTPromiseReso
 }
 //拉人入群
 RCT_EXPORT_METHOD(addMembers:(nonnull NSString *)teamId accounts:(nonnull NSArray *)accounts resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
-   [[TeamViewController initWithTeamViewController] addMembers:teamId accounts:accounts Succ:^(id param) {
-     resolve(param);
-   } Err:^(id erro) {
-     reject(@"-1",erro,nil);
-   }];
+    [[TeamViewController initWithTeamViewController] addMembers:teamId accounts:accounts Succ:^(id param) {
+        resolve(param);
+    } Err:^(id erro) {
+        reject(@"-1",erro,nil);
+    }];
 }
 //踢人出群
 RCT_EXPORT_METHOD(removeMember:(nonnull NSString *)teamId accounts:(nonnull NSArray *)count resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
@@ -321,7 +321,7 @@ RCT_EXPORT_METHOD(queryMessageListEx:(nonnull  NSString *)messageId limit:(int)l
     } err:^(id erro) {
         reject(@"-1",erro, nil);
     }];
-   
+    
 }
 //本地历史记录
 RCT_EXPORT_METHOD(queryMessageEx:(nonnull  NSString *)sessionId sessionType:(nonnull  NSString *)sessionType timeLong:(nonnull  NSString *)timeLong direction:(nonnull  NSString *)direction limit:(nonnull  NSString *)limit   asc:(BOOL)asc resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
@@ -331,15 +331,15 @@ RCT_EXPORT_METHOD(queryMessageEx:(nonnull  NSString *)sessionId sessionType:(non
 }
 //转发消息
 RCT_EXPORT_METHOD(sendForwardMessage:(nonnull NSString *)messageId sessionId:(nonnull NSString *)sessionId sessionType:(nonnull NSString *)sessionType content:(nonnull NSString *)content resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
-        [[ConversationViewController initWithConversationViewController]forwardMessage:messageId sessionId:sessionId sessionType:sessionType content:content success:^(id param) {
-            resolve(param);
-        }];
+    [[ConversationViewController initWithConversationViewController]forwardMessage:messageId sessionId:sessionId sessionType:sessionType content:content success:^(id param) {
+        resolve(param);
+    }];
 }
 //撤回消息
 RCT_EXPORT_METHOD(revokeMessage:(nonnull NSString *)messageId  resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
-   [[ConversationViewController initWithConversationViewController]revokeMessage:messageId success:^(id param) {
-       resolve(param);
-   }];
+    [[ConversationViewController initWithConversationViewController]revokeMessage:messageId success:^(id param) {
+        resolve(param);
+    }];
 }
 //删除会话内容
 RCT_EXPORT_METHOD(deleteMessage:(nonnull NSString *)messageId){
@@ -427,7 +427,7 @@ RCT_EXPORT_METHOD(sendBankTransferMessage:(NSString *)amount comments:(NSString 
 
 //发送提醒消息
 RCT_EXPORT_METHOD(sendTipMessage:(nonnull  NSString *)content){
-//    [[ConversationViewController initWithConversationViewController]sendMessage:content];
+    //    [[ConversationViewController initWithConversationViewController]sendMessage:content];
 }
 //获取黑名单列表
 RCT_EXPORT_METHOD(startBlackList){
@@ -437,11 +437,11 @@ RCT_EXPORT_METHOD(stopBlackList){
 }
 //添加黑名单
 RCT_EXPORT_METHOD(addToBlackList:(nonnull NSString *)contactId  resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
-     [[BankListViewController initWithBankListViewController]addToBlackList:contactId success:^(id param) {
-         resolve(param);
-     } Err:^(id erro) {
-       reject(@"-1",erro, nil);
-     }];
+    [[BankListViewController initWithBankListViewController]addToBlackList:contactId success:^(id param) {
+        resolve(param);
+    } Err:^(id erro) {
+        reject(@"-1",erro, nil);
+    }];
 }
 //移出黑名单
 RCT_EXPORT_METHOD(removeFromBlackList:(nonnull NSString *)contactId  resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
@@ -472,9 +472,12 @@ RCT_EXPORT_METHOD(getCacheSize:(RCTPromiseResolveBlock)resolve reject:(RCTPromis
     CGFloat libSize = [self folderSizeAtPath:libCachePath];
     
     NSString *tmpPath = NSTemporaryDirectory();
-    CGFloat tmpSize = [self folderSizeAtPath:tmpPath];
+    NSString *tmpNimPath = [tmpPath stringByAppendingPathComponent:@"NIM"];
+    NSString *tmpPickPath = [tmpPath stringByAppendingPathComponent:@"react-native-image-crop-picker"];
+    CGFloat tmpNimSize = [self folderSizeAtPath:tmpNimPath];
+    CGFloat tmpPickSize = [self folderSizeAtPath:tmpPickPath];
     
-    NSString *allSize = [NSString stringWithFormat:@"%f",docSize+libSize+tmpSize];
+    NSString *allSize = [NSString stringWithFormat:@"%f",docSize+libSize+tmpNimSize+tmpPickSize];
     NSLog(@"allSize:%@   documentPath:%@",allSize,documentPath);
     NSArray *events = @[allSize];
     resolve(events);
@@ -504,9 +507,13 @@ RCT_EXPORT_METHOD(cleanCache){
     [self deleteFilesWithPath:libCachePath andFiles:libFiles];
     
     NSString *tmpPath = NSTemporaryDirectory();
-    NSArray *tmpFiles = [[NSFileManager defaultManager] subpathsOfDirectoryAtPath:tmpPath error:nil];
-    [self deleteFilesWithPath:tmpPath andFiles:tmpFiles];
-
+    NSString *tmpNimPath = [tmpPath stringByAppendingPathComponent:@"NIM"];
+    NSString *tmpPickPath = [tmpPath stringByAppendingPathComponent:@"react-native-image-crop-picker"];
+    NSArray *tmpNimFiles = [[NSFileManager defaultManager] subpathsOfDirectoryAtPath:tmpNimPath error:nil];
+    [self deleteFilesWithPath:tmpNimPath andFiles:tmpNimFiles];
+    NSArray *tmpPickFiles = [[NSFileManager defaultManager] subpathsOfDirectoryAtPath:tmpPickPath error:nil];
+    [self deleteFilesWithPath:tmpPickPath andFiles:tmpPickFiles];
+    
     [self removAllRecentSessions];
 }
 
@@ -548,7 +555,7 @@ RCT_EXPORT_METHOD(cleanCache){
 - (void)removAllRecentSessions{
     id<NIMConversationManager> manager = [[NIMSDK sharedSDK] conversationManager];
     [manager deleteAllMessages:YES];
-
+    
 }
 
 
@@ -562,7 +569,7 @@ RCT_EXPORT_METHOD(cleanCache){
                 break;
             case 1:
                 //最近会话列表
-//                [_bridge.eventDispatcher sendDeviceEventWithName:@"observeRecentContact" body:@{@"sessionList":param}];
+                //                [_bridge.eventDispatcher sendDeviceEventWithName:@"observeRecentContact" body:@{@"sessionList":param}];
                 [_bridge.eventDispatcher sendDeviceEventWithName:@"observeRecentContact" body:(NSDictionary *)param];
                 break;
             case 2:
