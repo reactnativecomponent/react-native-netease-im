@@ -2,6 +2,7 @@ package com.netease.im.session;
 
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
+import android.content.res.Resources;
 import android.media.AudioManager;
 import android.media.AudioManager.OnAudioFocusChangeListener;
 import android.media.MediaPlayer;
@@ -110,15 +111,18 @@ public final class AudioPlayerM {
     }
 
     public final void setDataSource(Type defType, String name) {
+        type = defType;
         if (defType == Type.file) {
             setDataSource(name);
         } else if (defType == Type.raw) {
-            type = Type.raw;
             int resid = mContext.getResources().getIdentifier(name, "raw", mContext.getPackageName());
-            assetFileDescriptor = mContext.getResources().openRawResourceFd(resid);
+            try {
+                assetFileDescriptor = mContext.getResources().openRawResourceFd(resid);
+            } catch (Resources.NotFoundException e) {
+                e.printStackTrace();
+            }
         } else if (defType == Type.assets) {
             try {
-                type = Type.assets;
                 assetFileDescriptor = mContext.getAssets().openFd(name);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -228,12 +232,16 @@ public final class AudioPlayerM {
         });
 
         try {
-            if (this.mAudioFile != null) {
+            if ((type == Type.file && this.mAudioFile != null) || assetFileDescriptor != null) {
                 if (type == Type.file) {
                     this.mPlayer.setDataSource(this.mAudioFile);
                 } else {
-                    AssetFileDescriptor afd = assetFileDescriptor;
-                    this.mPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+                    AssetFileDescriptor fd = assetFileDescriptor;
+                    if (fd.getDeclaredLength() < 0) {
+                        this.mPlayer.setDataSource(fd.getFileDescriptor());
+                    } else {
+                        this.mPlayer.setDataSource(fd.getFileDescriptor(), fd.getStartOffset(), fd.getDeclaredLength());
+                    }
                 }
                 this.mPlayer.prepare();
                 this.mPlayer.start();

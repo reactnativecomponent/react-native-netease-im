@@ -1,6 +1,8 @@
 package com.netease.im.session;
 
+import android.media.AudioManager;
 import android.net.Uri;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
@@ -75,6 +77,8 @@ public class SessionService {
     private Set<String> timedItems = new HashSet<>(); // 需要显示消息时间的消息ID
     private IMMessage lastShowTimeItem; // 用于消息时间显示,判断和上条消息间的时间间隔
 
+    private Handler handler;
+
     private SessionService() {
     }
 
@@ -127,6 +131,9 @@ public class SessionService {
             updateShowTimeItem(addedListItems, false);
         }
         List<IMMessage> r = onQuery(addedListItems);
+        if (r.size() > 0) {
+            AudioPlayService.getInstance().playAudio(handler, ReactCache.getReactContext(), AudioManager.STREAM_RING, "raw", "msg");
+        }
         refreshMessageList(r);
 
     }
@@ -518,8 +525,9 @@ public class SessionService {
 
     /****************************** 消息处理 ***********************************/
 
-    public void startSession(String sessionId, String type) {
+    public void startSession(Handler handler, String sessionId, String type) {
         clear();
+        this.handler = handler;
         this.sessionId = sessionId;
         sessionTypeEnum = SessionUtil.getSessionType(type);
         registerObservers(true);

@@ -52,9 +52,11 @@ public class AudioPlayService implements SensorEventListener {
         if (TextUtils.isEmpty(filePath)) {
             return;
         }
-
+        LogUtil.i(type, "path:" + filePath);
         if (audioStreamType == -1) {
             register(context, true);
+        }else {
+            currentAudioStreamType = audioStreamType;
         }
         if (isPlayingAudio()) {
             stopAudio(handler);
@@ -70,7 +72,9 @@ public class AudioPlayService implements SensorEventListener {
         }
 //        ReactCache.emit(ReactCache.observeAudioRecord, ReactCache.createAudioPlay("Volume", context.getCurrentActivity().getVolumeControlStream()));
 
-        context.getCurrentActivity().setVolumeControlStream(currentAudioStreamType); // 默认使用听筒播放
+        if (context.getCurrentActivity() != null) {
+            context.getCurrentActivity().setVolumeControlStream(currentAudioStreamType); // 默认使用听筒播放
+        }
         if (TextUtils.equals(type, SCHEME_FILE)) {
             currentAudioPlayer.setDataSource(filePath);
         } else if (TextUtils.equals(type, SCHEME_RAW)) {

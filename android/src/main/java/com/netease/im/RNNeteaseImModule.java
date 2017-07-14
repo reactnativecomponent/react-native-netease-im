@@ -1453,7 +1453,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
 
             return;
         }
-        sessionService.startSession(sessionId, type);
+        sessionService.startSession(handler, sessionId, type);
     }
 
     /**
@@ -1653,7 +1653,13 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
     public void playLocal(String resourceFile, String type, Promise promise) {
 
         Uri uri = Uri.parse(resourceFile);
-        audioPlayService.playAudio(handler, reactContext, AudioManager.STREAM_MUSIC, uri.getScheme(), uri.getPath());
+        LogUtil.i(TAG, "scheme:" + uri.getScheme());
+        String filePath = uri.getPath();
+        if(filePath.startsWith("/")){
+            filePath = filePath.substring(1);
+        }
+        LogUtil.i(TAG, "path:" + filePath);
+        audioPlayService.playAudio(handler, reactContext, AudioManager.STREAM_RING, uri.getScheme(), filePath);
     }
 
     /**
