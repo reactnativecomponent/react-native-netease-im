@@ -13,7 +13,9 @@ import java.util.List;
 public class RNNeteaseImPackage implements ReactPackage {
     @Override
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
-      return Arrays.<NativeModule>asList(new RNNeteaseImModule(reactContext));
+      return Arrays.<NativeModule>asList(
+              new RNAppCacheUtilModule(reactContext),
+              new RNNeteaseImModule(reactContext));
     }
 
     @Override

@@ -112,7 +112,7 @@ public class IMApplication {
         @Override
         public void onEvent(CustomNotification customNotification) {
             NotificationManager notificationManager = (NotificationManager) IMApplication.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-            SessionUtil.receiver(notificationManager,customNotification);
+            SessionUtil.receiver(notificationManager, customNotification);
         }
     };
 
@@ -139,9 +139,10 @@ public class IMApplication {
         return LoginService.getInstance().getLoginInfo(context);
     }
 
-    public static String getSdkStorageRooPath(){
+    public static String getSdkStorageRooPath() {
         return Environment.getExternalStorageDirectory() + "/" + context.getPackageName() + "/nim";
     }
+
     private static SDKOptions getOptions(Context context) {
         SDKOptions options = new SDKOptions();
 
@@ -271,6 +272,7 @@ public class IMApplication {
             }
         }, true);
     }
+
     // 初始化用户信息提供者
     private static void initUserInfoProvider(UserInfoProvider userInfoProvider) {
 
