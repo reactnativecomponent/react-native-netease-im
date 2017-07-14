@@ -444,8 +444,10 @@
     message.timestamp = timestamp;
     if(![sendId isEqualToString:strMyId]){
         NSDictionary *dataDict = @{@"type":@"2",@"data":@{@"dict":dict,@"timestamp":[NSString stringWithFormat:@"%f",timestamp],@"sessionId":_session.sessionId,@"sessionType":[NSString stringWithFormat:@"%zd",_session.sessionType]}};
+        
+        NSString *content = [self jsonStringWithDictionary:dataDict];
         NIMSession *redSession = [NIMSession session:sendId type:NIMSessionTypeP2P];
-        NIMCustomSystemNotification *notifi = [[NIMCustomSystemNotification alloc]initWithContent:@""];
+        NIMCustomSystemNotification *notifi = [[NIMCustomSystemNotification alloc]initWithContent:content];
         notifi.sendToOnlineUsersOnly = NO;
         NIMCustomSystemNotificationSetting *setting = [[NIMCustomSystemNotificationSetting alloc]init];
         setting.shouldBeCounted = NO;
@@ -455,8 +457,23 @@
         [[NIMSDK sharedSDK].systemNotificationManager sendCustomNotification:notifi toSession:redSession completion:nil];//发送自定义通知
     }
     [[NIMSDK sharedSDK].conversationManager saveMessage:message forSession:_session completion:nil];
+    
 }
 
+// dict字典转json字符串
+- (NSString *)jsonStringWithDictionary:(NSDictionary *)dict
+{
+    if (dict && 0 != dict.count)
+    {
+        NSError *error = nil;
+        // NSJSONWritingOptions 是"NSJSONWritingPrettyPrinted"的话有换位符\n；是"0"的话没有换位符\n。
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dict options:0 error:&error];
+        NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+        return jsonString;
+    }
+    
+    return nil;
+}
 
 
 //设置好友消息提醒
@@ -520,7 +537,10 @@
                                                   completion:nil];
         //标记已读消息
         [[NIMSDK sharedSDK].conversationManager markAllMessagesReadInSession:_session];
-        [self playTipsMusicWithMessage:message];
+        
+        if (![message.from isEqualToString:[NIMSDK sharedSDK].loginManager.currentAccount]) {
+            [self playTipsMusicWithMessage:message];
+        }
     }
 }
 

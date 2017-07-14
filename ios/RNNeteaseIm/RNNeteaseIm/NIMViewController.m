@@ -302,7 +302,7 @@
         default:
             text = @"[未知消息]";
     }
-    if (lastMessage.session.sessionType == NIMSessionTypeP2P || lastMessage.messageType == NIMMessageTypeTip || lastMessage.messageType == NIMMessageTypeCustom) {
+    if ((lastMessage.session.sessionType == NIMSessionTypeP2P) || (lastMessage.messageType == NIMMessageTypeTip)||([lastMessage.from isEqualToString:[NIMSDK sharedSDK].loginManager.currentAccount]) ) {
         return text;
     }else{
         NSString *nickName = [NIMKitUtil showNick:lastMessage.from inSession:lastMessage.session];
