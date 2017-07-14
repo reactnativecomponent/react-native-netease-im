@@ -38,6 +38,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
 }
+
 //监听网络
 #pragma mark - NIMLoginManagerDelegate
 - (void)onLogin:(NIMLoginStep)step{

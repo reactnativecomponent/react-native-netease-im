@@ -219,20 +219,30 @@ RCT_EXPORT_METHOD(fetchTeamMemberList:(nonnull NSString *)teamId resolve:(RCTPro
 }
 //开启/关闭群组消息提醒
 RCT_EXPORT_METHOD(setTeamNotify:(nonnull NSString *)teamId needNotify:(nonnull NSString *)needNotify resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
+    __weak typeof(self)weakSelf = self;
     [[TeamViewController initWithTeamViewController]muteTeam:teamId mute:needNotify Succ:^(id param) {
         resolve(param);
+        [weakSelf updateMessageList];
     } Err:^(id erro) {
         reject(@"-1",erro,nil);
     }];
 }
 //好友消息提醒开关
 RCT_EXPORT_METHOD(setMessageNotify:(nonnull NSString *)contactId needNotify:(nonnull NSString *)needNotify resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
+    __weak typeof(self)weakSelf = self;
     [[ConversationViewController initWithConversationViewController]muteMessage:contactId mute:needNotify Succ:^(id param) {
         resolve(param);
+        [weakSelf updateMessageList];
     } Err:^(id erro) {
         reject(@"-1",erro,nil);
     }];
 }
+//刷新最近会话列表
+- (void)updateMessageList{
+    [[NIMViewController initWithController]getResouces];
+    NSLog(@"---updateMessageList");
+}
+
 //解散群
 RCT_EXPORT_METHOD(dismissTeam:(nonnull NSString *)teamId resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
     [[TeamViewController initWithTeamViewController] dismissTeam:teamId Succ:^(id param) {
