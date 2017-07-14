@@ -23,6 +23,7 @@ public class RNAppCacheUtilModule extends ReactContextBaseJavaModule {
     private final static String NAME = "AppCacheUtil";
 
     private ReactContext reactContext;
+
     public RNAppCacheUtilModule(ReactApplicationContext reactContext) {
         super(reactContext);
         this.reactContext = reactContext;
@@ -53,18 +54,25 @@ public class RNAppCacheUtilModule extends ReactContextBaseJavaModule {
             }
         });
     }
+
     @ReactMethod
     public void saveImageToAlbum(String filePath, final Promise promise) {
 
         File imageFile = new File(filePath);
-        if(imageFile.exists()){
+        if (imageFile.exists()) {
             try {
-                MediaStore.Images.Media.insertImage(reactContext.getContentResolver(), imageFile.getAbsolutePath(), "title", "description");
+                String path = MediaStore.Images.Media.insertImage(reactContext.getContentResolver(), imageFile.getAbsolutePath(), "title", "description");
                 reactContext.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + imageFile.getAbsolutePath())));
+                if (new File(path).exists()) {
+                    promise.resolve("200");
+                } else {
+                    promise.reject("-1", "");
+                }
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
-
+        } else {
+            promise.reject("-1", "");
         }
 
 
