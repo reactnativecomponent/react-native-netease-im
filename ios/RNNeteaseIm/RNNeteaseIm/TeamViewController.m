@@ -336,9 +336,9 @@ NSMutableArray *_myTeams;
 - (NSMutableArray *)fetchTeams{
     NSMutableArray *myTeams = [[NSMutableArray alloc]init];
     for (NIMTeam *team in [NIMSDK sharedSDK].teamManager.allMyTeams) {
-        if (team.type == NIMTeamTypeNormal) {
+//        if (team.type == NIMTeamTypeNormal) {
             [myTeams addObject:team];
-        }
+//        }
     }
     return myTeams;
 }

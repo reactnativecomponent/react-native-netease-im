@@ -54,8 +54,10 @@
     if(self) {
         NSURL *url = [[NSBundle mainBundle] URLForResource:@"message" withExtension:@"wav"];
         _player = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:nil];
+        _player.volume = 1.0;
         NSURL *redPackUrl = [[NSBundle mainBundle] URLForResource:@"packet_tip" withExtension:@"wav"];
         _redPacketPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:redPackUrl error:nil];
+        _redPacketPlayer.volume = 1.0;
     }
     return self;
 }
