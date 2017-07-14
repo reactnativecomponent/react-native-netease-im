@@ -55,7 +55,7 @@ public class AudioPlayService implements SensorEventListener {
         LogUtil.i(type, "path:" + filePath);
         if (audioStreamType == -1) {
             register(context, true);
-        }else {
+        } else {
             currentAudioStreamType = audioStreamType;
         }
         if (isPlayingAudio()) {
@@ -80,6 +80,9 @@ public class AudioPlayService implements SensorEventListener {
         } else if (TextUtils.equals(type, SCHEME_RAW)) {
             currentAudioPlayer.setDataSource(AudioPlayerM.Type.raw, filePath);
         } else if (TextUtils.equals(type, SCHEME_ASSETS)) {
+            if (filePath.indexOf(".") == -1) {
+                filePath = filePath + "." + type;
+            }
             currentAudioPlayer.setDataSource(AudioPlayerM.Type.assets, filePath);
         }
 
