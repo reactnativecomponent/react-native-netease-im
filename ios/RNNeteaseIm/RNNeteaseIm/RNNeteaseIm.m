@@ -290,7 +290,7 @@ RCT_EXPORT_METHOD(stopTeamList){
 RCT_EXPORT_METHOD(startSystemMsg){
     [[NoticeViewController initWithNoticeViewController] initWithDelegate];
 }
-//获取系统消息
+//停止系统消息
 RCT_EXPORT_METHOD(stopSystemMsg){
     [[NoticeViewController initWithNoticeViewController] stopSystemMsg];
 }
@@ -397,10 +397,17 @@ RCT_EXPORT_METHOD(cancelAudioRecord){
 RCT_EXPORT_METHOD(play:(nonnull NSString *)filepath){
     [[ConversationViewController initWithConversationViewController]play:filepath];
 }
+//播放本地资源录音
+RCT_EXPORT_METHOD(playLocacl:(nonnull NSString *)name type:(nonnull NSString *)type){
+    NSString *path = [[NSBundle mainBundle] pathForResource:name ofType:type];
+    [[ConversationViewController initWithConversationViewController]play:path];
+}
+
 //停止播放
 RCT_EXPORT_METHOD(stopPlay){
     [[ConversationViewController initWithConversationViewController]stopPlay];
 }
+
 
 //发送红包消息
 RCT_EXPORT_METHOD(sendRedPacketMessage:(NSString *)type comments:(NSString *)comments serialNo:(NSString *)serialNo){
@@ -444,6 +451,106 @@ RCT_EXPORT_METHOD(removeFromBlackList:(nonnull NSString *)contactId  resolve:(RC
         reject(@"-1",erro, nil);
     }];
 }
+
+//获取缓存大小
+RCT_EXPORT_METHOD(getCacheSize:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
+    NSString *documentPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    NSString *strDocPath = @"";
+    NSArray *files = [[NSFileManager defaultManager] subpathsOfDirectoryAtPath:documentPath error:nil];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:documentPath]) {
+        for (NSString *file in files) {
+            if ([file hasSuffix:@"Global/Resources"]) {
+                strDocPath = file;
+                break;
+            }
+        }
+    }
+    CGFloat docSize = [self folderSizeAtPath:strDocPath];
+    
+    NSString *libraryPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    NSString *libCachePath =  [libraryPath stringByAppendingPathComponent:@"Caches"];
+    CGFloat libSize = [self folderSizeAtPath:libCachePath];
+    
+    NSString *tmpPath = NSTemporaryDirectory();
+    CGFloat tmpSize = [self folderSizeAtPath:tmpPath];
+    
+    NSString *allSize = [NSString stringWithFormat:@"%f",docSize+libSize+tmpSize];
+    NSLog(@"allSize:%@   documentPath:%@",allSize,documentPath);
+    NSArray *events = @[allSize];
+    resolve(events);
+}
+
+//清除数据缓存
+RCT_EXPORT_METHOD(cleanCache){
+    //Document
+    NSString *documentPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    NSString *strDocPath = @"";
+    NSArray *files = [[NSFileManager defaultManager] subpathsOfDirectoryAtPath:documentPath error:nil];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:documentPath]) {
+        for (NSString *file in files) {
+            if ([file hasSuffix:@"Global/Resources"]) {
+                strDocPath = file;
+                break;
+            }
+        }
+    }
+    NSArray *ResourcesFiles = [[NSFileManager defaultManager] subpathsOfDirectoryAtPath:strDocPath error:nil];
+    [self deleteFilesWithPath:strDocPath andFiles:ResourcesFiles];
+    
+    //Library
+    NSString *libraryPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    NSString *libCachePath =  [libraryPath stringByAppendingPathComponent:@"Caches"];
+    NSArray *libFiles = [[NSFileManager defaultManager] subpathsOfDirectoryAtPath:libCachePath error:nil];
+    [self deleteFilesWithPath:libCachePath andFiles:libFiles];
+    
+    NSString *tmpPath = NSTemporaryDirectory();
+    NSArray *tmpFiles = [[NSFileManager defaultManager] subpathsOfDirectoryAtPath:tmpPath error:nil];
+    [self deleteFilesWithPath:tmpPath andFiles:tmpFiles];
+
+    [self removAllRecentSessions];
+}
+
+//删除文件夹下所有文件
+- (void)deleteFilesWithPath:(NSString *)path andFiles:(NSArray *)files{
+    if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
+        for (NSString *file in files) {
+            NSFileManager *fileMgr = [NSFileManager defaultManager];
+            NSError *err;
+            NSString *filePath = [path stringByAppendingPathComponent:file];
+            [fileMgr removeItemAtPath:filePath error:&err];
+        }
+    }
+}
+
+//单个文件的大小
+- (long long)fileSizeAtPath:(NSString*) filePath{
+    NSFileManager* manager = [NSFileManager defaultManager];
+    if ([manager fileExistsAtPath:filePath]){
+        return [[manager attributesOfItemAtPath:filePath error:nil] fileSize];
+    }
+    return 0;
+}
+
+//遍历文件夹获得文件夹大小，返回多少M
+- (float )folderSizeAtPath:(NSString*) folderPath{
+    NSFileManager* manager = [NSFileManager defaultManager];
+    if (![manager fileExistsAtPath:folderPath]) return 0;
+    NSEnumerator *childFilesEnumerator = [[manager subpathsAtPath:folderPath] objectEnumerator];
+    NSString* fileName;
+    long long folderSize = 0;
+    while ((fileName = [childFilesEnumerator nextObject]) != nil){
+        NSString* fileAbsolutePath = [folderPath stringByAppendingPathComponent:fileName];
+        folderSize += [self fileSizeAtPath:fileAbsolutePath];
+    }
+    return folderSize/(1024.0*1024.0);
+}
+//删除最近会话列表
+- (void)removAllRecentSessions{
+    id<NIMConversationManager> manager = [[NIMSDK sharedSDK] conversationManager];
+    [manager deleteAllMessages:YES];
+
+}
+
 
 -(void)setSendState{
     NIMModel *mod = [NIMModel initShareMD];

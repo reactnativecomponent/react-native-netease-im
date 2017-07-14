@@ -41,32 +41,8 @@
 //监听网络
 #pragma mark - NIMLoginManagerDelegate
 - (void)onLogin:(NIMLoginStep)step{
-    switch (step) {
-        case NIMLoginStepLinkFailed:
-            [NIMModel initShareMD].NetStatus = @"未连接";
-            break;
-        case NIMLoginStepLinking:
-            [NIMModel initShareMD].NetStatus = @"连接中";
-            break;
-        case NIMLoginStepLinkOK:
-        case NIMLoginStepSyncOK:
-            [self getResouces];
-            [NIMModel initShareMD].NetStatus = @"飞马钱包";
-            break;
-        case NIMLoginStepSyncing:
-            [self getResouces];
-            [NIMModel initShareMD].NetStatus = @"同步数据";
-            break;
-        case  NIMLoginStepLoseConnection:
-            [NIMModel initShareMD].NetStatus = @"连接断开";
-            break;
-        case  NIMLoginStepNetChanged:
-            [NIMModel initShareMD].NetStatus = @"网络切换";
-            break;
-        default:
-            break;
-    }
-    
+    NSString *strStatus = [NSString stringWithFormat:@"%zd",step];
+    [NIMModel initShareMD].NetStatus = strStatus;
 }
 //删除一行
 -(void)deleteCurrentSession:(NSString *)recentContactId andback:(ERROR)error{
@@ -121,6 +97,13 @@
               totalUnreadCount:(NSInteger)totalUnreadCount{
     [self getResouces];
 }
+//删除所有会话回调
+- (void)allMessagesDeleted{
+    [self getResouces];
+}
+
+
+
 -(void)getRecentContactListsuccess:(SUCCESS)suc andError:(ERROR)err{
     NSArray *NIMlistArr = [[NIMSDK sharedSDK].conversationManager.allRecentSessions mutableCopy];
     NSMutableArray *sessionList = [NSMutableArray array];
