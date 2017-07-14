@@ -6,8 +6,11 @@ import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.netease.im.IMApplication;
 import com.netease.im.session.extension.RedPacketOpenAttachement;
+import com.netease.im.uikit.common.util.log.LogUtil;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.msg.MessageBuilder;
 import com.netease.nimlib.sdk.msg.MsgService;
@@ -88,6 +91,7 @@ public class SessionUtil {
     }
 
     public static void receiver(NotificationManager manager, CustomNotification customNotification) {
+        LogUtil.i("SessionUtil", customNotification.getFromAccount());
         Map<String, Object> map = customNotification.getPushPayload();
         if (map != null && map.containsKey("type")) {
             String type = (String) map.get("type");
@@ -101,32 +105,37 @@ public class SessionUtil {
                 builder.setContentIntent(contentIntent);
                 builder.setSmallIcon(IMApplication.getNotify_msg_drawable_id());
                 manager.notify((int) System.currentTimeMillis(), builder.build());
-            } else if (SessionUtil.CUSTOM_Notification_redpacket_open.equals(type)) {
-                Map<String, Object> data = (Map<String, Object>) map.get("data");
+            } else {
+                String content = customNotification.getContent();
+                if (!TextUtils.isEmpty(content)) {
+                    JSONObject object = JSON.parseObject(content);
+                    JSONObject data = object.getJSONObject("data");
 
-                Map<String, Object> dict = (Map<String, Object>) data.get("dict");
-                String sendId = (String) dict.get("sendId");
-                String openId = (String) dict.get("openId");
-                String hasRedPacket = (String) dict.get("hasRedPacket");
-                String serialNo = (String) dict.get("serialNo");
+                    JSONObject dict = data.getJSONObject("dict");
+                    String sendId = dict.getString("sendId");
+                    String openId = dict.getString("openId");
+                    String hasRedPacket = dict.getString("hasRedPacket");
+                    String serialNo = dict.getString("serialNo");
 
-                String timestamp = (String) data.get("timestamp");
-                long t = 0L;
-                try {
-                    t = Long.parseLong(timestamp);
-                } catch (NumberFormatException e) {
-                    t = System.currentTimeMillis() / 1000;
-                    e.printStackTrace();
-                }
+                    String timestamp = data.getString("timestamp");
+                    long t = 0L;
+                    try {
+                        t = Long.parseLong(timestamp);
+                    } catch (NumberFormatException e) {
+                        t = System.currentTimeMillis() / 1000;
+                        e.printStackTrace();
+                    }
 //                LogUtil.i("timestamp","timestamp:"+timestamp);
 //                LogUtil.i("timestamp","t:"+t);
 //                LogUtil.i("timestamp",""+data);
-                String sessionId = (String) data.get("sessionId");
-                String sessionType = (String) data.get("sessionType");
-                final String id = getSessionType(sessionType) == SessionTypeEnum.P2P ? openId : sessionId;
-                sendRedPacketOpenLocal(id, getSessionType(sessionType), sendId, openId, hasRedPacket, serialNo, t);
+                    String sessionId = (String) data.get("sessionId");
+                    String sessionType = (String) data.get("sessionType");
+                    final String id = getSessionType(sessionType) == SessionTypeEnum.P2P ? openId : sessionId;
+                    sendRedPacketOpenLocal(id, getSessionType(sessionType), sendId, openId, hasRedPacket, serialNo, t);
+                }
             }
         }
+
     }
 
     /**

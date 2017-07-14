@@ -1895,6 +1895,27 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
         NIMClient.getService(SystemMessageService.class).resetSystemMessageUnreadCount();
     }
 
+
+    @ReactMethod
+    public void getCacheSize(final Promise promise) {
+        FileCacheUtil.getCacheSie(new FileCacheUtil.OnObserverGet() {
+            @Override
+            public void onGetCacheSize(String size) {
+                promise.resolve(size);
+            }
+        });
+    }
+
+    @ReactMethod
+    public void cleanCache(final Promise promise) {
+        FileCacheUtil.cleanCache(new FileCacheUtil.OnObserverClean() {
+
+            @Override
+            public void onCleanCache(boolean succeeded) {
+                promise.resolve("" + succeeded);
+            }
+        });
+    }
     void showTip(final String tip) {
         handler.post(new Runnable() {
             @Override
