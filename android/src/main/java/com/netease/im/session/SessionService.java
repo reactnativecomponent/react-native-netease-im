@@ -17,6 +17,7 @@ import com.netease.im.session.extension.CustomAttachmentType;
 import com.netease.im.session.extension.DefaultCustomAttachment;
 import com.netease.im.session.extension.RedPacketAttachement;
 import com.netease.im.session.extension.RedPacketOpenAttachement;
+import com.netease.im.uikit.cache.TeamDataCache;
 import com.netease.im.uikit.common.util.log.LogUtil;
 import com.netease.im.uikit.common.util.string.MD5;
 import com.netease.im.uikit.session.helper.MessageHelper;
@@ -28,6 +29,7 @@ import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.RequestCallbackWrapper;
 import com.netease.nimlib.sdk.ResponseCode;
+import com.netease.nimlib.sdk.friend.FriendService;
 import com.netease.nimlib.sdk.msg.MessageBuilder;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
@@ -44,6 +46,7 @@ import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.msg.model.MemberPushOption;
 import com.netease.nimlib.sdk.msg.model.MessageReceipt;
 import com.netease.nimlib.sdk.msg.model.QueryDirectionEnum;
+import com.netease.nimlib.sdk.team.model.Team;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -78,6 +81,7 @@ public class SessionService {
     private IMMessage lastShowTimeItem; // 用于消息时间显示,判断和上条消息间的时间间隔
 
     private Handler handler;
+    private boolean mute = false;
 
     private SessionService() {
     }
@@ -131,7 +135,7 @@ public class SessionService {
             updateShowTimeItem(addedListItems, false);
         }
         List<IMMessage> r = onQuery(addedListItems);
-        if (r.size() > 0) {
+        if (!this.mute && r.size() > 0) {
             AudioPlayService.getInstance().playAudio(handler, ReactCache.getReactContext(), AudioManager.STREAM_RING, "raw", "msg");
         }
         refreshMessageList(r);
@@ -529,7 +533,15 @@ public class SessionService {
         clear();
         this.handler = handler;
         this.sessionId = sessionId;
+
         sessionTypeEnum = SessionUtil.getSessionType(type);
+
+        if (sessionTypeEnum == SessionTypeEnum.P2P) {
+            this.mute = !NIMClient.getService(FriendService.class).isNeedMessageNotify(sessionId);
+        } else {
+            Team t = TeamDataCache.getInstance().getTeamById(sessionId);
+            this.mute = t.mute();
+        }
         registerObservers(true);
         getMsgService().setChattingAccount(sessionId, sessionTypeEnum);
     }

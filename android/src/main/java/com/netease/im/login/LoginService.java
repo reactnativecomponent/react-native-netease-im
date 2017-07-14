@@ -105,7 +105,7 @@ public class LoginService {
 
     volatile boolean hasRegister;
 
-    RecentContactObserver recentContactObserver = new RecentContactObserver();
+    RecentContactObserver recentContactObserver = RecentContactObserver.getInstance();
 //    SysMessageObserver sysMessageObserver = new SysMessageObserver();
 
     synchronized void registerObserver(boolean register) {
