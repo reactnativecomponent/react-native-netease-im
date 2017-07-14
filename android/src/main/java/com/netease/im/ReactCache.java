@@ -190,11 +190,9 @@ public class ReactCache {
                 map.putString("nick", fromNick);
                 String teamNick = "";
                 if (contact.getSessionType() == SessionTypeEnum.Team && !TextUtils.equals(LoginService.getInstance().getAccount(), fromAccount)) {
-
+                    String tid = contact.getContactId();
+                    teamNick = getTeamUserDisplayName(tid, fromAccount)+": ";
                     if ((contact.getAttachment() instanceof NotificationAttachment)) {
-                        String tid = contact.getContactId();
-                        teamNick = getTeamUserDisplayName(tid, fromAccount);
-                        teamNick += ": ";
                         if (AitHelper.hasAitExtention(contact)) {
                             if (contact.getUnreadCount() == 0) {
                                 AitHelper.clearRecentContactAited(contact);
