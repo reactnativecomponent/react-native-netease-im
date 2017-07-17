@@ -77,7 +77,7 @@ public class NimUserInfoCache {
 
             @Override
             public void onResult(int code, List<NimUserInfo> users, Throwable exception) {
-                if (exception != null&&callback != null) {
+                if (exception != null && callback != null) {
                     callback.onException(exception);
                     return;
                 }
@@ -198,7 +198,6 @@ public class NimUserInfoCache {
     }
 
     /**
-     *
      * @param account
      * @return
      */
@@ -230,7 +229,7 @@ public class NimUserInfoCache {
     }
 
     public String getUserDisplayNameEx(String account) {
-        if (account.equals(LoginService.getInstance().getAccount())) {
+        if (TextUtils.equals(account, LoginService.getInstance().getAccount())) {
             return "我";
         }
 
@@ -238,7 +237,7 @@ public class NimUserInfoCache {
     }
 
     public String getUserDisplayNameYou(String account) {
-        if (account.equals(LoginService.getInstance().getAccount())) {
+        if (TextUtils.equals(account, LoginService.getInstance().getAccount())) {
             return "你";  // 若为用户自己，显示“你”
         }
 

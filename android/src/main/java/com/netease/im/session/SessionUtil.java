@@ -131,7 +131,7 @@ public class SessionUtil {
 //                LogUtil.i("timestamp",""+data);
                 String sessionId = data.getString("sessionId");
                 String sessionType = data.getString("sessionType");
-                final String id = getSessionType(sessionType) == SessionTypeEnum.P2P ? openId : sessionId;
+                final String id =  sessionId;//getSessionType(sessionType) == SessionTypeEnum.P2P ? openId :
                 sendRedPacketOpenLocal(id, getSessionType(sessionType), sendId, openId, hasRedPacket, serialNo, t);
             }
         }

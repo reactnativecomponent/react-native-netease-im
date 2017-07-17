@@ -981,7 +981,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
     }
 
     boolean string2Boolean(String bool) {
-        return TextUtils.isEmpty(bool) ? false : !bool.equals("0");
+        return TextUtils.isEmpty(bool) ? false : !"0".equals(bool);
     }
 
     /**

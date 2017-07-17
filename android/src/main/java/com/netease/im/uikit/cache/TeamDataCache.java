@@ -385,7 +385,7 @@ public class TeamDataCache {
      * @return
      */
     public String getTeamMemberDisplayName(String tid, String account) {
-        if (account.equals(LoginService.getInstance().getAccount())) {
+        if (TextUtils.equals(account, LoginService.getInstance().getAccount())) {
             return "我";
         }
 
@@ -400,7 +400,7 @@ public class TeamDataCache {
      * @return
      */
     public String getTeamMemberDisplayNameYou(String tid, String account) {
-        if (account.equals(LoginService.getInstance().getAccount())) {
+        if (TextUtils.equals(account, LoginService.getInstance().getAccount())) {
             return "你";
         }
 

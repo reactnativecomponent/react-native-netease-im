@@ -7,6 +7,7 @@ import com.facebook.react.bridge.WritableMap;
 import com.netease.im.ReactCache;
 import com.netease.im.uikit.cache.SimpleCallback;
 import com.netease.im.uikit.cache.TeamDataCache;
+import com.netease.im.uikit.common.util.log.LogUtil;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.RequestCallbackWrapper;
@@ -44,6 +45,7 @@ public class RecentContactObserver {
     public static RecentContactObserver getInstance() {
         return InstanceHolder.instance;
     }
+
     /*******************************最近会话********************************/
 
     private List<RecentContact> items = new ArrayList<>();
@@ -55,7 +57,12 @@ public class RecentContactObserver {
             public void onResult(int code, List<RecentContact> recentContacts, Throwable throwable) {
 
                 items.clear();
-                items.addAll(recentContacts);
+                if (recentContacts != null) {
+                    for (RecentContact c : recentContacts) {
+                        doAddDeleteQuitTeamMessage(c, true);
+                    }
+                }
+//                items.addAll(recentContacts);
                 refreshMessages(true);
             }
         });
@@ -74,8 +81,17 @@ public class RecentContactObserver {
 
     }
 
-    private void deleteRecentContact(String contactId, SessionTypeEnum sessionTypeEnum) {
-        NIMClient.getService(MsgService.class).deleteRecentContact2(contactId, sessionTypeEnum);
+    private void deleteRecentContactCallback(RecentContact recent, boolean callback) {
+
+        String contactId = recent.getContactId();
+        SessionTypeEnum sessionTypeEnum = recent.getSessionType();
+        LogUtil.i("deleteRecentContactCallback-","---"+contactId);
+        LogUtil.i("deleteRecentContactCallback-","---"+recent.getContent());
+        if (callback) {
+            NIMClient.getService(MsgService.class).deleteRecentContact2(contactId, sessionTypeEnum);
+        } else {
+            NIMClient.getService(MsgService.class).deleteRecentContact(recent);
+        }
         NIMClient.getService(MsgService.class).clearChattingHistory(contactId, sessionTypeEnum);
     }
 
@@ -87,7 +103,7 @@ public class RecentContactObserver {
         for (RecentContact recent : items) {
             String contactId = recent.getContactId();
             if (rContactId.equals(contactId)) {
-                deleteRecentContact(contactId, recent.getSessionType());
+                deleteRecentContactCallback(recent, true);
                 result = true;
                 break;
             }
@@ -127,7 +143,7 @@ public class RecentContactObserver {
                 if (t.isMyTeam()) {
                     items.add(r);
                 } else {
-                    deleteRecentContact(contactId, r.getSessionType());
+                    deleteRecentContactCallback(r, false);
                 }
             } else {
                 TeamDataCache.getInstance().fetchTeamById(contactId, new SimpleCallback<Team>() {
@@ -136,7 +152,7 @@ public class RecentContactObserver {
                         if (success && result != null) {
                             if (!result.isMyTeam()) {
                                 items.remove(r);
-                                deleteRecentContact(contactId, SessionTypeEnum.Team);
+                                deleteRecentContactCallback(r, true);
                                 refreshMessages(true);
                             }
                         }

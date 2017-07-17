@@ -131,7 +131,7 @@ public class SysMessageObserver {
         if (addFriendVerifyFilter(message)) {
             SystemMessage del = null;
             for (SystemMessage m : sysItems) {
-                if (m.getFromAccount().equals(message.getFromAccount()) && m.getType() == SystemMessageType.AddFriend) {
+                if (TextUtils.equals(m.getFromAccount(), message.getFromAccount()) && m.getType() == SystemMessageType.AddFriend) {
                     AddFriendNotify attachData = (AddFriendNotify) m.getAttachObject();
                     if (attachData != null && attachData.getEvent() == AddFriendNotify.Event.RECV_ADD_FRIEND_VERIFY_REQUEST) {
                         del = m;

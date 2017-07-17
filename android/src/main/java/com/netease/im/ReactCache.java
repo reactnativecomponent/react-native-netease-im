@@ -356,7 +356,7 @@ public class ReactCache {
 
                     map.putString("alias", contact.getDisplayName());
                     map.putString("type", Integer.toString(contact.getContactType()));
-                    map.putString("name", NimUserInfoCache.getInstance().getUserName(contact.getContactId()));
+                    map.putString("name", NimUserInfoCache.getInstance().getUserDisplayName(contact.getContactId()));
                     String avatar = NimUserInfoCache.getInstance().getAvatar(contact.getContactId());
                     map.putString("avatar", avatar);
                     map.putString("avatarLocal", ImageLoaderKit.getMemoryCachedAvatar(avatar));
