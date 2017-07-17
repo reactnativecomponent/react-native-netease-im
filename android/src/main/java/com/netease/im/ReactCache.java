@@ -179,25 +179,29 @@ public class ReactCache {
                 }
                 map.putString("time", TimeUtil.getTimeShowString(contact.getTime(), true));
 
-                String fromNick = "";
-                try {
-                    fromNick = contact.getFromNick();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
 
-                fromNick = TextUtils.isEmpty(fromNick) ? NimUserInfoCache.getInstance().getUserDisplayName(fromAccount) : fromNick;
-                map.putString("nick", fromNick);
+                String fromNick = "";
                 String teamNick = "";
-                if (contact.getSessionType() == SessionTypeEnum.Team && !TextUtils.equals(LoginService.getInstance().getAccount(), fromAccount)) {
-                    String tid = contact.getContactId();
-                    teamNick = getTeamUserDisplayName(tid, fromAccount)+": ";
-                    if ((contact.getAttachment() instanceof NotificationAttachment)) {
-                        if (AitHelper.hasAitExtention(contact)) {
-                            if (contact.getUnreadCount() == 0) {
-                                AitHelper.clearRecentContactAited(contact);
-                            } else {
-                                content = AitHelper.getAitAlertString(content);
+                if (!TextUtils.isEmpty(fromAccount)) {
+                    try {
+                        fromNick = contact.getFromNick();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    fromNick = TextUtils.isEmpty(fromNick) ? NimUserInfoCache.getInstance().getUserDisplayName(fromAccount) : fromNick;
+                    map.putString("nick", fromNick);
+
+                    if (contact.getSessionType() == SessionTypeEnum.Team && !TextUtils.equals(LoginService.getInstance().getAccount(), fromAccount)) {
+                        String tid = contact.getContactId();
+                        teamNick = TextUtils.isEmpty(fromAccount) ? "" : getTeamUserDisplayName(tid, fromAccount) + ": ";
+                        if ((contact.getAttachment() instanceof NotificationAttachment)) {
+                            if (AitHelper.hasAitExtention(contact)) {
+                                if (contact.getUnreadCount() == 0) {
+                                    AitHelper.clearRecentContactAited(contact);
+                                } else {
+                                    content = AitHelper.getAitAlertString(content);
+                                }
                             }
                         }
                     }

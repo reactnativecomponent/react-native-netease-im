@@ -27,10 +27,11 @@ public class AudioPlayService implements SensorEventListener {
     AudioPlayerM currentAudioPlayer;
     private String currentFile;
     private int state;
-    private int currentAudioStreamType = AudioManager.STREAM_VOICE_CALL;
+    private int currentAudioStreamType = AudioManager.STREAM_MUSIC;
 
     protected boolean needSeek = false;
     protected long seekPosition;
+    private ReactContext mContext;
 
     private AudioPlayService() {
     }
@@ -72,6 +73,7 @@ public class AudioPlayService implements SensorEventListener {
         }
 //        ReactCache.emit(ReactCache.observeAudioRecord, ReactCache.createAudioPlay("Volume", context.getCurrentActivity().getVolumeControlStream()));
 
+        mContext = context;
         if (context.getCurrentActivity() != null) {
             context.getCurrentActivity().setVolumeControlStream(currentAudioStreamType); // 默认使用听筒播放
         }
@@ -88,7 +90,7 @@ public class AudioPlayService implements SensorEventListener {
 
         currentAudioPlayer.setOnPlayListener(new BasePlayerListener(currentAudioPlayer));
 
-        handler.postDelayed(playRunnable, 50);
+        handler.postDelayed(playRunnable, 500);
         state = AudioControllerState.ready;
     }
 
@@ -149,7 +151,9 @@ public class AudioPlayService implements SensorEventListener {
         if (audioStreamType == currentAudioStreamType) {
             return false;
         }
-
+        if (mContext.getCurrentActivity() != null) {
+            mContext.getCurrentActivity().setVolumeControlStream(currentAudioStreamType); // 默认使用听筒播放
+        }
         changeAudioStreamType(audioStreamType);
         return true;
     }
