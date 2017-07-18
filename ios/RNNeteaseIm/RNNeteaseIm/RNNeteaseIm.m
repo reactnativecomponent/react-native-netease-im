@@ -599,7 +599,7 @@ RCT_EXPORT_METHOD(cleanCache){
                 break;
             case 6:
                 //系统通知未读条数
-                [_bridge.eventDispatcher sendDeviceEventWithName:@"observeUnreadCount" body:param];
+                [_bridge.eventDispatcher sendDeviceEventWithName:@"observeUnreadCountChange" body:param];
                 break;
             case 7:
                 //聊天记录
