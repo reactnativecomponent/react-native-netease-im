@@ -480,7 +480,7 @@ public class ReactCache {
                 map.putString("avatarLocal", ImageLoaderKit.getMemoryCachedAvatar(avatar));
                 map.putString("name", nimUserInfoCache.getUserDisplayNameEx(message.getFromAccount()));//alias
                 map.putString("time", Long.toString(message.getTime() / 1000));
-                map.putString("isVerify", String.valueOf(verify));
+                map.putString("isVerify", boolean2String(verify));
                 map.putString("status", Integer.toString(message.getStatus().getValue()));
                 map.putString("verifyText", getVerifyNotificationText(message));
                 map.putString("verifyResult", "");
