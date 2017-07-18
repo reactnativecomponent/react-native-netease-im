@@ -128,7 +128,7 @@
 - (void)updateSourceMember:(NIMKitInfo *)sourceMember andNoti:(NIMSystemNotification *)noti{
     
     NSMutableDictionary *dic = [NSMutableDictionary dictionary];
-    BOOL isVerify = false;
+    BOOL isVerify = @"0";
     NIMSystemNotificationType type = noti.type;
     NSString *avatarUrlString = sourceMember.avatarUrlString;
     NSURL *url;
@@ -141,7 +141,7 @@
         case NIMSystemNotificationTypeTeamApply:
         {
             team = [[NIMSDK sharedSDK].teamManager teamById:noti.targetID];
-            isVerify = true;
+            isVerify = @"1";
             verifyText = [NSString stringWithFormat:@"申请加入群 %@", team.teamName];
         }
             break;
@@ -154,7 +154,7 @@
         case NIMSystemNotificationTypeTeamInvite:
         {
             team = [[NIMSDK sharedSDK].teamManager teamById:noti.targetID];
-            isVerify = true;
+            isVerify = @"1";
             verifyText = [NSString stringWithFormat:@"群 %@ 邀请你加入", team.teamName];
         }
             break;
@@ -174,7 +174,7 @@
                         verifyText = @"已添加你为好友";
                         break;
                     case NIMUserOperationRequest:
-                        isVerify = true;
+                        isVerify = @"1";
                         verifyText = @"请求添加你为好友";
                         break;
                     case NIMUserOperationVerify:
