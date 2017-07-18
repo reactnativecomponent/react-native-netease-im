@@ -252,7 +252,7 @@
 //同意
 -(void)onAccept:(NSString *)targetID timestamp:(NSString *)timestamp sucess:(Success)success error:(Errors)err{
     
-    
+    __weak typeof(self)weakSelf = self;
     for (int i = 0; i < _notiArr.count; i++) {
         if ([targetID isEqualToString:[[_notiArr objectAtIndex:i] objectForKey:@"fromAccount"]]) {
             if ([timestamp isEqualToString:[[_notiArr objectAtIndex:i] objectForKey:@"time"]]) {
@@ -320,6 +320,7 @@
                                                                          [self updateSourceMember:sourceMember andNoti:notices];
                                                                      }
                                                                      success(@"同意成功");
+                                                                     [weakSelf sendMakeFriendSucessMessgae:request.userId];
                                                                      [self refrash];
                                                                  }
                                                                  else
@@ -340,6 +341,21 @@
     
     
 }
+
+
+//发送成为好友提醒
+- (void)sendMakeFriendSucessMessgae:(NSString *)strUserId{
+    NIMMessage *message = [[NIMMessage alloc] init];
+    message.text    = @"我们已经是朋友啦，一起来聊天吧！";
+    NIMMessageSetting *setting = [[NIMMessageSetting alloc]init];
+    setting.apnsEnabled = NO;
+    message.setting = setting;
+    NIMSession *session = [NIMSession session:strUserId type:NIMSessionTypeP2P];
+    //发送消息
+    [[NIMSDK sharedSDK].chatManager sendMessage:message toSession:session error:nil];
+}
+
+
 //拒绝
 -(void)onRefuse:(NSString *)targetID timestamp:(NSString *)timestamp sucess:(Success)success error:(Errors)err{
     for (int i = 0; i < _notiArr.count; i++) {
