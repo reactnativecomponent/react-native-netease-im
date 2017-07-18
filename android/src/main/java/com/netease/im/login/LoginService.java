@@ -4,6 +4,7 @@ import android.app.NotificationManager;
 import android.content.Context;
 
 import com.netease.im.IMApplication;
+import com.netease.im.ReactCache;
 import com.netease.im.session.SessionUtil;
 import com.netease.im.team.TeamListService;
 import com.netease.im.uikit.LoginSyncDataStatusObserver;
@@ -16,6 +17,8 @@ import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.netease.nimlib.sdk.friend.model.AddFriendNotify;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
+import com.netease.nimlib.sdk.msg.SystemMessageObserver;
+import com.netease.nimlib.sdk.msg.SystemMessageService;
 import com.netease.nimlib.sdk.msg.constant.SystemMessageType;
 import com.netease.nimlib.sdk.msg.model.CustomNotification;
 import com.netease.nimlib.sdk.msg.model.SystemMessage;
@@ -77,6 +80,7 @@ public class LoginService {
 
                 registerObserver(true);
                 queryRecentContacts();
+                startSystemMsgUnreadCount();
                 loginInfoFuture = null;
             }
 
@@ -164,5 +168,26 @@ public class LoginService {
         LoginSyncDataStatusObserver.getInstance().reset();
     }
 
+    public void startSystemMsgUnreadCount(){
+        registerSystemMsgUnreadCount(true);
+        int unread = NIMClient.getService(SystemMessageService.class).querySystemMessageUnreadCountBlock();
+        ReactCache.emit(ReactCache.observeUnreadCountChange, Integer.toString(unread));
+    }
+    boolean hasRegisterSystemMsgUnreadCount;
+    private Observer<Integer> sysMsgUnreadCountChangedObserver = new Observer<Integer>() {
+        @Override
+        public void onEvent(Integer unreadCount) {
+            int unread = unreadCount == null ? 0 : unreadCount;
+            ReactCache.emit(ReactCache.observeUnreadCountChange, Integer.toString(unread));
+        }
+    };
+
+    public void registerSystemMsgUnreadCount(boolean register) {
+        if (hasRegisterSystemMsgUnreadCount && register) {
+            return;
+        }
+        hasRegisterSystemMsgUnreadCount = register;
+        NIMClient.getService(SystemMessageObserver.class).observeUnreadCountChange(sysMsgUnreadCountChangedObserver, register);
+    }
 
 }

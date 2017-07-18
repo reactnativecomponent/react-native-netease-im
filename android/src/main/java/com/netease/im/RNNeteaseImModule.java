@@ -49,7 +49,6 @@ import com.netease.im.uikit.permission.annotation.OnMPermissionGranted;
 import com.netease.im.uikit.permission.annotation.OnMPermissionNeverAskAgain;
 import com.netease.im.uikit.session.helper.MessageHelper;
 import com.netease.nimlib.sdk.NIMClient;
-import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.RequestCallbackWrapper;
 import com.netease.nimlib.sdk.ResponseCode;
@@ -61,7 +60,6 @@ import com.netease.nimlib.sdk.friend.constant.VerifyType;
 import com.netease.nimlib.sdk.friend.model.AddFriendData;
 import com.netease.nimlib.sdk.msg.MessageBuilder;
 import com.netease.nimlib.sdk.msg.MsgService;
-import com.netease.nimlib.sdk.msg.SystemMessageObserver;
 import com.netease.nimlib.sdk.msg.SystemMessageService;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
@@ -1658,7 +1656,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
         Uri uri = Uri.parse(resourceFile);
         LogUtil.i(TAG, "scheme:" + uri.getScheme());
         String filePath = uri.getPath();
-        if(filePath.startsWith("/")){
+        if (filePath.startsWith("/")) {
             filePath = filePath.substring(1);
             if (filePath.indexOf(".") == -1) {
                 filePath = filePath + "." + type;
@@ -1714,27 +1712,9 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
      */
     @ReactMethod
     public void startSystemMsgUnreadCount(Promise promise) {
-        registerSystemMsgUnreadCount(true);
-        int unread = NIMClient.getService(SystemMessageService.class).querySystemMessageUnreadCountBlock();
-        ReactCache.emit(ReactCache.observeUnreadCountChange, Integer.toString(unread));
+        LoginService.getInstance().startSystemMsgUnreadCount();
     }
 
-    boolean hasRegisterSystemMsgUnreadCount;
-    private Observer<Integer> sysMsgUnreadCountChangedObserver = new Observer<Integer>() {
-        @Override
-        public void onEvent(Integer unreadCount) {
-            int unread = unreadCount == null ? 0 : unreadCount;
-            ReactCache.emit(ReactCache.observeUnreadCountChange, Integer.toString(unread));
-        }
-    };
-
-    void registerSystemMsgUnreadCount(boolean register) {
-        if (hasRegisterSystemMsgUnreadCount && register) {
-            return;
-        }
-        hasRegisterSystemMsgUnreadCount = register;
-        NIMClient.getService(SystemMessageObserver.class).observeUnreadCountChange(sysMsgUnreadCountChangedObserver, register);
-    }
 
     /**
      * 停止系统通知计数监听
@@ -1743,7 +1723,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
      */
     @ReactMethod
     public void stopSystemMsgUnreadCount(Promise promise) {
-        registerSystemMsgUnreadCount(false);
+        LoginService.getInstance().registerSystemMsgUnreadCount(false);
     }
 
     /**
@@ -1839,7 +1819,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
      * @param promise
      */
     @ReactMethod
-    public void ackAddFriendRequest(String messageId, String contactId, String pass, String timestamp, final Promise promise) {
+    public void ackAddFriendRequest(String messageId, final String contactId, String pass, String timestamp, final Promise promise) {
         LogUtil.i(TAG, "ackAddFriendRequest" + contactId);
         long messageIdLong = 0L;
         try {
@@ -1847,11 +1827,16 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
         } catch (NumberFormatException e) {
             e.printStackTrace();
         }
+        final boolean toPass = string2Boolean(pass);
         if (sysMessageObserver != null)
             sysMessageObserver.ackAddFriendRequest(messageIdLong, contactId, string2Boolean(pass), timestamp, new RequestCallbackWrapper<Void>() {
                 @Override
                 public void onResult(int code, Void aVoid, Throwable throwable) {
                     if (code == ResponseCode.RES_SUCCESS) {
+                        if (toPass) {
+                            IMMessage message = MessageBuilder.createTextMessage(contactId, SessionTypeEnum.P2P, "我们已经是好友啦，一起来聊天吧！");
+                            NIMClient.getService(MsgService.class).sendMessage(message, false);
+                        }
                         promise.resolve("" + code);
                     } else {
                         promise.reject("" + code, "");
@@ -1916,6 +1901,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
             }
         });
     }
+
     void showTip(final String tip) {
         handler.post(new Runnable() {
             @Override

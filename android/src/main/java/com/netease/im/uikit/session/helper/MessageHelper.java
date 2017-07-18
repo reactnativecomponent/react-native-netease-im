@@ -33,6 +33,12 @@ public class MessageHelper {
         if (item == null) {
             return;
         }
+        if (item.getSessionType() == SessionTypeEnum.Team) {
+            Team t = TeamDataCache.getInstance().getTeamById(item.getSessionId());
+            if (t == null || !t.isMyTeam()) {
+                return;
+            }
+        }
 
         IMMessage message = MessageBuilder.createTipMessage(item.getSessionId(), item.getSessionType());
         String nick = "";
@@ -46,19 +52,22 @@ public class MessageHelper {
         message.setStatus(MsgStatusEnum.success);
         CustomMessageConfig config = new CustomMessageConfig();
         config.enableUnreadCount = false;
+        config.enablePush = false;
         message.setConfig(config);
         NIMClient.getService(MsgService.class).saveMessageToLocalEx(message, true, item.getTime());
     }
-    public void onCreateTeamMessage(Team team){
-        if(team==null||team.getType()== TeamTypeEnum.Normal){
+
+    public void onCreateTeamMessage(Team team) {
+        if (team == null || team.getType() == TeamTypeEnum.Normal) {
             return;
         }
         Map<String, Object> content = new HashMap<>(1);
-        content.put("content", "成功创建高级群");
+        content.put("content", "成功创建群");
         IMMessage msg = MessageBuilder.createTipMessage(team.getId(), SessionTypeEnum.Team);
         msg.setRemoteExtension(content);
         CustomMessageConfig config = new CustomMessageConfig();
         config.enableUnreadCount = false;
+        config.enablePush = false;
         msg.setConfig(config);
         msg.setStatus(MsgStatusEnum.success);
         NIMClient.getService(MsgService.class).saveMessageToLocal(msg, true);

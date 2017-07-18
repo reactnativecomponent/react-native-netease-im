@@ -554,7 +554,8 @@ public class SessionService {
             this.mute = !NIMClient.getService(FriendService.class).isNeedMessageNotify(sessionId);
         } else {
             Team t = TeamDataCache.getInstance().getTeamById(sessionId);
-            this.mute = t.mute();
+            if (t != null)
+                this.mute = t.mute();
         }
         registerObservers(true);
         getMsgService().setChattingAccount(sessionId, sessionTypeEnum);

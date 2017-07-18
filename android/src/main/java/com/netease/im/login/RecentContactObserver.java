@@ -7,7 +7,6 @@ import com.facebook.react.bridge.WritableMap;
 import com.netease.im.ReactCache;
 import com.netease.im.uikit.cache.SimpleCallback;
 import com.netease.im.uikit.cache.TeamDataCache;
-import com.netease.im.uikit.common.util.log.LogUtil;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.RequestCallbackWrapper;
@@ -85,8 +84,8 @@ public class RecentContactObserver {
 
         String contactId = recent.getContactId();
         SessionTypeEnum sessionTypeEnum = recent.getSessionType();
-        LogUtil.i("deleteRecentContactCallback-","---"+contactId);
-        LogUtil.i("deleteRecentContactCallback-","---"+recent.getContent());
+//        LogUtil.i("deleteRecentContactCallback-", "---" + contactId);
+//        LogUtil.i("deleteRecentContactCallback-", "---" + recent.getContent());
         if (callback) {
             NIMClient.getService(MsgService.class).deleteRecentContact2(contactId, sessionTypeEnum);
         } else {
@@ -149,16 +148,22 @@ public class RecentContactObserver {
                 TeamDataCache.getInstance().fetchTeamById(contactId, new SimpleCallback<Team>() {
                     @Override
                     public void onResult(boolean success, Team result) {
-                        if (success && result != null) {
-                            if (!result.isMyTeam()) {
-                                items.remove(r);
+                        if (success) {
+                            if (result != null) {
+                                if (result.isMyTeam()) {
+                                    items.add(r);
+                                    refreshMessages(true);
+                                    return;
+                                } else {
+                                    deleteRecentContactCallback(r, true);
+                                }
+                            } else {
                                 deleteRecentContactCallback(r, true);
-                                refreshMessages(true);
                             }
                         }
                     }
                 });
-                items.add(r);
+
             }
         } else {
             items.add(r);
