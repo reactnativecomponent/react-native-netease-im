@@ -1,8 +1,11 @@
+# To enable ProGuard in your project, edit project.properties
+# to define the proguard.config property as described in that file.
+#
 # Add project specific ProGuard rules here.
 # By default, the flags in this file are appended to flags specified
-# in /usr/local/Cellar/android-sdk/24.3.3/tools/proguard/proguard-android.txt
-# You can edit the include path and order by changing the proguardFiles
-# directive in build.gradle.
+# in ${sdk.dir}/tools/proguard/proguard-android.txt
+# You can edit the include path and order by changing the ProGuard
+# include property in project.properties.
 #
 # For more details, see
 #   http://developer.android.com/guide/developing/tools/proguard.html
@@ -16,8 +19,16 @@
 #   public *;
 #}
 
-# Disabling obfuscation is useful if you collect stack traces from production crashes
-# (unless you are using a system that supports de-obfuscate the stack traces).
+# Optimizations: If you don't want to optimize, use the
+# proguard-android.txt configuration file instead of this one, which
+# turns off the optimization flags.  Adding optimization introduces
+# certain risks, since for example not all optimizations performed by
+# ProGuard works on all versions of Dalvik.  The following flags turn
+# off various optimizations known to have issues, but the list may not
+# be complete or up to date. (The "arithmetic" optimization can be
+# used if you are only targeting Android 2.0 or later.)  Make sure you
+# test thoroughly if you go this route.
+
 -optimizations !code/simplification/cast,!field/*,!class/merging/*
 -optimizationpasses 5
 -allowaccessmodification
@@ -34,17 +45,13 @@
 # The support library contains references to newer platform versions.
 # Don't warn about those in case this app is linking against an older
 # platform version.  We know about them, and they are safe.
--dontwarn android.support.**
-
+### Android support
 -dontwarn org.apache.http.**
--dontwarn com.amap.**
--dontwarn com.alibaba.**
--dontwarn com.netease.**
--dontwarn io.netty.**
--dontwarn com.autonavi.amap.**
+-dontwarn android.support.**
+-keep class android.support.** {*;}
+-keep class android.webkit.** {*;}
 
-### keep options
-#system default, from android example
+### keep options, system default, from android example
 -keep public class * extends android.app.Activity
 -keep public class * extends android.support.v4.app.Fragment
 -keep public class * extends android.app.Application
@@ -60,24 +67,47 @@
 -keepattributes *Annotation*,InnerClasses
 #-keepattributes SourceFile,LineNumberTable
 
-### 3rd party jars
--keep class android.support.** {*;}
+### APP 3rd party jars
+-dontwarn com.amap.**
 -keep class com.amap.** {*;}
--keep class android.webkit.** {*;}
+-dontwarn com.autonavi.amap.**
 -keep class com.autonavi.amap.** {*;}
--keep class com.nostra13.** {*;}
+-dontwarn com.alibaba.**
+-keep class com.alibaba.fastjson.** {*;}
 
-### 3rd party jars(xiaomi push)
+### APP 3rd party jars(xiaomi push)
 -dontwarn com.xiaomi.push.**
 -keep class com.xiaomi.** {*;}
 
-### 3rd party jars(lucene)
+### APP 3rd party jars(huawei push)
+
+-ignorewarning
+-keepattributes Exceptions
+-keepattributes Signature
+# hmscore-support: remote transport
+-keep class * extends com.huawei.hms.core.aidl.IMessageEntity { *; }
+# hmscore-support: remote transport
+-keepclasseswithmembers class * implements com.huawei.hms.support.api.transport.DatagramTransport {
+<init>(...); }
+# manifest: provider for updates
+-keep public class com.huawei.hms.update.provider.UpdateProvider { public *; protected *; }
+
+### APP 3rd party jars(glide)
+-keep public class * implements com.bumptech.glide.module.GlideModule
+-keep public enum com.bumptech.glide.load.resource.bitmap.ImageHeaderParser$** {
+  **[] $VALUES;
+  public *;
+}
+
+### org.json xml
+-dontwarn org.json.**
+-keep class org.json.**{*;}
+
+### NIM SDK
+-dontwarn com.netease.**
+-keep class com.netease.** {*;}
 -dontwarn org.apache.lucene.**
 -keep class org.apache.lucene.** {*;}
-
-### nimlib
--keep class com.netease.** {*;}
--keep class com.alibaba.fastjson.** {*;}
 -keep class net.sqlcipher.** {*;}
 
 -keepclasseswithmembernames class * {
