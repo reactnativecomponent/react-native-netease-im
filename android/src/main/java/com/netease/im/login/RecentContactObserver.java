@@ -26,6 +26,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import static com.netease.nimlib.sdk.StatusCode.PWD_ERROR;
+
 /**
  * Created by dowin on 2017/5/3.
  */
@@ -268,14 +270,16 @@ public class RecentContactObserver {
             if (loginSyncStatus == LoginSyncStatus.SYNC_COMPLETED) {
                 refreshMessages(true);
             }
-            ReactCache.emit(ReactCache.observeOnlineStatus, Integer.toString(StatusCode.values().length + loginSyncStatus.ordinal()));
+            WritableMap r = Arguments.createMap();
+            r.putString("status", Integer.toString(StatusCode.values().length + loginSyncStatus.ordinal()));
+            ReactCache.emit(ReactCache.observeOnlineStatus, r);
         }
     };
     Observer<StatusCode> userStatusObserver = new Observer<StatusCode>() {
 
         @Override
         public void onEvent(StatusCode code) {
-            if (code != StatusCode.PWD_ERROR && code.wontAutoLogin()) {
+            if (code != PWD_ERROR && code.wontAutoLogin()) {
                 WritableMap r = Arguments.createMap();
                 String status = "";
                 switch (code) {
@@ -293,7 +297,16 @@ public class RecentContactObserver {
                 ReactCache.emit(ReactCache.observeOnKick, r);
             }
             WritableMap r = Arguments.createMap();
-            r.putString("status", Integer.toString(code.getValue()));
+            String codeValue;
+            switch (code){
+                case PWD_ERROR:
+                    codeValue = "10";
+                    break;
+                default:
+                    codeValue = Integer.toString(code.getValue());
+                    break;
+            }
+            r.putString("status", codeValue);
             ReactCache.emit(ReactCache.observeOnlineStatus, r);
         }
     };
