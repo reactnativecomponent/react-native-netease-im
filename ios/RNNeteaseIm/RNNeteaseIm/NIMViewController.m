@@ -42,18 +42,44 @@
 //监听网络
 #pragma mark - NIMLoginManagerDelegate
 - (void)onLogin:(NIMLoginStep)step{
-    NSString *strStatus = [NSString stringWithFormat:@"%zd",step];
+    NSString *strStatus = @"0";
     switch (step) {
-        case NIMLoginStepLinkOK:
-        case NIMLoginStepSyncOK:
-        case NIMLoginStepSyncing:
+        case NIMLoginStepLinking://连接服务器
+            strStatus = @"3";
+            break;
+        case NIMLoginStepLinkOK://连接服务器成功
+            strStatus = @"5";
             [self getResouces];
             break;
-            
+        case NIMLoginStepLinkFailed://连接服务器失败
+            strStatus = @"2";
+            break;
+        case NIMLoginStepLogining://登录
+            strStatus = @"4";
+            break;
+        case NIMLoginStepLoginOK://登录成功
+            strStatus = @"6";
+            break;
+        case NIMLoginStepLoginFailed://登录失败
+            strStatus = @"10";
+            break;
+        case NIMLoginStepSyncing://开始同步
+            strStatus = @"13";
+            [self getResouces];
+            break;
+        case NIMLoginStepSyncOK://同步完成
+            strStatus = @"14";
+            [self getResouces];
+            break;
+        case NIMLoginStepLoseConnection://连接断开
+            strStatus = @"2";
+            break;
+        case NIMLoginStepNetChanged://网络切换
+            strStatus = @"15";
+            break;
         default:
             break;
     }
-    
     [NIMModel initShareMD].NetStatus = strStatus;
 }
 //删除一行
