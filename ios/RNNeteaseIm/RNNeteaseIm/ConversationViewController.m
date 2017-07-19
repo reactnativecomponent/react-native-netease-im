@@ -361,9 +361,10 @@
         NIMMessageApnsMemberOption *apnsMemberOption = [[NIMMessageApnsMemberOption alloc]init];
         apnsMemberOption.userIds = members;
         apnsMemberOption.forcePush = YES;
+        apnsMemberOption.apnsContent = @"有人@了你";
         message.apnsMemberOption = apnsMemberOption;
-        message.apnsContent = @"有人@了你";
     }
+    message.apnsContent = mess;
     //发送消息
     [[NIMSDK sharedSDK].chatManager sendMessage:message toSession:_session error:nil];
 }
