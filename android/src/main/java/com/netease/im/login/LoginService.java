@@ -61,7 +61,7 @@ public class LoginService {
     }
 
     public LoginInfo getLoginInfo(Context context) {
-        LoginInfo info = new LoginInfo(null, null);
+        LoginInfo info = new LoginInfo(account, null);
         return info;
     }
 
