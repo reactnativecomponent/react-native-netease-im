@@ -57,7 +57,11 @@ public final class AudioPlayerM {
                 switch (var1.what) {
                     case 0:
                         if (AudioPlayerM.this.mListener != null) {
-                            AudioPlayerM.this.mListener.onPlaying((long) AudioPlayerM.this.mPlayer.getCurrentPosition());
+                            try {
+                                AudioPlayerM.this.mListener.onPlaying((long) AudioPlayerM.this.mPlayer.getCurrentPosition());//TODO
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         }
 
                         this.sendEmptyMessageDelayed(0, AudioPlayerM.this.mIntervalTime);

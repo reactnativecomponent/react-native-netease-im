@@ -613,7 +613,7 @@ public class SessionService {
 
         if (selectedMembers != null && !selectedMembers.isEmpty()) {
             MemberPushOption option = createMemPushOption(selectedMembers, message);
-            message.setPushContent("有人@了你");
+//            message.setPushContent("有人@了你");
             message.setMemberPushOption(option);
         }
         sendMessage(message, onSendMessageListener);
@@ -846,7 +846,8 @@ public class SessionService {
 
         MemberPushOption memberPushOption = new MemberPushOption();
         memberPushOption.setForcePush(true);
-        memberPushOption.setForcePushContent(message.getContent());
+//        memberPushOption.setForcePushContent(message.getContent());
+        memberPushOption.setForcePushContent("有人@了你");
         memberPushOption.setForcePushList(selectedMembers);
         return memberPushOption;
     }
