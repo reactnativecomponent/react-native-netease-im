@@ -32,8 +32,9 @@ RCT_EXPORT_METHOD(login:(nonnull NSString *)account token:(nonnull NSString *)to
             [[NoticeViewController initWithNoticeViewController]initWithDelegate];
             resolve(account);
         }else{
-            reject(@"-1",error, nil);
-            NSLog(@"登录失败");
+            NSString *strEorr = @"登录失败";
+            reject(@"-1",strEorr, nil);
+            NSLog(@"%@:%@",strEorr,error);
         }
     }];
 }
