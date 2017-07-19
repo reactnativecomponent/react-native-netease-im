@@ -160,7 +160,11 @@ public class AudioPlayService implements SensorEventListener {
 
     private void changeAudioStreamType(int audioStreamType) {
         if (isPlayingAudio()) {
-            seekPosition = currentAudioPlayer.getCurrentPosition();
+            try {
+                seekPosition = currentAudioPlayer.getCurrentPosition();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             needSeek = true;
             currentAudioStreamType = audioStreamType;
             currentAudioPlayer.start(audioStreamType);
