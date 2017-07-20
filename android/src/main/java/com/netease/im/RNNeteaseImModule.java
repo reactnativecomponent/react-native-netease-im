@@ -87,7 +87,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static com.netease.im.common.ResourceUtil.getString;
 
 public class RNNeteaseImModule extends ReactContextBaseJavaModule implements LifecycleEventListener, ActivityEventListener {
 
@@ -167,7 +166,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
 
             @Override
             public void onException(Throwable throwable) {
-                promise.reject(Integer.toString(ResponseCode.RES_EXCEPTION), getString(R.string.login_exception));
+                promise.reject(Integer.toString(ResponseCode.RES_EXCEPTION), ResourceUtil.getString(R.string.login_exception));
 
             }
         });
@@ -318,7 +317,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
                 });
         SysMessageObserver sysMessageObserver = new SysMessageObserver();
         sysMessageObserver.loadMessages(false);
-        sysMessageObserver.deleteSystemMessageById(contactId);
+        sysMessageObserver.deleteSystemMessageById(contactId, false);
     }
 
     /*************Black 黑名单***********/
@@ -1320,28 +1319,19 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
     }
 
     /**
-     * 保存用户资料
+     * 更新用户资料
      *
+     * @param name
      * @param promise
      */
-//    @ReactMethod
-    public void updateMyUserInfo(final Promise promise) {//TODO;
-
-//        final Map<UserInfoFieldEnum, Object> fields = new HashMap<>(1);
-//        UserUpdateHelper.update(fields, new RequestCallbackWrapper<Void>() {
-//            @Override
-//            public void onResult(int code, Void result, Throwable exception) {
-//
-//                if (code == ResponseCode.RES_SUCCESS) {
-//                    LogUtil.i(TAG, "update userInfo success, update fields count=" + fields.size());
-//                } else {
-//                    if (exception != null) {
-//                        Toast.makeText(IMApplication.getContext(), R.string.user_info_update_failed, Toast.LENGTH_SHORT).show();
-//                        LogUtil.i(TAG, "update userInfo failed, exception=" + exception.getMessage());
-//                    }
-//                }
-//            }
-//        });
+    @ReactMethod
+    public void updateMyUserInfo(String name, final Promise promise) {
+        String contactId = LoginService.getInstance().getAccount();
+        NimUserInfoCache.getInstance().getUserInfoFromRemote(contactId, new RequestCallbackWrapper<NimUserInfo>() {
+            @Override
+            public void onResult(int i, NimUserInfo userInfo, Throwable throwable) {
+            }
+        });
     }
 
     /**
@@ -1855,7 +1845,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
     @ReactMethod
     public void deleteSystemMessage(String fromAccount, String timestamp, final Promise promise) {
         if (sysMessageObserver != null)
-            sysMessageObserver.deleteSystemMessageById(fromAccount);
+            sysMessageObserver.deleteSystemMessageById(fromAccount, true);
     }
 
     /**
