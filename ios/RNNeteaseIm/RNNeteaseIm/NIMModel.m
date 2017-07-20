@@ -45,20 +45,16 @@
     }
 }
 -(void)setContactList:(NSMutableDictionary *)contactList{
-    if ((_contactList != contactList)&&(contactList.count)) {
+    if (_contactList != contactList) {
         _contactList = contactList;
         self.myBlock(3, contactList);
     }
 }
 -(void)setNotiArr:(NSMutableArray *)notiArr{
-    if (notiArr.count) {
        self.myBlock(5, notiArr);
-    }
 }
 -(void)setTeamArr:(NSMutableArray *)teamArr{
-    if (teamArr.count) {
         self.myBlock(4, teamArr);
-    }
 }
 //未读条数
 -(void)setUnreadCount:(NSInteger)unreadCount{
@@ -66,9 +62,7 @@
 }
 //
 -(void)setResorcesArr:(NSMutableArray *)ResorcesArr{
-    if (ResorcesArr.count) {
         self.myBlock(7, ResorcesArr);
-    }
 }
 //开始发送
 -(void)setStartSend:(NSDictionary *)startSend{
@@ -96,7 +90,7 @@
 }
 //发送消息
 -(void)setSendState:(NSMutableArray *)sendState{
-    if ((_sendState != sendState)&&(sendState.count)) {
+    if (_sendState != sendState) {
         self.myBlock(12, sendState);
     }
 }
