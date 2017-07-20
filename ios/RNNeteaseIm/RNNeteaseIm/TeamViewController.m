@@ -32,7 +32,7 @@ NSMutableArray *_myTeams;
     NSMutableArray *teamArr = [NSMutableArray array];
     for (NIMTeam *team in _myTeams) {
         NSMutableDictionary *dic = [NSMutableDictionary dictionary];
-        [dic setObject:team.teamId forKey:@"teamId"];
+        [dic setObject:[NSString stringWithFormat:@"%@",team.teamId] forKey:@"teamId"];
         [dic setObject:[NSString stringWithFormat:@"%@", team.teamName] forKey:@"name"];
         [dic setObject:[NSString stringWithFormat:@"%@", team.avatarUrl ] forKey:@"avatar"];
         [dic setObject:[NSString stringWithFormat:@"%ld", team.type] forKey:@"type"];

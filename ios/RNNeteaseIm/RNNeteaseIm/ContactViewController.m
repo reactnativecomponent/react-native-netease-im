@@ -320,7 +320,7 @@
     NSString *myID = [NIMSDK sharedSDK].loginManager.currentAccount;
     NIMUser *user = [[NIMSDK sharedSDK].userManager userInfo:myID];
     NSString *apnsContent = [NSString stringWithFormat:@"%@ %@",user.userInfo.nickName,apnsText];
-    NSDictionary *dataDict = @{@"type":@"1",@"data":@{@"content":msg}};
+    NSDictionary *dataDict = @{@"type":@"1",@"data":@{@"content":[NSString stringWithFormat:@"%@",msg]}};
         [[NIMSDK sharedSDK].userManager requestFriend:request completion:^(NSError *error) {
             if (!error) {
                 success(successText);

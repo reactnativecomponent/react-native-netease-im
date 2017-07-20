@@ -147,7 +147,7 @@
     NSMutableArray *sessionList = [NSMutableArray array];
     for (NIMRecentSession *recent in NIMlistArr) {
         NSMutableDictionary *dic = [NSMutableDictionary dictionary];
-        [dic setObject:recent.session.sessionId forKey:@"contactId"];
+        [dic setObject:[NSString stringWithFormat:@"%@",recent.session.sessionId] forKey:@"contactId"];
         [dic setObject:[NSString stringWithFormat:@"%ld", recent.session.sessionType] forKey:@"sessionType"];
         //未读
         [dic setObject:[NSString stringWithFormat:@"%ld", recent.unreadCount] forKey:@"unreadCount"];
@@ -192,7 +192,7 @@
         
         if (recent.session.sessionType == NIMSessionTypeP2P) {
             NSMutableDictionary *dic = [NSMutableDictionary dictionary];
-            [dic setObject:recent.session.sessionId forKey:@"contactId"];
+            [dic setObject:[NSString stringWithFormat:@"%@",recent.session.sessionId] forKey:@"contactId"];
             [dic setObject:[NSString stringWithFormat:@"%ld", recent.session.sessionType] forKey:@"sessionType"];
             //未读
             NSString *strUnreadCount = [NSString stringWithFormat:@"%ld", recent.unreadCount];
@@ -223,7 +223,7 @@
         else{
             if ( [[NIMSDK sharedSDK].teamManager isMyTeam:recent.lastMessage.session.sessionId]) {
                 NSMutableDictionary *dic = [NSMutableDictionary dictionary];
-                [dic setObject:recent.session.sessionId forKey:@"contactId"];
+                [dic setObject:[NSString stringWithFormat:@"%@",recent.session.sessionId] forKey:@"contactId"];
                 [dic setObject:[NSString stringWithFormat:@"%ld", recent.session.sessionType] forKey:@"sessionType"];
                 //未读
                 NSString *strUnreadCount = [NSString stringWithFormat:@"%ld", recent.unreadCount];
@@ -255,7 +255,6 @@
         }
     }
     
-//    [NIMModel initShareMD].recentListArr = sessionList;
     NSDictionary *recentDict = @{@"recents":sessionList,@"unreadCount":[NSString stringWithFormat:@"%zd",allUnreadNum]};
     [NIMModel initShareMD].recentDict = recentDict;
 }
