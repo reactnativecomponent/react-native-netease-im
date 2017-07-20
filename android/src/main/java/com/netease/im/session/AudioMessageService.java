@@ -2,6 +2,7 @@ package com.netease.im.session;
 
 import android.content.Context;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.widget.Toast;
 
@@ -51,7 +52,7 @@ public class AudioMessageService implements IAudioRecordCallback {
             audioMessageHelper = new AudioRecorder(context, RecordType.AAC, currMaxTime, this);
         }
         if (handler == null) {
-            handler = new Handler() {
+            handler = new Handler(Looper.getMainLooper()) {
                 @Override
                 public void handleMessage(Message msg) {
                     if (msg.what == WHAT_AUDIO) {
