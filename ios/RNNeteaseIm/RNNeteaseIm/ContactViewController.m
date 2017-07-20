@@ -188,7 +188,7 @@
 
 }
 //修改个人资料
--(void)updateMyUserInfo:(NSDictionary *)userInFo Success:(Success )success error:(Error )err{
+-(void)updateMyUserInfo:(NSString *)strName{
     [self fetchUserInfos:[NIMSDK sharedSDK].loginManager.currentAccount Success:^(id param) {
         NSLog(@"更新成功");
     } error:^(NSString *error) {
@@ -238,7 +238,6 @@
             err(@"昵称设置失败，请重试");
         }
     }];*/
-
 }
 
 //- (void)presentMemberSelector:(ContactSelectFinishBlock) block{

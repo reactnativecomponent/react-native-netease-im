@@ -23,5 +23,5 @@ typedef void(^Success)(id param);
 -(void)getFriendList:(Success )success error:(Error )error;
 - (void)disealloc;
 -(void)upDateUserInfo:(NSString *)contactId alias:(NSString *)alias Success:(Success )success error:(Error )err;
--(void)updateMyUserInfo:(NSDictionary *)userInFo Success:(Success )success error:(Error )err;
+-(void)updateMyUserInfo:(NSString *)strName;
 @end
