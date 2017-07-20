@@ -208,7 +208,9 @@ public class ReactCache {
                 }
                 CustomAttachment attachment = null;
                 try {
-                    attachment = (CustomAttachment) contact.getAttachment();
+                    if (contact.getMsgType() == MsgTypeEnum.custom) {
+                        attachment = (CustomAttachment) contact.getAttachment();
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -747,7 +749,7 @@ public class ReactCache {
                         imageObj.putString("thumbPath", imageAttachment.getPath());
                     } else {
                         imageObj.putString("thumbPath2", imageAttachment.getThumbPathForSave());
-                       imageObj.putString("thumbPath", imageAttachment.getThumbPath());
+                        imageObj.putString("thumbPath", imageAttachment.getThumbPath());
                     }
                     imageObj.putString("path2", imageAttachment.getPathForSave());
                     imageObj.putString("path", imageAttachment.getPath());
