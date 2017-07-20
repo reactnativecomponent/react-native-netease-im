@@ -87,7 +87,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static com.netease.im.common.ResourceUtil.getString;
 
 public class RNNeteaseImModule extends ReactContextBaseJavaModule implements LifecycleEventListener, ActivityEventListener {
 
@@ -167,7 +166,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
 
             @Override
             public void onException(Throwable throwable) {
-                promise.reject(Integer.toString(ResponseCode.RES_EXCEPTION), getString(R.string.login_exception));
+                promise.reject(Integer.toString(ResponseCode.RES_EXCEPTION), ResourceUtil.getString(R.string.login_exception));
 
             }
         });
@@ -318,7 +317,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
                 });
         SysMessageObserver sysMessageObserver = new SysMessageObserver();
         sysMessageObserver.loadMessages(false);
-        sysMessageObserver.deleteSystemMessageById(contactId);
+        sysMessageObserver.deleteSystemMessageById(contactId, false);
     }
 
     /*************Black 黑名单***********/
@@ -1855,7 +1854,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
     @ReactMethod
     public void deleteSystemMessage(String fromAccount, String timestamp, final Promise promise) {
         if (sysMessageObserver != null)
-            sysMessageObserver.deleteSystemMessageById(fromAccount);
+            sysMessageObserver.deleteSystemMessageById(fromAccount, true);
     }
 
     /**

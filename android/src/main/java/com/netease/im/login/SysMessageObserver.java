@@ -235,7 +235,7 @@ public class SysMessageObserver {
         registerSystemObserver(false);
     }
 
-    public void deleteSystemMessageById(String contactId) {
+    public void deleteSystemMessageById(String contactId, boolean refresh) {
 
         for (int i = sysItems.size() - 1; i >= 0; i--) {
             SystemMessage msg = sysItems.get(i);
@@ -243,6 +243,9 @@ public class SysMessageObserver {
                 NIMClient.getService(SystemMessageService.class).deleteSystemMessage(msg.getMessageId());
                 sysItems.remove(i);
             }
+        }
+        if (refresh) {
+            refresh();
         }
     }
 
