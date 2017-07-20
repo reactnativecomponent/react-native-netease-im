@@ -113,14 +113,17 @@
     }
     
     if (_notifications.count) {
+        NSMutableArray *tmpArr = [NSMutableArray array];
         for (NIMSystemNotification *notices in _notifications) {
             
             if ([notices.sourceID isEqualToString:notification.sourceID]) {
-
                 [[[NIMSDK sharedSDK] systemNotificationManager] deleteNotification:notices];
-                [_notifications removeObject:notices];
+            }else{
+                [tmpArr addObject:notices];
             }
         }
+        [_notifications removeAllObjects];
+        [_notifications addObjectsFromArray:tmpArr];
     }
     [_notifications insertObject:notification atIndex:0];
     
