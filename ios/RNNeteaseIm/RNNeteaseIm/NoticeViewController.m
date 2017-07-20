@@ -19,9 +19,6 @@
 
 @implementation NoticeViewController
 
-- (void)dealloc{
-    NSLog(@"NoticeViewController----dealloc");
-}
 
 +(instancetype)initWithNoticeViewController{
     static NoticeViewController *notVC = nil;
@@ -64,11 +61,8 @@
                     [[NIMSDK sharedSDK].systemNotificationManager markNotificationsAsRead:notices];
                     [[[NIMSDK sharedSDK] systemNotificationManager] deleteNotification:notices];
                 }
-
             }
         }
-        
-        
     }
     
     [self ReFrash];
@@ -114,9 +108,9 @@
         if (attach.operationType == NIMUserOperationVerify) {//如果是通过添加好友请求，标为已读并删除
             [[NIMSDK sharedSDK].systemNotificationManager markNotificationsAsRead:notification];
             [[[NIMSDK sharedSDK] systemNotificationManager] deleteNotification:notification];
+            return;
         }
     }
-    
     
     if (_notifications.count) {
         for (NIMSystemNotification *notices in _notifications) {
@@ -125,7 +119,6 @@
 
                 [[[NIMSDK sharedSDK] systemNotificationManager] deleteNotification:notices];
                 [_notifications removeObject:notices];
-                
             }
         }
     }
