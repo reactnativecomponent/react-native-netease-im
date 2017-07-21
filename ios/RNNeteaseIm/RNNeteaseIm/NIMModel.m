@@ -51,7 +51,10 @@
     }
 }
 -(void)setNotiArr:(NSMutableArray *)notiArr{
-       self.myBlock(5, notiArr);
+    if (_notiArr != notiArr) {
+        _notiArr = notiArr;
+        self.myBlock(5, notiArr);
+    }
 }
 -(void)setTeamArr:(NSMutableArray *)teamArr{
         self.myBlock(4, teamArr);

@@ -5,6 +5,7 @@ const { RNNeteaseIm } = NativeModules;
 
 export default class NIM{
 
+
     // static init(){
     //     return RNNeteaseIm.init();
     // }

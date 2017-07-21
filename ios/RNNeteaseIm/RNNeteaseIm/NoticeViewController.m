@@ -187,13 +187,15 @@
                         break;
                     case NIMUserOperationRequest:
                         isVerify = @"1";
-                        verifyText = @"请求添加你为好友";
+                        verifyText = [noti.postscript length]?noti.postscript:@"请求添加你为好友";
                         break;
                     case NIMUserOperationVerify:
                         verifyText = @"通过了你的好友请求";
+                        noti.handleStatus = NotificationHandleTypeOk;
                         break;
                     case NIMUserOperationReject:
                         verifyText = @"拒绝了你的好友请求";
+                        noti.handleStatus = NotificationHandleTypeNo;
                         break;
                     default:
                         break;
@@ -251,7 +253,9 @@
 }
 -(void)refrash{
     NIMModel *mode = [NIMModel initShareMD];
-    mode.notiArr = _notiArr;
+    NSMutableArray *ok = [NSMutableArray array];
+   
+    mode.notiArr = ok;
 }
 //返回标记为已读
 -(void)setAllread{
@@ -435,7 +439,7 @@
                                                              completion:^(NSError *error) {
                                                                  if (!error) {
                                                                      
-//                                                                     notices.handleStatus = NotificationHandleTypeNo;
+                                                                     notices.handleStatus = NotificationHandleTypeNo;
 //                                                                     [_notifications replaceObjectAtIndex:i withObject:notices];
 //                                                                     for (NIMSystemNotification *notices in _notifications) {
 //                                                                         NIMKitInfo *sourceMember = [[NIMKit sharedKit] infoByUser:notices.sourceID option:nil];

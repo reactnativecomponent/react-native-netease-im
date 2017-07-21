@@ -17,19 +17,21 @@
     return dispatch_get_main_queue();
 }
 
+
 RCT_EXPORT_MODULE()
+
+
+
 //手动登录
 RCT_EXPORT_METHOD(login:(nonnull NSString *)account token:(nonnull NSString *)token
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject){
+    [self setSendState];
+    [[NIMViewController initWithController] addDelegate];
+    [[NoticeViewController initWithNoticeViewController]initWithDelegate];
     //请将 NIMMyAccount 以及 NIMMyToken 替换成您自己提交到此App下的账号和密码
     [[NIMSDK sharedSDK].loginManager login:account token:token completion:^(NSError *error) {
         if (!error) {
-            
-            [self setSendState];
-            [[NIMViewController initWithController] addDelegate];
-            [[RNNotificationCenter sharedCenter] start];
-            [[NoticeViewController initWithNoticeViewController]initWithDelegate];
             resolve(account);
         }else{
             NSString *strEorr = @"登录失败";

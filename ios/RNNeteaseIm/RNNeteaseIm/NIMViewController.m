@@ -80,6 +80,7 @@
         default:
             break;
     }
+    NSLog(@"--------------------%@",strStatus);
     [NIMModel initShareMD].NetStatus = strStatus;
 }
 //删除一行
