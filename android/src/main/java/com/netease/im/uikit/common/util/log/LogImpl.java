@@ -26,12 +26,15 @@ final class LogImpl {
 	private static final DateFormat fileNameFormat = new SimpleDateFormat(FILE_FORMAT, Locale.getDefault());
 
     private static final Executor logger = Executors.newSingleThreadExecutor();
+	private static boolean DEBUG = false;
 
     public static void init(String logPath, int level) {
         LogImpl.logPath = logPath;
         LogImpl.level = level;
     }
-
+	public static void setDebugAble(boolean debugAble){
+		DEBUG = debugAble;
+	}
 	public static void i(String tag, String msg) {
 		i(tag, msg, null);
 	}
@@ -77,6 +80,9 @@ final class LogImpl {
 	}
 	
 	public static void o(final int priority, final String tag, final String msg, final Throwable tr) {
+		if(!DEBUG){
+			return;
+		}
         final long time = System.currentTimeMillis();
         final long threadId = Thread.currentThread().getId();
         logger.execute(new Runnable() {

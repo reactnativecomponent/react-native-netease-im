@@ -2,6 +2,7 @@ package com.netease.im;
 
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.graphics.Color;
 import android.location.LocationProvider;
 import android.os.Environment;
@@ -108,6 +109,9 @@ public class IMApplication {
 
     }
 
+    public static void setDebugAble(boolean debugAble){
+        LogUtil.setDebugAble(debugAble);
+    }
     private static Observer<CustomNotification> notificationObserver = new Observer<CustomNotification>() {
         @Override
         public void onEvent(CustomNotification customNotification) {
@@ -207,6 +211,7 @@ public class IMApplication {
             // APP默认 StatusBarNotificationConfig 配置修改后，使其生效
             userConfig.notificationEntrance = config.notificationEntrance;
             userConfig.notificationFolded = config.notificationFolded;
+//          userConfig.notificationColor = Color.parseColor("#3a9efb");
         }
         // 持久化生效
 //        UserPreferences.setStatusConfig(config);
@@ -256,8 +261,16 @@ public class IMApplication {
         // init log
         String path = StorageUtil.getDirectoryByDirType(StorageType.TYPE_LOG);
         LogUtil.init(path, Log.DEBUG);
+    }
 
-
+    public static boolean isApkDebugable(Context context) {
+        try {
+            ApplicationInfo info = context.getApplicationInfo();
+            return (info.flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     private static void registerMsgRevokeObserver() {

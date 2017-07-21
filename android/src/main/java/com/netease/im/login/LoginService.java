@@ -2,6 +2,7 @@ package com.netease.im.login;
 
 import android.app.NotificationManager;
 import android.content.Context;
+import android.os.AsyncTask;
 
 import com.netease.im.IMApplication;
 import com.netease.im.ReactCache;
@@ -66,7 +67,7 @@ public class LoginService {
     }
 
     void initLogin(LoginInfo loginInfo) {
-        DataCacheManager.buildDataCacheAsync();
+
     }
 
     public void login(LoginInfo loginInfo, final RequestCallback<LoginInfo> callback) {
@@ -79,8 +80,7 @@ public class LoginService {
                 callback.onSuccess(loginInfo);
 
                 registerObserver(true);
-                queryRecentContacts();
-                startSystemMsgUnreadCount();
+                startLogin();
                 loginInfoFuture = null;
             }
 
@@ -103,6 +103,21 @@ public class LoginService {
     }
 
 
+    private void startLogin() {
+        new AsyncTask<Object, Object, Object>() {
+
+            @Override
+            protected Object doInBackground(Object[] params) {
+                DataCacheManager.buildDataCacheAsync();
+                SysMessageObserver.getInstance().loadMessages(false);
+                queryRecentContacts();
+                startSystemMsgUnreadCount();
+                return null;
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
+    }
+
     private void queryRecentContacts() {
         recentContactObserver.queryRecentContacts();
     }
@@ -122,6 +137,7 @@ public class LoginService {
 //        sysMessageObserver.registerSystemObserver(register);
 //        NIMClient.getService(SystemMessageObserver.class).observeReceiveSystemMsg(systemMessageObserver, register);
         NIMClient.getService(MsgServiceObserve.class).observeCustomNotification(notificationObserver, register);
+        SysMessageObserver.getInstance().register(register);
     }
 
     private NotificationManager notificationManager;
@@ -129,7 +145,7 @@ public class LoginService {
         @Override
         public void onEvent(CustomNotification customNotification) {
 
-            SessionUtil.receiver(getNotificationManager(),customNotification);
+            SessionUtil.receiver(getNotificationManager(), customNotification);
         }
     };
 
@@ -168,11 +184,12 @@ public class LoginService {
         LoginSyncDataStatusObserver.getInstance().reset();
     }
 
-    public void startSystemMsgUnreadCount(){
+    public void startSystemMsgUnreadCount() {
         registerSystemMsgUnreadCount(true);
         int unread = NIMClient.getService(SystemMessageService.class).querySystemMessageUnreadCountBlock();
         ReactCache.emit(ReactCache.observeUnreadCountChange, Integer.toString(unread));
     }
+
     boolean hasRegisterSystemMsgUnreadCount;
     private Observer<Integer> sysMsgUnreadCountChangedObserver = new Observer<Integer>() {
         @Override

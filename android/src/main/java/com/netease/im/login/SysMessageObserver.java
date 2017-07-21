@@ -30,6 +30,18 @@ import java.util.Set;
 public class SysMessageObserver {
 
     final static String TAG = "SysMessageObserver";
+
+    static class InstanceHolder {
+        final static SysMessageObserver instance = new SysMessageObserver();
+    }
+
+    private SysMessageObserver() {
+    }
+
+    public static SysMessageObserver getInstance() {
+        return InstanceHolder.instance;
+    }
+
     /*******************************系统消息********************************/
 
     private static final boolean MERGE_ADD_FRIEND_VERIFY = true; // 是否要合并好友申请，同一个用户仅保留最近一条申请内容（默认不合并）
@@ -41,6 +53,7 @@ public class SysMessageObserver {
     private Set<String> addFriendVerifyRequestAccounts = new HashSet<>(); // 发送过好友申请的账号（好友申请合并用）
 
     private Set<Long> itemIds = new HashSet<>();
+    private List<Observer<SystemMessage>> observerList = new ArrayList<>();
 
     // db
     private boolean firstLoad = true;
@@ -53,6 +66,7 @@ public class SysMessageObserver {
         int validMessageCount = 0; // 实际加载的数量（排除被过滤被合并的条目）
         List<String> messageFromAccounts = new ArrayList<>(LOAD_MESSAGE_COUNT);
 
+        List<SystemMessage> deleteList = new ArrayList<>();
         while (true) {
             List<SystemMessage> temps = NIMClient.getService(SystemMessageService.class)
                     .querySystemMessagesBlock(loadOffset, LOAD_MESSAGE_COUNT);
@@ -73,7 +87,7 @@ public class SysMessageObserver {
 
                 // 同一个账号的好友申请仅保留最近一条
                 if (addFriendVerifyFilter(m)) {
-                    NIMClient.getService(SystemMessageService.class).deleteSystemMessage(m.getMessageId());//删除旧的加好友通知
+                    deleteList.add(m);
                     continue;
                 }
 
@@ -100,6 +114,13 @@ public class SysMessageObserver {
             }
         }
         firstLoad = false;
+        if (!deleteList.isEmpty()) {
+            for (SystemMessage m : deleteList) {
+                NIMClient.getService(SystemMessageService.class).deleteSystemMessage(m.getMessageId());//删除旧的加好友通知
+            }
+            loadOffset -= deleteList.size();
+            deleteList.clear();
+        }
         // 更新数据源，刷新界面
         if (refresh)
             refresh();
@@ -110,46 +131,84 @@ public class SysMessageObserver {
 
     boolean hasRegister;
 
+    public void register(boolean register) {
+
+        NIMClient.getService(SystemMessageObserver.class).observeReceiveSystemMsg(baseSystemMessageObserver, register);
+        registerSystemObserver(new Observer<SystemMessage>() {
+            @Override
+            public void onEvent(SystemMessage systemMessage) {
+                if (hasRegister) {
+                    return;
+                }
+                onIncomingMessage(systemMessage, false);
+            }
+        }, register);
+    }
+
     public void registerSystemObserver(boolean register) {
         if (hasRegister && register) {
             return;
         }
         hasRegister = register;
-        NIMClient.getService(SystemMessageObserver.class).observeReceiveSystemMsg(systemMessageObserver, register);
+        registerSystemObserver(systemMessageObserver, register);
     }
 
+    public void registerSystemObserver(Observer<SystemMessage> o, boolean register) {
+        if (o == null) {
+            return;
+        }
+
+        if (register) {
+            if (!observerList.contains(o)) {
+                observerList.add(o);
+            }
+        } else {
+            observerList.remove(o);
+        }
+
+    }
+
+    private Observer<SystemMessage> baseSystemMessageObserver = new Observer<SystemMessage>() {
+        @Override
+        public void onEvent(SystemMessage systemMessage) {
+            for (Observer<SystemMessage> o : observerList) {
+                o.onEvent(systemMessage);
+            }
+        }
+    };
     private Observer<SystemMessage> systemMessageObserver = new Observer<SystemMessage>() {
         @Override
         public void onEvent(SystemMessage systemMessage) {
-            onIncomingMessage(systemMessage);
+            onIncomingMessage(systemMessage, true);
         }
     };
 
 
-    private void onIncomingMessage(final SystemMessage message) {
+    private void onIncomingMessage(final SystemMessage message, boolean refresh) {
         // 同一个账号的好友申请仅保留最近一条
+        SystemMessage del = null;
         if (addFriendVerifyFilter(message)) {
-            SystemMessage del = null;
             for (SystemMessage m : sysItems) {
                 if (TextUtils.equals(m.getFromAccount(), message.getFromAccount()) && m.getType() == SystemMessageType.AddFriend) {
                     AddFriendNotify attachData = (AddFriendNotify) m.getAttachObject();
                     if (attachData != null && attachData.getEvent() == AddFriendNotify.Event.RECV_ADD_FRIEND_VERIFY_REQUEST) {
                         del = m;
-                        NIMClient.getService(SystemMessageService.class).deleteSystemMessage(m.getMessageId());//删除旧的加好友通知
                         break;
                     }
                 }
             }
-
-            if (del != null) {
-                sysItems.remove(del);
-            }
+        }
+        if (del != null) {
+            sysItems.remove(del);
+            NIMClient.getService(SystemMessageService.class).deleteSystemMessage(del.getMessageId());//删除旧的加好友通知
+        } else {
+            loadOffset++;
         }
 
-        loadOffset++;
         sysItems.add(0, message);
 
-        refresh();
+        if (refresh)
+            refresh();
 
         // 收集未知用户资料的账号集合并从远程获取
         List<String> messageFromAccounts = new ArrayList<>(1);
@@ -229,6 +288,7 @@ public class SysMessageObserver {
     public void startSystemMsg() {
         loadMessages(true);
         registerSystemObserver(true);
+        NIMClient.getService(SystemMessageService.class).resetSystemMessageUnreadCount();
     }
 
     public void stopSystemMsg() {
@@ -334,7 +394,7 @@ public class SysMessageObserver {
         }
 
         SystemMessageStatus status = SystemMessageStatus.expired;
-        NIMClient.getService(SystemMessageService.class).setSystemMessageRead(messageId);
+//        NIMClient.getService(SystemMessageService.class).setSystemMessageRead(messageId);
         NIMClient.getService(SystemMessageService.class).setSystemMessageStatus(messageId, status);
         refreshViewHolder(messageId, status);
     }

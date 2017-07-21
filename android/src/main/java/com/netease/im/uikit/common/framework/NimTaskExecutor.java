@@ -12,6 +12,9 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ *  NimTaskExecutor taskExecutor = new NimTaskExecutor("NIM_HTTP_TASK_EXECUTOR", new NimTaskExecutor.Config(1, 3, 10 * 1000, true));
+ */
 public class NimTaskExecutor implements Executor {
 
     private final static int QUEUE_INIT_CAPACITY = 20;

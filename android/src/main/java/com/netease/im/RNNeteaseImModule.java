@@ -315,7 +315,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
                         }
                     }
                 });
-        SysMessageObserver sysMessageObserver = new SysMessageObserver();
+        SysMessageObserver sysMessageObserver = SysMessageObserver.getInstance();
         sysMessageObserver.loadMessages(false);
         sysMessageObserver.deleteSystemMessageById(contactId, false);
     }
@@ -1670,7 +1670,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
      * *****************************systemMsg 系统通知******************************************
      **/
 
-    SysMessageObserver sysMessageObserver = new SysMessageObserver();
+    SysMessageObserver sysMessageObserver = SysMessageObserver.getInstance();
 
     /**
      * 进入系统通知消息
@@ -1679,7 +1679,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
      */
     @ReactMethod
     public void startSystemMsg(Promise promise) {
-        sysMessageObserver = new SysMessageObserver();
+        sysMessageObserver = SysMessageObserver.getInstance();
         sysMessageObserver.startSystemMsg();
     }
 

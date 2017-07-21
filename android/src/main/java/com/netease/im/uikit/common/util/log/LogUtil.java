@@ -1,6 +1,10 @@
 package com.netease.im.uikit.common.util.log;
 
 public class LogUtil {
+
+	public static void setDebugAble(boolean debugAble){
+		LogImpl.setDebugAble(debugAble);
+	}
     public static final void init(String logFile, int level) {
         LogImpl.init(logFile, level);
     }

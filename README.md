@@ -90,6 +90,7 @@ public class MainApplication extends Application implements ReactApplication {
    @Override
   public void onCreate() {
     //初始化方法appId以及appKey在小米开放平台获取，小米推送证书名称在网易云信后台设置
+    IMApplication.setDebugAble(BuildConfig.DEBUG);
     IMApplication.init(this, MainActivity.class,R.drawable.ic_stat_notify_msg,new    IMApplication.MiPushConfig("小米推送证书名称","小米推送appId","小米推送的appKey"));
    ...
   }
