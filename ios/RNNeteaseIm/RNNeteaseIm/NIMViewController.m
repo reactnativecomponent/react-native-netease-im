@@ -201,7 +201,7 @@
             //群组名称或者聊天对象名称
             [dic setObject:[NSString stringWithFormat:@"%@", [self nameForRecentSession:recent] ] forKey:@"name"];
             //账号
-            [dic setObject:[NSString stringWithFormat:@"%@",recent.lastMessage.from] forKey:@"account"];
+            [dic setObject:[NSString stringWithFormat:@"%@",recent.lastMessage.session.sessionId] forKey:@"account"];
             //消息类型
             [dic setObject:[NSString stringWithFormat:@"%ld", recent.lastMessage.messageType] forKey:@"msgType"];
             //消息状态
@@ -214,7 +214,7 @@
             [dic setObject:[NSString stringWithFormat:@"%@", [self timestampDescriptionForRecentSession:recent] ] forKey:@"time"];
             
             [dic setObject:[NSString stringWithFormat:@"%@", [self imageUrlForRecentSession:recent] ?  [self imageUrlForRecentSession:recent] : @""] forKey:@"imagePath"];
-            NIMUser *user = [[NIMSDK sharedSDK].userManager userInfo:recent.lastMessage.from];
+            NIMUser *user = [[NIMSDK sharedSDK].userManager userInfo:recent.lastMessage.session.sessionId];
             NSString *strMute = user.notifyForNewMsg?@"1":@"0";
             [dic setObject:strMute forKey:@"mute"];
             [sessionList addObject:dic];

@@ -188,55 +188,58 @@
 
 }
 //修改个人资料
--(void)updateMyUserInfo:(NSDictionary *)userInFo Success:(Success )success error:(Error )err{
+-(void)updateMyUserInfo:(NSString *)strName{
+    [self fetchUserInfos:[NIMSDK sharedSDK].loginManager.currentAccount Success:^(id param) {
+        NSLog(@"更新成功");
+    } error:^(NSString *error) {
+        NSLog(@"更新失败");
+    }];
+    /*
     NSArray *keys = [userInFo allKeys];
-    NSMutableDictionary  *userDic;
+    NSMutableDictionary  *userDic = [NSMutableDictionary dictionary];
     for (NSString *tem  in keys) {
         //设置用户昵称
-        if ([[userInFo objectForKey:tem] isEqualToString:@"NIMUserInfoUpdateTagNick"]) {
-            [userDic setObject:@(NIMUserInfoUpdateTagNick) forKey:[userInFo objectForKey:@"NIMUserInfoUpdateTagNick"]];
+        if ([tem isEqualToString:@"NIMUserInfoUpdateTagNick"]) {
+            [userDic setObject:[userInFo objectForKey:@"NIMUserInfoUpdateTagNick"] forKey:@(NIMUserInfoUpdateTagNick)];
         }
         //用户头像
-        if ([[userInFo objectForKey:tem] isEqualToString:@"NIMUserInfoUpdateTagAvatar"]) {
-            [userDic setObject:@(NIMUserInfoUpdateTagAvatar) forKey:[userInFo objectForKey:@"NIMUserInfoUpdateTagAvatar"]];
+        if ([tem isEqualToString:@"NIMUserInfoUpdateTagAvatar"]) {
+            [userDic setObject:[userInFo objectForKey:@"NIMUserInfoUpdateTagAvatar"] forKey:@(NIMUserInfoUpdateTagAvatar)];
         }
         //用户签名
-        if ([[userInFo objectForKey:tem] isEqualToString:@"NIMUserInfoUpdateTagSign"]) {
-            [userDic setObject:@(NIMUserInfoUpdateTagSign) forKey:[userInFo objectForKey:@"NIMUserInfoUpdateTagSign"]];
+        if ([tem isEqualToString:@"NIMUserInfoUpdateTagSign"]) {
+            [userDic setObject:[userInFo objectForKey:@"NIMUserInfoUpdateTagSign"] forKey:@(NIMUserInfoUpdateTagSign)];
         }
         //用户性别
-        if ([[userInFo objectForKey:tem] isEqualToString:@"NIMUserInfoUpdateTagGender"]) {
-            [userDic setObject:@(NIMUserInfoUpdateTagGender) forKey:[userInFo objectForKey:@"NIMUserInfoUpdateTagGender"]];
+        if ([tem isEqualToString:@"NIMUserInfoUpdateTagGender"]) {
+            [userDic setObject:[userInFo objectForKey:@"NIMUserInfoUpdateTagGender"] forKey:@(NIMUserInfoUpdateTagGender)];
         }
         //用户邮箱
-        if ([[userInFo objectForKey:tem] isEqualToString:@"NIMUserInfoUpdateTagEmail"]) {
-            [userDic setObject:@(NIMUserInfoUpdateTagEmail) forKey:[userInFo objectForKey:@"NIMUserInfoUpdateTagEmail"]];
+        if ([tem isEqualToString:@"NIMUserInfoUpdateTagEmail"]) {
+            [userDic setObject:[userInFo objectForKey:@"NIMUserInfoUpdateTagEmail"] forKey:@(NIMUserInfoUpdateTagEmail)];
         }
         //用户生日
-        if ([[userInFo objectForKey:tem] isEqualToString:@"NIMUserInfoUpdateTagBirth"]) {
-            [userDic setObject:@(NIMUserInfoUpdateTagBirth) forKey:[userInFo objectForKey:@"NIMUserInfoUpdateTagBirth"]];
+        if ([tem isEqualToString:@"NIMUserInfoUpdateTagBirth"]) {
+            [userDic setObject:[userInFo objectForKey:@"NIMUserInfoUpdateTagBirth"] forKey:@(NIMUserInfoUpdateTagBirth)];
         }
         //用户手机
-        if ([[userInFo objectForKey:tem] isEqualToString:@"NIMUserInfoUpdateTagBirth"]) {
-            [userDic setObject:@(NIMUserInfoUpdateTagBirth) forKey:[userInFo objectForKey:@"NIMUserInfoUpdateTagBirth"]];
+        if ([tem isEqualToString:@"NIMUserInfoUpdateTagBirth"]) {
+            [userDic setObject:[userInFo objectForKey:@"NIMUserInfoUpdateTagBirth"] forKey:@(NIMUserInfoUpdateTagBirth)];
         }
         //拓展字段
-        if ([[userInFo objectForKey:tem] isEqualToString:@"NIMUserInfoUpdateTagExt"]) {
-            [userDic setObject:@(NIMUserInfoUpdateTagExt) forKey:[userInFo objectForKey:@"NIMUserInfoUpdateTagExt"]];
+        if ([tem isEqualToString:@"NIMUserInfoUpdateTagExt"]) {
+            [userDic setObject:[userInFo objectForKey:@"NIMUserInfoUpdateTagExt"] forKey:@(NIMUserInfoUpdateTagExt)];
         }
-        
     }
-    
-    
     [[NIMSDK sharedSDK].userManager updateMyUserInfo:userDic completion:^(NSError *error) {
         if (!error) {
             success(@"设置成功");
         }else{
             err(@"昵称设置失败，请重试");
         }
-    }];
-
+    }];*/
 }
+
 //- (void)presentMemberSelector:(ContactSelectFinishBlock) block{
 //    NSMutableArray *users = [[NSMutableArray alloc] init];
 //    //使用内置的好友选择器
