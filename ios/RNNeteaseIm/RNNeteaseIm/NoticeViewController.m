@@ -253,9 +253,8 @@
 }
 -(void)refrash{
     NIMModel *mode = [NIMModel initShareMD];
-    NSMutableArray *ok = [NSMutableArray array];
    
-    mode.notiArr = ok;
+    mode.notiArr = _notiArr;
 }
 //返回标记为已读
 -(void)setAllread{
