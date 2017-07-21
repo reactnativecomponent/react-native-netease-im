@@ -567,7 +567,7 @@
     }
     if (message.messageType == NIMMessageTypeNotification) return;
     if (message.session.sessionType == NIMSessionTypeP2P) {//个人
-        NIMUser *user = [[NIMSDK sharedSDK].userManager userInfo:message.from];
+        NIMUser *user = [[NIMSDK sharedSDK].userManager userInfo:message.session.sessionId];
         needToPlay = user.notifyForNewMsg;
         
     }else if(message.session.sessionType == NIMSessionTypeTeam){//群
