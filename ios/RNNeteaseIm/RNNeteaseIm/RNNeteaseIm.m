@@ -9,7 +9,16 @@
 #import "RNNeteaseIm.h"
 #import "RCTUtils.h"
 #import "RNNotificationCenter.h"
+
 @implementation RNNeteaseIm
+
+- (instancetype)init{
+    if (self = [super init]) {
+        
+    }
+    [self initController];
+    return self;
+}
 
 @synthesize bridge = _bridge;
 - (dispatch_queue_t)methodQueue
@@ -26,10 +35,6 @@ RCT_EXPORT_MODULE()
 RCT_EXPORT_METHOD(login:(nonnull NSString *)account token:(nonnull NSString *)token
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject){
-    [self setSendState];
-    [[NIMViewController initWithController] addDelegate];
-    [[NoticeViewController initWithNoticeViewController]initWithDelegate];
-    [[RNNotificationCenter sharedCenter] start];
     //请将 NIMMyAccount 以及 NIMMyToken 替换成您自己提交到此App下的账号和密码
     [[NIMSDK sharedSDK].loginManager login:account token:token completion:^(NSError *error) {
         if (!error) {
@@ -567,6 +572,12 @@ RCT_EXPORT_METHOD(cleanCache){
     
 }
 
+- (void)initController{
+    [self setSendState];
+    [[NIMViewController initWithController] addDelegate];
+    [[NoticeViewController initWithNoticeViewController]initWithDelegate];
+    [[RNNotificationCenter sharedCenter] start];
+}
 
 -(void)setSendState{
     NIMModel *mod = [NIMModel initShareMD];

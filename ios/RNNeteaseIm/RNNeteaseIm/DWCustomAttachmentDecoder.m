@@ -8,7 +8,6 @@
 
 #import "DWCustomAttachmentDecoder.h"
 
-
 @implementation DWCustomAttachmentDecoder
 
 - (id<NIMCustomAttachment>)decodeAttachment:(NSString *)content
