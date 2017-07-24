@@ -93,7 +93,11 @@ public class ReactCache {
     }
 
     public static void emit(String eventName, Object date) {
-        reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit(eventName, date);
+        try {
+            reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit(eventName, date);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static Object createRecentList(List<RecentContact> recents, int unreadNum) {
@@ -114,6 +118,7 @@ public class ReactCache {
                 String name = "";
                 SessionTypeEnum sessionType = contact.getSessionType();
                 String imagePath = "";
+                Team team = null;
                 if (sessionType == SessionTypeEnum.P2P) {
                     map.putString("teamType", "-1");
                     NimUserInfoCache nimUserInfoCache = NimUserInfoCache.getInstance();
@@ -122,7 +127,7 @@ public class ReactCache {
                     map.putString("mute", boolean2String(NIMClient.getService(FriendService.class).isNeedMessageNotify(contactId)));
                     name = nimUserInfoCache.getUserDisplayName(contactId);
                 } else if (sessionType == SessionTypeEnum.Team) {
-                    Team team = TeamDataCache.getInstance().getTeamById(contactId);
+                    team = TeamDataCache.getInstance().getTeamById(contactId);
                     if (team != null) {
                         name = team.getName();
                         map.putString("teamType", Integer.toString(team.getType().getValue()));
@@ -168,7 +173,7 @@ public class ReactCache {
                         }
                         break;
                     case notification:
-                        if (sessionType == SessionTypeEnum.Team) {
+                        if (sessionType == SessionTypeEnum.Team && team != null) {
                             content = TeamNotificationHelper.getTeamNotificationText(contact.getContactId(),
                                     contact.getFromAccount(),
                                     (NotificationAttachment) contact.getAttachment());
@@ -724,7 +729,12 @@ public class ReactCache {
 
         WritableMap user = Arguments.createMap();
         String fromAccount = item.getFromAccount();
-        String fromNick = item.getFromNick();
+        String fromNick = null;
+        try {
+            fromNick = item.getFromNick();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         user.putString("_id", fromAccount);
 
         if (item.getSessionType() == SessionTypeEnum.Team && !TextUtils.equals(LoginService.getInstance().getAccount(), fromAccount)) {

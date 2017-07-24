@@ -25,11 +25,13 @@ public class BlackListObserver {
         items.clear();
         final List<String> accounts = NIMClient.getService(FriendService.class).getBlackList();
         List<String> unknownAccounts = new ArrayList<>();
-        for (String contactId : accounts) {
-            if (!NimUserInfoCache.getInstance().hasUser(contactId)) {
-                unknownAccounts.add(contactId);
-            } else {
-                items.add(NimUserInfoCache.getInstance().getUserInfo(contactId));
+        if (accounts != null) {
+            for (String contactId : accounts) {
+                if (!NimUserInfoCache.getInstance().hasUser(contactId)) {
+                    unknownAccounts.add(contactId);
+                } else {
+                    items.add(NimUserInfoCache.getInstance().getUserInfo(contactId));
+                }
             }
         }
 
@@ -53,8 +55,8 @@ public class BlackListObserver {
                 .setCallback(new RequestCallbackWrapper<Void>() {
                     @Override
                     public void onResult(int code, Void aVoid, Throwable throwable) {
-                        if(callbackWrapper!=null){
-                            callbackWrapper.onResult(code,aVoid,throwable);
+                        if (callbackWrapper != null) {
+                            callbackWrapper.onResult(code, aVoid, throwable);
                         }
                         if (code == ResponseCode.RES_SUCCESS) {
                             removeBlackList(contactId);
@@ -62,13 +64,14 @@ public class BlackListObserver {
                     }
                 });
     }
+
     public void addToBlackList(final String contactId, final RequestCallbackWrapper<Void> callbackWrapper) {
         NIMClient.getService(FriendService.class).addToBlackList(contactId)
                 .setCallback(new RequestCallbackWrapper<Void>() {
                     @Override
                     public void onResult(int code, Void aVoid, Throwable throwable) {
-                        if(callbackWrapper!=null){
-                            callbackWrapper.onResult(code,aVoid,throwable);
+                        if (callbackWrapper != null) {
+                            callbackWrapper.onResult(code, aVoid, throwable);
                         }
                         if (code == ResponseCode.RES_SUCCESS) {
                             addBlackList(contactId);
@@ -76,10 +79,12 @@ public class BlackListObserver {
                     }
                 });
     }
-    void addBlackList(String contactId){
+
+    void addBlackList(String contactId) {
         items.add(NimUserInfoCache.getInstance().getUserInfo(contactId));
         refresh();
     }
+
     private void removeBlackList(String contactId) {
 
         int index = -1;
@@ -98,6 +103,7 @@ public class BlackListObserver {
 
         refresh();
     }
+
     void refresh() {
         ReactCache.emit(ReactCache.observeBlackList, ReactCache.createBlackList(items));
     }
