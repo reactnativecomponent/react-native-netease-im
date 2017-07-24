@@ -29,6 +29,7 @@ RCT_EXPORT_METHOD(login:(nonnull NSString *)account token:(nonnull NSString *)to
     [self setSendState];
     [[NIMViewController initWithController] addDelegate];
     [[NoticeViewController initWithNoticeViewController]initWithDelegate];
+    [[RNNotificationCenter sharedCenter] start];
     //请将 NIMMyAccount 以及 NIMMyToken 替换成您自己提交到此App下的账号和密码
     [[NIMSDK sharedSDK].loginManager login:account token:token completion:^(NSError *error) {
         if (!error) {
