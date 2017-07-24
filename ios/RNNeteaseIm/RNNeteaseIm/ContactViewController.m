@@ -327,7 +327,7 @@
         [[NIMSDK sharedSDK].userManager requestFriend:request completion:^(NSError *error) {
             if (!error) {
                 success(successText);
-                [weakSelf sendCustomNotificationContent:msg andSessionID:userId andApnsContent:apnsContent AndData:dataDict shouldBeCounted:NO];
+                [weakSelf sendCustomNotificationContent:msg andSessionID:userId andApnsContent:apnsContent AndData:dataDict shouldBeCounted:YES];
                // [self refresh];
             }else{
                 err(failedText);
