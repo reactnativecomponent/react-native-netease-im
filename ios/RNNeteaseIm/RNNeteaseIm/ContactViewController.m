@@ -327,7 +327,7 @@
         [[NIMSDK sharedSDK].userManager requestFriend:request completion:^(NSError *error) {
             if (!error) {
                 success(successText);
-                [weakSelf sendCustomNotificationContent:msg andSessionID:userId andApnsContent:apnsContent AndData:dataDict];
+                [weakSelf sendCustomNotificationContent:msg andSessionID:userId andApnsContent:apnsContent AndData:dataDict shouldBeCounted:NO];
                // [self refresh];
             }else{
                 err(failedText);
@@ -335,10 +335,11 @@
         }];
 }
 //发送自定义通知
-- (void)sendCustomNotificationContent:(NSString *)content andSessionID:(NSString *)sessionID andApnsContent:(NSString *)strApns AndData:(NSDictionary *)dict{
+- (void)sendCustomNotificationContent:(NSString *)content andSessionID:(NSString *)sessionID andApnsContent:(NSString *)strApns AndData:(NSDictionary *)dict shouldBeCounted:(BOOL)isCounted{
     NIMSession *session = [NIMSession session:sessionID type:NIMSessionTypeP2P];
     NIMCustomSystemNotification *notifi = [[NIMCustomSystemNotification alloc]initWithContent:content];
     NIMCustomSystemNotificationSetting *setting = [[NIMCustomSystemNotificationSetting alloc]init];
+    setting.shouldBeCounted = isCounted;
     setting.apnsEnabled = YES;
     notifi.apnsContent = strApns;
     notifi.apnsPayload = dict;
