@@ -433,12 +433,8 @@
         return @"[视频聊天]";
     }
     if (object.notificationType == NIMNotificationTypeTeam) {
-        NIMTeam *team = [[NIMSDK sharedSDK].teamManager teamById:lastMessage.session.sessionId];
-        if (team.type == NIMTeamTypeNormal) {
-            return @"[讨论组信息更新]";
-        }else{
-            return @"[群信息更新]";
-        }
+        NSString *strContent = [NIMKitUtil teamNotificationFormatedMessage:lastMessage];
+        return strContent;
     }
     return @"[未知消息]";
 }

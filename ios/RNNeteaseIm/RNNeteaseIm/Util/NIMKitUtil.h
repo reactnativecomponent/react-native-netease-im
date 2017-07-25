@@ -24,4 +24,6 @@
 
 + (BOOL)canInviteMember:(NIMTeamMember *)member;
 
++ (NSString*)teamNotificationFormatedMessage:(NIMMessage *)message;
+
 @end
