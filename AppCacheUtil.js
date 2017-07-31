@@ -1,5 +1,5 @@
 'use strict'
-import { NativeModules,Platform } from 'react-native';
+import { NativeModules,Platform, NetInfo } from 'react-native';
 
 const { RNNeteaseIm } = NativeModules;
 
@@ -21,8 +21,16 @@ export default class AppCacheUtil{
     /**
      * 获取网络状态
      */
-    static getNetWorkStatus(){//0：无网络，1：有网络
-        return RNNeteaseIm.getNetWorkStatus();
+    static NetIsConnected(){//0：无网络，1：有网络
+        if(Platform.OS === 'ios'){
+           if(RNNeteaseIm.getNetWorkStatus() === '1'){
+               return true;
+           }
+           return false;
+        }else{
+            return NetInfo.isConnected.fetch().done();
+        }
     }
+
 }
 
