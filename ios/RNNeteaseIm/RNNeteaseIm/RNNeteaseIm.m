@@ -655,5 +655,24 @@ RCT_EXPORT_METHOD(cleanCache){
     };
 }
 
+//开启录音权限
+RCT_EXPORT_METHOD(getNetWorkStatus:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject){
+    UIApplication *app = [UIApplication sharedApplication];
+    NSArray *children = [[[app valueForKeyPath:@"statusBar"] valueForKeyPath:@"foregroundView"] subviews];
+    int type = 0;//0:无网络, 1:2G, 2:3G, 3:4G, 4:LTE准4G，5：wifi
+    for (id child in children) {
+        if ([child isKindOfClass:[NSClassFromString(@"UIStatusBarDataNetworkItemView") class]]) {
+            type = [[child valueForKeyPath:@"dataNetworkType"] intValue];
+        }
+    }
+    if (type) {
+        resolve(@(1));
+    }else{
+        resolve(@(0));
+    }
+    
+}
+
 
 @end

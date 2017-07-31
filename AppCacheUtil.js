@@ -17,5 +17,12 @@ export default class AppCacheUtil{
     static getCacheSize(){
         return RNNeteaseIm.getCacheSize();
     }
+
+    /**
+     * 获取网络状态
+     */
+    static getNetWorkStatus(){//0：无网络，1：有网络
+        return RNNeteaseIm.getNetWorkStatus();
+    }
 }
 
