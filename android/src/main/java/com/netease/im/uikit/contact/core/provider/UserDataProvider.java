@@ -25,7 +25,7 @@ public final class UserDataProvider {
             items.add(new ContactItem(ContactHelper.makeContactFromUserInfo(u), ItemTypes.FRIEND));
         }
 
-        LogUtil.i(TAG, "contact provide data size =" + items.size());
+        LogUtil.w(TAG, "contact provide data size =" + items.size());
         return items;
     }
 

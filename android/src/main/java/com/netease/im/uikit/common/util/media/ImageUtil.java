@@ -277,7 +277,7 @@ public class ImageUtil {
         String filePath = imageFile.getPath();
 
         if (!isInvalidPictureFile(mimeType)) {
-            LogUtil.i("ImageUtil", "is invalid picture file");
+            LogUtil.w("ImageUtil", "is invalid picture file");
             return null;
         }
 

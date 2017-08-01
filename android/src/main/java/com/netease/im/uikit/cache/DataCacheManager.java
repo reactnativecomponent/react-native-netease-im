@@ -56,7 +56,7 @@ public class DataCacheManager {
                     });
                 }
 
-                LogUtil.i(TAG, "build data cache completed");
+                LogUtil.w(TAG, "build data cache completed");
             }
         });
     }
@@ -105,6 +105,6 @@ public class DataCacheManager {
         }
         sb.append(", total size=" + accounts.size());
 
-        LogUtil.i(logTag, sb.toString());
+        LogUtil.w(logTag, sb.toString());
     }
 }

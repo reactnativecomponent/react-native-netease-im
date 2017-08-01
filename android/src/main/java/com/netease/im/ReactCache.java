@@ -101,7 +101,7 @@ public class ReactCache {
     }
 
     public static Object createRecentList(List<RecentContact> recents, int unreadNum) {
-        LogUtil.i(TAG, "size:" + (recents == null ? 0 : recents.size()));
+        LogUtil.w(TAG, "size:" + (recents == null ? 0 : recents.size()));
         // recents参数即为最近联系人列表（最近会话列表）
         WritableMap writableMap = Arguments.createMap();
         WritableArray array = Arguments.createArray();
@@ -267,7 +267,7 @@ public class ReactCache {
                 map.putString("content", content);
                 array.pushMap(map);
             }
-            LogUtil.i(TAG, array + "");
+            LogUtil.w(TAG, array + "");
         }
         writableMap.putArray("recents", array);
         writableMap.putString("unreadCount", Integer.toString(unreadNumTotal));
@@ -302,7 +302,7 @@ public class ReactCache {
      * @return
      */
     public static Object createFriendList(ContactDataList dataList, boolean hasFilter) {
-        LogUtil.i(TAG, dataList.getCount() + "");
+        LogUtil.w(TAG, dataList.getCount() + "");
         WritableArray array = Arguments.createArray();
         if (dataList != null) {
             int count = dataList.getCount();
@@ -337,7 +337,7 @@ public class ReactCache {
                 }
             }
         }
-        LogUtil.i(TAG, array + "");
+        LogUtil.w(TAG, array + "");
         return array;
     }
 
@@ -391,7 +391,7 @@ public class ReactCache {
             listHashMap.clear();
         }
 
-        LogUtil.i(TAG, writableMap + "");
+        LogUtil.w(TAG, writableMap + "");
         return writableMap;
     }
 
@@ -431,7 +431,7 @@ public class ReactCache {
             }
         }
 
-        LogUtil.i(TAG, writableArray + "");
+        LogUtil.w(TAG, writableArray + "");
         return writableArray;
     }
 

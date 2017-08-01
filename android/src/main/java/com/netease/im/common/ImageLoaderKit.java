@@ -72,7 +72,7 @@ public class ImageLoaderKit {
             LogUtil.e(TAG, "init ImageLoaderKit error, e=" + e.getMessage().toString());
         }
 
-        LogUtil.i(TAG, "init ImageLoaderKit completed");
+        LogUtil.w(TAG, "init ImageLoaderKit completed");
     }
 
     public void clear() {
@@ -93,8 +93,8 @@ public class ImageLoaderKit {
         int MAX_CACHE_MEMORY_SIZE = (int) (Runtime.getRuntime().maxMemory() / 8);
         File cacheDir = getChacheDir();
 
-        LogUtil.i(TAG, "ImageLoader memory cache size = " + MAX_CACHE_MEMORY_SIZE / M + "M");
-        LogUtil.i(TAG, "ImageLoader disk cache directory = " + cacheDir.getAbsolutePath());
+        LogUtil.w(TAG, "ImageLoader memory cache size = " + MAX_CACHE_MEMORY_SIZE / M + "M");
+        LogUtil.w(TAG, "ImageLoader disk cache directory = " + cacheDir.getAbsolutePath());
 
         ImageLoaderConfiguration config = new ImageLoaderConfiguration
                 .Builder(context)
@@ -157,7 +157,7 @@ public class ImageLoaderKit {
             }
         }
 
-        LogUtil.i(TAG, "build avatar cache completed, avatar count =" + accounts.size());
+        LogUtil.w(TAG, "build avatar cache completed, avatar count =" + accounts.size());
     }
 
     /**

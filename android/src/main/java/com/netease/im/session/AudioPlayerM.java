@@ -176,7 +176,7 @@ public final class AudioPlayerM {
     }
 
     private void startPlay() {
-        LogUtil.i("AudioPlayerM", "start() called");
+        LogUtil.w("AudioPlayerM", "start() called");
         this.endPlay();
         this.startInner();
     }
@@ -205,7 +205,7 @@ public final class AudioPlayerM {
         this.audioManager.requestAudioFocus(this.onAudioFocusChangeListener, this.audioStreamType, 2);
         this.mPlayer.setOnPreparedListener(new OnPreparedListener() {
             public void onPrepared(MediaPlayer var1) {
-                LogUtil.i("AudioPlayerM", "player:onPrepared");
+                LogUtil.w("AudioPlayerM", "player:onPrepared");
                 AudioPlayerM.this.mHandler.sendEmptyMessage(0);
                 if (AudioPlayerM.this.mListener != null) {
                     AudioPlayerM.this.mListener.onPrepared();
@@ -215,7 +215,7 @@ public final class AudioPlayerM {
         });
         this.mPlayer.setOnCompletionListener(new OnCompletionListener() {
             public void onCompletion(MediaPlayer var1) {
-                LogUtil.i("AudioPlayerM", "player:onCompletion");
+                LogUtil.w("AudioPlayerM", "player:onCompletion");
                 AudioPlayerM.this.endPlay();
                 if (AudioPlayerM.this.mListener != null) {
                     AudioPlayerM.this.mListener.onCompletion();
@@ -249,7 +249,7 @@ public final class AudioPlayerM {
                 }
                 this.mPlayer.prepare();
                 this.mPlayer.start();
-                LogUtil.i("AudioPlayerM", "player:start ok---->" + this.mAudioFile);
+                LogUtil.w("AudioPlayerM", "player:start ok---->" + this.mAudioFile);
             } else {
                 if (this.mListener != null) {
                     this.mListener.onError("no datasource");

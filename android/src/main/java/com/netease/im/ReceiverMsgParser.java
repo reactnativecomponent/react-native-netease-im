@@ -22,6 +22,15 @@ import java.util.ArrayList;
 
 public class ReceiverMsgParser {
 
+    public static boolean checkOpen(Intent intent) {
+        if (intent != null && canAutoLogin()) {
+            if (intent.hasExtra(NimIntent.EXTRA_NOTIFY_CONTENT) || intent.hasExtra(Extras.EXTRA_JUMP_P2P)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static Bundle openIntent(Intent intent) {
         Bundle result = new Bundle();
         if (intent != null && canAutoLogin()) {
@@ -45,7 +54,8 @@ public class ReceiverMsgParser {
                 }
             }
         }
-        LogUtil.i("ReceiverMsgParser",result+"");
+        LogUtil.w("ReceiverMsgParser", intent + "");
+        LogUtil.w("ReceiverMsgParser", result + "");
         return result;
     }
 

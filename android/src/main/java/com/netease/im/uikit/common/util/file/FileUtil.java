@@ -66,7 +66,7 @@ public class FileUtil {
             MimeTypeMap mime = MimeTypeMap.getSingleton();
             type = mime.getMimeTypeFromExtension(extension);
         }
-        LogUtil.i(TAG, "url:" + filePath + " " + "type:" + type);
+        LogUtil.w(TAG, "url:" + filePath + " " + "type:" + type);
 
         // FIXME
         if (StringUtil.isEmpty(type) && filePath.endsWith("aac")) {

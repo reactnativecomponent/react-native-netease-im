@@ -38,11 +38,11 @@ public class TeamDataCache {
 
     public void buildCache() {
         final List<Team> teams = NIMClient.getService(TeamService.class).queryTeamListBlock();
-        LogUtil.i(TAG, "start build TeamDataCache");
+        LogUtil.w(TAG, "start build TeamDataCache");
 
         addOrUpdateTeam(teams);
 
-        LogUtil.i(TAG, "build TeamDataCache completed, team count = " + teams.size());
+        LogUtil.w(TAG, "build TeamDataCache completed, team count = " + teams.size());
     }
 
     public void clear() {
@@ -82,7 +82,7 @@ public class TeamDataCache {
         @Override
         public void onEvent(final List<Team> teams) {
             if (teams != null) {
-                LogUtil.i(TAG, "team update size:" + teams.size());
+                LogUtil.w(TAG, "team update size:" + teams.size());
             }
             addOrUpdateTeam(teams);
             notifyTeamDataUpdate(teams);

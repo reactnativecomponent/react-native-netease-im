@@ -49,7 +49,7 @@ public class LoginSyncDataStatusObserver {
      * 调用时机：主进程Application onCreate中
      */
     public void registerLoginSyncDataStatus(boolean register) {
-        LogUtil.i(TAG, "observe login sync data completed event on Application create");
+        LogUtil.w(TAG, "observe login sync data completed event on Application create");
         NIMClient.getService(AuthServiceObserver.class).observeLoginSyncDataStatus(loginSyncStatusObserver, register);
     }
 
@@ -58,9 +58,9 @@ public class LoginSyncDataStatusObserver {
         public void onEvent(LoginSyncStatus status) {
             syncStatus = status;
             if (status == LoginSyncStatus.BEGIN_SYNC) {
-                LogUtil.i(TAG, "login sync data begin");
+                LogUtil.w(TAG, "login sync data begin");
             } else if (status == LoginSyncStatus.SYNC_COMPLETED) {
-                LogUtil.i(TAG, "login sync data completed");
+                LogUtil.w(TAG, "login sync data completed");
                 onLoginSyncDataCompleted(false);
             }
         }
@@ -114,7 +114,7 @@ public class LoginSyncDataStatusObserver {
      * 登录同步数据完成处理
      */
     private void onLoginSyncDataCompleted(boolean timeout) {
-        LogUtil.i(TAG, "onLoginSyncDataCompleted, timeout=" + timeout);
+        LogUtil.w(TAG, "onLoginSyncDataCompleted, timeout=" + timeout);
 
         // 移除超时任务（有可能完成包到来的时候，超时任务都还没创建）
         if (timeoutRunnable != null) {

@@ -91,7 +91,7 @@ public class SessionUtil {
     }
 
     public static void receiver(NotificationManager manager, CustomNotification customNotification) {
-        LogUtil.i("SessionUtil", customNotification.getContent());
+        LogUtil.w("SessionUtil", customNotification.getContent());
         Map<String, Object> map = customNotification.getPushPayload();
         if (map != null && map.containsKey("type")) {
             String type = (String) map.get("type");
@@ -126,9 +126,9 @@ public class SessionUtil {
 //                    t = System.currentTimeMillis() / 1000;
 //                    e.printStackTrace();
 //                }
-//                LogUtil.i("timestamp","timestamp:"+timestamp);
-//                LogUtil.i("timestamp","t:"+t);
-//                LogUtil.i("timestamp",""+data);
+//                LogUtil.w("timestamp","timestamp:"+timestamp);
+//                LogUtil.w("timestamp","t:"+t);
+//                LogUtil.w("timestamp",""+data);
                 String sessionId = data.getString("sessionId");
                 String sessionType = data.getString("sessionType");
                 final String id =  sessionId;//getSessionType(sessionType) == SessionTypeEnum.P2P ? openId :

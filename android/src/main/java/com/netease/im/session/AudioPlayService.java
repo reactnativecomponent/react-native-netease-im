@@ -53,7 +53,7 @@ public class AudioPlayService implements SensorEventListener {
         if (TextUtils.isEmpty(filePath)) {
             return;
         }
-        LogUtil.i(type, "path:" + filePath);
+        LogUtil.w(type, "path:" + filePath);
         if (audioStreamType == -1) {
             register(context, true);
         } else {

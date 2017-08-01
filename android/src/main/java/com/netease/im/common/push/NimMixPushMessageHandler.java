@@ -26,7 +26,7 @@ public class NimMixPushMessageHandler implements MixPushMessageHandler {
     @Override
     public boolean onNotificationClicked(Context context, Map<String, String> payload) {
 
-        LogUtil.i(NimMixPushMessageHandler.class.getSimpleName(), "rev miPushMessage payload " + payload);
+        LogUtil.w(NimMixPushMessageHandler.class.getSimpleName(), "rev miPushMessage payload " + payload);
 
         String sessionId = payload.get("sessionID");
         String type = payload.get("sessionType");

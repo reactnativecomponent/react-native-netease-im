@@ -74,7 +74,7 @@ public class TeamListService {
             return false;
         }
 
-        LogUtil.i(TAG, "contact load data");
+        LogUtil.w(TAG, "contact load data");
 
         startTask(null, false);
 
@@ -152,7 +152,7 @@ public class TeamListService {
         protected void onProgressUpdate(Object... values) {
             AbsContactDataList datas = (AbsContactDataList) values[0];
             boolean all = (Boolean) values[1];
-            LogUtil.i(TAG, datas.getCount() + "");
+            LogUtil.w(TAG, datas.getCount() + "");
 
 
 //            onPostLoad(datas.isEmpty(), datas.getQueryText(), all);

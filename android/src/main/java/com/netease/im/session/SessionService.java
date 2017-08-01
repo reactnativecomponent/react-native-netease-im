@@ -798,7 +798,7 @@ public class SessionService {
                     messageQueryListener.onResult(code, null);
                     return;
                 }
-                LogUtil.i(TAG, messageList.get(0).getUuid() + "::" + messageList.get(0).getContent());
+                LogUtil.w(TAG, messageList.get(0).getUuid() + "::" + messageList.get(0).getContent());
                 messageQueryListener.onResult(code, messageList.get(0));
             }
         });
@@ -865,7 +865,7 @@ public class SessionService {
                 e.printStackTrace();
             }
             if (attachment != null && !TextUtils.isEmpty(attachment.getPath())) {
-                LogUtil.i(TAG, "attachmentPath:" + attachment.getPath());
+                LogUtil.w(TAG, "attachmentPath:" + attachment.getPath());
                 return true;
             }
         }

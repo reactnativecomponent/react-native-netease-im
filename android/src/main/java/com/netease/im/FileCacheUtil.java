@@ -56,28 +56,28 @@ public class FileCacheUtil {
                 long allLength = 0;
                 for (String s : pathList) {
                     long t = makeDirSize(new File(s));
-                    LogUtil.i(TAG, s + ":" + FileUtil.formatFileSize(t));
+                    LogUtil.w(TAG, s + ":" + FileUtil.formatFileSize(t));
                     allLength += t;
                 }
-                LogUtil.i(TAG, "allFile" + ":" + FileUtil.formatFileSize(allLength));
+                LogUtil.w(TAG, "allFile" + ":" + FileUtil.formatFileSize(allLength));
                 final long finalAllLength = allLength;
                 getCacheSize(new IPackageStatsObserver.Stub() {
                     @Override
                     public void onGetStatsCompleted(PackageStats pStats, boolean succeeded) throws RemoteException {
 
-                        LogUtil.i(TAG, "cacheSize" + ":" + FileUtil.formatFileSize(pStats.cacheSize));
-                        LogUtil.i(TAG, "externalCacheSize" + ":" + FileUtil.formatFileSize(pStats.externalCacheSize));
+                        LogUtil.w(TAG, "cacheSize" + ":" + FileUtil.formatFileSize(pStats.cacheSize));
+                        LogUtil.w(TAG, "externalCacheSize" + ":" + FileUtil.formatFileSize(pStats.externalCacheSize));
 
-//                        LogUtil.i(TAG, "codeSize" + ":" + FileUtil.formatFileSize(pStats.codeSize));
-//                        LogUtil.i(TAG, "dataSize" + ":" + FileUtil.formatFileSize(pStats.dataSize));
-//                        LogUtil.i(TAG, "externalCodeSize" + ":" + FileUtil.formatFileSize(pStats.externalCodeSize));
-//                        LogUtil.i(TAG, "externalDataSize" + ":" + FileUtil.formatFileSize(pStats.externalDataSize));
-//                        LogUtil.i(TAG, "externalMediaSize" + ":" + FileUtil.formatFileSize(pStats.externalMediaSize));
-//                        LogUtil.i(TAG, "externalObbSize" + ":" + FileUtil.formatFileSize(pStats.externalObbSize));
+//                        LogUtil.w(TAG, "codeSize" + ":" + FileUtil.formatFileSize(pStats.codeSize));
+//                        LogUtil.w(TAG, "dataSize" + ":" + FileUtil.formatFileSize(pStats.dataSize));
+//                        LogUtil.w(TAG, "externalCodeSize" + ":" + FileUtil.formatFileSize(pStats.externalCodeSize));
+//                        LogUtil.w(TAG, "externalDataSize" + ":" + FileUtil.formatFileSize(pStats.externalDataSize));
+//                        LogUtil.w(TAG, "externalMediaSize" + ":" + FileUtil.formatFileSize(pStats.externalMediaSize));
+//                        LogUtil.w(TAG, "externalObbSize" + ":" + FileUtil.formatFileSize(pStats.externalObbSize));
                         long result = finalAllLength;
                         result += pStats.cacheSize;
                         result += pStats.externalCacheSize;
-//                        LogUtil.i(TAG, "result" + ":" + FileUtil.formatFileSize(result));
+//                        LogUtil.w(TAG, "result" + ":" + FileUtil.formatFileSize(result));
                         if (observer != null) {
                             observer.onGetCacheSize(Long.toString(result / (1024 * 1024)));
                         }
@@ -103,8 +103,8 @@ public class FileCacheUtil {
 
                     @Override
                     public void onRemoveCompleted(String packageName, boolean succeeded) throws RemoteException {
-                        LogUtil.i(TAG, "result" + ":" + packageName);
-                        LogUtil.i(TAG, "result" + ":" + succeeded);
+                        LogUtil.w(TAG, "result" + ":" + packageName);
+                        LogUtil.w(TAG, "result" + ":" + succeeded);
                         if (observer != null) {
                             observer.onCleanCache(succeeded);
                         }
@@ -161,7 +161,7 @@ public class FileCacheUtil {
         String pkg = context.getPackageName();
         PackageManager pm = context.getPackageManager();
         try {
-            LogUtil.i(TAG, "name:" + pm.getClass().getName());
+            LogUtil.w(TAG, "name:" + pm.getClass().getName());
             Method getPackageSizeInfo = pm.getClass().getMethod("getPackageSizeInfo", String.class, IPackageStatsObserver.class);
             getPackageSizeInfo.invoke(pm, pkg, observer);
         } catch (Exception ex) {
@@ -211,7 +211,7 @@ public class FileCacheUtil {
         try {
             Context context = IMApplication.getContext();
             PackageManager pm = context.getPackageManager();
-            LogUtil.i(TAG, "name:" + pm.getClass().getName());
+            LogUtil.w(TAG, "name:" + pm.getClass().getName());
             Method localMethod = pm.getClass().getMethod("freeStorageAndNotify", Long.TYPE,
                     IPackageDataObserver.class);
             long localLong = Long.valueOf(getEnvironmentSize() - 1L);

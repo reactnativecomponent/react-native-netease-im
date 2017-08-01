@@ -38,7 +38,7 @@ public class ReflectionUtil {
             method.setAccessible(true);
             return method.invoke(obj, params);
         } catch (NoSuchMethodException e) {
-            LogUtil.i("reflect", "method " + methodName + " not found in " + obj.getClass().getName());
+            LogUtil.w("reflect", "method " + methodName + " not found in " + obj.getClass().getName());
         } catch (Exception e) {
             e.printStackTrace();
         }

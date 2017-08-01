@@ -35,7 +35,7 @@ public class FriendObserver {
             @Override
             public void updateData(ContactDataList datas) {
 
-                LogUtil.i(TAG, "size:" + (datas == null ? 0 : datas.getCount()));
+                LogUtil.w(TAG, "size:" + (datas == null ? 0 : datas.getCount()));
                 ReactCache.emit(ReactCache.observeFriend, ReactCache.createFriendSet(datas, false));
             }
         });

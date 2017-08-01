@@ -86,8 +86,8 @@ public class RecentContactObserver {
 
         String contactId = recent.getContactId();
         SessionTypeEnum sessionTypeEnum = recent.getSessionType();
-//        LogUtil.i("deleteRecentContactCallback-", "---" + contactId);
-//        LogUtil.i("deleteRecentContactCallback-", "---" + recent.getContent());
+//        LogUtil.w("deleteRecentContactCallback-", "---" + contactId);
+//        LogUtil.w("deleteRecentContactCallback-", "---" + recent.getContent());
         if (callback) {
             NIMClient.getService(MsgService.class).deleteRecentContact2(contactId, sessionTypeEnum);
         } else {

@@ -114,12 +114,12 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
 
     @Override
     public void initialize() {
-        LogUtil.i(TAG, "initialize");
+        LogUtil.w(TAG, "initialize");
     }
 
     @Override
     public void onCatalystInstanceDestroy() {
-        LogUtil.i(TAG, "onCatalystInstanceDestroy");
+        LogUtil.w(TAG, "onCatalystInstanceDestroy");
     }
 
     @Override
@@ -129,7 +129,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
 
     @ReactMethod
     public void init(Promise promise) {
-        LogUtil.i(TAG, "init");
+        LogUtil.w(TAG, "init");
         promise.resolve("200");
     }
 
@@ -142,9 +142,10 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
      */
     @ReactMethod
     public void login(String contactId, String token, final Promise promise) {
-//        LogUtil.i(TAG, "contactId:" + contactId);
-//        LogUtil.i(TAG, "token:" + token);
-//        LogUtil.i(TAG, "md5:" + MD5.getStringMD5(token));
+        LogUtil.w(TAG, "_id:" + contactId);
+        LogUtil.w(TAG, "t:" + token);
+//        LogUtil.w(TAG, "md5:" + MD5.getStringMD5(token));
+
         NIMClient.getService(AuthService.class).openLocalCache(contactId);
         LoginService.getInstance().login(new LoginInfo(contactId, token), new RequestCallback<LoginInfo>() {
             @Override
@@ -178,7 +179,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
      */
     @ReactMethod
     public void logout() {
-        LogUtil.i(TAG, "logout");
+        LogUtil.w(TAG, "logout");
         LoginService.getInstance().logout();
 
     }
@@ -193,7 +194,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
      */
     @ReactMethod
     public void startFriendList(final Promise promise) {
-        LogUtil.i(TAG, "startFriendList");
+        LogUtil.w(TAG, "startFriendList");
         friendObserver.startFriendList();
 
     }
@@ -205,7 +206,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
      */
     @ReactMethod
     public void stopFriendList(final Promise promise) {
-        LogUtil.i(TAG, "stopFriendList");
+        LogUtil.w(TAG, "stopFriendList");
         friendObserver.stopFriendList();
     }
 
@@ -217,7 +218,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
      */
     @ReactMethod
     public void getUserInfo(String contactId, final Promise promise) {
-        LogUtil.i(TAG, "getUserInfo" + contactId);
+        LogUtil.w(TAG, "getUserInfo" + contactId);
         NimUserInfo userInfo = NimUserInfoCache.getInstance().getUserInfo(contactId);
         promise.resolve(ReactCache.createUserInfo(userInfo));
     }
@@ -230,7 +231,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
      */
     @ReactMethod
     public void fetchUserInfo(String contactId, final Promise promise) {
-        LogUtil.i(TAG, "fetchUserInfo" + contactId);
+        LogUtil.w(TAG, "fetchUserInfo" + contactId);
         NimUserInfoCache.getInstance().getUserInfoFromRemote(contactId, new RequestCallbackWrapper<NimUserInfo>() {
             @Override
             public void onResult(int i, NimUserInfo userInfo, Throwable throwable) {
@@ -254,7 +255,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
         if ("1".equals(verifyType)) {
             verifyTypeAdd = VerifyType.DIRECT_ADD;
         }
-        LogUtil.i(TAG, "addFriend" + contactId);
+        LogUtil.w(TAG, "addFriend" + contactId);
         NIMClient.getService(FriendService.class).addFriend(new AddFriendData(contactId, verifyTypeAdd, msg))
                 .setCallback(new RequestCallbackWrapper<Void>() {
                     @Override
@@ -279,7 +280,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
      */
     @ReactMethod
     public void addFriend(final String contactId, String msg, final Promise promise) {
-        LogUtil.i(TAG, "addFriend" + contactId);
+        LogUtil.w(TAG, "addFriend" + contactId);
         NIMClient.getService(FriendService.class).addFriend(new AddFriendData(contactId, VerifyType.VERIFY_REQUEST, msg))
                 .setCallback(new RequestCallbackWrapper<Void>() {
                     @Override
@@ -303,7 +304,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
      */
     @ReactMethod
     public void deleteFriend(String contactId, final Promise promise) {
-        LogUtil.i(TAG, "deleteFriend" + contactId);
+        LogUtil.w(TAG, "deleteFriend" + contactId);
         NIMClient.getService(FriendService.class).deleteFriend(contactId)
                 .setCallback(new RequestCallbackWrapper<Void>() {
                     @Override
@@ -645,7 +646,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
      */
     @ReactMethod
     public void createTeam(ReadableMap fields, String type, ReadableArray accounts, final Promise promise) {
-        LogUtil.i(TAG, fields + "\n" + type + "\n" + accounts);
+        LogUtil.w(TAG, fields + "\n" + type + "\n" + accounts);
         TeamTypeEnum teamTypeEnum = TeamTypeEnum.Advanced;
         try {
             teamTypeEnum = TeamTypeEnum.typeOfValue(Integer.parseInt(type));
@@ -1042,7 +1043,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
      */
     @ReactMethod
     public void sendTextMessage(String content, ReadableArray atUserIds, final Promise promise) {
-        LogUtil.i(TAG, "sendTextMessage" + content);
+        LogUtil.w(TAG, "sendTextMessage" + content);
 
         List<String> atUserIdList = array2ListString(atUserIds);
         sessionService.sendTextMessage(content, atUserIdList, new SessionService.OnSendMessageListener() {
@@ -1055,7 +1056,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
     }
 
     public void sendTextMessage(String content, final Promise promise) {
-        LogUtil.i(TAG, "sendTextMessage" + content);
+        LogUtil.w(TAG, "sendTextMessage" + content);
         sessionService.sendTextMessage(content, null, new SessionService.OnSendMessageListener() {
             @Override
             public int onResult(int code, IMMessage message) {
@@ -1220,7 +1221,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
      */
     @ReactMethod
     public void sendForwardMessage(String messageId, final String sessionId, final String sessionType, final String content, final Promise promise) {
-        LogUtil.i(TAG, "sendForwardMessage" + content);
+        LogUtil.w(TAG, "sendForwardMessage" + content);
 
         sessionService.queryMessage(messageId, new SessionService.OnMessageQueryListener() {
             @Override
@@ -1252,7 +1253,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
      */
     @ReactMethod
     public void revokeMessage(String messageId, final Promise promise) {
-        LogUtil.i(TAG, "revokeMessage" + messageId);
+        LogUtil.w(TAG, "revokeMessage" + messageId);
         sessionService.queryMessage(messageId, new SessionService.OnMessageQueryListener() {
 
             @Override
@@ -1290,7 +1291,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
      */
     @ReactMethod
     public void deleteMessage(String messageId, final Promise promise) {
-        LogUtil.i(TAG, "deleteMessage" + messageId);
+        LogUtil.w(TAG, "deleteMessage" + messageId);
         sessionService.queryMessage(messageId, new SessionService.OnMessageQueryListener() {
 
             @Override
@@ -1365,7 +1366,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
      */
     @ReactMethod
     public void resendMessage(String messageId, final Promise promise) {
-        LogUtil.i(TAG, "resendMessage" + messageId);
+        LogUtil.w(TAG, "resendMessage" + messageId);
         sessionService.resendMessage(messageId);
     }
 
@@ -1377,7 +1378,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
      */
     @ReactMethod
     public void deleteRecentContact(String rContactId, Promise promise) {
-        LogUtil.i(TAG, "deleteRecentContact" + rContactId);
+        LogUtil.w(TAG, "deleteRecentContact" + rContactId);
         boolean result = LoginService.getInstance().deleteRecentContact(rContactId);
         if (result) {
             promise.resolve("" + ResponseCode.RES_SUCCESS);
@@ -1439,7 +1440,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
      */
     @ReactMethod
     public void startSession(String sessionId, String type, final Promise promise) {
-        LogUtil.i(TAG, "startSession" + sessionId);
+        LogUtil.w(TAG, "startSession" + sessionId);
         if (TextUtils.isEmpty(sessionId)) {
 
             return;
@@ -1454,7 +1455,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
      */
     @ReactMethod
     public void stopSession(final Promise promise) {
-        LogUtil.i(TAG, "stopSession");
+        LogUtil.w(TAG, "stopSession");
         sessionService.stopSession();
     }
 
@@ -1472,7 +1473,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
     @ReactMethod
     public void queryMessageListHistory(String sessionId, String sessionType, String
             timeLong, String direction, int limit, String asc, final Promise promise) {
-        LogUtil.i(TAG, "queryMessageListHistory");
+        LogUtil.w(TAG, "queryMessageListHistory");
         long time = 0;
         try {
             time = Long.parseLong(timeLong);
@@ -1509,7 +1510,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
      */
     @ReactMethod
     public void queryMessageListEx(String messageId, final int limit, final Promise promise) {
-        LogUtil.i(TAG, "queryMessageListEx:" + messageId + "(" + limit + ")");
+        LogUtil.w(TAG, "queryMessageListEx:" + messageId + "(" + limit + ")");
         sessionService.queryMessage(messageId, new SessionService.OnMessageQueryListener() {
             @Override
             public int onResult(int code, IMMessage message) {
@@ -1644,7 +1645,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
     public void playLocal(String resourceFile, String type, Promise promise) {
 
         Uri uri = Uri.parse(resourceFile);
-        LogUtil.i(TAG, "scheme:" + uri.getScheme());
+        LogUtil.w(TAG, "scheme:" + uri.getScheme());
         String filePath = uri.getPath();
         if (filePath.startsWith("/")) {
             filePath = filePath.substring(1);
@@ -1652,7 +1653,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
                 filePath = filePath + "." + type;
             }
         }
-        LogUtil.i(TAG, "path:" + filePath);
+        LogUtil.w(TAG, "path:" + filePath);
         audioPlayService.playAudio(handler, reactContext, AudioManager.STREAM_RING, uri.getScheme(), filePath);
     }
 
@@ -1810,7 +1811,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
      */
     @ReactMethod
     public void ackAddFriendRequest(String messageId, final String contactId, String pass, String timestamp, final Promise promise) {
-        LogUtil.i(TAG, "ackAddFriendRequest" + contactId);
+        LogUtil.w(TAG, "ackAddFriendRequest" + contactId);
         long messageIdLong = 0L;
         try {
             messageIdLong = Long.parseLong(messageId);
@@ -1913,29 +1914,31 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
 
     @Override
     public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
-        LogUtil.i(TAG, "onActivityResult:" + requestCode + "-result:" + resultCode);
+        LogUtil.w(TAG, "onActivityResult:" + requestCode + "-result:" + resultCode);
     }
 
     @Override
     public void onNewIntent(Intent intent) {
 
-        LogUtil.i(TAG, "onNewIntent:" + intent);
+        LogUtil.w(TAG, "onNewIntent:" + intent);
 //        ReceiverMsgParser.openIntent(intent);
 
     }
 
     @Override
     public void onHostResume() {
-        LogUtil.i(TAG, "onHostResume");
+        if (reactContext.getCurrentActivity() != null)
+            LogUtil.w(TAG, reactContext.getCurrentActivity().getClass().getPackage().getName());
+        LogUtil.w(TAG, "onHostResume");
     }
 
     @Override
     public void onHostPause() {
-        LogUtil.i(TAG, "onHostPause");
+        LogUtil.w(TAG, "onHostPause");
     }
 
     @Override
     public void onHostDestroy() {
-        LogUtil.i(TAG, "onHostDestroy");
+        LogUtil.w(TAG, "onHostDestroy");
     }
 }

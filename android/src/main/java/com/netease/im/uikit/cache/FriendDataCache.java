@@ -74,7 +74,7 @@ public class FriendDataCache {
         // 确定缓存
         friendAccountSet.addAll(accounts);
 
-        LogUtil.i(TAG, "build FriendDataCache completed, friends count = " + friendAccountSet.size());
+        LogUtil.w(TAG, "build FriendDataCache completed, friends count = " + friendAccountSet.size());
     }
 
     private void clearFriendCache() {

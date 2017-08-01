@@ -42,7 +42,7 @@ public class NimUserInfoCache {
     public void buildCache() {
         List<NimUserInfo> users = NIMClient.getService(UserService.class).getAllUserInfo();
         addOrUpdateUsers(users, false);
-        LogUtil.i(TAG, "build NimUserInfoCache completed, users count = " + account2UserMap.size());
+        LogUtil.w(TAG, "build NimUserInfoCache completed, users count = " + account2UserMap.size());
     }
 
     public void clear() {
