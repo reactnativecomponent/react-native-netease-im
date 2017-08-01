@@ -39,11 +39,6 @@
     
 }
 
-- (void)dealloc{
-    [[NIMSDK sharedSDK].chatManager removeDelegate:self];
-    [[NIMSDK sharedSDK].conversationManager removeDelegate:self];
-    [[NIMSDK sharedSDK].systemNotificationManager removeDelegate:self];
-}
 
 +(instancetype)initWithConversationViewController{
     static ConversationViewController *conVC = nil;
@@ -65,7 +60,6 @@
         _redPacketPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:redPackUrl error:nil];
         _redPacketPlayer.volume = 1.0;
     }
-    [self addListener];
     return self;
 }
 
@@ -74,6 +68,7 @@
     _type = type;
     _session = [NIMSession session:_sessionID type:[_type integerValue]];
     _sessionArr = [NSMutableArray array];
+    [self addListener];
 }
 //本地历史记录
 -(void)localSessionList:(NSString *)sessionId sessionType:(NSString *)sessionType timeLong:(NSString *)timeLong direction:(NSString *)direction limit:(NSString *)limit asc:(BOOL)asc success:(Success)succe{
@@ -1122,8 +1117,8 @@
 
 -(void)stopSession;
 {
-//    [[NIMSDK sharedSDK].chatManager removeDelegate:self];
-//    [[NIMSDK sharedSDK].conversationManager removeDelegate:self];
-//    [[NIMSDK sharedSDK].systemNotificationManager removeDelegate:self];
+    [[NIMSDK sharedSDK].chatManager removeDelegate:self];
+    [[NIMSDK sharedSDK].conversationManager removeDelegate:self];
+    [[NIMSDK sharedSDK].systemNotificationManager removeDelegate:self];
 }
 @end
