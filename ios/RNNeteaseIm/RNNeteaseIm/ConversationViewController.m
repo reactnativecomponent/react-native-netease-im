@@ -1041,7 +1041,9 @@
 //清空聊天记录
 -(void)clearMsg:(NSString *)contactId type:(NSString *)type{
     NIMSession  *session = [NIMSession session:contactId type:[type integerValue]];
-    [[NIMSDK sharedSDK].conversationManager deleteAllmessagesInSession:session removeRecentSession:NO];
+    NIMDeleteMessagesOption *option = [[NIMDeleteMessagesOption alloc] init];
+    option.removeSession = NO;
+    [[NIMSDK sharedSDK].conversationManager deleteAllmessagesInSession:session option:option];
 }
 - (NIMMessage *)msgWithTip:(NSString *)tip
 {
