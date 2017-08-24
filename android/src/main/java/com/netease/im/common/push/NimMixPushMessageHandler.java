@@ -50,6 +50,11 @@ public class NimMixPushMessageHandler implements MixPushMessageHandler {
         }
     }
 
+    @Override
+    public boolean cleanHuaWeiNotifications() {
+        return false;
+    }
+
     private ComponentName initLaunchComponent(Context context) {
         ComponentName launchComponent;
         StatusBarNotificationConfig config = IMApplication.getNotificationConfig();

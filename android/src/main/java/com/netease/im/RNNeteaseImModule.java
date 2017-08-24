@@ -1920,8 +1920,12 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
     @Override
     public void onNewIntent(Intent intent) {
 
-        LogUtil.w(TAG, "onNewIntent:" + intent);
+        LogUtil.w(TAG, "onNewIntent:" + intent.getExtras());
 //        ReceiverMsgParser.openIntent(intent);
+        if (reactContext.getCurrentActivity() != null && ReceiverMsgParser.checkOpen(ReceiverMsgParser.getIntent())) {
+            intent.putExtras(ReceiverMsgParser.getIntent());
+            reactContext.getCurrentActivity().setIntent(intent);
+        }
 
     }
 

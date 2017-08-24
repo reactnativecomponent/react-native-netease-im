@@ -79,7 +79,7 @@ public class ReactCache {
     public final static String observeUnreadCountChange = "observeUnreadCountChange";//'未读数变化'
     public final static String observeBlackList = "observeBlackList";//'黑名单'
     public final static String observeAttachmentProgress = "observeAttachmentProgress";//'上传下载进度'
-    public final static String observeOnKick = "observeOnKick";//'被提出'
+    public final static String observeOnKick = "observeOnKick";//'被踢出'
 
     final static String TAG = "ReactCache";
     private static ReactContext reactContext;
@@ -698,6 +698,78 @@ public class ReactCache {
         return bool ? Integer.toString(1) : Integer.toString(0);
     }
 
+
+    /**
+     *
+     * @return
+     */
+    static String getMessageType(IMMessage item) {
+        String type = "";
+        switch (item.getMsgType()) {
+            case text:
+                type = "text";
+                break;
+            case image:
+                type = "image";
+                break;
+            case audio:
+                type = "voice";
+                break;
+            case video:
+                type = "video";
+                break;
+            case location:
+                type = "location";
+                break;
+            case file:
+                type = "file";
+                break;
+            case notification:
+                type = "notification";
+                break;
+            case tip:
+                type = "tip";
+                break;
+            case robot:
+                type = "robot";
+                break;
+            case custom:
+                CustomAttachment attachment = null;
+                try {
+                    attachment = (CustomAttachment) item.getAttachment();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                if (attachment != null) {
+                    switch (attachment.getType()) {
+                        case CustomAttachmentType.RedPacket:
+                            type = "red_packet";
+                            break;
+
+                        case CustomAttachmentType.BankTransfer:
+                            type = "bank_transfer";
+                            break;
+                        case CustomAttachmentType.AccountNotice:
+                            type = "account_notice";
+                            break;
+                        case CustomAttachmentType.LinkUrl:
+                            type = "link";
+                            break;
+                        case CustomAttachmentType.RedPacketOpen:
+                            type = "red_packet_open";
+                            break;
+                        default:
+                    }
+                }
+                break;
+            default:
+                break;
+        }
+
+        return type;
+    }
+
+    final static String MESSAGE_EXTEND = "extend";
     /**
      * <br/>uuid 消息ID
      * <br/>sessionId 会话id
@@ -717,7 +789,7 @@ public class ReactCache {
         WritableMap itemMap = Arguments.createMap();
         itemMap.putString("_id", item.getUuid());
 
-        itemMap.putString("msgType", Integer.toString(item.getMsgType().getValue()));
+        itemMap.putString("msgType", getMessageType(item));
         itemMap.putString("createdAt", Long.toString(item.getTime() / 1000));
         itemMap.putString("sessionId", item.getSessionId());
         itemMap.putString("sessionType", Integer.toString(item.getSessionType().getValue()));
@@ -749,6 +821,7 @@ public class ReactCache {
 
         MsgAttachment attachment = item.getAttachment();
         String text = "";
+
         if (attachment != null) {
             if (item.getMsgType() == MsgTypeEnum.image) {
                 WritableMap imageObj = Arguments.createMap();
@@ -765,21 +838,20 @@ public class ReactCache {
                     imageObj.putString("path", imageAttachment.getPath());
                     imageObj.putString("url", imageAttachment.getUrl());
                     imageObj.putString("displayName", imageAttachment.getDisplayName());
-                    imageObj.putString("imageHeight", Integer.toString(imageAttachment.getHeight()));
-                    imageObj.putString("imageWidth", Integer.toString(imageAttachment.getWidth()));
+                    imageObj.putString("height", Integer.toString(imageAttachment.getHeight()));
+                    imageObj.putString("width", Integer.toString(imageAttachment.getWidth()));
                 }
-                itemMap.putMap("imageObj", imageObj);
+                itemMap.putMap(MESSAGE_EXTEND, imageObj);
             } else if (item.getMsgType() == MsgTypeEnum.audio) {
-
                 WritableMap audioObj = Arguments.createMap();
                 if (attachment instanceof AudioAttachment) {
                     AudioAttachment audioAttachment = (AudioAttachment) attachment;
                     audioObj.putString("path", audioAttachment.getPath());
-                    audioObj.putString("path2", audioAttachment.getThumbPathForSave());
+                    audioObj.putString("thumbPath", audioAttachment.getThumbPath());
                     audioObj.putString("url", audioAttachment.getUrl());
                     audioObj.putString("duration", Long.toString(audioAttachment.getDuration()));
                 }
-                itemMap.putMap("audioObj", audioObj);
+                itemMap.putMap(MESSAGE_EXTEND, audioObj);
             } else if (item.getMsgType() == MsgTypeEnum.video) {
                 WritableMap videoDic = Arguments.createMap();
                 if (attachment instanceof VideoAttachment) {
@@ -788,62 +860,58 @@ public class ReactCache {
                     videoDic.putString("path2", videoAttachment.getPathForSave());
                     videoDic.putString("path", videoAttachment.getPath());
                     videoDic.putString("displayName", videoAttachment.getDisplayName());
-                    videoDic.putString("coverSizeHeight", Integer.toString(videoAttachment.getHeight()));
-                    videoDic.putString("coverSizeWidth", Integer.toString(videoAttachment.getWidth()));
+                    videoDic.putString("height", Integer.toString(videoAttachment.getHeight()));
+                    videoDic.putString("width", Integer.toString(videoAttachment.getWidth()));
                     videoDic.putString("duration", Long.toString(videoAttachment.getDuration()));
                     videoDic.putString("fileLength", Long.toString(videoAttachment.getSize()));
 
-                    videoDic.putString("coverUrl", videoAttachment.getThumbPath());
+                    videoDic.putString("thumbPath", videoAttachment.getThumbPath());
                     videoDic.putString("coverPath", videoAttachment.getThumbPathForSave());
                 }
-                itemMap.putMap("videoDic", videoDic);
+                itemMap.putMap(MESSAGE_EXTEND, videoDic);
             } else if (item.getMsgType() == MsgTypeEnum.location) {
                 WritableMap locationObj = Arguments.createMap();
                 if (attachment instanceof LocationAttachment) {
                     LocationAttachment locationAttachment = (LocationAttachment) attachment;
                     locationObj.putString("latitude", Double.toString(locationAttachment.getLatitude()));
                     locationObj.putString("longitude", Double.toString(locationAttachment.getLongitude()));
-                    locationObj.putString("title", locationAttachment.getAddress());
+                    locationObj.putString("address", locationAttachment.getAddress());
                 }
-                itemMap.putMap("locationObj", locationObj);
+                itemMap.putMap(MESSAGE_EXTEND, locationObj);
             } else if (item.getMsgType() == MsgTypeEnum.notification) {
                 if (item.getSessionType() == SessionTypeEnum.Team) {
                     text = TeamNotificationHelper.getTeamNotificationText(item, item.getSessionId());
                 } else {
                     text = item.getContent();
                 }
-                WritableMap notiObj = Arguments.createMap();
-                notiObj.putString("tipMsg", text);
-                itemMap.putMap("notiObj", notiObj);
             } else if (item.getMsgType() == MsgTypeEnum.custom) {//自定义消息
                 try {
                     CustomAttachment customAttachment = (CustomAttachment) attachment;
-                    itemMap.putString("custType", customAttachment.getType());
 
                     switch (customAttachment.getType()) {
                         case CustomAttachmentType.RedPacket:
                             if (attachment instanceof RedPacketAttachement) {
                                 RedPacketAttachement redPackageAttachement = (RedPacketAttachement) attachment;
-                                itemMap.putMap("redPacketObj", redPackageAttachement.toReactNative());
+                                itemMap.putMap(MESSAGE_EXTEND, redPackageAttachement.toReactNative());
                             }
                             break;
 
                         case CustomAttachmentType.BankTransfer:
                             if (attachment instanceof BankTransferAttachment) {
                                 BankTransferAttachment bankTransferAttachment = (BankTransferAttachment) attachment;
-                                itemMap.putMap("bankTransferObj", bankTransferAttachment.toReactNative());
+                                itemMap.putMap(MESSAGE_EXTEND, bankTransferAttachment.toReactNative());
                             }
                             break;
                         case CustomAttachmentType.AccountNotice:
                             if (attachment instanceof AccountNoticeAttachment) {
                                 AccountNoticeAttachment accountNoticeAttachment = (AccountNoticeAttachment) attachment;
-                                itemMap.putMap("accountNoticeObj", accountNoticeAttachment.toReactNative());
+                                itemMap.putMap(MESSAGE_EXTEND, accountNoticeAttachment.toReactNative());
                             }
                             break;
                         case CustomAttachmentType.LinkUrl:
                             if (attachment instanceof LinkUrlAttachment) {
                                 LinkUrlAttachment linkUrlAttachment = (LinkUrlAttachment) attachment;
-                                itemMap.putMap("urlObj", linkUrlAttachment.toReactNative());
+                                itemMap.putMap(MESSAGE_EXTEND, linkUrlAttachment.toReactNative());
                             }
                             break;
                         case CustomAttachmentType.RedPacketOpen:
@@ -852,13 +920,13 @@ public class ReactCache {
 //                                if (!rpOpen.isSelf()) {
 //                                    return null;
 //                                }
-                                itemMap.putMap("redpacketOpenObj", rpOpen.toReactNative());
+                                itemMap.putMap(MESSAGE_EXTEND, rpOpen.toReactNative());
                             }
                             break;
                         default:
                             if (attachment instanceof DefaultCustomAttachment) {
                                 DefaultCustomAttachment defaultCustomAttachment = (DefaultCustomAttachment) attachment;
-                                itemMap.putMap("defaultObj", defaultCustomAttachment.toReactNative());
+                                itemMap.putMap(MESSAGE_EXTEND, defaultCustomAttachment.toReactNative());
                             }
                             break;
                     }
@@ -874,7 +942,6 @@ public class ReactCache {
             text = item.getContent();
 
         } else if (item.getMsgType() == MsgTypeEnum.tip) {
-
             if (TextUtils.isEmpty(item.getContent())) {
                 Map<String, Object> content = item.getRemoteExtension();
                 if (content != null && !content.isEmpty()) {
@@ -890,12 +957,10 @@ public class ReactCache {
             } else {
                 text = item.getContent();
             }
-            WritableMap notiObj = Arguments.createMap();
-            notiObj.putString("tipMsg", text);
-            itemMap.putMap("notiObj", notiObj);
 
         }
         itemMap.putString("content", text);
+
         return itemMap;
     }
 

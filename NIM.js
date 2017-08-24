@@ -317,9 +317,9 @@ export default class NIM{
      * @param duration 音频持续时间，单位是ms
      * @returns {*}
      */
-    //static sendAudioMessage(file,duration){
-    //    return RNNeteaseIm.sendAudioMessage(file,duration);
-    //}
+    static sendAudioMessage(file,duration){
+       return RNNeteaseIm.sendAudioMessage(file,duration);
+    }
 
     /**
      * 发送视频消息

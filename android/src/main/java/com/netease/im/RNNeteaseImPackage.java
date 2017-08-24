@@ -15,6 +15,7 @@ public class RNNeteaseImPackage implements ReactPackage {
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
       return Arrays.<NativeModule>asList(
 //              new RNAppCacheUtilModule(reactContext),
+              new RNPinYinModule(reactContext),
               new RNNeteaseImModule(reactContext));
     }
 
