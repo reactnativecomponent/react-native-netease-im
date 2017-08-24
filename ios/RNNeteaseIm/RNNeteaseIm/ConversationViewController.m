@@ -99,141 +99,132 @@
         }
         succe([self setTimeArr:messageArr]);
     }
-    
-    
 }
+//更新录音消息为已播放
+- (void)updateAudioMessagePlayStatus:(NSString *)messageID{
+    NSArray *messages = [[[NIMSDK sharedSDK] conversationManager] messagesInSession:_session messageIds:@[messageID] ];
+    if (messages.count) {
+        NIMMessage *tmpMessage = messages.firstObject;
+        tmpMessage.isPlayed = YES;
+    }
+}
+
 
 -(NSMutableArray *)setTimeArr:(NSArray *)messageArr{
     NSMutableArray *sourcesArr = [NSMutableArray array];
     for (NIMMessage *message in messageArr) {
         NSMutableDictionary *dic = [NSMutableDictionary dictionary];
-        NSMutableDictionary *user = [NSMutableDictionary dictionary];
+        NSMutableDictionary *fromUser = [NSMutableDictionary dictionary];
         NIMUser   *messageUser = [[NIMSDK sharedSDK].userManager userInfo:message.from];
-        [user setObject:[NSString stringWithFormat:@"%@",messageUser.userInfo.avatarUrl] forKey:@"avatar"];
-//        [user setObject:[NSString stringWithFormat:@"%@", message.senderName] forKey:@"fromNick"];
-        [user setObject:[NSString stringWithFormat:@"%@",messageUser.userInfo.nickName] forKey:@"name"];
-        [user setObject:[NSString stringWithFormat:@"%@", message.from] forKey:@"_id"];
-        NSArray *key = [user allKeys];
-        for (NSString *tem  in key) {
-            if ([[user objectForKey:tem] isEqualToString:@"(null)"]) {
-                [user setObject:@"" forKey:tem];
-            }
+        [fromUser setObject:[NSString stringWithFormat:@"%@",messageUser.userInfo.avatarUrl] forKey:@"avatar"];
+        NSString *strAlias = messageUser.alias;
+        if (strAlias.length) {
+            [fromUser setObject:strAlias forKey:@"name"];
+        }else{
+             [fromUser setObject:[NSString stringWithFormat:@"%@",messageUser.userInfo.nickName] forKey:@"name"];
         }
-        [dic setObject:[NSString stringWithFormat:@"%@", message.text] forKey:@"content"];
+        [fromUser setObject:[NSString stringWithFormat:@"%@", message.from] forKey:@"_id"];
+        [dic setObject:[NSString stringWithFormat:@"%@", message.text] forKey:@"text"];
         [dic setObject:[NSString stringWithFormat:@"%@", message.session.sessionId] forKey:@"sessionId"];
         [dic setObject:[NSString stringWithFormat:@"%ld", message.session.sessionType] forKey:@"sessionType"];
-        [dic setObject:[NSString stringWithFormat:@"%ld", message.messageType] forKey:@"msgType"];
         switch (message.deliveryState) {
             case NIMMessageDeliveryStateFailed:
-                [dic setObject:@"2" forKey:@"status"];
+                [dic setObject:@"send_failed" forKey:@"status"];
                 break;
             case NIMMessageDeliveryStateDelivering:
-                [dic setObject:@"0" forKey:@"status"];
+                [dic setObject:@"kMsgStatusSending" forKey:@"status"];
                 break;
             case NIMMessageDeliveryStateDeliveried:
-                [dic setObject:@"1" forKey:@"status"];
+                [dic setObject:@"kMsgStatusSuccess" forKey:@"status"];
                 break;
             default:
                 [dic setObject:@"-1" forKey:@"status"];
                 break;
         }
-        [dic setObject:[NSString stringWithFormat:@"%d", message.isOutgoingMsg] forKey:@"direct"];
-        [dic setObject:[NSString stringWithFormat:@"%f", message.timestamp] forKey:@"createdAt"];
-        [dic setObject:[NSString stringWithFormat:@"%@", message.messageId] forKey:@"_id"];
-        [dic setObject:[NSString stringWithFormat:@"%d",message.isRemoteRead] forKey:@"isRemoteRead"];
-      
-        NSArray *keys = [dic allKeys];
-        for (NSString *tem  in keys) {
-            if ([[dic objectForKey:tem] isEqualToString:@"(null)"]) {
-                [dic setObject:@"" forKey:tem];
-            }
+        [dic setObject: [NSNumber numberWithBool:message.isOutgoingMsg] forKey:@"isOutgoing"];
+        [dic setObject:[NSString stringWithFormat:@"%f", message.timestamp] forKey:@"timeString"];
+        [dic setObject:[NSNumber numberWithBool:NO] forKey:@"isShowTime"];
+        [dic setObject:[NSString stringWithFormat:@"%@", message.messageId] forKey:@"msgId"];
+        
+        if (message.messageType == NIMMessageTypeText) {
+            [dic setObject:@"text" forKey:@"msgType"];
         }
-        if (message.messageType  == 1) {
+        if (message.messageType  == NIMMessageTypeImage) {
+            [dic setObject:@"image" forKey:@"msgType"];
             NIMImageObject *object = message.messageObject;
-            NSMutableDictionary *imageObj = [NSMutableDictionary dictionary];
-            [imageObj setObject:[NSString stringWithFormat:@"%@", [object thumbPath] ] forKey:@"thumbPath"];
-            [imageObj setObject:[NSString stringWithFormat:@"%@",[object url] ] forKey:@"url"];
-            [imageObj setObject:[NSString stringWithFormat:@"%@",[object displayName] ] forKey:@"displayName"];
-            [imageObj setObject:[NSString stringWithFormat:@"%f",[object size].height] forKey:@"imageHeight"];
-            [imageObj setObject:[NSString stringWithFormat:@"%f",[object size].width] forKey:@"imageWidth"];
-            NSArray *keys = [imageObj allKeys];
-            for (NSString *tem  in keys) {
-                if ([[imageObj objectForKey:tem] isEqualToString:@"(null)"]) {
-                    [imageObj setObject:@"" forKey:tem];
-                }
-            }
-            [dic setObject:imageObj forKey:@"imageObj"];
+            [dic setObject:[NSString stringWithFormat:@"%@", [object thumbPath]] forKey:@"mediaPath"];
+            NSMutableDictionary *imgObj = [NSMutableDictionary dictionary];
+            [imgObj setObject:[NSString stringWithFormat:@"%@", [object thumbPath] ] forKey:@"thumbPath"];
+            [imgObj setObject:[NSString stringWithFormat:@"%@",[object url] ] forKey:@"url"];
+            [imgObj setObject:[NSString stringWithFormat:@"%@",[object displayName] ] forKey:@"displayName"];
+            [imgObj setObject:[NSString stringWithFormat:@"%f",[object size].height] forKey:@"imageHeight"];
+            [imgObj setObject:[NSString stringWithFormat:@"%f",[object size].width] forKey:@"imageWidth"];
+            [dic setObject:imgObj forKey:@"imgObj"];
         }
-        if(message.messageType == 2){
-            NSMutableDictionary *audioObj = [NSMutableDictionary dictionary];
+        if(message.messageType == NIMMessageTypeAudio){
+            [dic setObject:@"voice" forKey:@"msgType"];
             NIMAudioObject *object = message.messageObject;
-            [audioObj setObject:[NSString stringWithFormat:@"%@",object.path] forKey:@"path"];
-            [audioObj setObject:[NSString stringWithFormat:@"%@",object.url] forKey:@"url"];
-            [audioObj setObject:[NSString stringWithFormat:@"%ld",object.duration] forKey:@"duration"];
-            NSArray *keys = [audioObj allKeys];
-            for (NSString *tem  in keys) {
-                if ([[audioObj objectForKey:tem] isEqualToString:@"(null)"]) {
-                    [audioObj setObject:@"" forKey:tem];
-                }
-            }
-            [dic setObject:audioObj forKey:@"audioObj"];
+            [dic setObject:[NSString stringWithFormat:@"%@",object.path] forKey:@"mediaPath"];
+            [dic setObject:[NSString stringWithFormat:@"%@",object.url] forKey:@"url"];
+            [dic setObject:[NSNumber numberWithInteger:object.duration] forKey:@"duration"];
+            NSMutableDictionary *voiceObj = [NSMutableDictionary dictionary];
+            [voiceObj setObject:[NSString stringWithFormat:@"%@", [object url]] forKey:@"url"];
+            [voiceObj setObject:[NSString stringWithFormat:@"%zd",(object.duration/1000)] forKey:@"duration"];
+            [voiceObj setObject:[NSNumber  numberWithBool:message.isPlayed] forKey:@"isPlayed"];
+            [dic setObject:voiceObj forKey:@"voiceObj"];
         }
-        if(message.messageType == 3 ){
-            NSMutableDictionary *VideoObj = [NSMutableDictionary dictionary];
+        if(message.messageType == NIMMessageTypeVideo ){
+            [dic setObject:@"video" forKey:@"msgType"];
             NIMVideoObject *object = message.messageObject;
-            [VideoObj setObject:[NSString stringWithFormat:@"%@",object.url ] forKey:@"url"];
-            [VideoObj setObject:[NSString stringWithFormat:@"%@", object.displayName ] forKey:@"displayName"];
-            [VideoObj setObject:[NSString stringWithFormat:@"%@", object.coverUrl ] forKey:@"coverUrl"];
-            [VideoObj setObject:[NSString stringWithFormat:@"%f",object.coverSize.height ] forKey:@"coverSizeHeight"];
-            [VideoObj setObject:[NSString stringWithFormat:@"%f", object.coverSize.width ] forKey:@"coverSizeWidth"];
-            [VideoObj setObject:[NSString stringWithFormat:@"%ld",object.duration ] forKey:@"duration"];
-            [VideoObj setObject:[NSString stringWithFormat:@"%lld",object.fileLength] forKey:@"fileLength"];
+            
+            [dic setObject:[NSString stringWithFormat:@"%@",object.url ] forKey:@"url"];
+            [dic setObject:[NSString stringWithFormat:@"%@", object.displayName ] forKey:@"displayName"];
+            [dic setObject:[NSString stringWithFormat:@"%@", object.coverUrl ] forKey:@"coverUrl"];
+            [dic setObject:[NSString stringWithFormat:@"%f",object.coverSize.height ] forKey:@"coverSizeHeight"];
+            [dic setObject:[NSString stringWithFormat:@"%f", object.coverSize.width ] forKey:@"coverSizeWidth"];
+            [dic setObject:[NSString stringWithFormat:@"%ld",object.duration ] forKey:@"duration"];
+            [dic setObject:[NSString stringWithFormat:@"%lld",object.fileLength] forKey:@"fileLength"];
             if([[NSFileManager defaultManager] fileExistsAtPath:object.coverPath]){
-                [VideoObj setObject:[NSString stringWithFormat:@"%@",object.coverPath] forKey:@"coverPath"];
+                [dic setObject:[NSString stringWithFormat:@"%@",object.coverPath] forKey:@"coverPath"];
             }else{
                 //如果封面图下跪了，点进视频的时候再去下一把封面图
                 [[NIMSDK sharedSDK].resourceManager download:object.coverUrl filepath:object.coverPath progress:nil completion:^(NSError *error) {
                     if (!error) {
-                        [VideoObj setObject:[NSString stringWithFormat:@"%@",object.coverPath] forKey:@"coverPath"];
+                        [dic setObject:[NSString stringWithFormat:@"%@",object.coverPath] forKey:@"coverPath"];
                     }
                 }];
             }
             if ([[NSFileManager defaultManager] fileExistsAtPath:object.path]) {
-                [VideoObj setObject:[NSString stringWithFormat:@"%@",object.path] forKey:@"path"];
+                [dic setObject:[NSString stringWithFormat:@"%@",object.path] forKey:@"mediaPath"];
             }else{
                 
                 [[NIMObject initNIMObject] downLoadVideo:object Error:^(NSError *error) {
                     if (!error) {
-                        [VideoObj setObject:[NSString stringWithFormat:@"%@",object.path] forKey:@"path"];
+                        [dic setObject:[NSString stringWithFormat:@"%@",object.path] forKey:@"mediaPath"];
                     }
                 } progress:^(float progress) {
                     NSLog(@"下载进度%.f",progress);
                 }];
             }
-            NSArray *keys = [VideoObj allKeys];
-            for (NSString *tem  in keys) {
-                if ([[VideoObj objectForKey:tem] isEqualToString:@"(null)"]) {
-                    [VideoObj setObject:@"" forKey:tem];
-                }
-            }
-            [dic setObject:VideoObj forKey:@"videoDic"];
         }
-        if(message.messageType == 4){
+        if(message.messageType == NIMMessageTypeLocation){
+            [dic setObject:@"location" forKey:@"msgType"];
             NIMLocationObject *object = message.messageObject;
             NSMutableDictionary *locationObj = [NSMutableDictionary dictionary];
             [locationObj setObject:[NSString stringWithFormat:@"%f", object.latitude ] forKey:@"latitude"];
             [locationObj setObject:[NSString stringWithFormat:@"%f", object.longitude ] forKey:@"longitude"];
             [locationObj setObject:[NSString stringWithFormat:@"%@", object.title ] forKey:@"title"];
-            NSArray *keys = [locationObj allKeys];
-            for (NSString *tem  in keys) {
-                if ([[locationObj objectForKey:tem] isEqualToString:@"(null)"]) {
-                    [locationObj setObject:@"" forKey:tem];
-                }
-            }
             [dic setObject:locationObj forKey:@"locationObj"];
             
         }
-        if (message.messageType == 5) {
+        if(message.messageType == NIMMessageTypeTip){//提醒类消息
+            [dic setObject:@"notification" forKey:@"msgType"];
+            NSMutableDictionary *notiObj = [NSMutableDictionary dictionary];
+            [notiObj setObject:message.text forKey:@"tipMsg"];
+            [dic setObject:notiObj forKey:@"notiObj"];
+        }
+        if (message.messageType == NIMMessageTypeNotification) {
+            [dic setObject:@"notification" forKey:@"msgType"];
             NSMutableDictionary *notiObj = [NSMutableDictionary dictionary];
             NIMNotificationObject *object = message.messageObject;
             switch (object.notificationType) {
@@ -257,7 +248,7 @@
             
         }
         
-        if (message.messageType == 100) {
+        if (message.messageType == NIMMessageTypeCustom) {
             NIMCustomObject *customObject = message.messageObject;
             DWCustomAttachment *obj = customObject.attachment;
             if (obj) {
@@ -265,25 +256,15 @@
                     case CustomMessgeTypeRedpacket: //红包
                     {
                         [dic setObject:obj.dataDict forKey:@"redPacketObj"];
-                        [dic setObject:@"redpacket" forKey:@"custType"];
+//                        [dic setObject:@"redpacket" forKey:@"custType"];
+                        [dic setObject:@"redpacket" forKey:@"msgType"];
                     }
                         break;
                     case CustomMessgeTypeBankTransfer: //转账
                     {
                         [dic setObject:obj.dataDict  forKey:@"bankTransferObj"];
-                        [dic setObject:@"transfer" forKey:@"custType"];
-                    }
-                        break;
-                    case CustomMessgeTypeUrl: //链接
-                    {
-                        [dic setObject:obj.dataDict  forKey:@"urlObj"];
-                        [dic setObject:@"url" forKey:@"custType"];
-                    }
-                        break;
-                    case CustomMessgeTypeAccountNotice: //账户通知，与账户金额相关变动
-                    {
-                        [dic setObject:obj.dataDict  forKey:@"accountNoticeObj"];
-                        [dic setObject:@"account_notice" forKey:@"custType"];
+//                        [dic setObject:@"transfer" forKey:@"custType"];
+                        [dic setObject:@"transfer" forKey:@"msgType"];
                     }
                         break;
                     case CustomMessgeTypeRedPacketOpenMessage: //拆红包消息
@@ -291,10 +272,34 @@
                         NSDictionary *dataDict = [self dealWithData:obj.dataDict];
                         if (dataDict) {
                             [dic setObject:dataDict  forKey:@"redpacketOpenObj"];
-                            [dic setObject:@"redpacketOpen" forKey:@"custType"];
+//                            [dic setObject:@"redpacketOpen" forKey:@"custType"];
+                            [dic setObject:@"redpacketOpen" forKey:@"msgType"];
                         }else{
 
                             continue;//终止本次循环
+                        }
+                    }
+                        break;
+                    case CustomMessgeTypeUrl: //链接
+                    case CustomMessgeTypeAccountNotice: //账户通知，与账户金额相关变动
+                    {
+                        NSMutableDictionary *notiUser = [NSMutableDictionary dictionary];
+                        [notiUser setObject:[NSString stringWithFormat:@"%@",messageUser.userInfo.avatarUrl] forKey:@"avatar"];
+                        [notiUser setObject:[NSString stringWithFormat:@"%@",messageUser.userInfo.nickName] forKey:@"name"];
+                        [notiUser setObject:[NSString stringWithFormat:@"%@", message.from] forKey:@"_id"];
+                        [dic setObject:notiUser forKey:@"user"];
+                        [dic setObject:[NSString stringWithFormat:@"%@", message.text] forKey:@"content"];
+                        [dic setObject:[NSString stringWithFormat:@"%d", message.isOutgoingMsg] forKey:@"direct"];
+                        [dic setObject:[NSString stringWithFormat:@"%f", message.timestamp] forKey:@"createdAt"];
+                        [dic setObject:[NSString stringWithFormat:@"%@", message.messageId] forKey:@"_id"];
+                        [dic setObject:[NSString stringWithFormat:@"%d",message.isRemoteRead] forKey:@"isRemoteRead"];
+                        [dic setObject:[NSString stringWithFormat:@"%ld", message.messageType] forKey:@"msgType"];
+                        if (obj.custType == CustomMessgeTypeAccountNotice) {
+                            [dic setObject:obj.dataDict  forKey:@"accountNoticeObj"];
+                            [dic setObject:@"account_notice" forKey:@"custType"];
+                        }else{
+                            [dic setObject:obj.dataDict  forKey:@"urlObj"];
+                            [dic setObject:@"url" forKey:@"custType"];
                         }
                     }
                         break;
@@ -304,7 +309,7 @@
                 }
             }
         }
-        [dic setObject:user forKey:@"user"];
+        [dic setObject:fromUser forKey:@"fromUser"];
         [sourcesArr addObject:dic];
     }
     
@@ -502,7 +507,7 @@
 
 - (void)willSendMessage:(NIMMessage *)message
 {
-    [self refrashMessage:message From:@"send"];
+    [self refrashMessage:message From:@"send" isStart:YES];
     NIMModel *model = [NIMModel initShareMD];
     model.startSend = @{@"start":@"true"};
 }
@@ -510,8 +515,10 @@
 - (void)sendMessage:(NIMMessage *)message didCompleteWithError:(NSError *)error
 {
     if (!error) {
-        [self refrashMessage:message From:@"send"];
+        [self refrashMessage:message From:@"send" isStart:NO];
         [[NSUserDefaults standardUserDefaults]setObject: [NSString stringWithFormat:@"%f", message.timestamp] forKey:@"timestamp"];
+    }else{
+        [self refrashMessage:message From:@"send" isStart:NO];
     }
     NIMModel *model = [NIMModel initShareMD];
     if ([[NSString stringWithFormat:@"%@", error] isEqualToString:@"(null)"]) {
@@ -524,7 +531,7 @@
 //发送进度
 -(void)sendMessage:(NIMMessage *)message progress:(float)progress
 {
-    [self refrashMessage:message From:@"send"];
+    [self refrashMessage:message From:@"send" isStart:NO];
     NIMModel *model = [NIMModel initShareMD];
     model.endSend = @{@"progress":[NSString stringWithFormat:@"%f",progress]};
 }
@@ -535,7 +542,7 @@
 {
     NIMMessage *message = messages.firstObject;
     if ([message.session.sessionId isEqualToString:_sessionID]) {
-        [self refrashMessage:message From:@"receive"];
+        [self refrashMessage:message From:@"receive" isStart:NO];
         NIMMessageReceipt *receipt = [[NIMMessageReceipt alloc] initWithMessage:message];
         
         [[[NIMSDK sharedSDK] chatManager] sendMessageReceipt:receipt
@@ -656,7 +663,7 @@
     model.audioDic = Audic;
 }
 
-//播发结束回调
+//播放结束回调
 - (void)playAudio:(NSString *)filePath didCompletedWithError:(nullable NSError *)error{
     if(!error) {
         NIMModel *model = [NIMModel initShareMD];
@@ -739,129 +746,121 @@
 }
 
 
--(void)refrashMessage:(NIMMessage *)message From:(NSString *)from{
+-(void)refrashMessage:(NIMMessage *)message From:(NSString *)from isStart:(BOOL)isStart{
     NSMutableArray *messageArr = [NSMutableArray array];
     NSMutableDictionary *dic2 = [NSMutableDictionary dictionary];
     NIMUser   *user = [[NIMSDK sharedSDK].userManager userInfo:message.from];
-    NSMutableDictionary *dources = [NSMutableDictionary dictionary];
-    [dources setObject:[NSString stringWithFormat:@"%@",user.userInfo.avatarUrl] forKey:@"avatar"];
-//    [dources setObject:[NSString stringWithFormat:@"%@", message.senderName] forKey:@"fromNick"];
-    [dources setObject:[NSString stringWithFormat:@"%@",user.userInfo.nickName] forKey:@"name"];
-    [dources setObject:[NSString stringWithFormat:@"%@", message.from] forKey:@"_id"];
-    NSArray *key = [dources allKeys];
-    for (NSString *tem  in key) {
-        if ([[dources objectForKey:tem] isEqualToString:@"(null)"]) {
-            [dources setObject:@"" forKey:tem];
-        }
+    NSMutableDictionary *fromUser = [NSMutableDictionary dictionary];
+    [fromUser setObject:[NSString stringWithFormat:@"%@",user.userInfo.avatarUrl] forKey:@"avatar"];
+    NSString *strAlias = user.alias;
+    if (strAlias.length) {
+        [fromUser setObject:strAlias forKey:@"name"];
+    }else{
+        [fromUser setObject:[NSString stringWithFormat:@"%@",user.userInfo.nickName] forKey:@"name"];
     }
+    [fromUser setObject:[NSString stringWithFormat:@"%@", message.from] forKey:@"_id"];
+    [dic2 setObject:[NSString stringWithFormat:@"%@", message.text] forKey:@"text"];
+    [dic2 setObject:[NSString stringWithFormat:@"%@", message.session.sessionId] forKey:@"sessionId"];
+    [dic2 setObject:[NSString stringWithFormat:@"%ld", message.session.sessionType] forKey:@"sessionType"];
+    [dic2 setObject:[NSNumber numberWithBool:isStart] forKey:@"isStart"];
     switch (message.deliveryState) {
         case NIMMessageDeliveryStateFailed:
-            [dic2 setObject:@"2" forKey:@"status"];
+            [dic2 setObject:@"send_failed" forKey:@"status"];
             break;
         case NIMMessageDeliveryStateDelivering:
-            [dic2 setObject:@"0" forKey:@"status"];
+            [dic2 setObject:@"send_going" forKey:@"status"];
             break;
         case NIMMessageDeliveryStateDeliveried:
-            [dic2 setObject:@"1" forKey:@"status"];
+            [dic2 setObject:@"send_succeed" forKey:@"status"];
             break;
         default:
             [dic2 setObject:@"-1" forKey:@"status"];
             break;
     }
-    [dic2 setObject:[NSString stringWithFormat:@"%@", message.text] forKey:@"content"];
-    [dic2 setObject:[NSString stringWithFormat:@"%@", message.session.sessionId] forKey:@"sessionId"];
-    [dic2 setObject:[NSString stringWithFormat:@"%ld", message.session.sessionType] forKey:@"sessionType"];
-    [dic2 setObject:[NSString stringWithFormat:@"%ld", message.messageType] forKey:@"msgType"];
-    [dic2 setObject:[NSString stringWithFormat:@"%d", message.isOutgoingMsg] forKey:@"direct"];
-    [dic2 setObject:[NSString stringWithFormat:@"%f", message.timestamp] forKey:@"createdAt"];
-    [dic2 setObject:[NSString stringWithFormat:@"%@", message.messageId] forKey:@"_id"];
-    [dic2 setObject:[NSString stringWithFormat:@"%d",message.isRemoteRead] forKey:@"isRemoteRead"];
-    NSArray *keys = [dic2 allKeys];
-    for (NSString *tem  in keys) {
-        if ([[dic2 objectForKey:tem] isEqualToString:@"(null)"]) {
-            [dic2 setObject:@"" forKey:tem];
-        }
+    [dic2 setObject: [NSNumber numberWithBool:message.isOutgoingMsg] forKey:@"isOutgoing"];
+    [dic2 setObject:[NSString stringWithFormat:@"%f", message.timestamp] forKey:@"timeString"];
+    [dic2 setObject:[NSNumber numberWithBool:NO] forKey:@"isShowTime"];
+    [dic2 setObject:[NSString stringWithFormat:@"%@", message.messageId] forKey:@"msgId"];
+    [dic2 setObject:fromUser forKey:@"fromUser"];
+    if (message.messageType == NIMMessageTypeText) {
+        [dic2 setObject:@"text" forKey:@"msgType"];
     }
-    [dic2 setObject:dources forKey:@"user"];
-    if (message.messageType  == 1) {
+    if (message.messageType  == NIMMessageTypeImage) {
+        [dic2 setObject:@"image" forKey:@"msgType"];
         NIMImageObject *object = message.messageObject;
-        NSMutableDictionary *imageObj = [NSMutableDictionary dictionary];
-        [imageObj setObject:[NSString stringWithFormat:@"%@", [object thumbPath] ] forKey:@"thumbPath"];
-        [imageObj setObject:[NSString stringWithFormat:@"%@",[object url] ] forKey:@"url"];
-        [imageObj setObject:[NSString stringWithFormat:@"%@",[object displayName] ] forKey:@"displayName"];
-        [imageObj setObject:[NSString stringWithFormat:@"%f",[object size].height] forKey:@"imageHeight"];
-        [imageObj setObject:[NSString stringWithFormat:@"%f",[object size].width] forKey:@"imageWidth"];
-        [dic2 setObject:imageObj forKey:@"imageObj"];
+        [dic2 setObject:[NSString stringWithFormat:@"%@", [object thumbPath]] forKey:@"mediaPath"];
+        NSMutableDictionary *imgObj = [NSMutableDictionary dictionary];
+        [imgObj setObject:[NSString stringWithFormat:@"%@", [object thumbPath] ] forKey:@"thumbPath"];
+        [imgObj setObject:[NSString stringWithFormat:@"%@",[object url] ] forKey:@"url"];
+        [imgObj setObject:[NSString stringWithFormat:@"%@",[object displayName] ] forKey:@"displayName"];
+        [imgObj setObject:[NSString stringWithFormat:@"%f",[object size].height] forKey:@"imageHeight"];
+        [imgObj setObject:[NSString stringWithFormat:@"%f",[object size].width] forKey:@"imageWidth"];
+        [dic2 setObject:imgObj forKey:@"imgObj"];
     }
-    if(message.messageType == 2){
-        NSMutableDictionary *audioObj = [NSMutableDictionary dictionary];
+    if(message.messageType == NIMMessageTypeAudio){
+        [dic2 setObject:@"voice" forKey:@"msgType"];
         NIMAudioObject *object = message.messageObject;
-        [audioObj setObject:[NSString stringWithFormat:@"%@",object.path] forKey:@"path"];
-        [audioObj setObject:[NSString stringWithFormat:@"%@",object.url] forKey:@"url"];
-        [audioObj setObject:[NSString stringWithFormat:@"%ld",object.duration] forKey:@"duration"];
-        NSArray *keys = [audioObj allKeys];
-        for (NSString *tem  in keys) {
-            if ([[audioObj objectForKey:tem] isEqualToString:@"(null)"]) {
-                [audioObj setObject:@"" forKey:tem];
-            }
-        }
-        [dic2 setObject:audioObj forKey:@"audioObj"];
+        [dic2 setObject:[NSString stringWithFormat:@"%@",object.path] forKey:@"mediaPath"];
+        [dic2 setObject:[NSString stringWithFormat:@"%@",object.url] forKey:@"url"];
+        [dic2 setObject:[NSNumber numberWithInteger:object.duration] forKey:@"duration"];
+        NSMutableDictionary *voiceObj = [NSMutableDictionary dictionary];
+        [voiceObj setObject:[NSString stringWithFormat:@"%@", [object url]] forKey:@"url"];
+        [voiceObj setObject:[NSString stringWithFormat:@"%zd",(object.duration/1000)] forKey:@"duration"];
+        [voiceObj setObject:[NSNumber  numberWithBool:message.isPlayed] forKey:@"isPlayed"];
+        [dic2 setObject:voiceObj forKey:@"voiceObj"];
     }
-    if(message.messageType == 3 ){
-        NSMutableDictionary *VideoObj = [NSMutableDictionary dictionary];
+    if(message.messageType == NIMMessageTypeVideo ){
+        [dic2 setObject:@"video" forKey:@"msgType"];
         NIMVideoObject *object = message.messageObject;
-        [VideoObj setObject:[NSString stringWithFormat:@"%@",object.url ] forKey:@"url"];
-        [VideoObj setObject:[NSString stringWithFormat:@"%@", object.displayName ] forKey:@"displayName"];
-        [VideoObj setObject:[NSString stringWithFormat:@"%@", object.coverUrl ] forKey:@"coverUrl"];
-        [VideoObj setObject:[NSString stringWithFormat:@"%f",object.coverSize.height ] forKey:@"coverSizeHeight"];
-        [VideoObj setObject:[NSString stringWithFormat:@"%f", object.coverSize.width ] forKey:@"coverSizeWidth"];
-        [VideoObj setObject:[NSString stringWithFormat:@"%ld",object.duration ] forKey:@"duration"];
-        [VideoObj setObject:[NSString stringWithFormat:@"%lld",object.fileLength] forKey:@"fileLength"];
+        
+        [dic2 setObject:[NSString stringWithFormat:@"%@",object.url ] forKey:@"url"];
+        [dic2 setObject:[NSString stringWithFormat:@"%@", object.displayName ] forKey:@"displayName"];
+        [dic2 setObject:[NSString stringWithFormat:@"%@", object.coverUrl ] forKey:@"coverUrl"];
+        [dic2 setObject:[NSString stringWithFormat:@"%f",object.coverSize.height ] forKey:@"coverSizeHeight"];
+        [dic2 setObject:[NSString stringWithFormat:@"%f", object.coverSize.width ] forKey:@"coverSizeWidth"];
+        [dic2 setObject:[NSString stringWithFormat:@"%ld",object.duration ] forKey:@"duration"];
+        [dic2 setObject:[NSString stringWithFormat:@"%lld",object.fileLength] forKey:@"fileLength"];
         if([[NSFileManager defaultManager] fileExistsAtPath:object.coverPath]){
-            [VideoObj setObject:[NSString stringWithFormat:@"%@",object.coverPath] forKey:@"coverPath"];
+            [dic2 setObject:[NSString stringWithFormat:@"%@",object.coverPath] forKey:@"coverPath"];
         }else{
             //如果封面图下跪了，点进视频的时候再去下一把封面图
             [[NIMSDK sharedSDK].resourceManager download:object.coverUrl filepath:object.coverPath progress:nil completion:^(NSError *error) {
                 if (!error) {
-                    [VideoObj setObject:[NSString stringWithFormat:@"%@",object.coverPath] forKey:@"coverPath"];
+                    [dic2 setObject:[NSString stringWithFormat:@"%@",object.coverPath] forKey:@"coverPath"];
                 }
             }];
         }
         if ([[NSFileManager defaultManager] fileExistsAtPath:object.path]) {
-            [VideoObj setObject:[NSString stringWithFormat:@"%@",object.path] forKey:@"path"];
+            [dic2 setObject:[NSString stringWithFormat:@"%@",object.path] forKey:@"mediaPath"];
         }else{
             
             [[NIMObject initNIMObject] downLoadVideo:object Error:^(NSError *error) {
                 if (!error) {
-                    [VideoObj setObject:[NSString stringWithFormat:@"%@",object.path] forKey:@"path"];
+                    [dic2 setObject:[NSString stringWithFormat:@"%@",object.path] forKey:@"mediaPath"];
                 }
             } progress:^(float progress) {
                 NSLog(@"下载进度%.f",progress);
             }];
         }
-        NSArray *keys = [VideoObj allKeys];
-        for (NSString *tem  in keys) {
-            if ([[VideoObj objectForKey:tem] isEqualToString:@"(null)"]) {
-                [VideoObj setObject:@"" forKey:tem];
-            }
-        }
-        [dic2 setObject:VideoObj forKey:@"videoDic"];
     }
-    if(message.messageType == 4){
+    if(message.messageType == NIMMessageTypeLocation){
+        [dic2 setObject:@"location" forKey:@"msgType"];
         NIMLocationObject *object = message.messageObject;
         NSMutableDictionary *locationObj = [NSMutableDictionary dictionary];
         [locationObj setObject:[NSString stringWithFormat:@"%f", object.latitude ] forKey:@"latitude"];
         [locationObj setObject:[NSString stringWithFormat:@"%f", object.longitude ] forKey:@"longitude"];
         [locationObj setObject:[NSString stringWithFormat:@"%@", object.title ] forKey:@"title"];
-        NSArray *keys = [locationObj allKeys];
-        for (NSString *tem  in keys) {
-            if ([[locationObj objectForKey:tem] isEqualToString:@"(null)"]) {
-                [locationObj setObject:@"" forKey:tem];
-            }
-        }
         [dic2 setObject:locationObj forKey:@"locationObj"];
+        
     }
-    if (message.messageType == 5) {
+    if(message.messageType == NIMMessageTypeTip){//提醒类消息
+        [dic2 setObject:@"notification" forKey:@"msgType"];
+        NSMutableDictionary *notiObj = [NSMutableDictionary dictionary];
+        [notiObj setObject:message.text forKey:@"tipMsg"];
+        [dic2 setObject:notiObj forKey:@"notiObj"];
+    }
+    if (message.messageType == NIMMessageTypeNotification) {
+        [dic2 setObject:@"notification" forKey:@"msgType"];
         NSMutableDictionary *notiObj = [NSMutableDictionary dictionary];
         NIMNotificationObject *object = message.messageObject;
         switch (object.notificationType) {
@@ -882,8 +881,10 @@
                 break;
         }
         [dic2 setObject:notiObj forKey:@"notiObj"];
+        
     }
-    if (message.messageType == 100) {
+    if (message.messageType == NIMMessageTypeCustom) {
+//            [dic setObject:@"custom" forKey:@"msgType"];
         NIMCustomObject *customObject = message.messageObject;
         DWCustomAttachment *obj = customObject.attachment;
         if (obj) {
@@ -891,25 +892,13 @@
                 case CustomMessgeTypeRedpacket: //红包
                 {
                     [dic2 setObject:obj.dataDict forKey:@"redPacketObj"];
-                    [dic2 setObject:@"redpacket" forKey:@"custType"];
+                    [dic2 setObject:@"redpacket" forKey:@"msgType"];
                 }
                     break;
                 case CustomMessgeTypeBankTransfer: //转账
                 {
                     [dic2 setObject:obj.dataDict  forKey:@"bankTransferObj"];
-                    [dic2 setObject:@"transfer" forKey:@"custType"];
-                }
-                    break;
-                case CustomMessgeTypeUrl: //链接
-                {
-                    [dic2 setObject:obj.dataDict  forKey:@"urlObj"];
-                    [dic2 setObject:@"url" forKey:@"custType"];
-                }
-                    break;
-                case CustomMessgeTypeAccountNotice: //账户通知，与账户金额相关变动
-                {
-                    [dic2 setObject:obj.dataDict  forKey:@"accountNoticeObj"];
-                    [dic2 setObject:@"account_notice" forKey:@"custType"];
+                    [dic2 setObject:@"transfer" forKey:@"msgType"];
                 }
                     break;
                 case CustomMessgeTypeRedPacketOpenMessage: //拆红包消息
@@ -917,9 +906,33 @@
                     NSDictionary *dataDict = [self dealWithData:obj.dataDict];
                     if (dataDict) {
                         [dic2 setObject:dataDict  forKey:@"redpacketOpenObj"];
-                        [dic2 setObject:@"redpacketOpen" forKey:@"custType"];
+                        [dic2 setObject:@"redpacketOpen" forKey:@"msgType"];
                     }else{
                         return;
+                    }
+                }
+                    break;
+                    
+                case CustomMessgeTypeAccountNotice: //账户通知，与账户金额相关变动
+                case CustomMessgeTypeUrl: //链接
+                {
+                    NSMutableDictionary *notiUser = [NSMutableDictionary dictionary];
+                    [notiUser setObject:[NSString stringWithFormat:@"%@",user.userInfo.avatarUrl] forKey:@"avatar"];
+                    [notiUser setObject:[NSString stringWithFormat:@"%@",user.userInfo.nickName] forKey:@"name"];
+                    [notiUser setObject:[NSString stringWithFormat:@"%@", message.from] forKey:@"_id"];
+                    [dic2 setObject:notiUser forKey:@"user"];
+                    [dic2 setObject:[NSString stringWithFormat:@"%@", message.text] forKey:@"content"];
+                    [dic2 setObject:[NSString stringWithFormat:@"%d", message.isOutgoingMsg] forKey:@"direct"];
+                    [dic2 setObject:[NSString stringWithFormat:@"%f", message.timestamp] forKey:@"createdAt"];
+                    [dic2 setObject:[NSString stringWithFormat:@"%@", message.messageId] forKey:@"_id"];
+                    [dic2 setObject:[NSString stringWithFormat:@"%d",message.isRemoteRead] forKey:@"isRemoteRead"];
+                    [dic2 setObject:[NSString stringWithFormat:@"%ld", message.messageType] forKey:@"msgType"];
+                    if (obj.custType == CustomMessgeTypeAccountNotice) {
+                        [dic2 setObject:obj.dataDict  forKey:@"accountNoticeObj"];
+                        [dic2 setObject:@"account_notice" forKey:@"custType"];
+                    }else{
+                        [dic2 setObject:obj.dataDict  forKey:@"urlObj"];
+                        [dic2 setObject:@"url" forKey:@"custType"];
                     }
                 }
                     break;
@@ -1018,16 +1031,16 @@
         }
         else
         {
+            succe(@"撤回成功");
             NSString * tip = [self tipOnMessageRevoked:currentmessage];
             NIMMessage *tipMessage = [self msgWithTip:tip];
             tipMessage.timestamp = currentmessage.timestamp;
             
-            NSDictionary *deleteDict = @{@"_id":messageId};
+            NSDictionary *deleteDict = @{@"msgId":messageId};
             [NIMModel initShareMD].deleteMessDict = deleteDict;
             
             // saveMessage 方法执行成功后会触发 onRecvMessages: 回调，但是这个回调上来的 NIMMessage 时间为服务器时间，和界面上的时间有一定出入，所以要提前先在界面上插入一个和被删消息的界面时间相符的 Tip, 当触发 onRecvMessages: 回调时，组件判断这条消息已经被插入过了，就会忽略掉。
             [[NIMSDK sharedSDK].conversationManager saveMessage:tipMessage forSession:_session completion:nil];
-            
         }
     }];
     
@@ -1041,7 +1054,8 @@
 //清空聊天记录
 -(void)clearMsg:(NSString *)contactId type:(NSString *)type{
     NIMSession  *session = [NIMSession session:contactId type:[type integerValue]];
-    [[NIMSDK sharedSDK].conversationManager deleteAllmessagesInSession:session removeRecentSession:NO];
+    [[NIMSDK sharedSDK].conversationManager deleteAllmessagesInSession:session option:NO];
+//    [[NIMSDK sharedSDK].conversationManager deleteAllmessagesInSession:session removeRecentSession:NO];
 }
 - (NIMMessage *)msgWithTip:(NSString *)tip
 {

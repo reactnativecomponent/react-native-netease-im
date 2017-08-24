@@ -11,6 +11,7 @@
 #import "NTESContactDataMember.h"
 //#import "NIMContactSelectViewController.h"
 #import "NTESBundleSetting.h"
+
 @interface ContactViewController ()<NIMLoginManagerDelegate,NIMSystemNotificationManagerDelegate,NIMUserManagerDelegate>
 {
   NTESContactDataMember *_contacts;

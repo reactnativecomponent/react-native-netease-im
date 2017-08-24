@@ -408,6 +408,12 @@ RCT_EXPORT_METHOD(endAudioRecord){
 RCT_EXPORT_METHOD(cancelAudioRecord){
     [[ConversationViewController initWithConversationViewController]onCancelRecording];
 }
+
+//更新录音消息为已播放
+RCT_EXPORT_METHOD(updateAudioMessagePlayStatus:(nonnull NSString *)strMessageID){
+    [[ConversationViewController initWithConversationViewController]updateAudioMessagePlayStatus:strMessageID];
+}
+
 //开始播放录音
 RCT_EXPORT_METHOD(play:(nonnull NSString *)filepath){
     [[ConversationViewController initWithConversationViewController]play:filepath];
@@ -568,8 +574,10 @@ RCT_EXPORT_METHOD(cleanCache){
 //删除最近会话列表
 - (void)removAllRecentSessions{
     id<NIMConversationManager> manager = [[NIMSDK sharedSDK] conversationManager];
-    [manager deleteAllMessages:YES];
-    
+//    [manager deleteAllMessages:YES];
+    NIMDeleteMessagesOption *option = [[NIMDeleteMessagesOption alloc]init];
+    option.removeSession = YES;
+    [manager deleteAllMessages:option];
 }
 
 - (void)initController{
@@ -613,7 +621,7 @@ RCT_EXPORT_METHOD(cleanCache){
                 [_bridge.eventDispatcher sendDeviceEventWithName:@"observeUnreadCountChange" body:param];
                 break;
             case 7:
-                //聊天记录
+                //收到新消息、聊天记录
                 [_bridge.eventDispatcher sendDeviceEventWithName:@"observeReceiveMessage" body:param];
                 break;
             case 8:
