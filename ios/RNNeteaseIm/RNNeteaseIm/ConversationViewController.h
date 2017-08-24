@@ -65,4 +65,6 @@ typedef void(^Errors)(id erro);
 -(void)deleteMsg:(NSString *)messageId;
 //麦克风权限
 - (void)onTouchVoiceSucc:(Success)succ Err:(Errors)err;
+//更新录音消息为已播放
+- (void)updateAudioMessagePlayStatus:(NSString *)messageID;
 @end

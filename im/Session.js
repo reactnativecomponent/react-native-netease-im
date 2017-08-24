@@ -277,5 +277,13 @@ class Session {
     downloadAttachment(messageId){
         return RNNeteaseIm.downloadAttachment(messageId,'0');
     }
+    /**
+     * 更新录音消息是否播放过的状态
+     * @param messageId
+     * @returns {*}
+     */
+    static updateAudioMessagePlayStatus(messageId){
+        return RNNeteaseIm.updateAudioMessagePlayStatus(messageId);
+    }
 }
 module.exports = new Session();
