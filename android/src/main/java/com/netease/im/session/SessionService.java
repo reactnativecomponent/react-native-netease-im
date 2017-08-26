@@ -59,6 +59,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static com.netease.nimlib.sdk.NIMClient.getService;
+
 /**
  * Created by dowin on 2017/5/10.
  */
@@ -82,6 +84,8 @@ public class SessionService {
 
     private Handler handler;
     private boolean mute = false;
+
+    private boolean canSended = true;
 
     private SessionService() {
     }
@@ -507,7 +511,7 @@ public class SessionService {
             return;
         }
         hasRegister = register;
-        MsgServiceObserve service = NIMClient.getService(MsgServiceObserve.class);
+        MsgServiceObserve service = getService(MsgServiceObserve.class);
         service.observeReceiveMessage(incomingMessageObserver, register);
         service.observeMessageReceipt(messageReceiptObserver, register);
 
@@ -551,11 +555,16 @@ public class SessionService {
         sessionTypeEnum = SessionUtil.getSessionType(type);
 
         if (sessionTypeEnum == SessionTypeEnum.P2P) {
+            canSended = NIMClient.getService(FriendService.class).isMyFriend(sessionId);
             this.mute = !NIMClient.getService(FriendService.class).isNeedMessageNotify(sessionId);
         } else {
             Team t = TeamDataCache.getInstance().getTeamById(sessionId);
-            if (t != null)
+            if (t != null) {
                 this.mute = t.mute();
+                canSended = t.isMyTeam();
+            } else {
+                canSended = false;
+            }
         }
         registerObservers(true);
         getMsgService().setChattingAccount(sessionId, sessionTypeEnum);
@@ -811,11 +820,16 @@ public class SessionService {
         if (msgService == null) {
             synchronized (SessionService.class) {
                 if (msgService == null) {
-                    msgService = NIMClient.getService(MsgService.class);
+                    msgService = getService(MsgService.class);
                 }
             }
         }
         return msgService;
+    }
+
+    public void updateMessage(final IMMessage message, MsgStatusEnum statusEnum) {
+        message.setStatus(statusEnum);
+        getMsgService().updateIMMessageStatus(message);
     }
 
     public void sendMessage(final IMMessage message, final OnSendMessageListener onSendMessageListener) {
@@ -873,7 +887,7 @@ public class SessionService {
     }
 
     void observerAttachProgress(boolean register) {
-        NIMClient.getService(MsgServiceObserve.class).observeAttachmentProgress(new Observer<AttachmentProgress>() {
+        getService(MsgServiceObserve.class).observeAttachmentProgress(new Observer<AttachmentProgress>() {
             @Override
             public void onEvent(AttachmentProgress attachmentProgress) {
                 ReactCache.emit(ReactCache.observeAttachmentProgress, ReactCache.createAttachmentProgress(attachmentProgress));
@@ -887,7 +901,7 @@ public class SessionService {
         if (isOriginImageHasDownloaded(message)) {
             return;
         }
-        AbortableFuture future = NIMClient.getService(MsgService.class).downloadAttachment(message, isThumb);
+        AbortableFuture future = getService(MsgService.class).downloadAttachment(message, isThumb);
     }
 
     public interface OnSendMessageListener {

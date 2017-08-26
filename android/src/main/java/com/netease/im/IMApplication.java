@@ -109,9 +109,10 @@ public class IMApplication {
 
     }
 
-    public static void setDebugAble(boolean debugAble){
+    public static void setDebugAble(boolean debugAble) {
         LogUtil.setDebugAble(debugAble);
     }
+
     private static Observer<CustomNotification> notificationObserver = new Observer<CustomNotification>() {
         @Override
         public void onEvent(CustomNotification customNotification) {

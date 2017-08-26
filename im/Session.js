@@ -115,9 +115,9 @@ class Session {
      * @param duration 音频持续时间，单位是ms
      * @returns {*}
      */
-    //sendAudioMessage(file,duration){
-    //    return RNNeteaseIm.sendAudioMessage(file,duration);
-    //}
+    sendAudioMessage(file,duration){
+       return RNNeteaseIm.sendAudioMessage(file,duration);
+    }
 
     /**
      * 发送视频消息
@@ -212,6 +212,14 @@ class Session {
         return RNNeteaseIm.endAudioRecord();
     }
 
+
+    /**
+     * 取消播放录音
+     * @returns {*}
+     */
+    cancelAudioRecord(){
+        return RNNeteaseIm.cancelAudioRecord();
+    }
     /** ******************************消息操作 ****************************************** **/
     /**
      * 转发消息操作

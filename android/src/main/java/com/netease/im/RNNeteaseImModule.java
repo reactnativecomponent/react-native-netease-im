@@ -61,6 +61,7 @@ import com.netease.nimlib.sdk.friend.model.AddFriendData;
 import com.netease.nimlib.sdk.msg.MessageBuilder;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.SystemMessageService;
+import com.netease.nimlib.sdk.msg.constant.MsgStatusEnum;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.msg.model.QueryDirectionEnum;
@@ -1283,6 +1284,21 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
 
     }
 
+    @ReactMethod
+    public void updateAudioMessagePlayStatus(String messageId, final Promise promise) {
+        LogUtil.w(TAG, "revokeMessage" + messageId);
+        sessionService.queryMessage(messageId, new SessionService.OnMessageQueryListener() {
+
+            @Override
+            public int onResult(int code, IMMessage message) {
+                if (code == ResponseCode.RES_SUCCESS && message != null) {
+                    sessionService.updateMessage(message, MsgStatusEnum.read);
+                }
+                return 0;
+            }
+        });
+    }
+
     /**
      * 消息删除
      *
@@ -1920,8 +1936,12 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
     @Override
     public void onNewIntent(Intent intent) {
 
-        LogUtil.w(TAG, "onNewIntent:" + intent);
+        LogUtil.w(TAG, "onNewIntent:" + intent.getExtras());
 //        ReceiverMsgParser.openIntent(intent);
+        if (reactContext.getCurrentActivity() != null && ReceiverMsgParser.checkOpen(ReceiverMsgParser.getIntent())) {
+            intent.putExtras(ReceiverMsgParser.getIntent());
+            reactContext.getCurrentActivity().setIntent(intent);
+        }
 
     }
 

@@ -1,7 +1,7 @@
 'use strict'
 import { NativeModules,Platform, NetInfo } from 'react-native';
 
-const { RNNeteaseIm } = NativeModules;
+const { RNNeteaseIm,PinYin } = NativeModules;
 
 class Utils{
     /**
@@ -59,12 +59,8 @@ class Utils{
     stopPlay(){
         return RNNeteaseIm.stopPlay();
     }
-    /**
-     * 取消播放录音
-     * @returns {*}
-     */
-    cancelAudioRecord(){
-        return RNNeteaseIm.cancelAudioRecord();
+    sortPinYin(o,key){
+        return PinYin.sortPinYin(o,key);
     }
 }
 module.exports = new Utils();

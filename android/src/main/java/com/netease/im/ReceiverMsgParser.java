@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 
+import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.WritableMap;
 import com.netease.im.common.push.Extras;
 import com.netease.im.uikit.common.util.log.LogUtil;
 import com.netease.nimlib.sdk.NimIntent;
@@ -31,6 +33,16 @@ public class ReceiverMsgParser {
         return false;
     }
 
+    private static Intent result = new Intent();
+
+    public static void setIntent(Intent intent) {
+        result = intent;
+    }
+
+    public static Intent getIntent() {
+        return result;
+    }
+
     public static Bundle openIntent(Intent intent) {
         Bundle result = new Bundle();
         if (intent != null && canAutoLogin()) {
@@ -53,10 +65,42 @@ public class ReceiverMsgParser {
                     result.putString("sessionId", account);
                 }
             }
+
+            LogUtil.w("ReceiverMsgParser", intent + "");
         }
-        LogUtil.w("ReceiverMsgParser", intent + "");
+
         LogUtil.w("ReceiverMsgParser", result + "");
         return result;
+    }
+
+    public static WritableMap getWritableMap(Intent intent) {
+        WritableMap r = Arguments.createMap();
+        if (intent != null && canAutoLogin()) {
+            if (intent.hasExtra(NimIntent.EXTRA_NOTIFY_CONTENT)) {
+                ArrayList<IMMessage> messages = (ArrayList<IMMessage>) intent.getSerializableExtra(NimIntent.EXTRA_NOTIFY_CONTENT);
+                if (messages == null || messages.size() > 1) {
+                    r.putString("type", "sessionList");
+                } else {
+                    IMMessage message = messages.get(0);
+                    r.putString("type", "session");
+                    r.putString("sessionType", Integer.toString(message.getSessionType().getValue()));
+                    r.putString("sessionId", message.getSessionId());
+                }
+            } else if (intent.hasExtra(Extras.EXTRA_JUMP_P2P)) {
+                Intent data = intent.getParcelableExtra(Extras.EXTRA_DATA);
+                String account = data.getStringExtra(Extras.EXTRA_ACCOUNT);
+                if (!TextUtils.isEmpty(account)) {
+                    r.putString("type", "session");
+                    r.putString("sessionType", Integer.toString(SessionTypeEnum.P2P.getValue()));
+                    r.putString("sessionId", account);
+                }
+            }
+
+            LogUtil.w("ReceiverMsgParser", intent + "");
+        }
+
+        LogUtil.w("ReceiverMsgParser", result + "");
+        return r;
     }
 
     /**
