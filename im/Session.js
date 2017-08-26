@@ -282,7 +282,7 @@ class Session {
      * @param messageId
      * @returns {*}
      */
-    static updateAudioMessagePlayStatus(messageId){
+    updateAudioMessagePlayStatus(messageId){
         return RNNeteaseIm.updateAudioMessagePlayStatus(messageId);
     }
 }

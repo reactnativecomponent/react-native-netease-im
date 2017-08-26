@@ -1286,7 +1286,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
 
     @ReactMethod
     public void updateAudioMessagePlayStatus(String messageId, final Promise promise) {
-        LogUtil.w(TAG, "revokeMessage" + messageId);
+        LogUtil.w(TAG, "updateAudioMessagePlayStatus" + messageId);
         sessionService.queryMessage(messageId, new SessionService.OnMessageQueryListener() {
 
             @Override

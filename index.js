@@ -7,7 +7,6 @@ import NimListener from './im/Listener';
 import NimSession from './im/Session';
 import NimSystemMsg from './im/SystemMsg';
 import NimTeam from './im/Team';
-const NIM = Object.assign({},NimUtils);
 export {
     // NIM,
     NimUtils,
