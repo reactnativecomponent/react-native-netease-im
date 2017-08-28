@@ -120,10 +120,18 @@
         NSString *strAlias = messageUser.alias;
         if (strAlias.length) {
             [fromUser setObject:strAlias forKey:@"name"];
-        }else{
+        }else if(messageUser.userInfo.nickName.length){
              [fromUser setObject:[NSString stringWithFormat:@"%@",messageUser.userInfo.nickName] forKey:@"name"];
+        }else{
+            [fromUser setObject:[NSString stringWithFormat:@"%@",messageUser.userId] forKey:@"name"];
         }
         [fromUser setObject:[NSString stringWithFormat:@"%@", message.from] forKey:@"_id"];
+        NSArray *key = [fromUser allKeys];
+        for (NSString *tem  in key) {
+            if ([[fromUser objectForKey:tem] isEqualToString:@"(null)"]) {
+                [fromUser setObject:@"" forKey:tem];
+            }
+        }
         [dic setObject:[NSString stringWithFormat:@"%@", message.text] forKey:@"text"];
         [dic setObject:[NSString stringWithFormat:@"%@", message.session.sessionId] forKey:@"sessionId"];
         [dic setObject:[NSString stringWithFormat:@"%ld", message.session.sessionType] forKey:@"sessionType"];
@@ -159,7 +167,7 @@
             [imgObj setObject:[NSString stringWithFormat:@"%@",[object displayName] ] forKey:@"displayName"];
             [imgObj setObject:[NSString stringWithFormat:@"%f",[object size].height] forKey:@"imageHeight"];
             [imgObj setObject:[NSString stringWithFormat:@"%f",[object size].width] forKey:@"imageWidth"];
-            [dic setObject:imgObj forKey:@"imgObj"];
+            [dic setObject:imgObj forKey:@"extend"];
         }
         if(message.messageType == NIMMessageTypeAudio){
             [dic setObject:@"voice" forKey:@"msgType"];
@@ -171,7 +179,7 @@
             [voiceObj setObject:[NSString stringWithFormat:@"%@", [object url]] forKey:@"url"];
             [voiceObj setObject:[NSString stringWithFormat:@"%zd",(object.duration/1000)] forKey:@"duration"];
             [voiceObj setObject:[NSNumber  numberWithBool:message.isPlayed] forKey:@"isPlayed"];
-            [dic setObject:voiceObj forKey:@"voiceObj"];
+            [dic setObject:voiceObj forKey:@"extend"];
         }
         if(message.messageType == NIMMessageTypeVideo ){
             [dic setObject:@"video" forKey:@"msgType"];
@@ -214,14 +222,14 @@
             [locationObj setObject:[NSString stringWithFormat:@"%f", object.latitude ] forKey:@"latitude"];
             [locationObj setObject:[NSString stringWithFormat:@"%f", object.longitude ] forKey:@"longitude"];
             [locationObj setObject:[NSString stringWithFormat:@"%@", object.title ] forKey:@"title"];
-            [dic setObject:locationObj forKey:@"locationObj"];
+            [dic setObject:locationObj forKey:@"extend"];
             
         }
         if(message.messageType == NIMMessageTypeTip){//提醒类消息
             [dic setObject:@"notification" forKey:@"msgType"];
             NSMutableDictionary *notiObj = [NSMutableDictionary dictionary];
             [notiObj setObject:message.text forKey:@"tipMsg"];
-            [dic setObject:notiObj forKey:@"notiObj"];
+            [dic setObject:notiObj forKey:@"extend"];
         }
         if (message.messageType == NIMMessageTypeNotification) {
             [dic setObject:@"notification" forKey:@"msgType"];
@@ -244,7 +252,7 @@
                 default:
                     break;
             }
-            [dic setObject:notiObj forKey:@"notiObj"];
+            [dic setObject:notiObj forKey:@"extend"];
             
         }
         
@@ -255,14 +263,14 @@
                 switch (obj.custType) {
                     case CustomMessgeTypeRedpacket: //红包
                     {
-                        [dic setObject:obj.dataDict forKey:@"redPacketObj"];
+                        [dic setObject:obj.dataDict forKey:@"extend"];
 //                        [dic setObject:@"redpacket" forKey:@"custType"];
                         [dic setObject:@"redpacket" forKey:@"msgType"];
                     }
                         break;
                     case CustomMessgeTypeBankTransfer: //转账
                     {
-                        [dic setObject:obj.dataDict  forKey:@"bankTransferObj"];
+                        [dic setObject:obj.dataDict  forKey:@"extend"];
 //                        [dic setObject:@"transfer" forKey:@"custType"];
                         [dic setObject:@"transfer" forKey:@"msgType"];
                     }
@@ -271,7 +279,7 @@
                     {
                         NSDictionary *dataDict = [self dealWithData:obj.dataDict];
                         if (dataDict) {
-                            [dic setObject:dataDict  forKey:@"redpacketOpenObj"];
+                            [dic setObject:dataDict  forKey:@"extend"];
 //                            [dic setObject:@"redpacketOpen" forKey:@"custType"];
                             [dic setObject:@"redpacketOpen" forKey:@"msgType"];
                         }else{
@@ -755,10 +763,18 @@
     NSString *strAlias = user.alias;
     if (strAlias.length) {
         [fromUser setObject:strAlias forKey:@"name"];
-    }else{
+    }else if(user.userInfo.nickName.length){
         [fromUser setObject:[NSString stringWithFormat:@"%@",user.userInfo.nickName] forKey:@"name"];
+    }else{
+        [fromUser setObject:[NSString stringWithFormat:@"%@",user.userId] forKey:@"name"];
     }
     [fromUser setObject:[NSString stringWithFormat:@"%@", message.from] forKey:@"_id"];
+    NSArray *key = [fromUser allKeys];
+    for (NSString *tem  in key) {
+        if ([[fromUser objectForKey:tem] isEqualToString:@"(null)"]) {
+            [fromUser setObject:@"" forKey:tem];
+        }
+    }
     [dic2 setObject:[NSString stringWithFormat:@"%@", message.text] forKey:@"text"];
     [dic2 setObject:[NSString stringWithFormat:@"%@", message.session.sessionId] forKey:@"sessionId"];
     [dic2 setObject:[NSString stringWithFormat:@"%ld", message.session.sessionType] forKey:@"sessionType"];
@@ -795,7 +811,7 @@
         [imgObj setObject:[NSString stringWithFormat:@"%@",[object displayName] ] forKey:@"displayName"];
         [imgObj setObject:[NSString stringWithFormat:@"%f",[object size].height] forKey:@"imageHeight"];
         [imgObj setObject:[NSString stringWithFormat:@"%f",[object size].width] forKey:@"imageWidth"];
-        [dic2 setObject:imgObj forKey:@"imgObj"];
+        [dic2 setObject:imgObj forKey:@"extend"];
     }
     if(message.messageType == NIMMessageTypeAudio){
         [dic2 setObject:@"voice" forKey:@"msgType"];
@@ -807,7 +823,7 @@
         [voiceObj setObject:[NSString stringWithFormat:@"%@", [object url]] forKey:@"url"];
         [voiceObj setObject:[NSString stringWithFormat:@"%zd",(object.duration/1000)] forKey:@"duration"];
         [voiceObj setObject:[NSNumber  numberWithBool:message.isPlayed] forKey:@"isPlayed"];
-        [dic2 setObject:voiceObj forKey:@"voiceObj"];
+        [dic2 setObject:voiceObj forKey:@"extend"];
     }
     if(message.messageType == NIMMessageTypeVideo ){
         [dic2 setObject:@"video" forKey:@"msgType"];
@@ -850,14 +866,14 @@
         [locationObj setObject:[NSString stringWithFormat:@"%f", object.latitude ] forKey:@"latitude"];
         [locationObj setObject:[NSString stringWithFormat:@"%f", object.longitude ] forKey:@"longitude"];
         [locationObj setObject:[NSString stringWithFormat:@"%@", object.title ] forKey:@"title"];
-        [dic2 setObject:locationObj forKey:@"locationObj"];
+        [dic2 setObject:locationObj forKey:@"extend"];
         
     }
     if(message.messageType == NIMMessageTypeTip){//提醒类消息
         [dic2 setObject:@"notification" forKey:@"msgType"];
         NSMutableDictionary *notiObj = [NSMutableDictionary dictionary];
         [notiObj setObject:message.text forKey:@"tipMsg"];
-        [dic2 setObject:notiObj forKey:@"notiObj"];
+        [dic2 setObject:notiObj forKey:@"extend"];
     }
     if (message.messageType == NIMMessageTypeNotification) {
         [dic2 setObject:@"notification" forKey:@"msgType"];
@@ -880,7 +896,7 @@
             default:
                 break;
         }
-        [dic2 setObject:notiObj forKey:@"notiObj"];
+        [dic2 setObject:notiObj forKey:@"extend"];
         
     }
     if (message.messageType == NIMMessageTypeCustom) {
@@ -891,13 +907,13 @@
             switch (obj.custType) {
                 case CustomMessgeTypeRedpacket: //红包
                 {
-                    [dic2 setObject:obj.dataDict forKey:@"redPacketObj"];
+                    [dic2 setObject:obj.dataDict forKey:@"extend"];
                     [dic2 setObject:@"redpacket" forKey:@"msgType"];
                 }
                     break;
                 case CustomMessgeTypeBankTransfer: //转账
                 {
-                    [dic2 setObject:obj.dataDict  forKey:@"bankTransferObj"];
+                    [dic2 setObject:obj.dataDict  forKey:@"extend"];
                     [dic2 setObject:@"transfer" forKey:@"msgType"];
                 }
                     break;
@@ -905,7 +921,7 @@
                 {
                     NSDictionary *dataDict = [self dealWithData:obj.dataDict];
                     if (dataDict) {
-                        [dic2 setObject:dataDict  forKey:@"redpacketOpenObj"];
+                        [dic2 setObject:dataDict  forKey:@"extend"];
                         [dic2 setObject:@"redpacketOpen" forKey:@"msgType"];
                     }else{
                         return;
