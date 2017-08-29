@@ -19,7 +19,6 @@ public class RNNeteaseImPackage implements ReactPackage {
               new RNNeteaseImModule(reactContext));
     }
 
-    @Override
     public List<Class<? extends JavaScriptModule>> createJSModules() {
       return Collections.emptyList();
     }
