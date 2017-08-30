@@ -32,7 +32,8 @@
 }
 -(void)getBlackList{
     NSMutableArray *list = [[NSMutableArray alloc] init];
-    for (NIMUser *user in [NIMSDK sharedSDK].userManager.myBlackList) {
+    NSArray *blackList = [NIMSDK sharedSDK].userManager.myBlackList;
+    for (NIMUser *user in blackList) {
         NIMKitInfo *info = [[NIMKit sharedKit] infoByUser:user.userId option:nil];
         NSMutableDictionary *dic = [NSMutableDictionary dictionary];
         [dic setObject:[NSString stringWithFormat:@"%@", info.showName] forKey:@"name"];
