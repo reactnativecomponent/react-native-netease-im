@@ -89,7 +89,11 @@
     for (NIMRecentSession *recent in NIMlistArr) {
         if ([recent.session.sessionId isEqualToString:recentContactId]) {
             id<NIMConversationManager> manager = [[NIMSDK sharedSDK] conversationManager];
-            [manager deleteRecentSession:recent];
+            //            [manager deleteRecentSession:recent];
+            NIMDeleteMessagesOption *option = [[NIMDeleteMessagesOption alloc]init];
+            option.removeSession = YES;
+            [manager deleteAllmessagesInSession:recent.session option:option];
+            //清除历史记录
             [self getResouces];
         }
     }

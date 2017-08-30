@@ -96,11 +96,21 @@
 -(void)getAllContactFriends{
     
     NSMutableArray *contacts = [NSMutableArray array];
+    NSArray *blackList = [NIMSDK sharedSDK].userManager.myBlackList;
     for (NIMUser *user in [NIMSDK sharedSDK].userManager.myFriends) {
-        NIMKitInfo *info           = [[NIMKit sharedKit] infoByUser:user.userId option:nil];
-        _contacts = [[NTESContactDataMember alloc] init];
-        _contacts.info               = info;
-        [contacts addObject:_contacts];
+        BOOL isBlack = NO;
+        for (NIMUser *blackUser in blackList) {
+            if ([user.userId isEqualToString:blackUser.userId]) {
+                isBlack = YES;
+                break;
+            }
+        }
+        if (!isBlack) {
+            NIMKitInfo *info           = [[NIMKit sharedKit] infoByUser:user.userId option:nil];
+            _contacts = [[NTESContactDataMember alloc] init];
+            _contacts.info               = info;
+            [contacts addObject:_contacts];
+        }
     }
     [self setMembers:contacts];
 }

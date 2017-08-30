@@ -50,6 +50,7 @@
         }
     }
 }
+//通信录列表
 -(void)setContactList:(NSMutableDictionary *)contactList{
     if (_contactList != contactList) {
         _contactList = contactList;
@@ -125,11 +126,8 @@
 }
 //黑名单列表
 -(void)setBankList:(NSMutableArray *)bankList{
-    if (bankList.count) {
         if (self.myBlock) {
         self.myBlock(13, bankList);
-        }
-
     }
 }
 
