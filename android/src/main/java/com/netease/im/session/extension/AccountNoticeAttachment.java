@@ -3,6 +3,7 @@ package com.netease.im.session.extension;
 import com.alibaba.fastjson.JSONObject;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableMap;
+import com.netease.im.MessageConstant;
 
 import java.util.Map;
 import java.util.Set;
@@ -71,11 +72,11 @@ public class AccountNoticeAttachment extends CustomAttachment {
     @Override
     public WritableMap toReactNative() {
         WritableMap writableMap = Arguments.createMap();
-        writableMap.putString("title", title);
-        writableMap.putString("time", time);
-        writableMap.putString("date", date);
-        writableMap.putString("amount", amount);
-        writableMap.putString("serialNo", serialNo);
+        writableMap.putString(MessageConstant.AccountNotice.TITLE, title);
+        writableMap.putString(MessageConstant.AccountNotice.TIME, time);
+        writableMap.putString(MessageConstant.AccountNotice.DATE, date);
+        writableMap.putString(MessageConstant.AccountNotice.AMOUNT, amount);
+        writableMap.putString(MessageConstant.AccountNotice.SERIA_NO, serialNo);
         WritableMap bodyMap = Arguments.createMap();
         if (body != null && !body.isEmpty()) {
             Set<Map.Entry<String, Object>> entrySet = body.entrySet();
@@ -83,7 +84,7 @@ public class AccountNoticeAttachment extends CustomAttachment {
                 bodyMap.putString(entry.getKey(), String.valueOf(entry.getValue()));
             }
         }
-        writableMap.putMap("body", bodyMap);
+        writableMap.putMap(MessageConstant.AccountNotice.BODY, bodyMap);
         return writableMap;
     }
 }

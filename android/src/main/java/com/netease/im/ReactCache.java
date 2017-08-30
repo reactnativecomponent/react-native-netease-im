@@ -700,38 +700,49 @@ public class ReactCache {
 
 
     /**
+     * case text
+     * case image
+     * case voice
+     * case video
+     * case location
+     * case notification
+     * case redpacket
+     * case transfer
+     * case url
+     * case account_notice
+     * case redpacketOpen
      *
      * @return
      */
     static String getMessageType(IMMessage item) {
-        String type = "";
+        String type = MessageConstant.MsgType.CUSTON;
         switch (item.getMsgType()) {
             case text:
-                type = "text";
+                type = MessageConstant.MsgType.TEXT;
                 break;
             case image:
-                type = "image";
+                type = MessageConstant.MsgType.IMAGE;
                 break;
             case audio:
-                type = "voice";
+                type = MessageConstant.MsgType.VOICE;
                 break;
             case video:
-                type = "video";
+                type = MessageConstant.MsgType.VIDEO;
                 break;
             case location:
-                type = "location";
+                type = MessageConstant.MsgType.LOCATION;
                 break;
             case file:
-                type = "file";
+                type = MessageConstant.MsgType.FILE;
                 break;
             case notification:
-                type = "notification";
+                type = MessageConstant.MsgType.NOTIFICATION;
                 break;
             case tip:
-                type = "tip";
+                type = MessageConstant.MsgType.TIP;
                 break;
             case robot:
-                type = "robot";
+                type = MessageConstant.MsgType.ROBOT;
                 break;
             case custom:
                 CustomAttachment attachment = null;
@@ -743,33 +754,39 @@ public class ReactCache {
                 if (attachment != null) {
                     switch (attachment.getType()) {
                         case CustomAttachmentType.RedPacket:
-                            type = "red_packet";
+                            type = MessageConstant.MsgType.RED_PACKET;
                             break;
 
                         case CustomAttachmentType.BankTransfer:
-                            type = "bank_transfer";
+                            type = MessageConstant.MsgType.BANK_TRANSFER;
                             break;
                         case CustomAttachmentType.AccountNotice:
-                            type = "account_notice";
+                            type = MessageConstant.MsgType.ACCOUNT_NOTICE;
                             break;
                         case CustomAttachmentType.LinkUrl:
-                            type = "link";
+                            type = MessageConstant.MsgType.LINK;
                             break;
                         case CustomAttachmentType.RedPacketOpen:
-                            type = "red_packet_open";
+                            type = MessageConstant.MsgType.RED_PACKET_OPEN;
                             break;
                         default:
+                            type = MessageConstant.MsgType.CUSTON;
+                            break;
                     }
+                }else {
+                    type = MessageConstant.MsgType.CUSTON;
                 }
                 break;
             default:
+                type = MessageConstant.MsgType.CUSTON;
                 break;
         }
 
         return type;
     }
 
-    final static String MESSAGE_EXTEND = "extend";
+    final static String MESSAGE_EXTEND = MessageConstant.Message.EXTEND;
+
     /**
      * <br/>uuid 消息ID
      * <br/>sessionId 会话id
@@ -787,17 +804,17 @@ public class ReactCache {
      */
     public static WritableMap createMessage(IMMessage item) {
         WritableMap itemMap = Arguments.createMap();
-        itemMap.putString("_id", item.getUuid());
+        itemMap.putString(MessageConstant.Message.MSG_ID, item.getUuid());
 
-        itemMap.putString("msgType", getMessageType(item));
-        itemMap.putString("createdAt", Long.toString(item.getTime() / 1000));
-        itemMap.putString("sessionId", item.getSessionId());
-        itemMap.putString("sessionType", Integer.toString(item.getSessionType().getValue()));
+        itemMap.putString(MessageConstant.Message.MSG_TYPE, getMessageType(item));
+        itemMap.putString(MessageConstant.Message.TIME_STRING, Long.toString(item.getTime() / 1000));
+        itemMap.putString(MessageConstant.Message.SESSION_ID, item.getSessionId());
+        itemMap.putString(MessageConstant.Message.SESSION_TYPE, Integer.toString(item.getSessionType().getValue()));
 
-        itemMap.putString("direct", Integer.toString(item.getDirect().getValue()));
-        itemMap.putString("status", Integer.toString(item.getStatus().getValue()));
-        itemMap.putString("attachStatus", Integer.toString(item.getAttachStatus().getValue()));
-        itemMap.putString("isRemoteRead", boolean2String(receiveReceiptCheck(item)));
+        itemMap.putString(MessageConstant.Message.IS_OUTGOING, Integer.toString(item.getDirect().getValue()));
+        itemMap.putString(MessageConstant.Message.STATUS, Integer.toString(item.getStatus().getValue()));
+        itemMap.putString(MessageConstant.Message.ATTACH_STATUS, Integer.toString(item.getAttachStatus().getValue()));
+        itemMap.putString(MessageConstant.Message.IS_REMOTE_READ, boolean2String(receiveReceiptCheck(item)));
 
         WritableMap user = Arguments.createMap();
         String fromAccount = item.getFromAccount();
@@ -807,17 +824,16 @@ public class ReactCache {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        user.putString("_id", fromAccount);
+        user.putString(MessageConstant.User.USER_ID, fromAccount);
 
         if (item.getSessionType() == SessionTypeEnum.Team && !TextUtils.equals(LoginService.getInstance().getAccount(), fromAccount)) {
-            user.putString("name", getTeamUserDisplayName(item.getSessionId(), fromAccount));
+            user.putString(MessageConstant.User.DISPLAY_NAME, getTeamUserDisplayName(item.getSessionId(), fromAccount));
         } else {
-            user.putString("name", !TextUtils.isEmpty(fromNick) ? fromNick : NimUserInfoCache.getInstance().getUserDisplayName(fromAccount));
+            user.putString(MessageConstant.User.DISPLAY_NAME, !TextUtils.isEmpty(fromNick) ? fromNick : NimUserInfoCache.getInstance().getUserDisplayName(fromAccount));
         }
         String avatar = NimUserInfoCache.getInstance().getAvatar(fromAccount);
-        user.putString("avatar", avatar);
-        user.putString("avatarLocal", ImageLoaderKit.getMemoryCachedAvatar(avatar));
-        itemMap.putMap("user", user);
+        user.putString(MessageConstant.User.AVATAR_PATH, avatar);
+        itemMap.putMap(MessageConstant.Message.FROM_USER, user);
 
         MsgAttachment attachment = item.getAttachment();
         String text = "";
@@ -828,54 +844,49 @@ public class ReactCache {
                 if (attachment instanceof ImageAttachment) {
                     ImageAttachment imageAttachment = (ImageAttachment) attachment;
                     if (item.getDirect() == MsgDirectionEnum.Out) {
-                        imageObj.putString("thumbPath2", imageAttachment.getPathForSave());
-                        imageObj.putString("thumbPath", imageAttachment.getPath());
+                        imageObj.putString(MessageConstant.MediaFile.THUMB_PATH, imageAttachment.getPath());
                     } else {
-                        imageObj.putString("thumbPath2", imageAttachment.getThumbPathForSave());
-                        imageObj.putString("thumbPath", imageAttachment.getThumbPath());
+                        imageObj.putString(MessageConstant.MediaFile.THUMB_PATH, imageAttachment.getThumbPath());
                     }
-                    imageObj.putString("path2", imageAttachment.getPathForSave());
-                    imageObj.putString("path", imageAttachment.getPath());
-                    imageObj.putString("url", imageAttachment.getUrl());
-                    imageObj.putString("displayName", imageAttachment.getDisplayName());
-                    imageObj.putString("height", Integer.toString(imageAttachment.getHeight()));
-                    imageObj.putString("width", Integer.toString(imageAttachment.getWidth()));
+                    imageObj.putString(MessageConstant.MediaFile.PATH, imageAttachment.getPath());
+                    imageObj.putString(MessageConstant.MediaFile.URL, imageAttachment.getUrl());
+                    imageObj.putString(MessageConstant.MediaFile.DISPLAY_NAME, imageAttachment.getDisplayName());
+                    imageObj.putString(MessageConstant.MediaFile.HEIGHT, Integer.toString(imageAttachment.getHeight()));
+                    imageObj.putString(MessageConstant.MediaFile.WIDTH, Integer.toString(imageAttachment.getWidth()));
                 }
                 itemMap.putMap(MESSAGE_EXTEND, imageObj);
             } else if (item.getMsgType() == MsgTypeEnum.audio) {
                 WritableMap audioObj = Arguments.createMap();
                 if (attachment instanceof AudioAttachment) {
                     AudioAttachment audioAttachment = (AudioAttachment) attachment;
-                    audioObj.putString("path", audioAttachment.getPath());
-                    audioObj.putString("thumbPath", audioAttachment.getThumbPath());
-                    audioObj.putString("url", audioAttachment.getUrl());
-                    audioObj.putString("duration", Long.toString(audioAttachment.getDuration()));
+                    audioObj.putString(MessageConstant.MediaFile.PATH, audioAttachment.getPath());
+                    audioObj.putString(MessageConstant.MediaFile.THUMB_PATH, audioAttachment.getThumbPath());
+                    audioObj.putString(MessageConstant.MediaFile.URL, audioAttachment.getUrl());
+                    audioObj.putString(MessageConstant.MediaFile.DURATION, Long.toString(audioAttachment.getDuration()));
                 }
                 itemMap.putMap(MESSAGE_EXTEND, audioObj);
             } else if (item.getMsgType() == MsgTypeEnum.video) {
                 WritableMap videoDic = Arguments.createMap();
                 if (attachment instanceof VideoAttachment) {
                     VideoAttachment videoAttachment = (VideoAttachment) attachment;
-                    videoDic.putString("url", videoAttachment.getUrl());
-                    videoDic.putString("path2", videoAttachment.getPathForSave());
-                    videoDic.putString("path", videoAttachment.getPath());
-                    videoDic.putString("displayName", videoAttachment.getDisplayName());
-                    videoDic.putString("height", Integer.toString(videoAttachment.getHeight()));
-                    videoDic.putString("width", Integer.toString(videoAttachment.getWidth()));
-                    videoDic.putString("duration", Long.toString(videoAttachment.getDuration()));
-                    videoDic.putString("fileLength", Long.toString(videoAttachment.getSize()));
+                    videoDic.putString(MessageConstant.MediaFile.URL, videoAttachment.getUrl());
+                    videoDic.putString(MessageConstant.MediaFile.PATH, videoAttachment.getPath());
+                    videoDic.putString(MessageConstant.MediaFile.DISPLAY_NAME, videoAttachment.getDisplayName());
+                    videoDic.putString(MessageConstant.MediaFile.HEIGHT, Integer.toString(videoAttachment.getHeight()));
+                    videoDic.putString(MessageConstant.MediaFile.WIDTH, Integer.toString(videoAttachment.getWidth()));
+                    videoDic.putString(MessageConstant.MediaFile.DURATION, Long.toString(videoAttachment.getDuration()));
+                    videoDic.putString(MessageConstant.MediaFile.SIZE, Long.toString(videoAttachment.getSize()));
 
-                    videoDic.putString("thumbPath", videoAttachment.getThumbPath());
-                    videoDic.putString("coverPath", videoAttachment.getThumbPathForSave());
+                    videoDic.putString(MessageConstant.MediaFile.THUMB_PATH, videoAttachment.getThumbPath());
                 }
                 itemMap.putMap(MESSAGE_EXTEND, videoDic);
             } else if (item.getMsgType() == MsgTypeEnum.location) {
                 WritableMap locationObj = Arguments.createMap();
                 if (attachment instanceof LocationAttachment) {
                     LocationAttachment locationAttachment = (LocationAttachment) attachment;
-                    locationObj.putString("latitude", Double.toString(locationAttachment.getLatitude()));
-                    locationObj.putString("longitude", Double.toString(locationAttachment.getLongitude()));
-                    locationObj.putString("address", locationAttachment.getAddress());
+                    locationObj.putString(MessageConstant.Location.LATITUDE, Double.toString(locationAttachment.getLatitude()));
+                    locationObj.putString(MessageConstant.Location.LONGITUDE, Double.toString(locationAttachment.getLongitude()));
+                    locationObj.putString(MessageConstant.Location.ADDRESS, locationAttachment.getAddress());
                 }
                 itemMap.putMap(MESSAGE_EXTEND, locationObj);
             } else if (item.getMsgType() == MsgTypeEnum.notification) {
@@ -959,7 +970,7 @@ public class ReactCache {
             }
 
         }
-        itemMap.putString("content", text);
+        itemMap.putString(MessageConstant.Message.MSG_TEXT, text);
 
         return itemMap;
     }

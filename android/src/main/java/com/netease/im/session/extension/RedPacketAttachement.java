@@ -3,6 +3,7 @@ package com.netease.im.session.extension;
 import com.alibaba.fastjson.JSONObject;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableMap;
+import com.netease.im.MessageConstant;
 
 /**
  * Created by dowin on 2017/5/2.
@@ -51,9 +52,9 @@ public class RedPacketAttachement extends CustomAttachment {
     @Override
     public WritableMap toReactNative(){
         WritableMap writableMap = Arguments.createMap();
-        writableMap.putString("type",redPacketType);
-        writableMap.putString("comments",comments);
-        writableMap.putString("serialNo",serialNo);
+        writableMap.putString(MessageConstant.RedPacket.TYPE,redPacketType);
+        writableMap.putString(MessageConstant.RedPacket.COMMENTS,comments);
+        writableMap.putString(MessageConstant.RedPacket.SERIA_NO,serialNo);
         return writableMap;
     }
 
