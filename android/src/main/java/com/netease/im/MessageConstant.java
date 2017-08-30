@@ -26,11 +26,13 @@ public class MessageConstant {
     }
 
     public class MsgStatus {
-        public final static String SEND_FAILED = "send_failed";
-        public final static String SEND_GOING = "send_going";
-        public final static String RECEIVE_FAILED = "receive_failed";
-        public final static String RECEIVE_SUCCESS = "receive_success";
-        public final static String RECEIVE_READED = "readed";
+
+        public final static String SEND_DRAFT = "send_draft";
+        public final static String SEND_FAILE = "send_fail";
+        public final static String SEND_SENDING = "send_sending";
+        public final static String SEND_SUCCESS = "send_success";
+        public final static String RECEIVE_READ = "receive_read";
+        public final static String RECEIVE_UNREAD = "receive_unread";
     }
 
     public class Message {
