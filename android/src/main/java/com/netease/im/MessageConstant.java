@@ -13,7 +13,7 @@ public class MessageConstant {
         public final static String VIDEO = "video";
         public final static String FILE = "file";
         public final static String ROBOT = "robot";
-        public final static String BANK_TRANSFER = "bank_transfer";
+        public final static String BANK_TRANSFER = "transfer";
         public final static String ACCOUNT_NOTICE = "account_notice";
         public final static String EVENT = "event";
         public final static String LOCATION = "location";
@@ -69,7 +69,7 @@ public class MessageConstant {
         public final static String DATE = "date";
         public final static String AMOUNT = "amount";
         public final static String BODY = "body";
-        public final static String SERIA_NO = "serialNo";
+        public final static String SERIAL_NO = "serialNo";
     }
 
     public static class BankTransfer {
@@ -106,12 +106,12 @@ public class MessageConstant {
     public static class RedPacket {
         public final static String TYPE = "type";
         public final static String COMMENTS = "comments";
-        public final static String SERIA_NO = "seriaNo";
+        public final static String SERIAL_NO = "serialNo";
     }
 
     public static class RedPacketOpen {
         public final static String HAS_RED_PACKET = "hasRedPacket";
-        public final static String SERIA_NO = "seriaNo";
+        public final static String SERIAL_NO = "serialNo";
         public final static String TIP_MSG = "tipMsg";
 
         public final static String SEND_ID = "sendId";

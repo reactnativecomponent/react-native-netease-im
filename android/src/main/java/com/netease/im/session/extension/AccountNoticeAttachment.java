@@ -76,7 +76,7 @@ public class AccountNoticeAttachment extends CustomAttachment {
         writableMap.putString(MessageConstant.AccountNotice.TIME, time);
         writableMap.putString(MessageConstant.AccountNotice.DATE, date);
         writableMap.putString(MessageConstant.AccountNotice.AMOUNT, amount);
-        writableMap.putString(MessageConstant.AccountNotice.SERIA_NO, serialNo);
+        writableMap.putString(MessageConstant.AccountNotice.SERIAL_NO, serialNo);
         WritableMap bodyMap = Arguments.createMap();
         if (body != null && !body.isEmpty()) {
             Set<Map.Entry<String, Object>> entrySet = body.entrySet();

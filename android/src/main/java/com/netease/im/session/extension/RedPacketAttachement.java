@@ -54,7 +54,7 @@ public class RedPacketAttachement extends CustomAttachment {
         WritableMap writableMap = Arguments.createMap();
         writableMap.putString(MessageConstant.RedPacket.TYPE,redPacketType);
         writableMap.putString(MessageConstant.RedPacket.COMMENTS,comments);
-        writableMap.putString(MessageConstant.RedPacket.SERIA_NO,serialNo);
+        writableMap.putString(MessageConstant.RedPacket.SERIAL_NO,serialNo);
         return writableMap;
     }
 
