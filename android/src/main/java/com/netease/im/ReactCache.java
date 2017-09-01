@@ -40,6 +40,7 @@ import com.netease.nimlib.sdk.msg.attachment.MsgAttachment;
 import com.netease.nimlib.sdk.msg.attachment.NotificationAttachment;
 import com.netease.nimlib.sdk.msg.attachment.VideoAttachment;
 import com.netease.nimlib.sdk.msg.constant.MsgDirectionEnum;
+import com.netease.nimlib.sdk.msg.constant.MsgStatusEnum;
 import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.constant.SystemMessageStatus;
@@ -785,6 +786,25 @@ public class ReactCache {
         return type;
     }
 
+    static String getMessageStatus(MsgStatusEnum statusEnum){
+        switch (statusEnum){
+            case draft:
+                return MessageConstant.MsgStatus.SEND_DRAFT;
+            case sending:
+                return MessageConstant.MsgStatus.SEND_SENDING;
+            case success:
+                return MessageConstant.MsgStatus.SEND_SUCCESS;
+            case fail:
+                return MessageConstant.MsgStatus.SEND_FAILE;
+            case read:
+                return MessageConstant.MsgStatus.RECEIVE_READ;
+            case unread:
+                return MessageConstant.MsgStatus.RECEIVE_UNREAD;
+            default:
+                return MessageConstant.MsgStatus.SEND_DRAFT;
+        }
+
+    }
     final static String MESSAGE_EXTEND = MessageConstant.Message.EXTEND;
 
     /**
@@ -812,7 +832,7 @@ public class ReactCache {
         itemMap.putString(MessageConstant.Message.SESSION_TYPE, Integer.toString(item.getSessionType().getValue()));
 
         itemMap.putString(MessageConstant.Message.IS_OUTGOING, Integer.toString(item.getDirect().getValue()));
-        itemMap.putString(MessageConstant.Message.STATUS, Integer.toString(item.getStatus().getValue()));
+        itemMap.putString(MessageConstant.Message.STATUS, getMessageStatus(item.getStatus()));
         itemMap.putString(MessageConstant.Message.ATTACH_STATUS, Integer.toString(item.getAttachStatus().getValue()));
         itemMap.putString(MessageConstant.Message.IS_REMOTE_READ, boolean2String(receiveReceiptCheck(item)));
 

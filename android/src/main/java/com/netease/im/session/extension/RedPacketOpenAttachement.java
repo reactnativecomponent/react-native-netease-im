@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import com.alibaba.fastjson.JSONObject;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableMap;
+import com.netease.im.MessageConstant;
 import com.netease.im.login.LoginService;
 import com.netease.im.uikit.cache.NimUserInfoCache;
 
@@ -86,13 +87,13 @@ public class RedPacketOpenAttachement extends CustomAttachment {
     @Override
     public WritableMap toReactNative() {
         WritableMap writableMap = Arguments.createMap();
-//        writableMap.putString("sendId", sendId);
+        writableMap.putString(MessageConstant.RedPacketOpen.SEND_ID, sendId);
 //        writableMap.putString("sendName", sendName);
-//        writableMap.putString("openId", openId);
+        writableMap.putString(MessageConstant.RedPacketOpen.OPEN_ID, openId);
 //        writableMap.putString("openName", openName);
-        writableMap.putString("hasRedPacket", hasRedPacket);
-        writableMap.putString("serialNo", serialNo);
-        writableMap.putString("tipMsg", getTipMsg(true));
+        writableMap.putString(MessageConstant.RedPacketOpen.HAS_RED_PACKET, hasRedPacket);
+        writableMap.putString(MessageConstant.RedPacketOpen.SERIAL_NO, serialNo);
+        writableMap.putString(MessageConstant.RedPacketOpen.TIP_MSG, getTipMsg(true));
         return writableMap;
     }
 }

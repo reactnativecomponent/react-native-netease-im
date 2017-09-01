@@ -3,6 +3,7 @@ package com.netease.im.session.extension;
 import com.alibaba.fastjson.JSONObject;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableMap;
+import com.netease.im.MessageConstant;
 
 /**
  * Created by dowin on 2017/6/14.
@@ -48,10 +49,10 @@ public class LinkUrlAttachment extends CustomAttachment{
     @Override
     public WritableMap toReactNative() {
         WritableMap writableMap = Arguments.createMap();
-        writableMap.putString("title",title);
-        writableMap.putString("describe",describe);
-        writableMap.putString("image",image);
-        writableMap.putString("linkUrl",linkUrl);
+        writableMap.putString(MessageConstant.Link.TITLE,title);
+        writableMap.putString(MessageConstant.Link.DESCRIBE,describe);
+        writableMap.putString(MessageConstant.Link.IMAGE,image);
+        writableMap.putString(MessageConstant.Link.LINK_URL,linkUrl);
         return writableMap;
     }
 
