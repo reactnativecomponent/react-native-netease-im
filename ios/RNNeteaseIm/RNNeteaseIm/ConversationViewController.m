@@ -291,23 +291,14 @@
                     case CustomMessgeTypeUrl: //链接
                     case CustomMessgeTypeAccountNotice: //账户通知，与账户金额相关变动
                     {
-                        NSMutableDictionary *notiUser = [NSMutableDictionary dictionary];
-                        [notiUser setObject:[NSString stringWithFormat:@"%@",messageUser.userInfo.avatarUrl] forKey:@"avatar"];
-                        [notiUser setObject:[NSString stringWithFormat:@"%@",messageUser.userInfo.nickName] forKey:@"name"];
-                        [notiUser setObject:[NSString stringWithFormat:@"%@", message.from] forKey:@"_id"];
-                        [dic setObject:notiUser forKey:@"user"];
-                        [dic setObject:[NSString stringWithFormat:@"%@", message.text] forKey:@"content"];
-                        [dic setObject:[NSString stringWithFormat:@"%d", message.isOutgoingMsg] forKey:@"direct"];
-                        [dic setObject:[NSString stringWithFormat:@"%f", message.timestamp] forKey:@"createdAt"];
-                        [dic setObject:[NSString stringWithFormat:@"%@", message.messageId] forKey:@"_id"];
                         [dic setObject:[NSString stringWithFormat:@"%d",message.isRemoteRead] forKey:@"isRemoteRead"];
-                        [dic setObject:[NSString stringWithFormat:@"%ld", message.messageType] forKey:@"msgType"];
+//                        [dic setObject:[NSString stringWithFormat:@"%ld", message.messageType] forKey:@"msgType"];
                         if (obj.custType == CustomMessgeTypeAccountNotice) {
-                            [dic setObject:obj.dataDict  forKey:@"accountNoticeObj"];
-                            [dic setObject:@"account_notice" forKey:@"custType"];
+                            [dic setObject:obj.dataDict  forKey:@"extend"];
+                            [dic setObject:@"account_notice" forKey:@"msgType"];
                         }else{
-                            [dic setObject:obj.dataDict  forKey:@"urlObj"];
-                            [dic setObject:@"url" forKey:@"custType"];
+                            [dic setObject:obj.dataDict  forKey:@"extend"];
+                            [dic setObject:@"url" forKey:@"msgType"];
                         }
                     }
                         break;
@@ -932,25 +923,17 @@
                 case CustomMessgeTypeAccountNotice: //账户通知，与账户金额相关变动
                 case CustomMessgeTypeUrl: //链接
                 {
-                    NSMutableDictionary *notiUser = [NSMutableDictionary dictionary];
-                    [notiUser setObject:[NSString stringWithFormat:@"%@",user.userInfo.avatarUrl] forKey:@"avatar"];
-                    [notiUser setObject:[NSString stringWithFormat:@"%@",user.userInfo.nickName] forKey:@"name"];
-                    [notiUser setObject:[NSString stringWithFormat:@"%@", message.from] forKey:@"_id"];
-                    [dic2 setObject:notiUser forKey:@"user"];
-                    [dic2 setObject:[NSString stringWithFormat:@"%@", message.text] forKey:@"content"];
-                    [dic2 setObject:[NSString stringWithFormat:@"%d", message.isOutgoingMsg] forKey:@"direct"];
-                    [dic2 setObject:[NSString stringWithFormat:@"%f", message.timestamp] forKey:@"createdAt"];
-                    [dic2 setObject:[NSString stringWithFormat:@"%@", message.messageId] forKey:@"_id"];
                     [dic2 setObject:[NSString stringWithFormat:@"%d",message.isRemoteRead] forKey:@"isRemoteRead"];
-                    [dic2 setObject:[NSString stringWithFormat:@"%ld", message.messageType] forKey:@"msgType"];
+//                    [dic2 setObject:[NSString stringWithFormat:@"%ld", message.messageType] forKey:@"msgType"];
                     if (obj.custType == CustomMessgeTypeAccountNotice) {
-                        [dic2 setObject:obj.dataDict  forKey:@"accountNoticeObj"];
-                        [dic2 setObject:@"account_notice" forKey:@"custType"];
+                        [dic2 setObject:obj.dataDict  forKey:@"extend"];
+                        [dic2 setObject:@"account_notice" forKey:@"msgType"];
                     }else{
-                        [dic2 setObject:obj.dataDict  forKey:@"urlObj"];
-                        [dic2 setObject:@"url" forKey:@"custType"];
+                        [dic2 setObject:obj.dataDict  forKey:@"extend"];
+                        [dic2 setObject:@"url" forKey:@"msgType"];
                     }
                 }
+                    
                     break;
                 default:
                     break;
