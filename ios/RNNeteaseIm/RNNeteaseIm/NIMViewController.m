@@ -9,7 +9,9 @@
 #import "NIMViewController.h"
 #import "ContactViewController.h"
 
-@interface NIMViewController ()<NIMLoginManagerDelegate,NIMConversationManagerDelegate>
+@interface NIMViewController ()<NIMLoginManagerDelegate,NIMConversationManagerDelegate>{
+    
+}
 
 @end
 
@@ -102,25 +104,27 @@
 #pragma NIMLoginManagerDelegate
 -(void)onKick:(NIMKickReason)code clientType:(NIMLoginClientType)clientType
 {
-    switch (code) {
-        case NIMKickReasonByClient:{//被另外一个客户端踢下线 (互斥客户端一端登录挤掉上一个登录中的客户端)
-            [NIMModel initShareMD].NIMKick = @"1";
+
+        switch (code) {
+            case NIMKickReasonByClient:{//被另外一个客户端踢下线 (互斥客户端一端登录挤掉上一个登录中的客户端)
+                [NIMModel initShareMD].NIMKick = @"1";
+            }
+                break;
+            case NIMKickReasonByClientManually:{//被另外一个客户端手动选择踢下线
+                [NIMModel initShareMD].NIMKick = @"3";
+            }
+                break;
+            case NIMKickReasonByServer:{//你被服务器踢下线
+                [NIMModel initShareMD].NIMKick = @"2";
+            }
+                break;
+            default:
+                break;
         }
-            break;
-        case NIMKickReasonByClientManually:{//被另外一个客户端手动选择踢下线
-            [NIMModel initShareMD].NIMKick = @"3";
-        }
-            break;
-        case NIMKickReasonByServer:{//你被服务器踢下线
-            [NIMModel initShareMD].NIMKick = @"2";
-        }
-            break;
-        default:
-            break;
-    }
-    [[[NIMSDK sharedSDK] loginManager] logout:^(NSError *error) {
-    }];
+        [[[NIMSDK sharedSDK] loginManager] logout:^(NSError *error) {
+        }];
 }
+
 - (void)onAutoLoginFailed:(NSError *)error{
     
     NSLog(@"自动登录失败");

@@ -12,6 +12,7 @@
 typedef void(^SUCCESS) (id param);
 typedef void(^ERROR)(NSString *error);
 @interface NIMViewController : UIViewController
+
 +(instancetype)initWithController;
 -(instancetype)initWithNIMController;
 -(void)deleteCurrentSession:(NSString *)recentContactId andback:(ERROR)error;

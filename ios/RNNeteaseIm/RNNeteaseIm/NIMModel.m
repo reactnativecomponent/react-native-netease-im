@@ -43,12 +43,10 @@
     }
 }
 -(void)setNIMKick:(NSString *)NIMKick{
-    if ((_NIMKick != NIMKick)&&(NIMKick.length)) {
         _NIMKick = NIMKick;
         if (self.myBlock) {
             self.myBlock(2, NIMKick);
         }
-    }
 }
 //通信录列表
 -(void)setContactList:(NSMutableDictionary *)contactList{
