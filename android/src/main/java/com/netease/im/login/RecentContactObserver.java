@@ -4,6 +4,7 @@ import android.text.TextUtils;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableMap;
+import com.netease.im.RNNeteaseImModule;
 import com.netease.im.ReactCache;
 import com.netease.im.uikit.cache.SimpleCallback;
 import com.netease.im.uikit.cache.TeamDataCache;
@@ -279,6 +280,7 @@ public class RecentContactObserver {
 
         @Override
         public void onEvent(StatusCode code) {
+            RNNeteaseImModule.status = "";
             if (code != PWD_ERROR && code.wontAutoLogin()) {
                 WritableMap r = Arguments.createMap();
                 String status = "";
@@ -293,6 +295,7 @@ public class RecentContactObserver {
                         status = "2";
                         break;
                 }
+                RNNeteaseImModule.status = status;
                 r.putString("status", status);
                 ReactCache.emit(ReactCache.observeOnKick, r);
             }

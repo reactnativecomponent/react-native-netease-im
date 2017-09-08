@@ -88,7 +88,7 @@ public class MessageConstant {
     public static class Location {
         public final static String LATITUDE = "latitude";
         public final static String LONGITUDE = "longitude";
-        public final static String ADDRESS = "address";
+        public final static String ADDRESS = "title";
     }
 
     public static class MediaFile {
