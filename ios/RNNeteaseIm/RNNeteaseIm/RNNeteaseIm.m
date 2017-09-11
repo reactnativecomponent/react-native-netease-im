@@ -656,6 +656,10 @@ RCT_EXPORT_METHOD(cleanCache){
                 //删除撤销消息通知
                 [_bridge.eventDispatcher sendDeviceEventWithName:@"observeDeleteMessage" body:param];
                 break;
+            case 16:
+                //资金变动通知
+                [_bridge.eventDispatcher sendDeviceEventWithName:@"observeAccountNotice" body:param];
+                break;
             default:
                 break;
         }

@@ -146,4 +146,11 @@
     }
 }
 
+
+- (void)setAccountNoticeDict:(NSDictionary *)accountNoticeDict{
+    if (self.myBlock) {
+        self.myBlock(16, accountNoticeDict);
+    }
+}
+
 @end

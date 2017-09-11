@@ -10,6 +10,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import "NSDictionary+NTESJson.h"
 #import "NIMMessageMaker.h"
+#import "NIMModel.h"
 @interface RNNotificationCenter () <NIMSystemNotificationManagerDelegate,NIMChatManagerDelegate>
 @property (nonatomic,strong) AVAudioPlayer *player; //播放提示音
 @end
@@ -47,7 +48,7 @@
     [[NIMSDK sharedSDK].chatManager removeDelegate:self];
 }
 #pragma mark - NIMChatManagerDelegate
-- (void)onRecvMessages:(NSArray *)messages
+- (void)onRecvMessages:(NSArray *)messages//接收到新消息
 {
     static BOOL isPlaying = NO;
     if (isPlaying) {
@@ -58,7 +59,7 @@
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         isPlaying = NO;
     });
-    [self checkMessageAt:messages];
+    [self checkTranferMessage:messages];
 }
 
 - (void)playMessageAudioTip
@@ -78,9 +79,20 @@
 //        [self.player play];
 //    }
 }
-
-- (void)checkMessageAt:(NSArray *)messages
-{
+//检测是不是消息助手发来的转账消息提醒
+- (void)checkTranferMessage:(NSArray *)messages{
+    for (NIMMessage *message in messages) {
+        if ([message.from isEqualToString:@"10000"] && (message.messageType == NIMMessageTypeCustom)) {
+            NIMCustomObject *customObject = message.messageObject;
+            DWCustomAttachment *obj = customObject.attachment;
+            if (obj && (obj.custType == CustomMessgeTypeAccountNotice)) {
+//                NSLog(@"dataDict:%@",obj.dataDict);
+                NIMModel *mode = [NIMModel initShareMD];
+                mode.accountNoticeDict = obj.dataDict;
+                
+            }
+        }
+    }
    
 }
 
