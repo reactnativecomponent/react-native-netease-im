@@ -215,15 +215,8 @@ import NIM from 'react-native-netease-im';
 ```
 
 ### API
-#### NIM.login()
-```javascript
-// 登录参数 
-{
-	accid: "", //云信注册帐号
-    token:"" //登录的token
-}
-```
-返回一个`Promise`对象
+
+参考[index.js](https://github.com/reactnativecomponent/react-native-netease-im/blob/master/index.js)
 
 #### 监听会话
 ```
@@ -231,5 +224,4 @@ NativeAppEventEmitter.addListener("observeRecentContact",(data)=>{
   console.log(data); //返回内容android和ios有区别
 })；
 ```
-更多接口请参阅`index.js`,或者参考Demo
 
