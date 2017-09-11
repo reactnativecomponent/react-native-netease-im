@@ -3,7 +3,7 @@ React Native的网易云信插件
 ## Demo
 [react-native-chat-demo](https://github.com/reactnativecomponent/react-native-chat-demo)
 
-#### 注意: react-native版本需要0.40.0及以上
+#### 注意: react-native版本需要0.47.0及以上NIMSDK版本4.0以上
 
 ## 如何安装
 
@@ -215,15 +215,8 @@ import NIM from 'react-native-netease-im';
 ```
 
 ### API
-#### NIM.login()
-```javascript
-// 登录参数 
-{
-	accid: "", //云信注册帐号
-    token:"" //登录的token
-}
-```
-返回一个`Promise`对象
+
+参考[index.js](https://github.com/reactnativecomponent/react-native-netease-im/blob/master/index.js)
 
 #### 监听会话
 ```
@@ -231,5 +224,4 @@ NativeAppEventEmitter.addListener("observeRecentContact",(data)=>{
   console.log(data); //返回内容android和ios有区别
 })；
 ```
-更多接口请参阅`index.js`,或者参考Demo
 

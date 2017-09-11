@@ -1945,11 +1945,20 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
 
     }
 
+    public static String status = "";
+
     @Override
     public void onHostResume() {
         if (reactContext.getCurrentActivity() != null)
             LogUtil.w(TAG, reactContext.getCurrentActivity().getClass().getPackage().getName());
         LogUtil.w(TAG, "onHostResume");
+
+        if (!TextUtils.isEmpty(status)) {
+            WritableMap r = Arguments.createMap();
+            r.putString("status", status);
+            ReactCache.emit(ReactCache.observeOnKick, r);
+            status = "";
+        }
     }
 
     @Override
