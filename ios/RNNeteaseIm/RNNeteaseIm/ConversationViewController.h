@@ -67,4 +67,10 @@ typedef void(^Errors)(id erro);
 - (void)onTouchVoiceSucc:(Success)succ Err:(Errors)err;
 //更新录音消息为已播放
 - (void)updateAudioMessagePlayStatus:(NSString *)messageID;
+
+//获得撤回内容
+- (NSString *)tipOnMessageRevoked:(id)message;
+//更具提示生成撤回消息
+- (NIMMessage *)msgWithTip:(NSString *)tip;
+
 @end

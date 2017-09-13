@@ -615,23 +615,22 @@
     mode.receipt = @"1";
 }
 
-
-- (void)onRecvRevokeMessageNotification:(NIMRevokeMessageNotification *)notification
-{
-    NSString * tip = [self tipOnMessageRevoked:notification];
-    NIMMessage *tipMessage = [self msgWithTip:tip];
-    NIMMessageSetting *setting = [[NIMMessageSetting alloc] init];
-    setting.shouldBeCounted = NO;
-    tipMessage.setting = setting;
-    tipMessage.timestamp = notification.timestamp;
-    NIMMessage *deleMess = notification.message;
-    NSDictionary *deleteDict = @{@"_id":deleMess.messageId};
-    [NIMModel initShareMD].deleteMessDict = deleteDict;
-    // saveMessage 方法执行成功后会触发 onRecvMessages: 回调，但是这个回调上来的 NIMMessage 时间为服务器时间，和界面上的时间有一定出入，所以要提前先在界面上插入一个和被删消息的界面时间相符的 Tip, 当触发 onRecvMessages: 回调时，组件判断这条消息已经被插入过了，就会忽略掉。
-    [[NIMSDK sharedSDK].conversationManager saveMessage:tipMessage
-                                             forSession:notification.session
-                                             completion:nil];
-}
+//写到RNNotificationCenter去了
+//- (void)onRecvRevokeMessageNotification:(NIMRevokeMessageNotification *)notification
+//{
+//    NSString * tip = [self tipOnMessageRevoked:notification];
+//    NIMMessage *tipMessage = [self msgWithTip:tip];
+//    tipMessage.timestamp = notification.timestamp;
+//    NIMMessage *deleMess = notification.message;
+//    NSDictionary *deleteDict = @{@"msgId":deleMess.messageId};
+//   
+//    // saveMessage 方法执行成功后会触发 onRecvMessages: 回调，但是这个回调上来的 NIMMessage 时间为服务器时间，和界面上的时间有一定出入，所以要提前先在界面上插入一个和被删消息的界面时间相符的 Tip, 当触发 onRecvMessages: 回调时，组件判断这条消息已经被插入过了，就会忽略掉。
+//    [[NIMSDK sharedSDK].conversationManager saveMessage:tipMessage
+//                                             forSession:notification.session
+//                                             completion:^(NSError * _Nullable error) {
+//                                                  [NIMModel initShareMD].deleteMessDict = deleteDict;
+//                                             }];
+//}
 
 #pragma mark - NIMMediaManagerDelegate
 - (void)recordAudio:(NSString *)filePath didBeganWithError:(NSError *)error {
