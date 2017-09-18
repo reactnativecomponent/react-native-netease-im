@@ -72,5 +72,6 @@ typedef void(^Errors)(id erro);
 - (NSString *)tipOnMessageRevoked:(id)message;
 //更具提示生成撤回消息
 - (NIMMessage *)msgWithTip:(NSString *)tip;
-
+//重发消息
+- (void)resendMessage:(NSString *)messageID;
 @end

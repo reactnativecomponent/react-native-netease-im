@@ -75,6 +75,17 @@
     // NIMMessageSearchOption *option = [[NIMMessageSearchOption alloc]init];
 }
 
+//重发消息
+- (void)resendMessage:(NSString *)messageID{
+    NSArray *currentMessage = [[[NIMSDK sharedSDK] conversationManager] messagesInSession:_session messageIds:@[messageID] ];
+    NIMMessage *currentM = currentMessage[0];
+    if (currentM.isReceivedMsg) {
+        [[[NIMSDK sharedSDK] chatManager] fetchMessageAttachment:currentM error:nil];
+    }else{
+        [[[NIMSDK sharedSDK] chatManager] resendMessage:currentM error:nil];
+    }
+}
+
 -(void)localSession:(NSInteger)index cerrentmessageId:(NSString *)currentMessageID success:(Success)succe err:(Errors)err{
     _index = index;
     [[NIMSDK sharedSDK].conversationManager markAllMessagesReadInSession:_session];
@@ -140,10 +151,10 @@
                 [dic setObject:@"send_failed" forKey:@"status"];
                 break;
             case NIMMessageDeliveryStateDelivering:
-                [dic setObject:@"kMsgStatusSending" forKey:@"status"];
+                [dic setObject:@"send_going" forKey:@"status"];
                 break;
             case NIMMessageDeliveryStateDeliveried:
-                [dic setObject:@"kMsgStatusSuccess" forKey:@"status"];
+                [dic setObject:@"send_succeed" forKey:@"status"];
                 break;
             default:
                 [dic setObject:@"-1" forKey:@"status"];
@@ -506,7 +517,7 @@
 
 - (void)willSendMessage:(NIMMessage *)message
 {
-    [self refrashMessage:message From:@"send" isStart:YES];
+    [self refrashMessage:message From:@"send"];
     NIMModel *model = [NIMModel initShareMD];
     model.startSend = @{@"start":@"true"};
 }
@@ -514,10 +525,10 @@
 - (void)sendMessage:(NIMMessage *)message didCompleteWithError:(NSError *)error
 {
     if (!error) {
-        [self refrashMessage:message From:@"send" isStart:NO];
+        [self refrashMessage:message From:@"send"];
         [[NSUserDefaults standardUserDefaults]setObject: [NSString stringWithFormat:@"%f", message.timestamp] forKey:@"timestamp"];
     }else{
-        [self refrashMessage:message From:@"send" isStart:NO];
+        [self refrashMessage:message From:@"send"];
     }
     NIMModel *model = [NIMModel initShareMD];
     if ([[NSString stringWithFormat:@"%@", error] isEqualToString:@"(null)"]) {
@@ -530,7 +541,7 @@
 //发送进度
 -(void)sendMessage:(NIMMessage *)message progress:(float)progress
 {
-    [self refrashMessage:message From:@"send" isStart:NO];
+    [self refrashMessage:message From:@"send" ];
     NIMModel *model = [NIMModel initShareMD];
     model.endSend = @{@"progress":[NSString stringWithFormat:@"%f",progress]};
 }
@@ -541,7 +552,7 @@
 {
     NIMMessage *message = messages.firstObject;
     if ([message.session.sessionId isEqualToString:_sessionID]) {
-        [self refrashMessage:message From:@"receive" isStart:NO];
+        [self refrashMessage:message From:@"receive" ];
         NIMMessageReceipt *receipt = [[NIMMessageReceipt alloc] initWithMessage:message];
         
         [[[NIMSDK sharedSDK] chatManager] sendMessageReceipt:receipt
@@ -744,7 +755,7 @@
 }
 
 
--(void)refrashMessage:(NIMMessage *)message From:(NSString *)from isStart:(BOOL)isStart{
+-(void)refrashMessage:(NIMMessage *)message From:(NSString *)from {
     NSMutableArray *messageArr = [NSMutableArray array];
     NSMutableDictionary *dic2 = [NSMutableDictionary dictionary];
     NIMUser   *user = [[NIMSDK sharedSDK].userManager userInfo:message.from];
@@ -768,7 +779,6 @@
     [dic2 setObject:[NSString stringWithFormat:@"%@", message.text] forKey:@"text"];
     [dic2 setObject:[NSString stringWithFormat:@"%@", message.session.sessionId] forKey:@"sessionId"];
     [dic2 setObject:[NSString stringWithFormat:@"%ld", message.session.sessionType] forKey:@"sessionType"];
-    [dic2 setObject:[NSNumber numberWithBool:isStart] forKey:@"isStart"];
     switch (message.deliveryState) {
         case NIMMessageDeliveryStateFailed:
             [dic2 setObject:@"send_failed" forKey:@"status"];

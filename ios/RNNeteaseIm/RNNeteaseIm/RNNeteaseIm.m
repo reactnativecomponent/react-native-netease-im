@@ -356,6 +356,12 @@ RCT_EXPORT_METHOD(revokeMessage:(nonnull NSString *)messageId  resolve:(RCTPromi
         resolve(param);
     }];
 }
+//重发消息
+RCT_EXPORT_METHOD(resendMessage:(nonnull NSString *)messageId){
+    [[ConversationViewController initWithConversationViewController]resendMessage:messageId];
+    
+}
+
 //删除会话内容
 RCT_EXPORT_METHOD(deleteMessage:(nonnull NSString *)messageId){
     [[ConversationViewController initWithConversationViewController]deleteMsg:messageId];
