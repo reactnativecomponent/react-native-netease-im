@@ -656,7 +656,10 @@ public class SessionService {
         file = Uri.parse(file).getPath();
         File f = new File(file);
         LogUtil.w(TAG, "path:" + f.getPath() + "-size:" + FileUtil.formatFileSize(f.length()));
-        f = ImageUtil.getScaledImageFileWithMD5(f, FileUtil.getMimeType(f.getPath()));
+        File temp = ImageUtil.getScaledImageFileWithMD5(f, FileUtil.getMimeType(f.getPath()));
+        if (temp != null) {
+            f = temp;
+        }
         LogUtil.w(TAG, "path:" + f.getPath() + "-size:" + FileUtil.formatFileSize(f.length()));
         IMMessage message = MessageBuilder.createImageMessage(sessionId, sessionTypeEnum, f, TextUtils.isEmpty(displayName) ? f.getName() : displayName);
         sendMessage(message, onSendMessageListener);
