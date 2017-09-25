@@ -609,6 +609,7 @@ public class SessionService {
                 item.setStatus(MsgStatusEnum.sending);
                 deleteItem(item, true);
                 onMsgSend(item);
+                appendPushConfig(item);
                 getMsgService().sendMessage(item, true);
                 return 0;
             }
@@ -627,7 +628,7 @@ public class SessionService {
 //            message.setPushContent("有人@了你");
             message.setMemberPushOption(option);
         }
-        sendMessage(message, onSendMessageListener);
+        sendMessageSelf(message, onSendMessageListener);
     }
 
     /**
@@ -648,7 +649,7 @@ public class SessionService {
 
             message.setContent(content);
             message.setConfig(config);
-            sendMessage(message, onSendMessageListener);
+            sendMessageSelf(message, onSendMessageListener);
         }
     }
 
@@ -662,7 +663,7 @@ public class SessionService {
         }
         LogUtil.w(TAG, "path:" + f.getPath() + "-size:" + FileUtil.formatFileSize(f.length()));
         IMMessage message = MessageBuilder.createImageMessage(sessionId, sessionTypeEnum, f, TextUtils.isEmpty(displayName) ? f.getName() : displayName);
-        sendMessage(message, onSendMessageListener);
+        sendMessageSelf(message, onSendMessageListener);
     }
 
     public void sendAudioMessage(String file, long duration, OnSendMessageListener onSendMessageListener) {
@@ -670,7 +671,7 @@ public class SessionService {
         File f = new File(file);
 
         IMMessage message = MessageBuilder.createAudioMessage(sessionId, sessionTypeEnum, f, duration);
-        sendMessage(message, onSendMessageListener);
+        sendMessageSelf(message, onSendMessageListener);
     }
 
     //        String md5Path = StorageUtil.getWritePath(filename, StorageType.TYPE_VIDEO);
@@ -692,7 +693,7 @@ public class SessionService {
             e.printStackTrace();
         }
         IMMessage message = MessageBuilder.createVideoMessage(sessionId, sessionTypeEnum, f, durationL, width, height, md5);
-        sendMessage(message, onSendMessageListener);
+        sendMessageSelf(message, onSendMessageListener);
     }
 
     public void sendLocationMessage(String latitude, String longitude, String address, OnSendMessageListener onSendMessageListener) {
@@ -709,7 +710,7 @@ public class SessionService {
             e.printStackTrace();
         }
         IMMessage message = MessageBuilder.createLocationMessage(sessionId, sessionTypeEnum, lat, lon, address);
-        sendMessage(message, onSendMessageListener);
+        sendMessageSelf(message, onSendMessageListener);
     }
 
     public void sendDefaultMessage(String type, String digst, String content, OnSendMessageListener onSendMessageListener) {
@@ -718,7 +719,7 @@ public class SessionService {
         attachment.setDigst(digst);
         attachment.setContent(content);
         IMMessage message = MessageBuilder.createCustomMessage(sessionId, sessionTypeEnum, digst, attachment, config);
-        sendMessage(message, onSendMessageListener);
+        sendMessageSelf(message, onSendMessageListener);
     }
 
     public void sendRedPacketOpenMessage(String sendId, String openId, String hasRedPacket, String serialNo, OnSendMessageListener onSendMessageListener) {
@@ -730,7 +731,7 @@ public class SessionService {
 //        IMMessage message = MessageBuilder.createCustomMessage(sessionId, sessionTypeEnum, sendId + ";" + openId, attachment, config);
 //
 ////        message.
-//        sendMessage(message, onSendMessageListener);
+//        sendMessageSelf(message, onSendMessageListener);
         long timestamp = new Date().getTime() / 1000;
         SessionUtil.sendRedPacketOpenNotification(sessionId, sessionTypeEnum, sendId, openId, hasRedPacket, serialNo, timestamp);
         SessionUtil.sendRedPacketOpenLocal(sessionId, sessionTypeEnum, sendId, openId, hasRedPacket, serialNo, timestamp);
@@ -741,7 +742,7 @@ public class SessionService {
         RedPacketAttachement attachment = new RedPacketAttachement();
         attachment.setParams(type, comments, serialNo);
         IMMessage message = MessageBuilder.createCustomMessage(sessionId, sessionTypeEnum, comments, attachment, config);
-        sendMessage(message, onSendMessageListener);
+        sendMessageSelf(message, onSendMessageListener);
     }
 
     public void sendBankTransferMessage(String amount, String comments, String serialNo, OnSendMessageListener onSendMessageListener) {
@@ -749,7 +750,7 @@ public class SessionService {
         BankTransferAttachment attachment = new BankTransferAttachment();
         attachment.setParams(amount, comments, serialNo);
         IMMessage message = MessageBuilder.createCustomMessage(sessionId, sessionTypeEnum, comments, attachment, config);
-        sendMessage(message, onSendMessageListener);
+        sendMessageSelf(message, onSendMessageListener);
     }
 
     public int sendForwardMessage(IMMessage selectMessage, final String sessionId, final String sessionType, String content, OnSendMessageListener onSendMessageListener) {
@@ -764,7 +765,7 @@ public class SessionService {
         if (message == null) {
             return 1;
         }
-        sendMessage(message, onSendMessageListener);
+        sendMessageSelf(message, onSendMessageListener);
         return 2;
     }
 
@@ -840,7 +841,7 @@ public class SessionService {
         getMsgService().updateIMMessageStatus(message);
     }
 
-    public void sendMessage(final IMMessage message, final OnSendMessageListener onSendMessageListener) {
+    public void sendMessageSelf(final IMMessage message, final OnSendMessageListener onSendMessageListener) {
 
 
         appendPushConfig(message);
@@ -851,12 +852,24 @@ public class SessionService {
     }
 
     private void appendPushConfig(IMMessage message) {
-//        CustomPushContentProvider customConfig = NimUIKit.getCustomPushContentProvider();
+//        CustomPushContentProvider customConfig = null;//NimUIKit.getCustomPushContentProvider();
 //        if (customConfig != null) {
 //            String content = customConfig.getPushContent(message);
 //            Map<String, Object> payload = customConfig.getPushPayload(message);
-//            message.setPushContent(content);
-//            message.setPushPayload(payload);
+        message.setPushContent(message.getContent());
+        Map<String, Object> payload = new HashMap<>();
+        Map<String, Object> body = new HashMap<>();
+
+        body.put("sessionType", message.getSessionType().getValue());
+        if (message.getSessionType() == SessionTypeEnum.P2P) {
+            body.put("sessionId", LoginService.getInstance().getAccount());
+        } else if (message.getSessionType() == SessionTypeEnum.Team) {
+            body.put("sessionId", message.getSessionId());
+
+        }
+        body.put("sessionName", SessionUtil.getSessionName(sessionId,message.getSessionType(),true));
+        payload.put("sessionBody", body);
+        message.setPushPayload(payload);
 //        }
     }
 

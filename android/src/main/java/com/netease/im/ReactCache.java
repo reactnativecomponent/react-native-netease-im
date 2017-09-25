@@ -82,6 +82,8 @@ public class ReactCache {
     public final static String observeAttachmentProgress = "observeAttachmentProgress";//'上传下载进度'
     public final static String observeOnKick = "observeOnKick";//'被踢出'
     public final static String observeAccountNotice = "observeAccountNotice";//'账户变动通知'
+    public final static String observeLaunchPushEvent = "observeLaunchPushEvent";//''
+    public final static String observeBackgroundPushEvent = "observeBackgroundPushEvent";//''
 
     final static String TAG = "ReactCache";
     private static ReactContext reactContext;

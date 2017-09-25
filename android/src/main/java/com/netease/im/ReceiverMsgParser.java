@@ -7,7 +7,9 @@ import android.text.TextUtils;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableMap;
 import com.netease.im.common.push.Extras;
+import com.netease.im.session.SessionUtil;
 import com.netease.im.uikit.common.util.log.LogUtil;
+import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.NimIntent;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
@@ -55,6 +57,7 @@ public class ReceiverMsgParser {
                     result.putString("type", "session");
                     result.putString("sessionType", Integer.toString(message.getSessionType().getValue()));
                     result.putString("sessionId", message.getSessionId());
+                    result.putString("sessionName", message.getSessionId());
                 }
             } else if (intent.hasExtra(Extras.EXTRA_JUMP_P2P)) {
                 Intent data = intent.getParcelableExtra(Extras.EXTRA_DATA);
@@ -63,6 +66,7 @@ public class ReceiverMsgParser {
                     result.putString("type", "session");
                     result.putString("sessionType", Integer.toString(SessionTypeEnum.P2P.getValue()));
                     result.putString("sessionId", account);
+                    result.putString("sessionName", account);
                 }
             }
 
@@ -85,6 +89,7 @@ public class ReceiverMsgParser {
                     r.putString("type", "session");
                     r.putString("sessionType", Integer.toString(message.getSessionType().getValue()));
                     r.putString("sessionId", message.getSessionId());
+                    r.putString("sessionName", SessionUtil.getSessionName(message.getSessionId(),message.getSessionType(),false));
                 }
             } else if (intent.hasExtra(Extras.EXTRA_JUMP_P2P)) {
                 Intent data = intent.getParcelableExtra(Extras.EXTRA_DATA);
@@ -93,6 +98,7 @@ public class ReceiverMsgParser {
                     r.putString("type", "session");
                     r.putString("sessionType", Integer.toString(SessionTypeEnum.P2P.getValue()));
                     r.putString("sessionId", account);
+                    r.putString("sessionName", SessionUtil.getSessionName(account,SessionTypeEnum.P2P,false));
                 }
             }
 
@@ -107,7 +113,7 @@ public class ReceiverMsgParser {
      * 已经登陆过，自动登陆
      */
     private static boolean canAutoLogin() {
-
-        return true;//!TextUtils.isEmpty(account) && !TextUtils.isEmpty(token);
+        return !NIMClient.getStatus().wontAutoLogin();
+//        return true;//!TextUtils.isEmpty(account) && !TextUtils.isEmpty(token);
     }
 }
