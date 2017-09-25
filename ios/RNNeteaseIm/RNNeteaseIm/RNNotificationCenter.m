@@ -147,7 +147,7 @@
     DWCustomAttachment *obj = [[DWCustomAttachment alloc]init];
     obj.custType = CustomMessgeTypeRedPacketOpenMessage;
     obj.dataDict = datatDict;
-    message = [NIMMessageMaker msgWithCustomAttachment:obj];
+    message = [NIMMessageMaker msgWithCustomAttachment:obj andeSession:session];
     message.timestamp = timestamp;
     [[NIMSDK sharedSDK].conversationManager saveMessage:message forSession:session completion:nil];
 }

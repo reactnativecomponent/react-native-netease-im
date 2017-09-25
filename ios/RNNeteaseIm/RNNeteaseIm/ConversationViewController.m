@@ -363,29 +363,19 @@
 //发送录音
 -(void)sendAudioMessage:(  NSString *)file duration:(  NSString *)duration{
     if (file) {
-        [[[NIMSDK sharedSDK] chatManager] sendMessage:[NIMMessageMaker msgWithAudio:file] toSession:_session error:nil];
+        [[[NIMSDK sharedSDK] chatManager] sendMessage:[NIMMessageMaker msgWithAudio:file andeSession:_session] toSession:_session error:nil];
     }
 }
 //发送文字消息
 -(void)sendMessage:(NSString *)mess andApnsMembers:(NSArray *)members{
-    NIMMessage *message = [[NIMMessage alloc] init];
-    message.text    = mess;
-    message.apnsContent = mess;
-    if (members.count) {
-        NIMMessageApnsMemberOption *apnsMemberOption = [[NIMMessageApnsMemberOption alloc]init];
-        apnsMemberOption.userIds = members;
-        apnsMemberOption.forcePush = YES;
-        apnsMemberOption.apnsContent = @"有人@了你";
-        message.apnsMemberOption = apnsMemberOption;
-    }
-    message.apnsContent = mess;
+    NIMMessage *message = [NIMMessageMaker msgWithText:mess andApnsMembers:members andeSession:_session];
     //发送消息
     [[NIMSDK sharedSDK].chatManager sendMessage:message toSession:_session error:nil];
 }
 //发送图片
 -(void)sendImageMessages:(  NSString *)path  displayName:(  NSString *)displayName{
     UIImage *img = [[UIImage alloc]initWithContentsOfFile:path];
-    NIMMessage *message = [NIMMessageMaker msgWithImage:img];
+    NIMMessage *message = [NIMMessageMaker msgWithImage:img andeSession:_session];
 //    NIMMessage *message = [NIMMessageMaker msgWithImagePath:path];
     [[NIMSDK sharedSDK].chatManager sendMessage:message toSession:_session error:nil];
 }
@@ -396,7 +386,7 @@
     //    if (image) {
     //        message = [NIMMessageMaker msgWithImage:image];
     //    }else{
-    message = [NIMMessageMaker msgWithVideo:path];
+    message = [NIMMessageMaker msgWithVideo:path andeSession:_session];
     //    }
     [[NIMSDK sharedSDK].chatManager sendMessage:message toSession:_session error:nil];
     
@@ -407,7 +397,7 @@
     NIMMessage *message;
     NIMObject *obj = [NIMObject initNIMObject];
     obj.attachment =attachment;
-    message = [NIMMessageMaker msgWithCustom:obj];
+    message = [NIMMessageMaker msgWithCustom:obj andeSession:_session];
     [[NIMSDK sharedSDK].chatManager sendMessage:message toSession:_session error:nil];
 }
 
@@ -415,7 +405,7 @@
 -(void)sendLocationMessage:(  NSString *)latitude longitude:(  NSString *)longitude address:(  NSString *)address{
     NIMLocationObject *locaObj = [[NIMLocationObject alloc]initWithLatitude:[latitude doubleValue] longitude:[longitude doubleValue] title:address];
     NIMKitLocationPoint *locationPoint = [[NIMKitLocationPoint alloc]initWithLocationObject:locaObj];
-    NIMMessage *message = [NIMMessageMaker msgWithLocation:locationPoint];
+    NIMMessage *message = [NIMMessageMaker msgWithLocation:locationPoint andeSession:_session];
     [[NIMSDK sharedSDK].chatManager sendMessage:message toSession:_session error:nil];
 }
 //发送自定义消息2
@@ -424,7 +414,7 @@
     DWCustomAttachment *obj = [[DWCustomAttachment alloc]init];
     obj.custType = custType;
     obj.dataDict = dataDict;
-    message = [NIMMessageMaker msgWithCustomAttachment:obj];
+    message = [NIMMessageMaker msgWithCustomAttachment:obj andeSession:_session];
     [[NIMSDK sharedSDK].chatManager sendMessage:message toSession:_session error:nil];
 }
 
@@ -459,7 +449,7 @@
     DWCustomAttachment *obj = [[DWCustomAttachment alloc]init];
     obj.custType = CustomMessgeTypeRedPacketOpenMessage;
     obj.dataDict = dict;
-    message = [NIMMessageMaker msgWithCustomAttachment:obj];
+    message = [NIMMessageMaker msgWithCustomAttachment:obj andeSession:_session];
     NSTimeInterval timestamp = [[NSDate date] timeIntervalSince1970];
     message.timestamp = timestamp;
     if(![sendId isEqualToString:strMyId]){
@@ -653,7 +643,7 @@
 - (void)recordAudio:(NSString *)filePath didCompletedWithError:(NSError *)error {
     if(!error) {
         if ([self recordFileCanBeSend:filePath]) {
-            [[[NIMSDK sharedSDK] chatManager] sendMessage:[NIMMessageMaker msgWithAudio:filePath] toSession:_session error:nil];
+            [[[NIMSDK sharedSDK] chatManager] sendMessage:[NIMMessageMaker msgWithAudio:filePath andeSession:_session] toSession:_session error:nil];
         }else{
             [self showRecordFileNotSendReason];
         }

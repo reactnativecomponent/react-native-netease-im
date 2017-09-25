@@ -13,19 +13,20 @@
 
 @interface NIMMessageMaker : NSObject
 
-+ (NIMMessage*)msgWithText:(NSString*)text;
++ (NIMMessage*)msgWithText:(NSString*)text andApnsMembers:(NSArray *)members andeSession:(NIMSession *)session;
 
-+ (NIMMessage *)msgWithAudio:(NSString *)filePath;
++ (NIMMessage *)msgWithAudio:(NSString *)filePath andeSession:(NIMSession *)session;
 
-+ (NIMMessage *)msgWithImage:(UIImage *)image;
++ (NIMMessage *)msgWithImage:(UIImage *)image andeSession:(NIMSession *)session;
 
-+ (NIMMessage *)msgWithImagePath:(NSString *)path;
++ (NIMMessage *)msgWithImagePath:(NSString *)path andeSession:(NIMSession *)session;
 
-+ (NIMMessage *)msgWithVideo:(NSString *)filePath;
++ (NIMMessage *)msgWithVideo:(NSString *)filePath andeSession:(NIMSession *)session;
 
-+ (NIMMessage *)msgWithLocation:(NIMKitLocationPoint*)locationPoint;
++ (NIMMessage *)msgWithLocation:(NIMKitLocationPoint*)locationPoint andeSession:(NIMSession *)session;
 
-+ (NIMMessage*)msgWithCustom:(NIMObject *)attachment;
++ (NIMMessage*)msgWithCustom:(NIMObject *)attachment andeSession:(NIMSession *)session;
 
-+ (NIMMessage*)msgWithCustomAttachment:(DWCustomAttachment *)attachment;
++ (NIMMessage*)msgWithCustomAttachment:(DWCustomAttachment *)attachment andeSession:(NIMSession *)session;
+
 @end

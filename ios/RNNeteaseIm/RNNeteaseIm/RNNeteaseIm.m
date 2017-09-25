@@ -27,14 +27,44 @@
 
 - (void)clickObserveNotification:(NSNotification *)noti{
     NSDictionary *dict = noti.object;
-    NSDictionary *param = [dict objectForKey:@"dict"];
-    if ([[dict objectForKey:@"type"] isEqualToString:@"launch"]) {
-        [_bridge.eventDispatcher sendDeviceEventWithName:@"observeLaunchPushEvent" body:param];
-    }else{
-        [_bridge.eventDispatcher sendDeviceEventWithName:@"observeBackgroundPushEvent" body:param];
+    NSMutableDictionary *param = [NSMutableDictionary dictionaryWithDictionary:[dict objectForKey:@"dict"]];
+    NSString *strDict = [param objectForKey:@"sessionBody"];
+    if ([strDict length]) {
+        NSDictionary *dataDict = [self dictChangeFromJson:strDict];
+        NSMutableDictionary *mutaDict = [NSMutableDictionary dictionaryWithDictionary:dataDict];
+        NSString *strType = [mutaDict objectForKey:@"sessionType"];
+        NSString *strSessionId = [mutaDict objectForKey:@"sessionId"];
+        NSString *strSessionName = @"";
+        if ([strType isEqualToString:@"0"]) {//点对点
+            NIMUser *user = [[NIMSDK sharedSDK].userManager userInfo:strSessionId];
+            if ([user.alias length]) {
+                strSessionName = user.alias;
+            }else{
+                NIMUserInfo *userInfo = user.userInfo;
+                strSessionName = userInfo.nickName;
+            }
+        }else{//群主
+            NIMTeam *team = [[[NIMSDK sharedSDK] teamManager]teamById:strSessionId];
+            strSessionName = team.teamName;
+        }
+        [mutaDict setObject:strSessionName forKey:@"sessionName"];
+        [param setObject:mutaDict forKey:@"sessionBody"];
+        if ([[dict objectForKey:@"type"] isEqualToString:@"launch"]) {
+            [_bridge.eventDispatcher sendDeviceEventWithName:@"observeLaunchPushEvent" body:param];
+        }else{
+            [_bridge.eventDispatcher sendDeviceEventWithName:@"observeBackgroundPushEvent" body:param];
+        }
     }
+
 }
 
+- (NSDictionary *)dictChangeFromJson:(NSString *)strJson{
+    NSData* data = [strJson dataUsingEncoding:NSUTF8StringEncoding];
+    __autoreleasing NSError* error = nil;
+    id result = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+    if (error != nil) return nil;
+    return result;
+}
 
 @synthesize bridge = _bridge;
 - (dispatch_queue_t)methodQueue
