@@ -12,13 +12,29 @@
 
 @implementation RNNeteaseIm
 
+- (void)dealloc{
+    [[NSNotificationCenter defaultCenter]removeObserver:self];
+}
+
 - (instancetype)init{
     if (self = [super init]) {
         
     }
     [self initController];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(clickObserveNotification:) name:@"ObservePushNotification" object:nil];
     return self;
 }
+
+- (void)clickObserveNotification:(NSNotification *)noti{
+    NSDictionary *dict = noti.object;
+    NSDictionary *param = [dict objectForKey:@"dict"];
+    if ([[dict objectForKey:@"type"] isEqualToString:@"launch"]) {
+        [_bridge.eventDispatcher sendDeviceEventWithName:@"observeLaunchPushEvent" body:param];
+    }else{
+        [_bridge.eventDispatcher sendDeviceEventWithName:@"observeBackgroundPushEvent" body:param];
+    }
+}
+
 
 @synthesize bridge = _bridge;
 - (dispatch_queue_t)methodQueue
