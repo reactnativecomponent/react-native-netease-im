@@ -18,7 +18,9 @@ import com.netease.im.session.extension.DefaultCustomAttachment;
 import com.netease.im.session.extension.RedPacketAttachement;
 import com.netease.im.session.extension.RedPacketOpenAttachement;
 import com.netease.im.uikit.cache.TeamDataCache;
+import com.netease.im.uikit.common.util.file.FileUtil;
 import com.netease.im.uikit.common.util.log.LogUtil;
+import com.netease.im.uikit.common.util.media.ImageUtil;
 import com.netease.im.uikit.common.util.string.MD5;
 import com.netease.im.uikit.session.helper.MessageHelper;
 import com.netease.im.uikit.session.helper.MessageListPanelHelper;
@@ -67,7 +69,7 @@ import static com.netease.nimlib.sdk.NIMClient.getService;
 
 public class SessionService {
 
-    final static String TAG = "SessionService2";
+    final static String TAG = "SessionService";
 
     private static final int LOAD_MESSAGE_COUNT = 20;
 
@@ -653,6 +655,12 @@ public class SessionService {
     public void sendImageMessage(String file, String displayName, OnSendMessageListener onSendMessageListener) {
         file = Uri.parse(file).getPath();
         File f = new File(file);
+        LogUtil.w(TAG, "path:" + f.getPath() + "-size:" + FileUtil.formatFileSize(f.length()));
+        File temp = ImageUtil.getScaledImageFileWithMD5(f, FileUtil.getMimeType(f.getPath()));
+        if (temp != null) {
+            f = temp;
+        }
+        LogUtil.w(TAG, "path:" + f.getPath() + "-size:" + FileUtil.formatFileSize(f.length()));
         IMMessage message = MessageBuilder.createImageMessage(sessionId, sessionTypeEnum, f, TextUtils.isEmpty(displayName) ? f.getName() : displayName);
         sendMessage(message, onSendMessageListener);
     }

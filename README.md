@@ -1,5 +1,6 @@
 
 React Native的网易云信插件
+欢迎加入QQ群交流`153174456`
 ## Demo
 [react-native-chat-demo](https://github.com/reactnativecomponent/react-native-chat-demo)
 

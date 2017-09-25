@@ -28,9 +28,9 @@ public class MessageConstant {
     public class MsgStatus {
 
         public final static String SEND_DRAFT = "send_draft";
-        public final static String SEND_FAILE = "send_fail";
-        public final static String SEND_SENDING = "send_sending";
-        public final static String SEND_SUCCESS = "send_success";
+        public final static String SEND_FAILE = "send_failed";
+        public final static String SEND_SENDING = "send_going";
+        public final static String SEND_SUCCESS = "send_succed";
         public final static String RECEIVE_READ = "receive_read";
         public final static String RECEIVE_UNREAD = "receive_unread";
     }
@@ -92,8 +92,8 @@ public class MessageConstant {
     }
 
     public static class MediaFile {
-        public final static String HEIGHT = "height";
-        public final static String WIDTH = "width";
+        public final static String HEIGHT = "imageHeight";
+        public final static String WIDTH = "imageWidth";
         public final static String DISPLAY_NAME = "displayName";
         public final static String DURATION = "duration";
         public final static String THUMB_PATH = "thumbPath";
