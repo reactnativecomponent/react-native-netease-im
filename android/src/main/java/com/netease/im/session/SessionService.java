@@ -8,6 +8,7 @@ import android.text.TextUtils;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableMap;
+import com.netease.im.MessageConstant;
 import com.netease.im.MessageUtil;
 import com.netease.im.ReactCache;
 import com.netease.im.login.LoginService;
@@ -784,7 +785,7 @@ public class SessionService {
 
     void revokMessage(IMMessage message) {
         WritableMap msg = Arguments.createMap();
-        msg.putString("_id", message.getUuid());
+        msg.putString(MessageConstant.Message.MSG_ID, message.getUuid());
         ReactCache.emit(ReactCache.observeDeleteMessage, msg);
     }
 

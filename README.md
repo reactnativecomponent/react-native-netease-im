@@ -57,6 +57,15 @@ public class MainActivity extends ReactActivity {
 
  ......
 
+  @Override
+     protected void onCreate(Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+         if(ReceiverMsgParser.checkOpen(getIntent())){//在后台时处理点击推送消息
+             ReactCache.emit(ReactCache.observeLaunchPushEvent, ReceiverMsgParser.getWritableMap(getIntent()));
+             RNNeteaseImModule.launch = getIntent();
+         }
+     }
+
  @Override
  public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         MPermission.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
