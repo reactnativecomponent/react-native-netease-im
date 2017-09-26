@@ -17,6 +17,7 @@ import com.netease.im.session.extension.CustomAttachmentType;
 import com.netease.im.session.extension.DefaultCustomAttachment;
 import com.netease.im.session.extension.RedPacketAttachement;
 import com.netease.im.session.extension.RedPacketOpenAttachement;
+import com.netease.im.uikit.cache.NimUserInfoCache;
 import com.netease.im.uikit.cache.TeamDataCache;
 import com.netease.im.uikit.common.util.file.FileUtil;
 import com.netease.im.uikit.common.util.log.LogUtil;
@@ -29,6 +30,7 @@ import com.netease.im.uikit.uinfo.UserInfoObservable;
 import com.netease.nimlib.sdk.AbortableFuture;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
+import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.RequestCallbackWrapper;
 import com.netease.nimlib.sdk.ResponseCode;
 import com.netease.nimlib.sdk.friend.FriendService;
@@ -87,8 +89,8 @@ public class SessionService {
     private Handler handler;
     private boolean mute = false;
 
+    private String sessionName = "";
     private boolean isFriend = true;
-    private boolean isInBlackList = false;
 
     private SessionService() {
     }
@@ -558,8 +560,8 @@ public class SessionService {
         sessionTypeEnum = SessionUtil.getSessionType(type);
 
         if (sessionTypeEnum == SessionTypeEnum.P2P) {
+            sessionName = NimUserInfoCache.getInstance().getUserName(sessionId);
             isFriend = NIMClient.getService(FriendService.class).isMyFriend(sessionId);
-            isInBlackList = NIMClient.getService(FriendService.class).isInBlackList(sessionId);
 
             this.mute = !NIMClient.getService(FriendService.class).isNeedMessageNotify(sessionId);
         } else {
@@ -637,6 +639,10 @@ public class SessionService {
      * @param content
      */
     public void sendTipMessage(String content, OnSendMessageListener onSendMessageListener) {
+        sendTipMessage(content, onSendMessageListener, false);
+    }
+
+    public void sendTipMessage(String content, OnSendMessageListener onSendMessageListener, boolean local) {
         CustomMessageConfig config = new CustomMessageConfig();
         config.enablePush = false; // 不推送
         IMMessage message = MessageBuilder.createTipMessage(sessionId, sessionTypeEnum);
@@ -651,7 +657,12 @@ public class SessionService {
 
             message.setContent(content);
             message.setConfig(config);
-            sendMessageSelf(message, onSendMessageListener, false);
+            if (local) {
+                message.setStatus(MsgStatusEnum.success);
+                getMsgService().saveMessageToLocal(message, true);
+            } else {
+                sendMessageSelf(message, onSendMessageListener, false);
+            }
         }
     }
 
@@ -843,18 +854,42 @@ public class SessionService {
         getMsgService().updateIMMessageStatus(message);
     }
 
-    public void sendMessageSelf(final IMMessage message, final OnSendMessageListener onSendMessageListener, boolean send) {
+    public void sendMessageSelf(final IMMessage message, final OnSendMessageListener onSendMessageListener, boolean resend) {
 
 
         appendPushConfig(message);
-        if(isInBlackList){
+        if (sessionTypeEnum == SessionTypeEnum.P2P) {
+            sessionName = NimUserInfoCache.getInstance().getUserName(sessionId);
 
+
+            isFriend = NIMClient.getService(FriendService.class).isMyFriend(sessionId);
+            LogUtil.w(TAG, "isFriend:" + isFriend);
+            if (!isFriend) {
+                sendTipMessage(sessionName + "开启了朋友验证，你还不是他(她)朋友。请先发送朋友验证请求，对方验证后，才能聊天。发送朋友验证", null, true);
+                message.setStatus(MsgStatusEnum.fail);
+                getMsgService().saveMessageToLocal(message, true);
+                return;
+            }
         }
-        if(!isFriend){
+        getMsgService().sendMessage(message, resend).setCallback(new RequestCallback<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
 
-        }
+            }
 
-        getMsgService().sendMessage(message, send);
+            @Override
+            public void onFailed(int code) {
+                LogUtil.w(TAG, "code:" + code);
+                if (code == ResponseCode.RES_IN_BLACK_LIST) {
+                    sendTipMessage("消息已发出，但被对方拒收了。", null, true);
+                }
+            }
+
+            @Override
+            public void onException(Throwable throwable) {
+//                LogUtil.w(TAG, "throwable:" + throwable.getLocalizedMessage());
+            }
+        });
         onMessageStatusChange(message, true);
 
     }
@@ -868,7 +903,7 @@ public class SessionService {
         Map<String, Object> payload = new HashMap<>();
         Map<String, Object> body = new HashMap<>();
 
-        body.put("sessionType", message.getSessionType().getValue());
+        body.put("sessionType", String.valueOf(message.getSessionType().getValue()));
         if (message.getSessionType() == SessionTypeEnum.P2P) {
             body.put("sessionId", LoginService.getInstance().getAccount());
         } else if (message.getSessionType() == SessionTypeEnum.Team) {
