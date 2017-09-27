@@ -205,50 +205,6 @@
     } error:^(NSString *error) {
         NSLog(@"更新失败");
     }];
-    /*
-    NSArray *keys = [userInFo allKeys];
-    NSMutableDictionary  *userDic = [NSMutableDictionary dictionary];
-    for (NSString *tem  in keys) {
-        //设置用户昵称
-        if ([tem isEqualToString:@"NIMUserInfoUpdateTagNick"]) {
-            [userDic setObject:[userInFo objectForKey:@"NIMUserInfoUpdateTagNick"] forKey:@(NIMUserInfoUpdateTagNick)];
-        }
-        //用户头像
-        if ([tem isEqualToString:@"NIMUserInfoUpdateTagAvatar"]) {
-            [userDic setObject:[userInFo objectForKey:@"NIMUserInfoUpdateTagAvatar"] forKey:@(NIMUserInfoUpdateTagAvatar)];
-        }
-        //用户签名
-        if ([tem isEqualToString:@"NIMUserInfoUpdateTagSign"]) {
-            [userDic setObject:[userInFo objectForKey:@"NIMUserInfoUpdateTagSign"] forKey:@(NIMUserInfoUpdateTagSign)];
-        }
-        //用户性别
-        if ([tem isEqualToString:@"NIMUserInfoUpdateTagGender"]) {
-            [userDic setObject:[userInFo objectForKey:@"NIMUserInfoUpdateTagGender"] forKey:@(NIMUserInfoUpdateTagGender)];
-        }
-        //用户邮箱
-        if ([tem isEqualToString:@"NIMUserInfoUpdateTagEmail"]) {
-            [userDic setObject:[userInFo objectForKey:@"NIMUserInfoUpdateTagEmail"] forKey:@(NIMUserInfoUpdateTagEmail)];
-        }
-        //用户生日
-        if ([tem isEqualToString:@"NIMUserInfoUpdateTagBirth"]) {
-            [userDic setObject:[userInFo objectForKey:@"NIMUserInfoUpdateTagBirth"] forKey:@(NIMUserInfoUpdateTagBirth)];
-        }
-        //用户手机
-        if ([tem isEqualToString:@"NIMUserInfoUpdateTagBirth"]) {
-            [userDic setObject:[userInFo objectForKey:@"NIMUserInfoUpdateTagBirth"] forKey:@(NIMUserInfoUpdateTagBirth)];
-        }
-        //拓展字段
-        if ([tem isEqualToString:@"NIMUserInfoUpdateTagExt"]) {
-            [userDic setObject:[userInFo objectForKey:@"NIMUserInfoUpdateTagExt"] forKey:@(NIMUserInfoUpdateTagExt)];
-        }
-    }
-    [[NIMSDK sharedSDK].userManager updateMyUserInfo:userDic completion:^(NSError *error) {
-        if (!error) {
-            success(@"设置成功");
-        }else{
-            err(@"昵称设置失败，请重试");
-        }
-    }];*/
 }
 
 //- (void)presentMemberSelector:(ContactSelectFinishBlock) block{

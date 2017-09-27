@@ -79,10 +79,15 @@
 - (void)resendMessage:(NSString *)messageID{
     NSArray *currentMessage = [[[NIMSDK sharedSDK] conversationManager] messagesInSession:_session messageIds:@[messageID] ];
     NIMMessage *currentM = currentMessage[0];
-    if (currentM.isReceivedMsg) {
-        [[[NIMSDK sharedSDK] chatManager] fetchMessageAttachment:currentM error:nil];
+    NSString *isFriend = [currentM.localExt objectForKey:@"isFriend"];
+    if ([isFriend length]) {
+
     }else{
-        [[[NIMSDK sharedSDK] chatManager] resendMessage:currentM error:nil];
+        if (currentM.isReceivedMsg) {
+            [[[NIMSDK sharedSDK] chatManager] fetchMessageAttachment:currentM error:nil];
+        }else{
+            [[[NIMSDK sharedSDK] chatManager] resendMessage:currentM error:nil];
+        }
     }
 }
 
@@ -157,8 +162,14 @@
                 [dic setObject:@"send_succeed" forKey:@"status"];
                 break;
             default:
-                [dic setObject:@"-1" forKey:@"status"];
+                [dic setObject:@"send_failed" forKey:@"status"];
                 break;
+        }
+        NSString *isFriend = [message.localExt objectForKey:@"isFriend"];
+        if ([isFriend length]) {
+            if ([isFriend isEqualToString:@"NO"]) {
+                [dic setObject:@"send_failed" forKey:@"status"];
+            }
         }
         [dic setObject: [NSNumber numberWithBool:message.isOutgoingMsg] forKey:@"isOutgoing"];
         [dic setObject:[NSString stringWithFormat:@"%f", message.timestamp] forKey:@"timeString"];
@@ -363,21 +374,28 @@
 //发送录音
 -(void)sendAudioMessage:(  NSString *)file duration:(  NSString *)duration{
     if (file) {
-        [[[NIMSDK sharedSDK] chatManager] sendMessage:[NIMMessageMaker msgWithAudio:file andeSession:_session] toSession:_session error:nil];
+        NIMMessage *message = [NIMMessageMaker msgWithAudio:file andeSession:_session];
+        if ([self isFriendToSendMessage:message]) {
+             [[[NIMSDK sharedSDK] chatManager] sendMessage:message toSession:_session error:nil];
+        }
     }
 }
 //发送文字消息
 -(void)sendMessage:(NSString *)mess andApnsMembers:(NSArray *)members{
     NIMMessage *message = [NIMMessageMaker msgWithText:mess andApnsMembers:members andeSession:_session];
     //发送消息
-    [[NIMSDK sharedSDK].chatManager sendMessage:message toSession:_session error:nil];
+    if ([self isFriendToSendMessage:message]) {
+        [[NIMSDK sharedSDK].chatManager sendMessage:message toSession:_session error:nil];
+    }
 }
 //发送图片
 -(void)sendImageMessages:(  NSString *)path  displayName:(  NSString *)displayName{
     UIImage *img = [[UIImage alloc]initWithContentsOfFile:path];
     NIMMessage *message = [NIMMessageMaker msgWithImage:img andeSession:_session];
 //    NIMMessage *message = [NIMMessageMaker msgWithImagePath:path];
-    [[NIMSDK sharedSDK].chatManager sendMessage:message toSession:_session error:nil];
+    if ([self isFriendToSendMessage:message]) {
+        [[NIMSDK sharedSDK].chatManager sendMessage:message toSession:_session error:nil];
+    }
 }
 
 //发送视频
@@ -388,6 +406,9 @@
     //    }else{
     message = [NIMMessageMaker msgWithVideo:path andeSession:_session];
     //    }
+    if ([self isFriendToSendMessage:message]) {
+       [[NIMSDK sharedSDK].chatManager sendMessage:message toSession:_session error:nil];
+    }
     [[NIMSDK sharedSDK].chatManager sendMessage:message toSession:_session error:nil];
     
 }
@@ -398,7 +419,9 @@
     NIMObject *obj = [NIMObject initNIMObject];
     obj.attachment =attachment;
     message = [NIMMessageMaker msgWithCustom:obj andeSession:_session];
-    [[NIMSDK sharedSDK].chatManager sendMessage:message toSession:_session error:nil];
+    if ([self isFriendToSendMessage:message]) {
+        [[NIMSDK sharedSDK].chatManager sendMessage:message toSession:_session error:nil];
+    }
 }
 
 //发送地理位置消息
@@ -406,7 +429,9 @@
     NIMLocationObject *locaObj = [[NIMLocationObject alloc]initWithLatitude:[latitude doubleValue] longitude:[longitude doubleValue] title:address];
     NIMKitLocationPoint *locationPoint = [[NIMKitLocationPoint alloc]initWithLocationObject:locaObj];
     NIMMessage *message = [NIMMessageMaker msgWithLocation:locationPoint andeSession:_session];
-    [[NIMSDK sharedSDK].chatManager sendMessage:message toSession:_session error:nil];
+    if ([self isFriendToSendMessage:message]) {
+        [[NIMSDK sharedSDK].chatManager sendMessage:message toSession:_session error:nil];
+    }
 }
 //发送自定义消息2
 -(void)sendCustomMessage:(NSInteger )custType data:(NSDictionary *)dataDict{
@@ -415,7 +440,9 @@
     obj.custType = custType;
     obj.dataDict = dataDict;
     message = [NIMMessageMaker msgWithCustomAttachment:obj andeSession:_session];
-    [[NIMSDK sharedSDK].chatManager sendMessage:message toSession:_session error:nil];
+    if ([self isFriendToSendMessage:message]) {
+        [[NIMSDK sharedSDK].chatManager sendMessage:message toSession:_session error:nil];
+    }
 }
 
 //发送提醒消息
@@ -518,6 +545,16 @@
         [self refrashMessage:message From:@"send"];
         [[NSUserDefaults standardUserDefaults]setObject: [NSString stringWithFormat:@"%f", message.timestamp] forKey:@"timestamp"];
     }else{
+        NSDictionary *userInfo = error.userInfo;
+        NSString *strEnum = [userInfo objectForKey:@"enum"];
+        if ([strEnum isEqualToString:@"NIMRemoteErrorCodeInBlackList"]) {
+            NSString * tip = @"消息已发出，但被对方拒收了";
+            NIMMessage *tipMessage = [self msgWithTip:tip];
+            tipMessage.timestamp = message.timestamp;
+            [[NIMSDK sharedSDK].conversationManager saveMessage:tipMessage forSession:_session completion:nil];
+        }
+        message.localExt = @{@"isFriend":@"NO"};
+        [[NIMSDK sharedSDK].conversationManager updateMessage:message forSession:_session completion:nil];
         [self refrashMessage:message From:@"send"];
     }
     NIMModel *model = [NIMModel initShareMD];
@@ -544,9 +581,7 @@
     if ([message.session.sessionId isEqualToString:_sessionID]) {
         [self refrashMessage:message From:@"receive" ];
         NIMMessageReceipt *receipt = [[NIMMessageReceipt alloc] initWithMessage:message];
-        
-        [[[NIMSDK sharedSDK] chatManager] sendMessageReceipt:receipt
-                                                  completion:nil];
+        [[[NIMSDK sharedSDK] chatManager] sendMessageReceipt:receipt completion:nil];
         //标记已读消息
         [[NIMSDK sharedSDK].conversationManager markAllMessagesReadInSession:_session];
         
@@ -780,8 +815,14 @@
             [dic2 setObject:@"send_succeed" forKey:@"status"];
             break;
         default:
-            [dic2 setObject:@"-1" forKey:@"status"];
+            [dic2 setObject:@"send_failed" forKey:@"status"];
             break;
+    }
+    NSString *isFriend = [message.localExt objectForKey:@"isFriend"];
+    if ([isFriend length]) {
+        if ([isFriend isEqualToString:@"NO"]) {
+            [dic2 setObject:@"send_failed" forKey:@"status"];
+        }
     }
     [dic2 setObject: [NSNumber numberWithBool:message.isOutgoingMsg] forKey:@"isOutgoing"];
     [dic2 setObject:[NSString stringWithFormat:@"%f", message.timestamp] forKey:@"timeString"];
@@ -1135,4 +1176,33 @@
     [[NIMSDK sharedSDK].conversationManager removeDelegate:self];
     [[NIMSDK sharedSDK].systemNotificationManager removeDelegate:self];
 }
+//判断是不是好友
+- (BOOL)isFriendToSendMessage:(NIMMessage *)message{
+    if (_session.sessionType == NIMSessionTypeP2P) {//点对点
+        NSString *strSessionId = _session.sessionId;
+        if ([[NIMSDK sharedSDK].userManager isMyFriend:strSessionId]) {//判断是否为自己好友
+            return YES;
+        }else{
+            message.localExt = @{@"isFriend":@"NO"};
+            [[NIMSDK sharedSDK].conversationManager saveMessage:message forSession:_session completion:nil];
+            NSString *strSessionName = @"";
+            NIMUser *user = [[NIMSDK sharedSDK].userManager userInfo:strSessionId];
+            if ([user.alias length]) {
+                strSessionName = user.alias;
+            }else{
+                NIMUserInfo *userInfo = user.userInfo;
+                strSessionName = userInfo.nickName;
+            }
+            
+            NSString * tip = [NSString stringWithFormat:@"%@开启了朋友验证，你还不是他（她）朋友。请先发送朋友验证请求，对方验证通过后，才能聊天。",strSessionName];
+            NIMMessage *tipMessage = [self msgWithTip:tip];
+            tipMessage.timestamp = message.timestamp+1;
+            [[NIMSDK sharedSDK].conversationManager saveMessage:tipMessage forSession:_session completion:nil];
+            return NO;
+        }
+    }else{
+        return YES;
+    }
+}
+
 @end
