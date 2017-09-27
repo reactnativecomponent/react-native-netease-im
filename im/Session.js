@@ -285,5 +285,8 @@ class Session {
     updateAudioMessagePlayStatus(messageId){
         return RNNeteaseIm.updateAudioMessagePlayStatus(messageId);
     }
+    getLaunch(){
+        return RNNeteaseIm.getLaunch();
+    }
 }
 module.exports = new Session();

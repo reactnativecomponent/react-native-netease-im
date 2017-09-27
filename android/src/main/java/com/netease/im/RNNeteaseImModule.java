@@ -88,6 +88,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static com.netease.im.ReceiverMsgParser.getIntent;
+
 
 public class RNNeteaseImModule extends ReactContextBaseJavaModule implements LifecycleEventListener, ActivityEventListener {
 
@@ -1938,14 +1940,26 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
 
         LogUtil.w(TAG, "onNewIntent:" + intent.getExtras());
 //        ReceiverMsgParser.openIntent(intent);
-        if (reactContext.getCurrentActivity() != null && ReceiverMsgParser.checkOpen(ReceiverMsgParser.getIntent())) {
-            intent.putExtras(ReceiverMsgParser.getIntent());
+        if (reactContext.getCurrentActivity() != null && ReceiverMsgParser.checkOpen(intent)) {
+            intent.putExtras(getIntent());
             reactContext.getCurrentActivity().setIntent(intent);
+            ReactCache.emit(ReactCache.observeBackgroundPushEvent, ReceiverMsgParser.getWritableMap(intent));
         }
 
     }
 
     public static String status = "";
+    public static Intent launch = null;
+
+    @ReactMethod
+    public void getLaunch(Promise promise) {
+        if (launch == null) {
+            promise.resolve(null);
+        } else {
+            promise.resolve(ReceiverMsgParser.getWritableMap(launch));
+            launch = null;
+        }
+    }
 
     @Override
     public void onHostResume() {

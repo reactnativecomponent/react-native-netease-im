@@ -7,7 +7,9 @@ import android.text.TextUtils;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableMap;
 import com.netease.im.common.push.Extras;
+import com.netease.im.session.SessionUtil;
 import com.netease.im.uikit.common.util.log.LogUtil;
+import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.NimIntent;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
@@ -55,6 +57,7 @@ public class ReceiverMsgParser {
                     result.putString("type", "session");
                     result.putString("sessionType", Integer.toString(message.getSessionType().getValue()));
                     result.putString("sessionId", message.getSessionId());
+                    result.putString("sessionName", message.getSessionId());
                 }
             } else if (intent.hasExtra(Extras.EXTRA_JUMP_P2P)) {
                 Intent data = intent.getParcelableExtra(Extras.EXTRA_DATA);
@@ -63,6 +66,7 @@ public class ReceiverMsgParser {
                     result.putString("type", "session");
                     result.putString("sessionType", Integer.toString(SessionTypeEnum.P2P.getValue()));
                     result.putString("sessionId", account);
+                    result.putString("sessionName", account);
                 }
             }
 
@@ -74,40 +78,52 @@ public class ReceiverMsgParser {
     }
 
     public static WritableMap getWritableMap(Intent intent) {
-        WritableMap r = Arguments.createMap();
+        WritableMap rr = Arguments.createMap();
         if (intent != null && canAutoLogin()) {
+            WritableMap r = Arguments.createMap();
             if (intent.hasExtra(NimIntent.EXTRA_NOTIFY_CONTENT)) {
                 ArrayList<IMMessage> messages = (ArrayList<IMMessage>) intent.getSerializableExtra(NimIntent.EXTRA_NOTIFY_CONTENT);
                 if (messages == null || messages.size() > 1) {
-                    r.putString("type", "sessionList");
+                    rr.putString("type", "sessionList");
                 } else {
                     IMMessage message = messages.get(0);
-                    r.putString("type", "session");
+                    rr.putString("type", "session");
                     r.putString("sessionType", Integer.toString(message.getSessionType().getValue()));
                     r.putString("sessionId", message.getSessionId());
+                    r.putString("sessionName", SessionUtil.getSessionName(message.getSessionId(), message.getSessionType(), false));
                 }
             } else if (intent.hasExtra(Extras.EXTRA_JUMP_P2P)) {
                 Intent data = intent.getParcelableExtra(Extras.EXTRA_DATA);
                 String account = data.getStringExtra(Extras.EXTRA_ACCOUNT);
                 if (!TextUtils.isEmpty(account)) {
-                    r.putString("type", "session");
+                    rr.putString("type", "session");
                     r.putString("sessionType", Integer.toString(SessionTypeEnum.P2P.getValue()));
                     r.putString("sessionId", account);
+                    r.putString("sessionName", SessionUtil.getSessionName(account, SessionTypeEnum.P2P, false));
                 }
             }
-
-            LogUtil.w("ReceiverMsgParser", intent + "");
+            rr.putMap("sessionBody", r);
+            printIntent(intent);
         }
 
-        LogUtil.w("ReceiverMsgParser", result + "");
-        return r;
+        LogUtil.w("ReceiverMsgParser", rr + "");
+        return rr;
+    }
+
+    static void printIntent(Intent intent) {
+        LogUtil.w("ReceiverMsgParser", intent + "");
+        Bundle extra = intent.getExtras();
+        for (String key : extra.keySet()) {
+            LogUtil.w("ReceiverMsgParser", "key:" + key);
+            LogUtil.w("ReceiverMsgParser", "v:" + extra.get(key));
+        }
     }
 
     /**
      * 已经登陆过，自动登陆
      */
     private static boolean canAutoLogin() {
-
-        return true;//!TextUtils.isEmpty(account) && !TextUtils.isEmpty(token);
+        return !NIMClient.getStatus().wontAutoLogin();
+//        return true;//!TextUtils.isEmpty(account) && !TextUtils.isEmpty(token);
     }
 }

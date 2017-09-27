@@ -57,6 +57,15 @@ public class MainActivity extends ReactActivity {
 
  ......
 
+  @Override
+     protected void onCreate(Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+         if(ReceiverMsgParser.checkOpen(getIntent())){//在后台时处理点击推送消息
+             ReactCache.emit(ReactCache.observeLaunchPushEvent, ReceiverMsgParser.getWritableMap(getIntent()));
+             RNNeteaseImModule.launch = getIntent();
+         }
+     }
+
  @Override
  public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         MPermission.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
@@ -134,8 +143,17 @@ Run `pod install`
 ...
 [self setupNIMSDK];
 [self registerAPNs];
+if (launchOptions) {//未启动时，点击推送消息
+    NSDictionary * remoteNotification = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
+    if (remoteNotification) {
+      [self performSelector:@selector(clickSendObserve:) withObject:remoteNotification afterDelay:0.5];
+    }
+  }
 ...
 return YES;
+}
+- (void)clickSendObserve:(NSDictionary *)dict{
+  [[NSNotificationCenter defaultCenter]postNotificationName:@"ObservePushNotification" object:@{@"dict":dict,@"type":@"launch"}];
 }
 - (void)setupNIMSDK
 {
@@ -159,20 +177,20 @@ UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTy
 
 - (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
-[[NIMSDK sharedSDK] updateApnsToken:deviceToken];
+  [[NIMSDK sharedSDK] updateApnsToken:deviceToken];
 }
-
+//在后台时处理点击推送消息
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo{
-NSLog(@"receive remote notification:  %@", userInfo);
-}
 
+  [[NSNotificationCenter defaultCenter]postNotificationName:@"ObservePushNotification" object:@{@"dict":userInfo,@"type":@"background"}];
+}
 - (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
 {
-NSLog(@"fail to get apns token :%@",error);
+  NSLog(@"fail to get apns token :%@",error);
 }
-
-- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
-  return [RCTLinkingManager application:application openURL:url sourceApplication:sourceApplication annotation:annotation];
+- (void)applicationDidEnterBackground:(UIApplication *)application {
+  NSInteger count = [[[NIMSDK sharedSDK] conversationManager] allUnreadCount];
+  [[UIApplication sharedApplication] setApplicationIconBadgeNumber:count];
 }
 ```
 
@@ -225,7 +243,28 @@ import NIM from 'react-native-netease-im';
 #### 监听会话
 ```
 NativeAppEventEmitter.addListener("observeRecentContact",(data)=>{
-  console.log(data); //返回内容android和ios有区别
+  console.log(data); //返回会话列表和未读数
 })；
+```
+#### 推送
+```
+//程序运行时获取的推送点击事件
+NativeAppEventEmitter.addListener("observeLaunchPushEvent",(data)=>{
+  console.log(data);
+})；
+//程序后台时获取的推送点击事件
+NativeAppEventEmitter.addListener("observeBackgroundPushEvent",(data)=>{
+  console.log(data); 
+})；
+//推送数据格式
+{
+    ...
+    sessionBody：{
+        sessionId:"",
+        sessionType:"",
+        sessionName:""
+    }
+}
+
 ```
 
