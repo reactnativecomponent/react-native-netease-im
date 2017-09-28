@@ -271,7 +271,7 @@ public class ReactCache {
                 map.putString("content", content);
                 array.pushMap(map);
             }
-            LogUtil.w(TAG, array + "");
+//            LogUtil.w(TAG, array + "");
         }
         writableMap.putArray("recents", array);
         writableMap.putString("unreadCount", Integer.toString(unreadNumTotal));
