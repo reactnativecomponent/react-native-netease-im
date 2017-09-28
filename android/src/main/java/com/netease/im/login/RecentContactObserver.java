@@ -11,6 +11,7 @@ import com.netease.im.session.extension.CustomAttachment;
 import com.netease.im.session.extension.CustomAttachmentType;
 import com.netease.im.uikit.cache.SimpleCallback;
 import com.netease.im.uikit.cache.TeamDataCache;
+import com.netease.im.uikit.common.util.log.LogUtil;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.RequestCallbackWrapper;
@@ -306,7 +307,6 @@ public class RecentContactObserver {
 
         @Override
         public void onEvent(StatusCode code) {
-            RNNeteaseImModule.status = "";
             if (code != PWD_ERROR && code.wontAutoLogin()) {
                 WritableMap r = Arguments.createMap();
                 String status = "";
@@ -321,10 +321,17 @@ public class RecentContactObserver {
                         status = "2";
                         break;
                 }
-                RNNeteaseImModule.status = status;
+                if ("onHostPause".equals(RNNeteaseImModule.status)) {
+                    RNNeteaseImModule.status = status;
+                }else {
+                    RNNeteaseImModule.status = "";
+                }
                 r.putString("status", status);
                 ReactCache.emit(ReactCache.observeOnKick, r);
+            } else {
+                RNNeteaseImModule.status = "";
             }
+
             WritableMap r = Arguments.createMap();
             String codeValue;
             switch (code) {
@@ -336,6 +343,8 @@ public class RecentContactObserver {
                     break;
             }
             r.putString("status", codeValue);
+            LogUtil.w(TAG, "onHostStatus1:" + RNNeteaseImModule.status);
+            LogUtil.w(TAG, "onHostStatus2:" + codeValue);
             ReactCache.emit(ReactCache.observeOnlineStatus, r);
         }
     };

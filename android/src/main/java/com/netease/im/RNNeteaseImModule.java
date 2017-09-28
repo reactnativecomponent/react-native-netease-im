@@ -150,6 +150,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
 //        LogUtil.w(TAG, "md5:" + MD5.getStringMD5(token));
 
         NIMClient.getService(AuthService.class).openLocalCache(contactId);
+        LogUtil.w(TAG, "s:" + NIMClient.getStatus().name());
         LoginService.getInstance().login(new LoginInfo(contactId, token), new RequestCallback<LoginInfo>() {
             @Override
             public void onSuccess(LoginInfo loginInfo) {
@@ -174,7 +175,6 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
 
             }
         });
-
     }
 
     /**
@@ -183,6 +183,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
     @ReactMethod
     public void logout() {
         LogUtil.w(TAG, "logout");
+        status = "";
         LoginService.getInstance().logout();
 
     }
@@ -1963,20 +1964,24 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
 
     @Override
     public void onHostResume() {
-        if (reactContext.getCurrentActivity() != null)
-            LogUtil.w(TAG, reactContext.getCurrentActivity().getClass().getPackage().getName());
-        LogUtil.w(TAG, "onHostResume");
 
-        if (!TextUtils.isEmpty(status)) {
-            WritableMap r = Arguments.createMap();
-            r.putString("status", status);
-            ReactCache.emit(ReactCache.observeOnKick, r);
-            status = "";
+        LogUtil.w(TAG, "onHostResume:" + status);
+
+        if (!TextUtils.isEmpty(status) && !"onHostPause".equals(status)) {
+            if (NIMClient.getStatus().wontAutoLogin()) {
+                WritableMap r = Arguments.createMap();
+                r.putString("status", status);
+                ReactCache.emit(ReactCache.observeOnKick, r);
+            }
         }
+        status = "";
     }
 
     @Override
     public void onHostPause() {
+        if (TextUtils.isEmpty(status)) {
+            status = "onHostPause";
+        }
         LogUtil.w(TAG, "onHostPause");
     }
 
