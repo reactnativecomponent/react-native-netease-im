@@ -91,6 +91,8 @@ RCT_EXPORT_METHOD(login:(nonnull NSString *)account token:(nonnull NSString *)to
             NSLog(@"%@:%@",strEorr,error);
         }
     }];
+    [NIMViewController initWithController].strToken = token;
+    [NIMViewController initWithController].strAccount = account;
 }
 
 //注销用户

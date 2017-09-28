@@ -10,7 +10,7 @@
 #import "ContactViewController.h"
 
 @interface NIMViewController ()<NIMLoginManagerDelegate,NIMConversationManagerDelegate>{
-    
+    BOOL isLoginFailed;
 }
 
 @end
@@ -51,6 +51,7 @@
             break;
         case NIMLoginStepLinkOK://连接服务器成功
             strStatus = @"5";
+            [self backLogin];
             [self getResouces];
             break;
         case NIMLoginStepLinkFailed://连接服务器失败
@@ -64,6 +65,7 @@
             break;
         case NIMLoginStepLoginFailed://登录失败
             strStatus = @"10";
+            isLoginFailed = YES;
             break;
         case NIMLoginStepSyncing://开始同步
             strStatus = @"13";
@@ -98,6 +100,17 @@
             //清除历史记录
             [self getResouces];
         }
+    }
+}
+
+//登录失败后重新手动登录
+- (void)backLogin{
+    if (isLoginFailed) {
+        isLoginFailed = NO;
+        NSLog(@":%@   :%@",_strAccount,_strToken);
+        [[NIMSDK sharedSDK].loginManager login:_strAccount token:_strToken completion:^(NSError * _Nullable error) {
+            NSLog(@"error:%@",error);
+        }];
     }
 }
 

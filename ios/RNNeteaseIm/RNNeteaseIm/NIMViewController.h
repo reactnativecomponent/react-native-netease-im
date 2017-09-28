@@ -13,6 +13,9 @@ typedef void(^SUCCESS) (id param);
 typedef void(^ERROR)(NSString *error);
 @interface NIMViewController : UIViewController
 
+@property (copy, nonatomic) NSString *strAccount;
+@property (copy, nonatomic) NSString *strToken;
+
 +(instancetype)initWithController;
 -(instancetype)initWithNIMController;
 -(void)deleteCurrentSession:(NSString *)recentContactId andback:(ERROR)error;
