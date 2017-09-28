@@ -1194,7 +1194,7 @@
                 strSessionName = userInfo.nickName;
             }
             
-            NSString * tip = [NSString stringWithFormat:@"%@开启了朋友验证，你还不是他（她）朋友。请先发送朋友验证请求，对方验证通过后，才能聊天。",strSessionName];
+            NSString * tip = [NSString stringWithFormat:@"%@开启了朋友验证，你还不是他（她）朋友。请先发送朋友验证请求，对方验证通过后，才能聊天。发送朋友验证",strSessionName];
             NIMMessage *tipMessage = [self msgWithTip:tip];
             tipMessage.timestamp = message.timestamp+1;
             [[NIMSDK sharedSDK].conversationManager saveMessage:tipMessage forSession:_session completion:nil];
