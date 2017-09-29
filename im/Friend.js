@@ -134,4 +134,4 @@ class Friend {
         return RNNeteaseIm.removeFromBlackList(contactId);
     }
 }
-module.exports = new Friend();
+export default new Friend();

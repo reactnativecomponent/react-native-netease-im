@@ -301,4 +301,4 @@ class Session {
         }
     }
 }
-module.exports = new Session();
+export default new Session();

@@ -212,4 +212,4 @@ class Team {
         return RNNeteaseIm.updateTeamName(teamId, teamName);
     }
 }
-module.exports = new Team();
+export default new Team();

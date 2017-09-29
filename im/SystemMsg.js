@@ -133,4 +133,4 @@ class SystemMsg {
         return RNNeteaseIm.resetSystemMessageUnreadCount();
     }
 }
-module.exports = new SystemMsg();
+export default new SystemMsg();
