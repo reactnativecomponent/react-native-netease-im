@@ -1974,6 +1974,9 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
                 ReactCache.emit(ReactCache.observeOnKick, r);
             }
         }
+//        if (NIMClient.getStatus().wontAutoLogin()) {
+//            Toast.makeText(IMApplication.getContext(), "您的帐号已在别的设备登录，请重新登陆", Toast.LENGTH_SHORT).show();
+//        }
         status = "";
     }
 

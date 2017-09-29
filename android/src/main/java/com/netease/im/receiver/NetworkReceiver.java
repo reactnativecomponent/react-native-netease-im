@@ -32,7 +32,7 @@ public class NetworkReceiver extends BroadcastReceiver {
         } else {
             WritableMap r = Arguments.createMap();
             r.putString("status", Integer.toString(StatusCode.NET_BROKEN.getValue()));
-            ReactCache.emit(ReactCache.observeOnKick, r);
+            ReactCache.emit(ReactCache.observeOnlineStatus, r);
         }
     }
 }

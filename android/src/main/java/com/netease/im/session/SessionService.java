@@ -5,9 +5,12 @@ import android.net.Uri;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
+import android.widget.Toast;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.common.MapBuilder;
+import com.netease.im.IMApplication;
 import com.netease.im.MessageConstant;
 import com.netease.im.MessageUtil;
 import com.netease.im.ReactCache;
@@ -558,6 +561,9 @@ public class SessionService {
         this.handler = handler;
         this.sessionId = sessionId;
 
+        if (NIMClient.getStatus().wontAutoLogin()) {
+            Toast.makeText(IMApplication.getContext(), "您的帐号已在别的设备登录，请重新登陆", Toast.LENGTH_SHORT).show();
+        }
         sessionTypeEnum = SessionUtil.getSessionType(type);
 
         if (sessionTypeEnum == SessionTypeEnum.P2P) {
@@ -609,6 +615,12 @@ public class SessionService {
         queryMessage(messageId, new OnMessageQueryListener() {
             @Override
             public int onResult(int code, IMMessage message) {
+                Map<String, Object> map = message.getLocalExtension();
+                if (map != null) {
+                    if (map.containsKey("resend")) {
+                        return -1;
+                    }
+                }
                 IMMessage item = message;
                 item.setStatus(MsgStatusEnum.sending);
                 deleteItem(item, true);
@@ -888,6 +900,10 @@ public class SessionService {
             public void onFailed(int code) {
                 LogUtil.w(TAG, "code:" + code);
                 if (code == ResponseCode.RES_IN_BLACK_LIST) {
+                    Map<String, Object> map = MapBuilder.newHashMap();
+                    map.put("resend", false);
+                    message.setLocalExtension(map);
+                    getMsgService().updateIMMessage(message);
                     sendTipMessage("消息已发出，但被对方拒收了。", null, true, false);
                 }
             }
