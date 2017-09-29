@@ -1386,7 +1386,22 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
     @ReactMethod
     public void resendMessage(String messageId, final Promise promise) {
         LogUtil.w(TAG, "resendMessage" + messageId);
-        sessionService.resendMessage(messageId);
+        sessionService.queryMessage(messageId, new SessionService.OnMessageQueryListener() {
+            @Override
+            public int onResult(int code, IMMessage message) {
+                Map<String, Object> map = message.getLocalExtension();
+                if (map != null) {
+                    if (map.containsKey("resend")) {
+                        return -1;
+                    }
+                }
+                promise.resolve("200");
+                sessionService.resendMessage(message);
+
+                return 0;
+            }
+        });
+
     }
 
     /**

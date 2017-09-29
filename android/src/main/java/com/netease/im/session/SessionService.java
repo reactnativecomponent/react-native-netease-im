@@ -608,29 +608,16 @@ public class SessionService {
     /**
      * 重发消息到服务器
      *
-     * @param messageId
+     * @param item
      */
-    public void resendMessage(String messageId) {
+    public void resendMessage(IMMessage item) {
         // 重置状态为unsent
-        queryMessage(messageId, new OnMessageQueryListener() {
-            @Override
-            public int onResult(int code, IMMessage message) {
-                Map<String, Object> map = message.getLocalExtension();
-                if (map != null) {
-                    if (map.containsKey("resend")) {
-                        return -1;
-                    }
-                }
-                IMMessage item = message;
-                item.setStatus(MsgStatusEnum.sending);
-                deleteItem(item, true);
+        item.setStatus(MsgStatusEnum.sending);
+        deleteItem(item, true);
 //                onMsgSend(item);
 //                appendPushConfig(item);
 //                getMsgService().sendMessage(item, true);
-                sendMessageSelf(item, null, true);
-                return 0;
-            }
-        });
+        sendMessageSelf(item, null, true);
     }
 
     /**
