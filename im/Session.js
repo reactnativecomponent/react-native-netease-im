@@ -286,7 +286,9 @@ class Session {
         return RNNeteaseIm.updateAudioMessagePlayStatus(messageId);
     }
     getLaunch(){
-        return RNNeteaseIm.getLaunch();
+        if(Platform.OS === 'android') {
+            return RNNeteaseIm.getLaunch();
+        }
     }
 }
 module.exports = new Session();
