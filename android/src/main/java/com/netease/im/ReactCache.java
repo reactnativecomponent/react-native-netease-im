@@ -271,7 +271,7 @@ public class ReactCache {
                 map.putString("content", content);
                 array.pushMap(map);
             }
-            LogUtil.w(TAG, array + "");
+//            LogUtil.w(TAG, array + "");
         }
         writableMap.putArray("recents", array);
         writableMap.putString("unreadCount", Integer.toString(unreadNumTotal));
@@ -778,7 +778,7 @@ public class ReactCache {
                             type = MessageConstant.MsgType.CUSTON;
                             break;
                     }
-                }else {
+                } else {
                     type = MessageConstant.MsgType.CUSTON;
                 }
                 break;
@@ -790,8 +790,8 @@ public class ReactCache {
         return type;
     }
 
-    static String getMessageStatus(MsgStatusEnum statusEnum){
-        switch (statusEnum){
+    static String getMessageStatus(MsgStatusEnum statusEnum) {
+        switch (statusEnum) {
             case draft:
                 return MessageConstant.MsgStatus.SEND_DRAFT;
             case sending:
@@ -809,6 +809,7 @@ public class ReactCache {
         }
 
     }
+
     final static String MESSAGE_EXTEND = MessageConstant.Message.EXTEND;
 
     /**
@@ -842,20 +843,27 @@ public class ReactCache {
 
         WritableMap user = Arguments.createMap();
         String fromAccount = item.getFromAccount();
+        String avatar = null;
+
         String fromNick = null;
+        String displayName = null;
         try {
             fromNick = item.getFromNick();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        user.putString(MessageConstant.User.USER_ID, fromAccount);
+        if (!TextUtils.isEmpty(fromAccount)) {
 
-        if (item.getSessionType() == SessionTypeEnum.Team && !TextUtils.equals(LoginService.getInstance().getAccount(), fromAccount)) {
-            user.putString(MessageConstant.User.DISPLAY_NAME, getTeamUserDisplayName(item.getSessionId(), fromAccount));
-        } else {
-            user.putString(MessageConstant.User.DISPLAY_NAME, !TextUtils.isEmpty(fromNick) ? fromNick : NimUserInfoCache.getInstance().getUserDisplayName(fromAccount));
+
+            if (item.getSessionType() == SessionTypeEnum.Team && !TextUtils.equals(LoginService.getInstance().getAccount(), fromAccount)) {
+                displayName = getTeamUserDisplayName(item.getSessionId(), fromAccount);
+            } else {
+                displayName = !TextUtils.isEmpty(fromNick) ? fromNick : NimUserInfoCache.getInstance().getUserDisplayName(fromAccount);
+            }
+            avatar = NimUserInfoCache.getInstance().getAvatar(fromAccount);
         }
-        String avatar = NimUserInfoCache.getInstance().getAvatar(fromAccount);
+        user.putString(MessageConstant.User.DISPLAY_NAME, displayName);
+        user.putString(MessageConstant.User.USER_ID, fromAccount);
         user.putString(MessageConstant.User.AVATAR_PATH, avatar);
         itemMap.putMap(MessageConstant.Message.FROM_USER, user);
 

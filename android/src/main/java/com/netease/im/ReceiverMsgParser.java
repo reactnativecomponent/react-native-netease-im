@@ -80,29 +80,33 @@ public class ReceiverMsgParser {
     public static WritableMap getWritableMap(Intent intent) {
         WritableMap rr = Arguments.createMap();
         if (intent != null && canAutoLogin()) {
-            WritableMap r = Arguments.createMap();
+
             if (intent.hasExtra(NimIntent.EXTRA_NOTIFY_CONTENT)) {
                 ArrayList<IMMessage> messages = (ArrayList<IMMessage>) intent.getSerializableExtra(NimIntent.EXTRA_NOTIFY_CONTENT);
-                if (messages == null || messages.size() > 1) {
+                if (messages == null || messages.isEmpty()) {
                     rr.putString("type", "sessionList");
                 } else {
+                    WritableMap r = Arguments.createMap();
                     IMMessage message = messages.get(0);
                     rr.putString("type", "session");
                     r.putString("sessionType", Integer.toString(message.getSessionType().getValue()));
                     r.putString("sessionId", message.getSessionId());
                     r.putString("sessionName", SessionUtil.getSessionName(message.getSessionId(), message.getSessionType(), false));
+                    rr.putMap("sessionBody", r);
                 }
             } else if (intent.hasExtra(Extras.EXTRA_JUMP_P2P)) {
                 Intent data = intent.getParcelableExtra(Extras.EXTRA_DATA);
                 String account = data.getStringExtra(Extras.EXTRA_ACCOUNT);
                 if (!TextUtils.isEmpty(account)) {
+                    WritableMap r = Arguments.createMap();
                     rr.putString("type", "session");
                     r.putString("sessionType", Integer.toString(SessionTypeEnum.P2P.getValue()));
                     r.putString("sessionId", account);
                     r.putString("sessionName", SessionUtil.getSessionName(account, SessionTypeEnum.P2P, false));
+                    rr.putMap("sessionBody", r);
                 }
+
             }
-            rr.putMap("sessionBody", r);
             printIntent(intent);
         }
 

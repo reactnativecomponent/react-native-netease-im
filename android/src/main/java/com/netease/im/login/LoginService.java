@@ -34,6 +34,7 @@ public class LoginService {
     final static String TAG = "LoginService";
     // 自己的用户帐号
     private String account;
+    private String token;
     private AbortableFuture<LoginInfo> loginInfoFuture;
 
     private LoginService() {
@@ -62,7 +63,7 @@ public class LoginService {
     }
 
     public LoginInfo getLoginInfo(Context context) {
-        LoginInfo info = new LoginInfo(account, null);
+        LoginInfo info = new LoginInfo(account, token);
         return info;
     }
 
@@ -70,14 +71,21 @@ public class LoginService {
 
     }
 
-    public void login(LoginInfo loginInfo, final RequestCallback<LoginInfo> callback) {
-        loginInfoFuture = NIMClient.getService(AuthService.class).login(loginInfo);
+    public void autoLogin() {
+        login(getLoginInfo(null), null);
+    }
+
+    public void login(final LoginInfo loginInfoP, final RequestCallback<LoginInfo> callback) {
+        loginInfoFuture = NIMClient.getService(AuthService.class).login(loginInfoP);
         loginInfoFuture.setCallback(new RequestCallback<LoginInfo>() {
             @Override
             public void onSuccess(LoginInfo loginInfo) {
                 account = loginInfo.getAccount();
+                token = loginInfoP.getToken();
                 initLogin(loginInfo);
-                callback.onSuccess(loginInfo);
+                if (callback != null) {
+                    callback.onSuccess(loginInfo);
+                }
 
                 registerObserver(true);
                 startLogin();
@@ -87,14 +95,18 @@ public class LoginService {
 
             @Override
             public void onFailed(int code) {
-                callback.onFailed(code);
-                registerObserver(false);
+                if (callback != null) {
+                    callback.onFailed(code);
+                }
+                registerObserver(true);
                 loginInfoFuture = null;
             }
 
             @Override
             public void onException(Throwable exception) {
-                callback.onException(exception);
+                if (callback != null) {
+                    callback.onException(exception);
+                }
                 registerObserver(false);
                 loginInfoFuture = null;
             }
@@ -181,6 +193,7 @@ public class LoginService {
         // 清理缓存&注销监听&清除状态
         DataCacheManager.clearDataCache();
         account = null;
+        token = null;
         LoginSyncDataStatusObserver.getInstance().reset();
     }
 

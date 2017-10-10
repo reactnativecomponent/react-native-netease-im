@@ -150,6 +150,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
 //        LogUtil.w(TAG, "md5:" + MD5.getStringMD5(token));
 
         NIMClient.getService(AuthService.class).openLocalCache(contactId);
+        LogUtil.w(TAG, "s:" + NIMClient.getStatus().name());
         LoginService.getInstance().login(new LoginInfo(contactId, token), new RequestCallback<LoginInfo>() {
             @Override
             public void onSuccess(LoginInfo loginInfo) {
@@ -174,7 +175,6 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
 
             }
         });
-
     }
 
     /**
@@ -183,6 +183,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
     @ReactMethod
     public void logout() {
         LogUtil.w(TAG, "logout");
+        status = "";
         LoginService.getInstance().logout();
 
     }
@@ -1385,7 +1386,22 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
     @ReactMethod
     public void resendMessage(String messageId, final Promise promise) {
         LogUtil.w(TAG, "resendMessage" + messageId);
-        sessionService.resendMessage(messageId);
+        sessionService.queryMessage(messageId, new SessionService.OnMessageQueryListener() {
+            @Override
+            public int onResult(int code, IMMessage message) {
+                Map<String, Object> map = message.getLocalExtension();
+                if (map != null) {
+                    if (map.containsKey("resend")) {
+                        return -1;
+                    }
+                }
+                promise.resolve("200");
+                sessionService.resendMessage(message);
+
+                return 0;
+            }
+        });
+
     }
 
     /**
@@ -1944,6 +1960,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
             intent.putExtras(getIntent());
             reactContext.getCurrentActivity().setIntent(intent);
             ReactCache.emit(ReactCache.observeBackgroundPushEvent, ReceiverMsgParser.getWritableMap(intent));
+            launch = null;
         }
 
     }
@@ -1963,20 +1980,27 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
 
     @Override
     public void onHostResume() {
-        if (reactContext.getCurrentActivity() != null)
-            LogUtil.w(TAG, reactContext.getCurrentActivity().getClass().getPackage().getName());
-        LogUtil.w(TAG, "onHostResume");
 
-        if (!TextUtils.isEmpty(status)) {
-            WritableMap r = Arguments.createMap();
-            r.putString("status", status);
-            ReactCache.emit(ReactCache.observeOnKick, r);
-            status = "";
+        LogUtil.w(TAG, "onHostResume:" + status);
+
+        if (!TextUtils.isEmpty(status) && !"onHostPause".equals(status)) {
+            if (NIMClient.getStatus().wontAutoLogin()) {
+                WritableMap r = Arguments.createMap();
+                r.putString("status", status);
+                ReactCache.emit(ReactCache.observeOnKick, r);
+            }
         }
+//        if (NIMClient.getStatus().wontAutoLogin()) {
+//            Toast.makeText(IMApplication.getContext(), "您的帐号已在别的设备登录，请重新登陆", Toast.LENGTH_SHORT).show();
+//        }
+        status = "";
     }
 
     @Override
     public void onHostPause() {
+        if (TextUtils.isEmpty(status)) {
+            status = "onHostPause";
+        }
         LogUtil.w(TAG, "onHostPause");
     }
 

@@ -52,6 +52,8 @@ dependencies {
 
 ```
 import com.netease.im.uikit.permission.MPermission;
+import com.netease.im.RNNeteaseImModule;
+import com.netease.im.ReceiverMsgParser;
 
 public class MainActivity extends ReactActivity {
 
@@ -61,7 +63,6 @@ public class MainActivity extends ReactActivity {
      protected void onCreate(Bundle savedInstanceState) {
          super.onCreate(savedInstanceState);
          if(ReceiverMsgParser.checkOpen(getIntent())){//在后台时处理点击推送消息
-             ReactCache.emit(ReactCache.observeLaunchPushEvent, ReceiverMsgParser.getWritableMap(getIntent()));
              RNNeteaseImModule.launch = getIntent();
          }
      }

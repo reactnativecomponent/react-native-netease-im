@@ -5,9 +5,12 @@ import android.net.Uri;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
+import android.widget.Toast;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.common.MapBuilder;
+import com.netease.im.IMApplication;
 import com.netease.im.MessageConstant;
 import com.netease.im.MessageUtil;
 import com.netease.im.ReactCache;
@@ -558,6 +561,9 @@ public class SessionService {
         this.handler = handler;
         this.sessionId = sessionId;
 
+        if (NIMClient.getStatus().wontAutoLogin()) {
+            Toast.makeText(IMApplication.getContext(), "您的帐号已在别的设备登录，请重新登陆", Toast.LENGTH_SHORT).show();
+        }
         sessionTypeEnum = SessionUtil.getSessionType(type);
 
         if (sessionTypeEnum == SessionTypeEnum.P2P) {
@@ -602,23 +608,16 @@ public class SessionService {
     /**
      * 重发消息到服务器
      *
-     * @param messageId
+     * @param item
      */
-    public void resendMessage(String messageId) {
+    public void resendMessage(IMMessage item) {
         // 重置状态为unsent
-        queryMessage(messageId, new OnMessageQueryListener() {
-            @Override
-            public int onResult(int code, IMMessage message) {
-                IMMessage item = message;
-                item.setStatus(MsgStatusEnum.sending);
-                deleteItem(item, true);
+        item.setStatus(MsgStatusEnum.sending);
+        deleteItem(item, true);
 //                onMsgSend(item);
 //                appendPushConfig(item);
 //                getMsgService().sendMessage(item, true);
-                sendMessageSelf(item, null, true);
-                return 0;
-            }
-        });
+        sendMessageSelf(item, null, true);
     }
 
     /**
@@ -640,12 +639,13 @@ public class SessionService {
      * @param content
      */
     public void sendTipMessage(String content, OnSendMessageListener onSendMessageListener) {
-        sendTipMessage(content, onSendMessageListener, false);
+        sendTipMessage(content, onSendMessageListener, false, true);
     }
 
-    public void sendTipMessage(String content, OnSendMessageListener onSendMessageListener, boolean local) {
+    public void sendTipMessage(String content, OnSendMessageListener onSendMessageListener, boolean local, boolean enableUnreadCount) {
         CustomMessageConfig config = new CustomMessageConfig();
         config.enablePush = false; // 不推送
+        config.enableUnreadCount = enableUnreadCount;
         IMMessage message = MessageBuilder.createTipMessage(sessionId, sessionTypeEnum);
         if (sessionTypeEnum == SessionTypeEnum.Team) {
             Map<String, Object> contentMap = new HashMap<>(1);
@@ -866,9 +866,14 @@ public class SessionService {
             isFriend = NIMClient.getService(FriendService.class).isMyFriend(sessionId);
             LogUtil.w(TAG, "isFriend:" + isFriend);
             if (!isFriend) {
-                sendTipMessage(sessionName + "开启了朋友验证，你还不是他(她)朋友。请先发送朋友验证请求，对方验证后，才能聊天。发送朋友验证", null, true);
+
                 message.setStatus(MsgStatusEnum.fail);
+                CustomMessageConfig config = new CustomMessageConfig();
+                config.enablePush = false;
+                config.enableUnreadCount = false;
+                message.setConfig(config);
                 getMsgService().saveMessageToLocal(message, true);
+                sendTipMessage(sessionName + "开启了朋友验证，你还不是他(她)朋友。请先发送朋友验证请求，对方验证后，才能聊天。发送朋友验证", null, true, false);
                 return;
             }
         }
@@ -882,7 +887,11 @@ public class SessionService {
             public void onFailed(int code) {
                 LogUtil.w(TAG, "code:" + code);
                 if (code == ResponseCode.RES_IN_BLACK_LIST) {
-                    sendTipMessage("消息已发出，但被对方拒收了。", null, true);
+                    Map<String, Object> map = MapBuilder.newHashMap();
+                    map.put("resend", false);
+                    message.setLocalExtension(map);
+                    getMsgService().updateIMMessage(message);
+                    sendTipMessage("消息已发出，但被对方拒收了。", null, true, false);
                 }
             }
 
