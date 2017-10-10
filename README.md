@@ -53,6 +53,7 @@ dependencies {
 ```
 import com.netease.im.uikit.permission.MPermission;
 import com.netease.im.RNNeteaseImModule;
+import com.netease.im.ReceiverMsgParser;
 
 public class MainActivity extends ReactActivity {
 
