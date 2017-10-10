@@ -1960,6 +1960,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
             intent.putExtras(getIntent());
             reactContext.getCurrentActivity().setIntent(intent);
             ReactCache.emit(ReactCache.observeBackgroundPushEvent, ReceiverMsgParser.getWritableMap(intent));
+            launch = null;
         }
 
     }
