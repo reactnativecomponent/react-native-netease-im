@@ -216,70 +216,7 @@ RCT_EXPORT_METHOD(deleteFriend:(nonnull  NSString *)contactId resolve:(RCTPromis
     }];
 }
 
-//开始获取群组
-RCT_EXPORT_METHOD(startTeamList){
-    
-    [[TeamViewController initWithTeamViewController]initWithDelegate];
-}
-//创建群组
-RCT_EXPORT_METHOD(createTeam:(nonnull NSDictionary *)filelds type:(nonnull NSString *)type accounts:(nonnull NSArray *)accounts resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
-    [[TeamViewController initWithTeamViewController]createTeam:filelds type:type accounts:accounts Succ:^(id param) {
-        resolve(param);
-    } Err:^(id erro) {
-        reject(@"-1",erro,nil);
-    }];
-}
-//获取群回调列表
-RCT_EXPORT_METHOD(getTeamList:(nonnull NSString *)keyWord resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
-    [[TeamViewController initWithTeamViewController]getTeamList:^(id param) {
-        resolve(param);
-    } Err:^(id erro) {
-        reject(@"-1",erro,nil);
-    }];
-}
-//申请加入群组
-RCT_EXPORT_METHOD(applyJoinTeam:(nonnull NSString *)teamId reason:(nonnull NSString *)reason  resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
-    
-    [[TeamViewController initWithTeamViewController]applyJoinTeam:teamId message:reason Succ:^(id param) {
-        resolve(param);
-    } Err:^(id erro) {
-        reject(@"-1",erro,nil);
-    }];
-}
-//获取本地群资料
-RCT_EXPORT_METHOD(getTeamInfo:(nonnull NSString *)teamId resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
-    [[TeamViewController initWithTeamViewController]getTeamInfo:teamId Succ:^(id param) {
-        resolve(param);
-    } Err:^(id erro) {
-        reject(@"-1",erro, nil);
-    }];
-}
-//获取远程群资料
-RCT_EXPORT_METHOD(fetchTeamInfo:(nonnull NSString *)teamId resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
-    [[TeamViewController initWithTeamViewController]fetchTeamInfo:teamId Succ:^(id param) {
-        resolve(param);
-    } Err:^(id erro) {
-        reject(@"-1",erro,nil);
-    }];
-}
-//获取群成员
-RCT_EXPORT_METHOD(fetchTeamMemberList:(nonnull NSString *)teamId resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
-    [[TeamViewController initWithTeamViewController] getTeamMemberList:teamId Succ:^(id param) {
-        resolve(param);
-    } Err:^(id erro) {
-        reject(@"-1",erro,nil);
-    }];
-}
-//开启/关闭群组消息提醒
-RCT_EXPORT_METHOD(setTeamNotify:(nonnull NSString *)teamId needNotify:(nonnull NSString *)needNotify resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
-    __weak typeof(self)weakSelf = self;
-    [[TeamViewController initWithTeamViewController]muteTeam:teamId mute:needNotify Succ:^(id param) {
-        resolve(param);
-        [weakSelf updateMessageList];
-    } Err:^(id erro) {
-        reject(@"-1",erro,nil);
-    }];
-}
+
 //好友消息提醒开关
 RCT_EXPORT_METHOD(setMessageNotify:(nonnull NSString *)contactId needNotify:(nonnull NSString *)needNotify resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
     __weak typeof(self)weakSelf = self;
@@ -290,65 +227,22 @@ RCT_EXPORT_METHOD(setMessageNotify:(nonnull NSString *)contactId needNotify:(non
         reject(@"-1",erro,nil);
     }];
 }
+
 //刷新最近会话列表
 - (void)updateMessageList{
     [[NIMViewController initWithController]getResouces];
     NSLog(@"---updateMessageList");
 }
 
-//解散群
-RCT_EXPORT_METHOD(dismissTeam:(nonnull NSString *)teamId resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
-    [[TeamViewController initWithTeamViewController] dismissTeam:teamId Succ:^(id param) {
-        resolve(param);
-    } Err:^(id erro) {
-        reject(@"-1",erro,nil);
-    }];
+//删除最近会话列表
+- (void)removAllRecentSessions{
+    id<NIMConversationManager> manager = [[NIMSDK sharedSDK] conversationManager];
+    //    [manager deleteAllMessages:YES];
+    NIMDeleteMessagesOption *option = [[NIMDeleteMessagesOption alloc]init];
+    option.removeSession = YES;
+    [manager deleteAllMessages:option];
 }
-//拉人入群
-RCT_EXPORT_METHOD(addMembers:(nonnull NSString *)teamId accounts:(nonnull NSArray *)accounts resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
-    [[TeamViewController initWithTeamViewController] addMembers:teamId accounts:accounts Succ:^(id param) {
-        resolve(param);
-    } Err:^(id erro) {
-        reject(@"-1",erro,nil);
-    }];
-}
-//踢人出群
-RCT_EXPORT_METHOD(removeMember:(nonnull NSString *)teamId accounts:(nonnull NSArray *)count resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
-    [[TeamViewController initWithTeamViewController] removeMember:teamId accounts:count Succ:^(id param) {
-        resolve(param);
-    } Err:^(id erro) {
-        reject(@"-1",erro,nil);
-    }];
-}
-//主动退群
-RCT_EXPORT_METHOD(quitTeam:(nonnull NSString *)teamId  resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
-    [[TeamViewController initWithTeamViewController]quitTeam:teamId Succ:^(id param) {
-        resolve(param);
-    } Err:^(id erro) {
-        reject(@"-1",erro,nil);
-    }];
-}
-//转让群组
-RCT_EXPORT_METHOD(transferTeam:(nonnull NSString *)teamId account:(nonnull NSString *)account quit:(nonnull NSString *)quit resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
-    [[TeamViewController initWithTeamViewController] transferManagerWithTeam:teamId newOwnerId:account quit:quit Succ:^(id param) {
-        resolve(param);
-    } Err:^(id erro) {
-        reject(@"-1",erro,nil);
-    }];
-}
-//修改群昵称
-RCT_EXPORT_METHOD(updateTeamName:(nonnull NSString *)teamId nick:(nonnull NSString *)nick  resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
-    [[TeamViewController initWithTeamViewController] updateTeamName:teamId nick:nick Succ:^(id param) {
-        resolve(param);
-    } Err:^(id erro) {
-        reject(@"-1",erro,nil);
-    }];
-}
-//退出讨论组列表
-RCT_EXPORT_METHOD(stopTeamList){
-    [[TeamViewController initWithTeamViewController]stopTeamList];
-}
-//
+
 //获取系统消息
 RCT_EXPORT_METHOD(startSystemMsg){
     [[NoticeViewController initWithNoticeViewController] initWithDelegate];
@@ -527,6 +421,174 @@ RCT_EXPORT_METHOD(removeFromBlackList:(nonnull NSString *)contactId  resolve:(RC
     }];
 }
 
+
+#pragma mark -- team方法 -----------------------------------------------
+
+//获取群回调列表
+RCT_EXPORT_METHOD(getTeamList:(nonnull NSString *)keyWord resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
+    [[TeamViewController initWithTeamViewController]getTeamList:^(id param) {
+        resolve(param);
+    } Err:^(id erro) {
+        reject(@"-1",erro,nil);
+    }];
+}
+
+//开始获取群组
+RCT_EXPORT_METHOD(startTeamList){
+    
+    [[TeamViewController initWithTeamViewController]initWithDelegate];
+}
+
+//退出讨论组列表
+RCT_EXPORT_METHOD(stopTeamList){
+    [[TeamViewController initWithTeamViewController]stopTeamList];
+}
+
+//获取本地群资料
+RCT_EXPORT_METHOD(getTeamInfo:(nonnull NSString *)teamId resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
+    [[TeamViewController initWithTeamViewController]getTeamInfo:teamId Succ:^(id param) {
+        resolve(param);
+    } Err:^(id erro) {
+        reject(@"-1",erro, nil);
+    }];
+}
+
+//开启/关闭群组消息提醒
+RCT_EXPORT_METHOD(setTeamNotify:(nonnull NSString *)teamId needNotify:(nonnull NSString *)needNotify resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
+    __weak typeof(self)weakSelf = self;
+    [[TeamViewController initWithTeamViewController]muteTeam:teamId mute:needNotify Succ:^(id param) {
+        resolve(param);
+        [weakSelf updateMessageList];
+    } Err:^(id erro) {
+        reject(@"-1",erro,nil);
+    }];
+}
+
+//群成员禁言 mute字符串:0是false 1是true
+RCT_EXPORT_METHOD(setTeamMemberMute:(nonnull NSString *)teamId contactId:(nonnull NSString *)contactId mute:(nonnull NSString *)mute resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
+    [[TeamViewController initWithTeamViewController]setTeamMemberMute:teamId contactId:contactId mute:mute Succ:^(id param) {
+        resolve(param);
+    } Err:^(id erro) {
+        reject(@"-1",erro,nil);
+    }];
+}
+
+//获取服务器群资料
+RCT_EXPORT_METHOD(fetchTeamInfo:(nonnull NSString *)teamId resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
+    [[TeamViewController initWithTeamViewController]fetchTeamInfo:teamId Succ:^(id param) {
+        resolve(param);
+    } Err:^(id erro) {
+        reject(@"-1",erro,nil);
+    }];
+}
+//获取服务器群成员资料
+RCT_EXPORT_METHOD(fetchTeamMemberList:(nonnull NSString *)teamId resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
+    [[TeamViewController initWithTeamViewController] getTeamMemberList:teamId Succ:^(id param) {
+        resolve(param);
+    } Err:^(id erro) {
+        reject(@"-1",erro,nil);
+    }];
+}
+
+//获取群成员资料及设置
+RCT_EXPORT_METHOD(fetchTeamMemberInfo:(nonnull NSString *)teamId contactId:(nonnull NSString *)contactId resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
+    [[TeamViewController initWithTeamViewController] fetchTeamMemberInfo:teamId  contactId:contactId Succ:^(id param) {
+        resolve(param);
+    } Err:^(id erro) {
+        reject(@"-1",erro,nil);
+    }];
+}
+
+//更新群成员名片
+RCT_EXPORT_METHOD(updateMemberNick:(nonnull NSString *)teamId contactId:(nonnull NSString *)contactId nick:(nonnull NSString*)nick resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
+    [[TeamViewController initWithTeamViewController]updateMemberNick:teamId contactId:contactId nick:nick Succ:^(id param) {
+        resolve(param);
+    } Err:^(id erro) {
+        reject(@"-1",erro,nil);
+    }];
+}
+
+//创建群组
+RCT_EXPORT_METHOD(createTeam:(nonnull NSDictionary *)filelds type:(nonnull NSString *)type accounts:(nonnull NSArray *)accounts resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
+    [[TeamViewController initWithTeamViewController]createTeam:filelds type:type accounts:accounts Succ:^(id param) {
+        resolve(param);
+    } Err:^(id erro) {
+        reject(@"-1",erro,nil);
+    }];
+}
+
+//更新群资料,
+RCT_EXPORT_METHOD(updateTeam:(nonnull NSString *)teamId fieldType:(nonnull NSString *)fieldType value:(nonnull NSString*)value resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
+    [[TeamViewController initWithTeamViewController]updateTeam:teamId fieldType:fieldType value:value Succ:^(id param) {
+        resolve(param);
+    } Err:^(id erro) {
+        reject(@"-1",erro,nil);
+    }];
+}
+
+
+//申请加入群组
+RCT_EXPORT_METHOD(applyJoinTeam:(nonnull NSString *)teamId reason:(nonnull NSString *)reason  resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
+    
+    [[TeamViewController initWithTeamViewController]applyJoinTeam:teamId message:reason Succ:^(id param) {
+        resolve(param);
+    } Err:^(id erro) {
+        reject(@"-1",erro,nil);
+    }];
+}
+
+//解散群组
+RCT_EXPORT_METHOD(dismissTeam:(nonnull NSString *)teamId resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
+    [[TeamViewController initWithTeamViewController] dismissTeam:teamId Succ:^(id param) {
+        resolve(param);
+    } Err:^(id erro) {
+        reject(@"-1",erro,nil);
+    }];
+}
+
+//拉人入群
+RCT_EXPORT_METHOD(addMembers:(nonnull NSString *)teamId accounts:(nonnull NSArray *)accounts resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
+    [[TeamViewController initWithTeamViewController] addMembers:teamId accounts:accounts Succ:^(id param) {
+        resolve(param);
+    } Err:^(id erro) {
+        reject(@"-1",erro,nil);
+    }];
+}
+//踢人出群
+RCT_EXPORT_METHOD(removeMember:(nonnull NSString *)teamId accounts:(nonnull NSArray *)count resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
+    [[TeamViewController initWithTeamViewController] removeMember:teamId accounts:count Succ:^(id param) {
+        resolve(param);
+    } Err:^(id erro) {
+        reject(@"-1",erro,nil);
+    }];
+}
+//主动退群
+RCT_EXPORT_METHOD(quitTeam:(nonnull NSString *)teamId  resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
+    [[TeamViewController initWithTeamViewController]quitTeam:teamId Succ:^(id param) {
+        resolve(param);
+    } Err:^(id erro) {
+        reject(@"-1",erro,nil);
+    }];
+}
+//转让群组
+RCT_EXPORT_METHOD(transferTeam:(nonnull NSString *)teamId account:(nonnull NSString *)account quit:(nonnull NSString *)quit resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
+    [[TeamViewController initWithTeamViewController] transferManagerWithTeam:teamId newOwnerId:account quit:quit Succ:^(id param) {
+        resolve(param);
+    } Err:^(id erro) {
+        reject(@"-1",erro,nil);
+    }];
+}
+//修改群昵称
+RCT_EXPORT_METHOD(updateTeamName:(nonnull NSString *)teamId nick:(nonnull NSString *)nick  resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
+    [[TeamViewController initWithTeamViewController] updateTeamName:teamId nick:nick Succ:^(id param) {
+        resolve(param);
+    } Err:^(id erro) {
+        reject(@"-1",erro,nil);
+    }];
+}
+
+
+#pragma mark ---- 获得缓存和处理缓存
 //获取缓存大小
 RCT_EXPORT_METHOD(getCacheSize:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
     NSString *documentPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
@@ -625,14 +687,7 @@ RCT_EXPORT_METHOD(cleanCache){
     }
     return folderSize/(1024.0*1024.0);
 }
-//删除最近会话列表
-- (void)removAllRecentSessions{
-    id<NIMConversationManager> manager = [[NIMSDK sharedSDK] conversationManager];
-//    [manager deleteAllMessages:YES];
-    NIMDeleteMessagesOption *option = [[NIMDeleteMessagesOption alloc]init];
-    option.removeSession = YES;
-    [manager deleteAllMessages:option];
-}
+
 
 - (void)initController{
     [self setSendState];
