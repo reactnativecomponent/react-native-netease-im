@@ -37,6 +37,7 @@ import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.RequestCallbackWrapper;
 import com.netease.nimlib.sdk.ResponseCode;
+import com.netease.nimlib.sdk.StatusCode;
 import com.netease.nimlib.sdk.friend.FriendService;
 import com.netease.nimlib.sdk.msg.MessageBuilder;
 import com.netease.nimlib.sdk.msg.MsgService;
@@ -561,7 +562,7 @@ public class SessionService {
         this.handler = handler;
         this.sessionId = sessionId;
 
-        if (NIMClient.getStatus().wontAutoLogin()) {
+        if (NIMClient.getStatus()!= StatusCode.PWD_ERROR&&NIMClient.getStatus().wontAutoLogin()) {
             Toast.makeText(IMApplication.getContext(), "您的帐号已在别的设备登录，请重新登陆", Toast.LENGTH_SHORT).show();
         }
         sessionTypeEnum = SessionUtil.getSessionType(type);

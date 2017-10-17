@@ -25,14 +25,20 @@ android {
     lintOptions {
         abortOnError false
     }
+    repositories {
+        mavenCentral()
+        flatDir {
+            dirs 'aars'
+        }
+    }
 }
 
-repositories {
-    mavenCentral()
-}
+
 
 dependencies {
     compile fileTree(include: '*.jar', dir: 'libs')
+    compile(name: 'HMS-SDK-2.4.0.300', ext: 'aar')
+//    compile 'com.huawei.android.hms:push:2.4.0.300'
     compile 'com.facebook.react:react-native:+'
 }
   

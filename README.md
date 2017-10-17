@@ -42,6 +42,14 @@ project(':react-native-netease-im').projectDir = new File(settingsDir, '../node_
 // file: android/app/build.gradle
 ...
 
+android {
+    ...
+    repositories {
+        flatDir {
+            dirs 'aars', '../../node_modules/react-native-netease-im/android/aars'
+        }
+    }
+}
 dependencies {
     ...
     compile project(':react-native-netease-im')
@@ -226,6 +234,17 @@ UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTy
              <meta-data
                         android:name="com.netease.nim.appKey"
                         android:value="App Key" />
+
+             <!-- ${HUAWEI_APP_ID}替换为华为推送平台配置的应用appid -->
+             <meta-data
+                 android:name="com.huawei.hms.client.appid"
+                 android:value="${HUAWEI_APP_ID}" />
+             <!-- com.im.demo替换为自己的包名 -->
+             <provider
+                 android:name="com.huawei.hms.update.provider.UpdateProvider"
+                 android:authorities="com.im.demo.hms.update.provider"
+                 android:exported="false"
+                 android:grantUriPermissions="true"></provider>
 
 ```
 

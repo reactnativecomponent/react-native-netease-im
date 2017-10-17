@@ -84,7 +84,7 @@ public class IMApplication {
     private static ImageLoaderKit imageLoaderKit;
     private static StatusBarNotificationConfig statusBarNotificationConfig;
 
-    public static void init(Context context, Class mainActivityClass, @DrawableRes int notify_msg_drawable_id, MiPushConfig miPushConfig) {
+    public static void init(Context context, Class mainActivityClass, @DrawableRes int notify_msg_drawable_id, MiPushConfig miPushConfig,String huaweiCertificate) {
         IMApplication.context = context.getApplicationContext();
         IMApplication.mainActivityClass = mainActivityClass;
         IMApplication.notify_msg_drawable_id = notify_msg_drawable_id;
@@ -92,6 +92,10 @@ public class IMApplication {
         // 注册小米推送appID 、appKey 以及在云信管理后台添加的小米推送证书名称，该逻辑放在 NIMClient init 之前
         if (miPushConfig != null) {
             NIMPushClient.registerMiPush(context, miPushConfig.certificate, miPushConfig.appID, miPushConfig.appKey);
+
+        }
+        if(!TextUtils.isEmpty(huaweiCertificate)){
+            NIMPushClient.registerHWPush(context, huaweiCertificate);
         }
 
         NIMClient.init(context, getLoginInfo(), getOptions(context));
