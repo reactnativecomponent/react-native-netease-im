@@ -22,6 +22,7 @@ public class MessageConstant {
         public final static String RED_PACKET = "redpacket";
         public final static String RED_PACKET_OPEN = "redpacketOpen";
         public final static String LINK = "url";
+        public final static String CARD = "card";
         public final static String CUSTON = "custom";
     }
 
@@ -117,6 +118,13 @@ public class MessageConstant {
         public final static String SEND_ID = "sendId";
         public final static String OPEN_ID = "openId";
 
+    }
+
+    public static class Card{
+        public final static String type = "type";
+        public final static String name = "name";
+        public final static String imgPath = "imgPath";
+        public final static String sessionId = "sessionId";
     }
 
     public static class Opt {

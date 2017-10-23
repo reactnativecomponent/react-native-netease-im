@@ -11,6 +11,7 @@ import com.netease.im.common.ImageLoaderKit;
 import com.netease.im.login.LoginService;
 import com.netease.im.session.extension.AccountNoticeAttachment;
 import com.netease.im.session.extension.BankTransferAttachment;
+import com.netease.im.session.extension.CardAttachment;
 import com.netease.im.session.extension.CustomAttachment;
 import com.netease.im.session.extension.CustomAttachmentType;
 import com.netease.im.session.extension.DefaultCustomAttachment;
@@ -255,6 +256,17 @@ public class ReactCache {
                                 } else {
                                     content = rpOpen.getTipMsg(false);
                                 }
+                            }
+                            break;
+                        case CustomAttachmentType.Card:
+                            if (attachment instanceof RedPacketOpenAttachement) {
+                                String str = "";
+                                if (fromAccount.equals(LoginService.getInstance().getAccount())) {
+                                    str = "推荐了";
+                                } else {
+                                    str = "向你推荐了";
+                                }
+                                content = str + ((CardAttachment) attachment).getName();
                             }
                             break;
                         default:
@@ -774,6 +786,9 @@ public class ReactCache {
                         case CustomAttachmentType.RedPacketOpen:
                             type = MessageConstant.MsgType.RED_PACKET_OPEN;
                             break;
+                        case CustomAttachmentType.Card:
+                            type = MessageConstant.MsgType.CARD;
+                            break;
                         default:
                             type = MessageConstant.MsgType.CUSTON;
                             break;
@@ -964,6 +979,12 @@ public class ReactCache {
 //                                    return null;
 //                                }
                                 itemMap.putMap(MESSAGE_EXTEND, rpOpen.toReactNative());
+                            }
+                            break;
+                        case CustomAttachmentType.Card:
+                            if (attachment instanceof CardAttachment) {
+                                CardAttachment cardAttachment = (CardAttachment) attachment;
+                                itemMap.putMap(MESSAGE_EXTEND, cardAttachment.toReactNative());
                             }
                             break;
                         default:

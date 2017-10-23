@@ -1138,6 +1138,17 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
         });
     }
 
+    @ReactMethod
+    public void sendCardMessage(String type, String name, String imgPath,String sessionId, final Promise promise){
+        sessionService.sendCardMessage(type,  name,  imgPath, sessionId, new SessionService.OnSendMessageListener() {
+            @Override
+            public int onResult(int code, IMMessage message) {
+                return 0;
+            }
+        });
+
+    }
+
     //5.发送自定义消息
 //    attachment, // 自定义消息附件
 //    config // 自定义消息的参数配置选项
