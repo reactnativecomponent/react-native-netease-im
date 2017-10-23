@@ -761,10 +761,10 @@ public class SessionService {
         sendMessageSelf(message, onSendMessageListener, false);
     }
 
-    public void sendCardMessage(String type, String name, String imgPath, String sessionId, OnSendMessageListener onSendMessageListener) {
+    public void sendCardMessage(String type, String name, String imgPath, String id, OnSendMessageListener onSendMessageListener) {
         CustomMessageConfig config = new CustomMessageConfig();
         CardAttachment attachment = new CardAttachment();
-        attachment.setParams(type, name, imgPath, sessionId);
+        attachment.setParams(type, name, imgPath, id);
         IMMessage message = MessageBuilder.createCustomMessage(sessionId, sessionTypeEnum, "[名片] " + name, attachment, config);
         sendMessageSelf(message, onSendMessageListener, false);
     }
