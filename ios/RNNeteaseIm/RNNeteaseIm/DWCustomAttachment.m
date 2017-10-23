@@ -28,6 +28,9 @@
         case CustomMessgeTypeRedPacketOpenMessage:
             strType = @"redpacketOpen";
             break;
+        case CustomMessgeTypeBusinessCard:
+            strType = @"card";
+            break;
         default:
             break;
     }

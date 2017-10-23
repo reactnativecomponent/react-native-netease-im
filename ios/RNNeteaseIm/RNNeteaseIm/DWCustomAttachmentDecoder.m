@@ -33,6 +33,8 @@
                 custType = CustomMessgeTypeAccountNotice;
             }else if ([strType isEqualToString:@"redpacketOpen"]){//拆红包消息
                 custType = CustomMessgeTypeRedPacketOpenMessage;
+            }else if([strType isEqualToString:@"card"]){//名片
+                custType = CustomMessgeTypeBusinessCard;
             }
             NSDictionary *dataDict = [self jsonDict:@"data" andDict:dict];
             DWCustomAttachment *obj = [[DWCustomAttachment alloc]init];

@@ -324,6 +324,12 @@
                         }
                     }
                         break;
+                    case CustomMessgeTypeBusinessCard://名片
+                    {
+                        [dic setObject:obj.dataDict  forKey:@"extend"];
+                        [dic setObject:@"card" forKey:@"msgType"];
+                    }
+                        break;
                     default:
                         break;
                         
@@ -495,6 +501,12 @@
     }
     [[NIMSDK sharedSDK].conversationManager saveMessage:message forSession:_session completion:nil];
     
+}
+
+//发送名片
+- (void)sendCardMessage:(NSString *)type sessionId:(NSString *)sessionId name:(NSString *)name imgPath:(NSString *)strImgPath{
+    NSDictionary *dict = @{@"type":type,@"name":name,@"imgPath":strImgPath,@"sessionId":sessionId};
+    [self sendCustomMessage:CustomMessgeTypeBusinessCard data:dict];
 }
 
 // dict字典转json字符串
@@ -973,8 +985,12 @@
                         [dic2 setObject:@"url" forKey:@"msgType"];
                     }
                 }
-                    
                     break;
+                case CustomMessgeTypeBusinessCard://名片
+                {
+                    [dic2 setObject:obj.dataDict  forKey:@"extend"];
+                    [dic2 setObject:@"card" forKey:@"msgType"];
+                }
                 default:
                     break;
             }

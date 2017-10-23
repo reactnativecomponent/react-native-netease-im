@@ -79,6 +79,11 @@
             message.setting = seting;
         }
             break;
+        case CustomMessgeTypeBusinessCard: //名片
+        {
+            text = [NSString stringWithFormat:@"[名片]%@", [attachment.dataDict objectForKey:@"name"]];
+        }
+            break;
         default:
             text = @"发来了一条未知消息";
             break;

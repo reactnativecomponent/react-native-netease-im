@@ -388,6 +388,15 @@
                 text = [self dealWithData:obj.dataDict];
             }
                 break;
+            case CustomMessgeTypeBusinessCard: //名片
+            {
+                if([message.from isEqualToString:[NIMSDK sharedSDK].loginManager.currentAccount]){//如果是自己
+                    text = [NSString stringWithFormat:@"你推荐了%@", [obj.dataDict objectForKey:@"name"]];
+                }else{
+                    text = [NSString stringWithFormat:@"向你推荐了%@", [obj.dataDict objectForKey:@"name"]];
+                }
+            }
+                break;
             default:
                 text = @"[未知消息]";
                 break;
