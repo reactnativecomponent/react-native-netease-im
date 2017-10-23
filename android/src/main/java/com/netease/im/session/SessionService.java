@@ -16,6 +16,7 @@ import com.netease.im.MessageUtil;
 import com.netease.im.ReactCache;
 import com.netease.im.login.LoginService;
 import com.netease.im.session.extension.BankTransferAttachment;
+import com.netease.im.session.extension.CardAttachment;
 import com.netease.im.session.extension.CustomAttachment;
 import com.netease.im.session.extension.CustomAttachmentType;
 import com.netease.im.session.extension.DefaultCustomAttachment;
@@ -98,6 +99,7 @@ public class SessionService {
 
     private SessionService() {
     }
+
 
     static class InstanceHolder {
         final static SessionService instance = new SessionService();
@@ -756,6 +758,14 @@ public class SessionService {
         RedPacketAttachement attachment = new RedPacketAttachement();
         attachment.setParams(type, comments, serialNo);
         IMMessage message = MessageBuilder.createCustomMessage(sessionId, sessionTypeEnum, comments, attachment, config);
+        sendMessageSelf(message, onSendMessageListener, false);
+    }
+
+    public void sendCardMessage(String type, String name, String imgPath, String sessionId, OnSendMessageListener onSendMessageListener) {
+        CustomMessageConfig config = new CustomMessageConfig();
+        CardAttachment attachment = new CardAttachment();
+        attachment.setParams(type, name, imgPath, sessionId);
+        IMMessage message = MessageBuilder.createCustomMessage(sessionId, sessionTypeEnum, "[名片] " + name, attachment, config);
         sendMessageSelf(message, onSendMessageListener, false);
     }
 

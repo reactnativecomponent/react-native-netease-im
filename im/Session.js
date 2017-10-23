@@ -164,7 +164,17 @@ class Session {
         return RNNeteaseIm.sendRedPacketMessage(type, comments, serialNo);
     }
 
-
+    /**
+     * 名片
+     * @param type 个人名片 群名片 公众号名片
+     * @param name
+     * @param imgPath
+     * @param sessionId
+     * @returns {*}
+     */
+    sendCardMessage(type, name, imgPath, sessionId){
+        return RNNeteaseIm.sendCardMessage(type, name, imgPath, sessionId);
+    }
     /**
      * 拆红包
      * @param sendId 发送红包的sessionId

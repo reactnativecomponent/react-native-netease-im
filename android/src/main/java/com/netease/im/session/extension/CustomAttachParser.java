@@ -39,6 +39,9 @@ public class CustomAttachParser implements MsgAttachmentParser {
                 case CustomAttachmentType.AccountNotice:
                     attachment = new AccountNoticeAttachment();
                     break;
+                case CustomAttachmentType.Card:
+                    attachment = new CardAttachment();
+                    break;
                 default:
                     attachment = new DefaultCustomAttachment(type);
                     break;
