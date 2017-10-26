@@ -982,6 +982,7 @@
                     [dic2 setObject:obj.dataDict  forKey:@"extend"];
                     [dic2 setObject:@"card" forKey:@"msgType"];
                 }
+                    break;
                 default:
                 {
                     [dic2 setObject:obj.dataDict  forKey:@"extend"];
