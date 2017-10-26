@@ -259,8 +259,8 @@ public class ReactCache {
                             }
                             break;
                         case CustomAttachmentType.Card:
-                            if (attachment instanceof RedPacketOpenAttachement) {
-                                String str = "";
+                            if (attachment instanceof CardAttachment) {
+                                String str;
                                 if (fromAccount.equals(LoginService.getInstance().getAccount())) {
                                     str = "推荐了";
                                 } else {
@@ -273,7 +273,7 @@ public class ReactCache {
                             if (attachment instanceof DefaultCustomAttachment) {
                                 content = ((DefaultCustomAttachment) attachment).getDigst();
                                 if (TextUtils.isEmpty(content)) {
-                                    content = "[自定义消息]";
+                                    content = "[未知消息]";
                                 }
                             }
                             break;
