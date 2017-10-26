@@ -32,6 +32,7 @@
             strType = @"card";
             break;
         default:
+            strType = @"unknown";
             break;
     }
     

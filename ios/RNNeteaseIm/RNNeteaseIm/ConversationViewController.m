@@ -178,8 +178,7 @@
         
         if (message.messageType == NIMMessageTypeText) {
             [dic setObject:@"text" forKey:@"msgType"];
-        }
-        if (message.messageType  == NIMMessageTypeImage) {
+        }else if (message.messageType  == NIMMessageTypeImage) {
             [dic setObject:@"image" forKey:@"msgType"];
             NIMImageObject *object = message.messageObject;
             [dic setObject:[NSString stringWithFormat:@"%@", [object thumbPath]] forKey:@"mediaPath"];
@@ -190,8 +189,7 @@
             [imgObj setObject:[NSString stringWithFormat:@"%f",[object size].height] forKey:@"imageHeight"];
             [imgObj setObject:[NSString stringWithFormat:@"%f",[object size].width] forKey:@"imageWidth"];
             [dic setObject:imgObj forKey:@"extend"];
-        }
-        if(message.messageType == NIMMessageTypeAudio){
+        }else if(message.messageType == NIMMessageTypeAudio){
             [dic setObject:@"voice" forKey:@"msgType"];
             NIMAudioObject *object = message.messageObject;
             [dic setObject:[NSString stringWithFormat:@"%@",object.path] forKey:@"mediaPath"];
@@ -202,8 +200,7 @@
             [voiceObj setObject:[NSString stringWithFormat:@"%zd",(object.duration/1000)] forKey:@"duration"];
             [voiceObj setObject:[NSNumber  numberWithBool:message.isPlayed] forKey:@"isPlayed"];
             [dic setObject:voiceObj forKey:@"extend"];
-        }
-        if(message.messageType == NIMMessageTypeVideo ){
+        }else if(message.messageType == NIMMessageTypeVideo ){
             [dic setObject:@"video" forKey:@"msgType"];
             NIMVideoObject *object = message.messageObject;
             
@@ -236,8 +233,7 @@
                     NSLog(@"下载进度%.f",progress);
                 }];
             }
-        }
-        if(message.messageType == NIMMessageTypeLocation){
+        }else if(message.messageType == NIMMessageTypeLocation){
             [dic setObject:@"location" forKey:@"msgType"];
             NIMLocationObject *object = message.messageObject;
             NSMutableDictionary *locationObj = [NSMutableDictionary dictionary];
@@ -246,14 +242,12 @@
             [locationObj setObject:[NSString stringWithFormat:@"%@", object.title ] forKey:@"title"];
             [dic setObject:locationObj forKey:@"extend"];
             
-        }
-        if(message.messageType == NIMMessageTypeTip){//提醒类消息
+        }else if(message.messageType == NIMMessageTypeTip){//提醒类消息
             [dic setObject:@"notification" forKey:@"msgType"];
             NSMutableDictionary *notiObj = [NSMutableDictionary dictionary];
             [notiObj setObject:message.text forKey:@"tipMsg"];
             [dic setObject:notiObj forKey:@"extend"];
-        }
-        if (message.messageType == NIMMessageTypeNotification) {
+        }else if (message.messageType == NIMMessageTypeNotification) {
             [dic setObject:@"notification" forKey:@"msgType"];
             NSMutableDictionary *notiObj = [NSMutableDictionary dictionary];
             NIMNotificationObject *object = message.messageObject;
@@ -267,8 +261,6 @@
                 }
                 case NIMNotificationTypeNetCall:{
                     [notiObj setObject:[NIMKitUtil messageTipContent:message]forKey:@"tipMsg"];
-                    
-                    
                     break;
                 }
                 default:
@@ -276,9 +268,7 @@
             }
             [dic setObject:notiObj forKey:@"extend"];
             
-        }
-        
-        if (message.messageType == NIMMessageTypeCustom) {
+        }else if (message.messageType == NIMMessageTypeCustom) {
             NIMCustomObject *customObject = message.messageObject;
             DWCustomAttachment *obj = customObject.attachment;
             if (obj) {
@@ -331,10 +321,18 @@
                     }
                         break;
                     default:
+                    {
+                        [dic setObject:obj.dataDict  forKey:@"extend"];
+                        [dic setObject:@"unknown" forKey:@"msgType"];
+                    }
                         break;
                         
                 }
             }
+        }else{
+            [dic setObject:@"unknown" forKey:@"msgType"];
+            NSMutableDictionary *unknowObj = [NSMutableDictionary dictionary];
+            [dic setObject:unknowObj  forKey:@"extend"];
         }
         [dic setObject:fromUser forKey:@"fromUser"];
         [sourcesArr addObject:dic];
@@ -843,8 +841,7 @@
     [dic2 setObject:fromUser forKey:@"fromUser"];
     if (message.messageType == NIMMessageTypeText) {
         [dic2 setObject:@"text" forKey:@"msgType"];
-    }
-    if (message.messageType  == NIMMessageTypeImage) {
+    }else if (message.messageType  == NIMMessageTypeImage) {
         [dic2 setObject:@"image" forKey:@"msgType"];
         NIMImageObject *object = message.messageObject;
         [dic2 setObject:[NSString stringWithFormat:@"%@", [object thumbPath]] forKey:@"mediaPath"];
@@ -855,8 +852,7 @@
         [imgObj setObject:[NSString stringWithFormat:@"%f",[object size].height] forKey:@"imageHeight"];
         [imgObj setObject:[NSString stringWithFormat:@"%f",[object size].width] forKey:@"imageWidth"];
         [dic2 setObject:imgObj forKey:@"extend"];
-    }
-    if(message.messageType == NIMMessageTypeAudio){
+    }else if(message.messageType == NIMMessageTypeAudio){
         [dic2 setObject:@"voice" forKey:@"msgType"];
         NIMAudioObject *object = message.messageObject;
         [dic2 setObject:[NSString stringWithFormat:@"%@",object.path] forKey:@"mediaPath"];
@@ -867,8 +863,7 @@
         [voiceObj setObject:[NSString stringWithFormat:@"%zd",(object.duration/1000)] forKey:@"duration"];
         [voiceObj setObject:[NSNumber  numberWithBool:message.isPlayed] forKey:@"isPlayed"];
         [dic2 setObject:voiceObj forKey:@"extend"];
-    }
-    if(message.messageType == NIMMessageTypeVideo ){
+    }else  if(message.messageType == NIMMessageTypeVideo ){
         [dic2 setObject:@"video" forKey:@"msgType"];
         NIMVideoObject *object = message.messageObject;
         
@@ -901,8 +896,7 @@
                 NSLog(@"下载进度%.f",progress);
             }];
         }
-    }
-    if(message.messageType == NIMMessageTypeLocation){
+    }else if(message.messageType == NIMMessageTypeLocation){
         [dic2 setObject:@"location" forKey:@"msgType"];
         NIMLocationObject *object = message.messageObject;
         NSMutableDictionary *locationObj = [NSMutableDictionary dictionary];
@@ -911,14 +905,12 @@
         [locationObj setObject:[NSString stringWithFormat:@"%@", object.title ] forKey:@"title"];
         [dic2 setObject:locationObj forKey:@"extend"];
         
-    }
-    if(message.messageType == NIMMessageTypeTip){//提醒类消息
+    }else if(message.messageType == NIMMessageTypeTip){//提醒类消息
         [dic2 setObject:@"notification" forKey:@"msgType"];
         NSMutableDictionary *notiObj = [NSMutableDictionary dictionary];
         [notiObj setObject:message.text forKey:@"tipMsg"];
         [dic2 setObject:notiObj forKey:@"extend"];
-    }
-    if (message.messageType == NIMMessageTypeNotification) {
+    }else if (message.messageType == NIMMessageTypeNotification) {
         [dic2 setObject:@"notification" forKey:@"msgType"];
         NSMutableDictionary *notiObj = [NSMutableDictionary dictionary];
         NIMNotificationObject *object = message.messageObject;
@@ -941,8 +933,7 @@
         }
         [dic2 setObject:notiObj forKey:@"extend"];
         
-    }
-    if (message.messageType == NIMMessageTypeCustom) {
+    }else if (message.messageType == NIMMessageTypeCustom) {
 //            [dic setObject:@"custom" forKey:@"msgType"];
         NIMCustomObject *customObject = message.messageObject;
         DWCustomAttachment *obj = customObject.attachment;
@@ -992,9 +983,17 @@
                     [dic2 setObject:@"card" forKey:@"msgType"];
                 }
                 default:
+                {
+                    [dic2 setObject:obj.dataDict  forKey:@"extend"];
+                    [dic2 setObject:@"unknown" forKey:@"msgType"];
+                }
                     break;
             }
         }
+    }else{
+        [dic2 setObject:@"unknown" forKey:@"msgType"];
+        NSMutableDictionary *unknowObj = [NSMutableDictionary dictionary];
+        [dic2 setObject:unknowObj  forKey:@"extend"];
     }
     [messageArr addObject:dic2];
     //接收消息
