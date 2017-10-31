@@ -12,6 +12,11 @@
 
 #define kDevice_Is_iPhoneX ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(1125, 2436), [[UIScreen mainScreen] currentMode].size) : NO)
 
+@interface RNNeteaseIm(){
+    NSString *strUserAgent;
+}
+
+@end
 
 @implementation RNNeteaseIm
 
@@ -784,9 +789,35 @@ RCT_EXPORT_METHOD(cleanCache){
 //获取网络状态权限
 RCT_EXPORT_METHOD(getNetWorkStatus:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject){
-    int type = 0;//0:无网络, 1:2G, 2:3G, 3:4G, 4:LTE准4G，5：wifi
+    //int type = 0;//0:无网络, 1:2G, 2:3G, 3:4G, 4:LTE准4G，5：wifi
     if (kDevice_Is_iPhoneX){//iPhone X 目前未找到获取状态栏网络状态，先设置为1
-        type = 1;
+        resolve(@(1));
+    }else{
+        NSString *strNetWork = [self getNetStatus];
+        if ([strNetWork isEqualToString:@"NOTFOUND"]) {
+            resolve(@(0));
+        }else{
+            resolve(@(1));
+        }
+    }
+}
+//设置webview UA
+RCT_EXPORT_METHOD(setupWebViewUserAgent){
+    if (!strUserAgent.length) {
+        NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+        NSString *userAgent = [[[UIWebView alloc] init] stringByEvaluatingJavaScriptFromString:@"navigator.userAgent"];
+        strUserAgent = [userAgent stringByAppendingFormat:@" Feima/%@ NetType/", version];
+    }
+    NSString *strNetWork = [self getNetStatus];
+    [[NSUserDefaults standardUserDefaults] registerDefaults:@{@"UserAgent":[NSString stringWithFormat:@"%@%@",strUserAgent,strNetWork]}];
+}
+
+//获取网络状态
+- (NSString *)getNetStatus{
+    NSString *strNetWork = @"";
+    int type = 0;//0:无网络, 1:2G, 2:3G, 3:4G, 4:LTE准4G，5：wifi,6:iphone x
+    if (kDevice_Is_iPhoneX){//iPhone X 目前未找到获取状态栏网络状态，先设置为1
+        type = 6;
     }else{
         UIApplication *app = [UIApplication sharedApplication];
         NSArray *children = [[[app valueForKeyPath:@"statusBar"] valueForKeyPath:@"foregroundView"] subviews];
@@ -796,13 +827,33 @@ RCT_EXPORT_METHOD(getNetWorkStatus:(RCTPromiseResolveBlock)resolve
             }
         }
     }
-    if (type) {
-        resolve(@(1));
-    }else{
-        resolve(@(0));
+    switch (type) {
+        case 0:
+            strNetWork = @"NOTFOUND";
+            break;
+        case 1:
+            strNetWork = @"2G";
+            break;
+        case 2:
+            strNetWork = @"3G";
+            break;
+        case 3:
+            strNetWork = @"4G";
+            break;
+        case 4:
+            strNetWork = @"LTE";
+            break;
+        case 5:
+            strNetWork = @"WIFI";
+            break;
+        case 6:
+            strNetWork = @"NOTFOUND";
+            break;
+        default:
+            strNetWork = @"NOTFOUND";
+            break;
     }
-    
+    return strNetWork;
 }
-
 
 @end

@@ -62,6 +62,15 @@ class Utils{
     sortPinYin(o,key){
         return PinYin.sortPinYin(o,key);
     }
+    /**
+     * 设置webview UA
+     * @returns {*}
+     */
+    setupWebViewUserAgent(){
+        if(Platform.OS === 'ios'){
+            RNNeteaseIm.setupWebViewUserAgent();
+        }
+    }
 }
 module.exports = new Utils();
 
