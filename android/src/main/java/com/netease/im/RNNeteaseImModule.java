@@ -42,6 +42,7 @@ import com.netease.im.uikit.cache.NimUserInfoCache;
 import com.netease.im.uikit.cache.SimpleCallback;
 import com.netease.im.uikit.cache.TeamDataCache;
 import com.netease.im.uikit.common.util.log.LogUtil;
+import com.netease.im.uikit.common.util.sys.NetworkUtil;
 import com.netease.im.uikit.contact.core.model.ContactDataList;
 import com.netease.im.uikit.permission.MPermission;
 import com.netease.im.uikit.permission.annotation.OnMPermissionDenied;
@@ -1139,8 +1140,8 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
     }
 
     @ReactMethod
-    public void sendCardMessage(String type, String name, String imgPath,String sessionId, final Promise promise){
-        sessionService.sendCardMessage(type,  name,  imgPath, sessionId, new SessionService.OnSendMessageListener() {
+    public void sendCardMessage(String type, String name, String imgPath, String sessionId, final Promise promise) {
+        sessionService.sendCardMessage(type, name, imgPath, sessionId, new SessionService.OnSendMessageListener() {
             @Override
             public int onResult(int code, IMMessage message) {
                 return 0;
@@ -1987,6 +1988,30 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
             promise.resolve(ReceiverMsgParser.getWritableMap(launch));
             launch = null;
         }
+    }
+
+    @ReactMethod
+    public void fetchNetInfo(Promise promise) {
+        int networkType = NetworkUtil.getNetworkClass(reactContext);
+        String networkString = "";
+        switch (networkType) {
+            case NetworkUtil.NETWORK_CLASS_2_G:
+                networkString = "2g";
+                break;
+            case NetworkUtil.NETWORK_CLASS_3_G:
+                networkString = "3g";
+                break;
+            case NetworkUtil.NETWORK_CLASS_4_G:
+                networkString = "4g";
+                break;
+            case NetworkUtil.NETWORK_CLASS_WIFI:
+                networkString = "wifi";
+                break;
+            case NetworkUtil.NETWORK_CLASS_UNKNOWN:
+                networkString = "unknown";
+                break;
+        }
+        promise.resolve(networkString);
     }
 
     @Override

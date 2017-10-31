@@ -62,6 +62,12 @@ class Utils{
     sortPinYin(o,key){
         return PinYin.sortPinYin(o,key);
     }
+
+
+    fetchNetInfo(){
+        return RNNeteaseIm.fetchNetInfo();
+    }
+    
     /**
      * 设置webview UA
      * @returns {*}
@@ -71,6 +77,5 @@ class Utils{
             RNNeteaseIm.setupWebViewUserAgent();
         }
     }
-}
 module.exports = new Utils();
 
