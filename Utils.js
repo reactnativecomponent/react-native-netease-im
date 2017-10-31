@@ -62,6 +62,9 @@ class Utils{
     sortPinYin(o,key){
         return PinYin.sortPinYin(o,key);
     }
+    fetchNetInfo(){
+        return RNNeteaseIm.fetchNetInfo();
+    }
 }
 module.exports = new Utils();
 
