@@ -55,6 +55,9 @@
             NIMTeam *team = [[[NIMSDK sharedSDK] teamManager]teamById:strSessionId];
             strSessionName = team.teamName;
         }
+        if (!strSessionName) {
+            strSessionName = @"";
+        }
         [mutaDict setObject:strSessionName forKey:@"sessionName"];
         [param setObject:mutaDict forKey:@"sessionBody"];
         if ([[dict objectForKey:@"type"] isEqualToString:@"launch"]) {
