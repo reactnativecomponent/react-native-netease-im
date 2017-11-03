@@ -503,6 +503,15 @@
 
 //发送名片
 - (void)sendCardMessage:(NSString *)type sessionId:(NSString *)sessionId name:(NSString *)name imgPath:(NSString *)strImgPath{
+    if ([type isEqualToString:@"个人名片"]) {
+        NIMUser *user = [[NIMSDK sharedSDK].userManager userInfo:sessionId];
+        NIMUserInfo *userInfo = user.userInfo;
+        name = userInfo.nickName ? userInfo.nickName : name;
+        
+    }else{
+        NIMTeam *team = [[[NIMSDK sharedSDK] teamManager]teamById:sessionId];
+        name = team.teamName ? team.teamName : name;
+    }
     NSDictionary *dict = @{@"type":type,@"name":name,@"imgPath":strImgPath,@"sessionId":sessionId};
     [self sendCustomMessage:CustomMessgeTypeBusinessCard data:dict];
 }
