@@ -11,9 +11,11 @@ import android.os.StatFs;
 import android.provider.Settings.Secure;
 import android.text.TextUtils;
 
+import com.alibaba.fastjson.JSONObject;
 import com.netease.im.IMApplication;
 import com.netease.im.common.sys.InstallUtil;
 import com.netease.im.common.sys.SysInfoUtil;
+import com.netease.im.uikit.common.util.log.LogUtil;
 import com.netease.im.uikit.common.util.sys.NetworkUtil;
 
 import java.io.BufferedReader;
@@ -204,6 +206,25 @@ public class CrashSnapshot {
 	}
 
 	
+	public static String snapshotJson(Context context, boolean uncaught, String timestamp, String trace, int count) {
+		JSONObject object = new JSONObject();
+		object.put("count",String.valueOf(count));
+		object.put("time",timestamp);
+		object.put("device",SysInfoUtil.getPhoneModelWithManufacturer());
+		object.put("android",SysInfoUtil.getOsInfo());
+		object.put("system",Build.DISPLAY);
+		object.put("battery",battery());
+		object.put("rooted: ", isRooted() ? "yes" : "no");
+		object.put("ram",ram());
+		object.put("disk",disk());
+		object.put("ver", String.format("%d", InstallUtil.getVersionCode(context)));
+		object.put("caught", uncaught ? "no" : "yes");
+		object.put("network",NetworkUtil.getNetworkInfo(context));
+
+		object.put("errorInfo",trace);
+		LogUtil.e("snapshot",object.toString());
+		return object.toString();
+	}
 	public static String snapshot(Context context, boolean uncaught, String timestamp, String trace, int count) {
 		Map<String, String> info = new LinkedHashMap<String, String>();
         info.put("count: ", String.valueOf(count));
@@ -232,6 +253,7 @@ public class CrashSnapshot {
     	sb.append(System.getProperty("line.separator"));
 		sb.append(System.getProperty("line.separator"));
 		sb.append(System.getProperty("line.separator"));
+		LogUtil.e("snapshot",sb.toString());
 		return sb.toString();
 	}
 
