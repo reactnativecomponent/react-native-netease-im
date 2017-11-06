@@ -764,6 +764,7 @@ public class SessionService {
     public void sendCardMessage(String type, String name, String imgPath, String id, OnSendMessageListener onSendMessageListener) {
         CustomMessageConfig config = new CustomMessageConfig();
         CardAttachment attachment = new CardAttachment();
+        name = NimUserInfoCache.getInstance().getUserName(id);
         attachment.setParams(type, name, imgPath, id);
         IMMessage message = MessageBuilder.createCustomMessage(sessionId, sessionTypeEnum, "[名片] " + name, attachment, config);
         sendMessageSelf(message, onSendMessageListener, false);
