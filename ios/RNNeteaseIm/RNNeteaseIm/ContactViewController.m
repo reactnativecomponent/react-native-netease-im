@@ -236,7 +236,7 @@
             continue;
         }
         NSString *groupTitle = [member groupTitle];
-        NTESContactDataMember *contact  =member;
+        NTESContactDataMember *contact  = member;
         NSMutableDictionary *dic = [NSMutableDictionary dictionary];
         [dic setObject:[NSString stringWithFormat:@"%@", contact.info.showName] forKey:@"name"];
         [dic setObject:[NSString stringWithFormat:@"%@", contact.info.infoId] forKey:@"contactId"];
@@ -255,9 +255,7 @@
     }
 
     NIMModel *model = [NIMModel initShareMD];
-    if (tmp.count) {
-        model.contactList = tmp;
-    }
+    model.contactList = tmp;
 }
 
 //通讯录删除好友
