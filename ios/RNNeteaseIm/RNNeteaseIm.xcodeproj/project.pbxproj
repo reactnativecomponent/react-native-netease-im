@@ -508,7 +508,7 @@
 				GCC_PREFIX_HEADER = RNNeteaseIm/PrefixHeader.pch;
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/../../../react-native/React/**",
-					"$(SRCROOT)/../../../../ios/Pods/**",
+					"$(SRCROOT)/../../../../ios/Pods/Headers/Public/**",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -523,7 +523,7 @@
 				GCC_PREFIX_HEADER = RNNeteaseIm/PrefixHeader.pch;
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/../../../react-native/React/**",
-					"$(SRCROOT)/../../../../ios/Pods/**",
+					"$(SRCROOT)/../../../../ios/Pods/Headers/Public/**",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
