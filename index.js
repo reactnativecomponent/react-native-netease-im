@@ -1,6 +1,6 @@
 // import NIM from './NIM';
 import NimUtils from './Utils';
-import Permissions from './permissions';
+
 
 import NimFriend from './im/Friend';
 import NimListener from './im/Listener';
