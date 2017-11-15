@@ -11,7 +11,6 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.netease.im.common.ImageLoaderKit;
-import com.netease.im.common.crash.AppCrashHandler;
 import com.netease.im.common.sys.SystemUtil;
 import com.netease.im.contact.DefalutUserInfoProvider;
 import com.netease.im.contact.DefaultContactProvider;
@@ -96,7 +95,7 @@ public class IMApplication {
 
         NIMClient.init(context, getLoginInfo(), getOptions(context));
         // crash handler
-        AppCrashHandler.getInstance(context);
+//        AppCrashHandler.getInstance(context);
         if (inMainProcess(IMApplication.context)) {
 
 
