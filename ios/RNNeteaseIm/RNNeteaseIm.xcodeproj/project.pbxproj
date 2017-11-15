@@ -10,17 +10,6 @@
 		4E27A5CB1ED5417100543BFC /* RNNotificationCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E27A5CA1ED5417100543BFC /* RNNotificationCenter.m */; };
 		4E354E871ECBE72700CD6587 /* NIMObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E354E861ECBE72700CD6587 /* NIMObject.m */; };
 		4E354EC01ECC2E3400CD6587 /* NSDictionary+NTESJson.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E354EBF1ECC2E3400CD6587 /* NSDictionary+NTESJson.m */; };
-		4E3900BE1F1DF57100E1C860 /* RCTConvert+RNPStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E3900BB1F1DF57100E1C860 /* RCTConvert+RNPStatus.m */; };
-		4E3900BF1F1DF57100E1C860 /* ReactNativePermissions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E3900BD1F1DF57100E1C860 /* ReactNativePermissions.m */; };
-		4E3900FA1F1DF62A00E1C860 /* RNPAudioVideo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E3900E91F1DF62A00E1C860 /* RNPAudioVideo.m */; };
-		4E3900FB1F1DF62A00E1C860 /* RNPBackgroundRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E3900EB1F1DF62A00E1C860 /* RNPBackgroundRefresh.m */; };
-		4E3900FC1F1DF62A00E1C860 /* RNPBluetooth.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E3900ED1F1DF62A00E1C860 /* RNPBluetooth.m */; };
-		4E3900FD1F1DF62A00E1C860 /* RNPContacts.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E3900EF1F1DF62A00E1C860 /* RNPContacts.m */; };
-		4E3900FE1F1DF62A00E1C860 /* RNPEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E3900F11F1DF62A00E1C860 /* RNPEvent.m */; };
-		4E3900FF1F1DF62A00E1C860 /* RNPLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E3900F31F1DF62A00E1C860 /* RNPLocation.m */; };
-		4E3901001F1DF62A00E1C860 /* RNPNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E3900F51F1DF62A00E1C860 /* RNPNotification.m */; };
-		4E3901011F1DF62A00E1C860 /* RNPPhoto.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E3900F71F1DF62A00E1C860 /* RNPPhoto.m */; };
-		4E3901021F1DF62A00E1C860 /* RNPSpeechRecognition.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E3900F91F1DF62A00E1C860 /* RNPSpeechRecognition.m */; };
 		4E3DD02E1EF384A900012CB7 /* DWCustomAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E3DD02B1EF384A900012CB7 /* DWCustomAttachment.m */; };
 		4E3DD02F1EF384A900012CB7 /* DWCustomAttachmentDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E3DD02D1EF384A900012CB7 /* DWCustomAttachmentDecoder.m */; };
 		4E5B47781EC1793600D74E72 /* RNNeteaseIm.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E5B47771EC1793600D74E72 /* RNNeteaseIm.m */; };
@@ -70,28 +59,6 @@
 		4E354E861ECBE72700CD6587 /* NIMObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIMObject.m; sourceTree = "<group>"; };
 		4E354EBE1ECC2E3400CD6587 /* NSDictionary+NTESJson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+NTESJson.h"; sourceTree = "<group>"; };
 		4E354EBF1ECC2E3400CD6587 /* NSDictionary+NTESJson.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+NTESJson.m"; sourceTree = "<group>"; };
-		4E3900BA1F1DF57100E1C860 /* RCTConvert+RNPStatus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RCTConvert+RNPStatus.h"; sourceTree = "<group>"; };
-		4E3900BB1F1DF57100E1C860 /* RCTConvert+RNPStatus.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RCTConvert+RNPStatus.m"; sourceTree = "<group>"; };
-		4E3900BC1F1DF57100E1C860 /* ReactNativePermissions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReactNativePermissions.h; sourceTree = "<group>"; };
-		4E3900BD1F1DF57100E1C860 /* ReactNativePermissions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReactNativePermissions.m; sourceTree = "<group>"; };
-		4E3900E81F1DF62A00E1C860 /* RNPAudioVideo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNPAudioVideo.h; sourceTree = "<group>"; };
-		4E3900E91F1DF62A00E1C860 /* RNPAudioVideo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNPAudioVideo.m; sourceTree = "<group>"; };
-		4E3900EA1F1DF62A00E1C860 /* RNPBackgroundRefresh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNPBackgroundRefresh.h; sourceTree = "<group>"; };
-		4E3900EB1F1DF62A00E1C860 /* RNPBackgroundRefresh.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNPBackgroundRefresh.m; sourceTree = "<group>"; };
-		4E3900EC1F1DF62A00E1C860 /* RNPBluetooth.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNPBluetooth.h; sourceTree = "<group>"; };
-		4E3900ED1F1DF62A00E1C860 /* RNPBluetooth.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNPBluetooth.m; sourceTree = "<group>"; };
-		4E3900EE1F1DF62A00E1C860 /* RNPContacts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNPContacts.h; sourceTree = "<group>"; };
-		4E3900EF1F1DF62A00E1C860 /* RNPContacts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNPContacts.m; sourceTree = "<group>"; };
-		4E3900F01F1DF62A00E1C860 /* RNPEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNPEvent.h; sourceTree = "<group>"; };
-		4E3900F11F1DF62A00E1C860 /* RNPEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNPEvent.m; sourceTree = "<group>"; };
-		4E3900F21F1DF62A00E1C860 /* RNPLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNPLocation.h; sourceTree = "<group>"; };
-		4E3900F31F1DF62A00E1C860 /* RNPLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNPLocation.m; sourceTree = "<group>"; };
-		4E3900F41F1DF62A00E1C860 /* RNPNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNPNotification.h; sourceTree = "<group>"; };
-		4E3900F51F1DF62A00E1C860 /* RNPNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNPNotification.m; sourceTree = "<group>"; };
-		4E3900F61F1DF62A00E1C860 /* RNPPhoto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNPPhoto.h; sourceTree = "<group>"; };
-		4E3900F71F1DF62A00E1C860 /* RNPPhoto.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNPPhoto.m; sourceTree = "<group>"; };
-		4E3900F81F1DF62A00E1C860 /* RNPSpeechRecognition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNPSpeechRecognition.h; sourceTree = "<group>"; };
-		4E3900F91F1DF62A00E1C860 /* RNPSpeechRecognition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNPSpeechRecognition.m; sourceTree = "<group>"; };
 		4E3DD02A1EF384A900012CB7 /* DWCustomAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DWCustomAttachment.h; sourceTree = "<group>"; };
 		4E3DD02B1EF384A900012CB7 /* DWCustomAttachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DWCustomAttachment.m; sourceTree = "<group>"; };
 		4E3DD02C1EF384A900012CB7 /* DWCustomAttachmentDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DWCustomAttachmentDecoder.h; sourceTree = "<group>"; };
@@ -165,31 +132,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		4E3900E71F1DF62A00E1C860 /* Permissions */ = {
-			isa = PBXGroup;
-			children = (
-				4E3900E81F1DF62A00E1C860 /* RNPAudioVideo.h */,
-				4E3900E91F1DF62A00E1C860 /* RNPAudioVideo.m */,
-				4E3900EA1F1DF62A00E1C860 /* RNPBackgroundRefresh.h */,
-				4E3900EB1F1DF62A00E1C860 /* RNPBackgroundRefresh.m */,
-				4E3900EC1F1DF62A00E1C860 /* RNPBluetooth.h */,
-				4E3900ED1F1DF62A00E1C860 /* RNPBluetooth.m */,
-				4E3900EE1F1DF62A00E1C860 /* RNPContacts.h */,
-				4E3900EF1F1DF62A00E1C860 /* RNPContacts.m */,
-				4E3900F01F1DF62A00E1C860 /* RNPEvent.h */,
-				4E3900F11F1DF62A00E1C860 /* RNPEvent.m */,
-				4E3900F21F1DF62A00E1C860 /* RNPLocation.h */,
-				4E3900F31F1DF62A00E1C860 /* RNPLocation.m */,
-				4E3900F41F1DF62A00E1C860 /* RNPNotification.h */,
-				4E3900F51F1DF62A00E1C860 /* RNPNotification.m */,
-				4E3900F61F1DF62A00E1C860 /* RNPPhoto.h */,
-				4E3900F71F1DF62A00E1C860 /* RNPPhoto.m */,
-				4E3900F81F1DF62A00E1C860 /* RNPSpeechRecognition.h */,
-				4E3900F91F1DF62A00E1C860 /* RNPSpeechRecognition.m */,
-			);
-			path = Permissions;
-			sourceTree = "<group>";
-		};
 		4E5B47381EC1788F00D74E72 = {
 			isa = PBXGroup;
 			children = (
@@ -209,11 +151,6 @@
 		4E5B47431EC1788F00D74E72 /* RNNeteaseIm */ = {
 			isa = PBXGroup;
 			children = (
-				4E3900E71F1DF62A00E1C860 /* Permissions */,
-				4E3900BA1F1DF57100E1C860 /* RCTConvert+RNPStatus.h */,
-				4E3900BB1F1DF57100E1C860 /* RCTConvert+RNPStatus.m */,
-				4E3900BC1F1DF57100E1C860 /* ReactNativePermissions.h */,
-				4E3900BD1F1DF57100E1C860 /* ReactNativePermissions.m */,
 				4E3DD02A1EF384A900012CB7 /* DWCustomAttachment.h */,
 				4E3DD02B1EF384A900012CB7 /* DWCustomAttachment.m */,
 				4E3DD02C1EF384A900012CB7 /* DWCustomAttachmentDecoder.h */,
@@ -367,7 +304,6 @@
 				4E5B47D01EC17A0D00D74E72 /* NTESSpellingCenter.m in Sources */,
 				4E5B49B71EC1AE5600D74E72 /* NIMKitUtil.m in Sources */,
 				4E3DD02E1EF384A900012CB7 /* DWCustomAttachment.m in Sources */,
-				4E3900FD1F1DF62A00E1C860 /* RNPContacts.m in Sources */,
 				4E27A5CB1ED5417100543BFC /* RNNotificationCenter.m in Sources */,
 				4E5B47C91EC17A0D00D74E72 /* TeamViewController.m in Sources */,
 				4E5B49D11EC1B34B00D74E72 /* NIMKit.m in Sources */,
@@ -383,29 +319,19 @@
 				4EC4FCCF1ECA9BDB00F3DA5E /* NSString+NIMKit.m in Sources */,
 				4E5B47CF1EC17A0D00D74E72 /* NTESPinyinConverter.m in Sources */,
 				4E354E871ECBE72700CD6587 /* NIMObject.m in Sources */,
-				4E3900FF1F1DF62A00E1C860 /* RNPLocation.m in Sources */,
 				4E9C78B91ECE88ED00037A6C /* NTESSDKConfigDelegate.m in Sources */,
-				4E3900BF1F1DF57100E1C860 /* ReactNativePermissions.m in Sources */,
 				4EC4FCD21ECA9C6C00F3DA5E /* NIMKitLocationPoint.m in Sources */,
 				4E5B49B41EC1AE0600D74E72 /* NIMKitInfo.m in Sources */,
 				4E5B49D51EC1BA0900D74E72 /* NIMKitDataProviderImpl.m in Sources */,
 				4E5B47CD1EC17A0D00D74E72 /* NTESBundleSetting.m in Sources */,
-				4E3901011F1DF62A00E1C860 /* RNPPhoto.m in Sources */,
 				4EC4FCCC1ECA9BBC00F3DA5E /* NIMMessageMaker.m in Sources */,
-				4E3901021F1DF62A00E1C860 /* RNPSpeechRecognition.m in Sources */,
-				4E3901001F1DF62A00E1C860 /* RNPNotification.m in Sources */,
 				4E5B47C41EC17A0D00D74E72 /* ContactViewController.m in Sources */,
 				4E5B49CE1EC1B0A700D74E72 /* NIMKitInfoFetchOption.m in Sources */,
-				4E3900BE1F1DF57100E1C860 /* RCTConvert+RNPStatus.m in Sources */,
 				4E5B47CC1EC17A0D00D74E72 /* NTESGroupedDataCollection.m in Sources */,
-				4E3900FA1F1DF62A00E1C860 /* RNPAudioVideo.m in Sources */,
 				4E5B47C81EC17A0D00D74E72 /* NoticeViewController.m in Sources */,
 				4E5B47CB1EC17A0D00D74E72 /* NTESGroupedContacts.m in Sources */,
-				4E3900FE1F1DF62A00E1C860 /* RNPEvent.m in Sources */,
 				4E5B47C71EC17A0D00D74E72 /* NIMViewController.m in Sources */,
 				4E6BA8E91EC2D21500630D77 /* NIMKitNotificationFirer.m in Sources */,
-				4E3900FB1F1DF62A00E1C860 /* RNPBackgroundRefresh.m in Sources */,
-				4E3900FC1F1DF62A00E1C860 /* RNPBluetooth.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
