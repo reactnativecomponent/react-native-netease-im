@@ -8,10 +8,7 @@ import NimSession from './im/Session';
 import NimSystemMsg from './im/SystemMsg';
 import NimTeam from './im/Team';
 export {
-    // NIM,
     NimUtils,
-    Permissions,
-
     NimFriend,
     NimListener,
     NimSession,
