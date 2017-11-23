@@ -4,11 +4,8 @@ React Native的网易云信插件
 ## Demo
 [react-native-chat-demo](https://github.com/reactnativecomponent/react-native-chat-demo)
 
-#### 注意: react-native版本需要0.47.0及以上NIMSDK版本4.0以上
-```
-NIMSDK >=4.0 or react-native >=0.47 使用最新版
-NIMSDK <4.0 or react-native <0.47 请使用历史版本 <=1.0.7
-```
+#### 注意: react-native版本需要0.47.0及以上NIMSDK对应版本4.4.0以上
+
 ## 如何安装
 
 ### 1.首先安装npm包
