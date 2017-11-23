@@ -40,6 +40,7 @@ import com.netease.nimlib.sdk.msg.MsgServiceObserve;
 import com.netease.nimlib.sdk.msg.model.CustomNotification;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
+import com.netease.nimlib.sdk.util.NIMUtil;
 
 /**
  * Created by dowin on 2017/4/28.
@@ -82,6 +83,7 @@ public class IMApplication {
     // 图片加载、缓存与管理组件
     private static ImageLoaderKit imageLoaderKit;
     private static StatusBarNotificationConfig statusBarNotificationConfig;
+    private static boolean DEBUG = false;
 
     public static void init(Context context, Class mainActivityClass, @DrawableRes int notify_msg_drawable_id, MiPushConfig miPushConfig) {
         IMApplication.context = context.getApplicationContext();
@@ -96,7 +98,7 @@ public class IMApplication {
         NIMClient.init(context, getLoginInfo(), getOptions(context));
         // crash handler
 //        AppCrashHandler.getInstance(context);
-        if (inMainProcess(IMApplication.context)) {
+        if (NIMUtil.isMainProcess(IMApplication.context)) {
 
 
             // init pinyin
@@ -114,6 +116,7 @@ public class IMApplication {
     }
 
     public static void setDebugAble(boolean debugAble) {
+        DEBUG = debugAble;
         LogUtil.setDebugAble(debugAble);
     }
 
@@ -179,6 +182,12 @@ public class IMApplication {
 
         // 在线多端同步未读数
         options.sessionReadAck = true;
+        //自动检查 SDK 配置是否完全
+        options.checkManifestConfig = DEBUG;
+        //reducedIM 支持弱 IM 场景
+        //asyncInitSDK 支持异步 SDK 初始化
+        //teamNotificationMessageMarkUnread 登录选项添加群通知消息是否计入未读数开关
+        //sdkStorageRootPath 配置的外置存储缓存根目录
 
         return options;
     }

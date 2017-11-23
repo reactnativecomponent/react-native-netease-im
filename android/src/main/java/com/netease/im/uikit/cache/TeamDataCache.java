@@ -64,7 +64,7 @@ public class TeamDataCache {
     public interface TeamMemberDataChangedObserver {
         void onUpdateTeamMember(List<TeamMember> members);
 
-        void onRemoveTeamMember(TeamMember member);
+        void onRemoveTeamMember(List<TeamMember> members);
     }
 
     private List<TeamDataChangedObserver> teamObservers = new ArrayList<>();
@@ -109,11 +109,11 @@ public class TeamDataCache {
     };
 
     // 移除群成员的观察者通知。
-    private Observer<TeamMember> memberRemoveObserver = new Observer<TeamMember>() {
+    private Observer<List<TeamMember>> memberRemoveObserver = new Observer<List<TeamMember>>() {
         @Override
-        public void onEvent(TeamMember member) {
+        public void onEvent(List<TeamMember> member) {
             // member的validFlag被更新，isInTeam为false
-            addOrUpdateTeamMember(member);
+            addOrUpdateTeamMembers(member);
             notifyTeamMemberRemove(member);
         }
     };
@@ -160,9 +160,9 @@ public class TeamDataCache {
         }
     }
 
-    private void notifyTeamMemberRemove(TeamMember member) {
+    private void notifyTeamMemberRemove(List<TeamMember> members) {
         for (TeamMemberDataChangedObserver o : memberObservers) {
-            o.onRemoveTeamMember(member);
+            o.onRemoveTeamMember(members);
         }
     }
 

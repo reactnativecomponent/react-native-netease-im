@@ -13,6 +13,9 @@ import com.netease.im.uikit.cache.TeamDataCache;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.team.model.Team;
 import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
+import com.netease.nimlib.sdk.uinfo.model.UserInfo;
+
+import static com.netease.im.MessageConstant.Card.sessionId;
 
 
 /**
@@ -39,12 +42,10 @@ public class DefalutUserInfoProvider implements UserInfoProvider {
         return user;
     }
 
-    @Override
     public int getDefaultIconResId() {
         return R.drawable.nim_avatar_default;
     }
 
-    @Override
     public Bitmap getAvatarForMessageNotifier(String account) {
         /**
          * 注意：这里最好从缓存里拿，如果读取本地头像可能导致UI进程阻塞，导致通知栏提醒延时弹出。
@@ -73,6 +74,31 @@ public class DefalutUserInfoProvider implements UserInfoProvider {
     }
 
     @Override
+    public Bitmap getAvatarForMessageNotifier(SessionTypeEnum sessionType, String account) {
+       /*
+         * 注意：这里最好从缓存里拿，如果加载时间过长会导致通知栏延迟弹出！该函数在后台线程执行！
+         */
+        Bitmap bm = null;
+        int defResId = R.drawable.nim_avatar_default;
+
+        if (SessionTypeEnum.P2P == sessionType) {
+            UserInfo user = getUserInfo(sessionId);
+            bm = (user != null) ? ImageLoaderKit.getNotificationBitmapFromCache(user.getAvatar()) : null;
+        } else if (SessionTypeEnum.Team == sessionType) {
+            Team team = TeamDataCache.getInstance().getTeamById(account);
+            bm = (team != null) ? ImageLoaderKit.getNotificationBitmapFromCache(team.getIcon()) : null;
+            defResId = R.drawable.nim_avatar_group;
+        }
+
+        if (bm == null) {
+            Drawable drawable = context.getResources().getDrawable(defResId);
+            if (drawable instanceof BitmapDrawable) {
+                bm = ((BitmapDrawable) drawable).getBitmap();
+            }
+        }
+        return bm;
+    }
+
     public Bitmap getTeamIcon(String teamId) {
         /**
          * 注意：这里最好从缓存里拿，如果读取本地头像可能导致UI进程阻塞，导致通知栏提醒延时弹出。

@@ -2,13 +2,13 @@ package com.netease.im.uikit.contact.core.provider;
 
 import com.netease.im.uikit.cache.TeamDataCache;
 import com.netease.im.uikit.contact.core.model.IContact;
+import com.netease.im.uikit.contact.core.provider.ContactSearch.HitInfo.Type;
 import com.netease.im.uikit.contact.core.query.TextQuery;
 import com.netease.im.uikit.contact.core.query.TextSearcher;
-import com.netease.im.uikit.contact.core.provider.ContactSearch.HitInfo.Type;
 import com.netease.nimlib.sdk.friend.model.Friend;
 import com.netease.nimlib.sdk.team.model.Team;
 import com.netease.nimlib.sdk.team.model.TeamMember;
-import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
+import com.netease.nimlib.sdk.uinfo.model.UserInfo;
 
 public class ContactSearch {
     public static final class HitInfo {
@@ -33,7 +33,7 @@ public class ContactSearch {
      * 判断是否击中
      */
 
-    public static final boolean hitUser(UserInfoProvider.UserInfo contact, TextQuery query) {
+    public static final boolean hitUser(UserInfo contact, TextQuery query) {
         String account = contact.getAccount();
         String name = contact.getName();
 

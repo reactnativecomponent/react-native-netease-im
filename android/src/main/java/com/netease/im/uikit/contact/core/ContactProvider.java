@@ -1,6 +1,6 @@
 package com.netease.im.uikit.contact.core;
 
-import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
+import com.netease.nimlib.sdk.uinfo.model.UserInfo;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ public interface ContactProvider {
      *
      * @return 用户信息集合
      */
-    List<UserInfoProvider.UserInfo> getUserInfoOfMyFriends();
+    List<UserInfo> getUserInfoOfMyFriends();
 
     /**
      * 返回我的好友数量，提供给通讯录显示所有联系人数量使用

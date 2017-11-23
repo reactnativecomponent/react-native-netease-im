@@ -6,13 +6,13 @@ import com.netease.im.uikit.cache.TeamDataCache;
 import com.netease.im.uikit.contact.core.model.IContact;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.search.model.MsgIndexRecord;
-import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
+import com.netease.nimlib.sdk.uinfo.model.UserInfo;
 
 /**
  * Created by huangjun on 2015/9/8.
  */
 public class ContactHelper {
-    public static IContact makeContactFromUserInfo(final UserInfoProvider.UserInfo userInfo) {
+    public static IContact makeContactFromUserInfo(final UserInfo userInfo) {
         return new IContact() {
             @Override
             public String getContactId() {

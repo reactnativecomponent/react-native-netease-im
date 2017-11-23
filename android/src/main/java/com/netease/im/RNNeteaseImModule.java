@@ -73,13 +73,15 @@ import com.netease.nimlib.sdk.team.TeamService;
 import com.netease.nimlib.sdk.team.constant.TeamBeInviteModeEnum;
 import com.netease.nimlib.sdk.team.constant.TeamFieldEnum;
 import com.netease.nimlib.sdk.team.constant.TeamInviteModeEnum;
+import com.netease.nimlib.sdk.team.constant.TeamMessageNotifyTypeEnum;
 import com.netease.nimlib.sdk.team.constant.TeamTypeEnum;
 import com.netease.nimlib.sdk.team.constant.TeamUpdateModeEnum;
 import com.netease.nimlib.sdk.team.constant.VerifyTypeEnum;
+import com.netease.nimlib.sdk.team.model.CreateTeamResult;
 import com.netease.nimlib.sdk.team.model.Team;
 import com.netease.nimlib.sdk.team.model.TeamMember;
-import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
+import com.netease.nimlib.sdk.uinfo.model.UserInfo;
 
 import java.io.File;
 import java.io.Serializable;
@@ -359,7 +361,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
     public void getBlackList(final Promise promise) {
         final List<String> accounts = NIMClient.getService(FriendService.class).getBlackList();
         List<String> unknownAccounts = new ArrayList<>();
-        final List<UserInfoProvider.UserInfo> data = new ArrayList<>();
+        final List<UserInfo> data = new ArrayList<>();
         for (String contactId : accounts) {
             if (!NimUserInfoCache.getInstance().hasUser(contactId)) {
                 unknownAccounts.add(contactId);
@@ -494,7 +496,15 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
     @ReactMethod
     public void setTeamNotify(String teamId, String mute, final Promise promise) {
 
-        NIMClient.getService(TeamService.class).muteTeam(teamId, !string2Boolean(mute))
+        TeamMessageNotifyTypeEnum typeEnum = TeamMessageNotifyTypeEnum.All;
+        if ("0".equals(mute)) {
+            typeEnum = TeamMessageNotifyTypeEnum.Mute;
+        } else if ("1".equals(mute)) {
+            typeEnum = TeamMessageNotifyTypeEnum.All;
+        } else if ("2".equals(mute)) {
+            typeEnum = TeamMessageNotifyTypeEnum.Manager;
+        }
+        NIMClient.getService(TeamService.class).muteTeam(teamId, typeEnum)//!string2Boolean(mute)
                 .setCallback(new RequestCallbackWrapper<Void>() {
                     @Override
                     public void onResult(int code, Void aVoid, Throwable throwable) {
@@ -714,11 +724,12 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
         fieldsMap.put(TeamFieldEnum.Name, teamName);
         final String finalTeamName = teamName;
         NIMClient.getService(TeamService.class).createTeam(fieldsMap, teamTypeEnum, "", array2ListString(accounts))
-                .setCallback(new RequestCallbackWrapper<Team>() {
+                .setCallback(new RequestCallbackWrapper<CreateTeamResult>() {
                     @Override
-                    public void onResult(int code, Team team, Throwable throwable) {
+                    public void onResult(int code, CreateTeamResult createTeamResult, Throwable throwable) {
                         if (code == ResponseCode.RES_SUCCESS) {
 
+                            Team team = createTeamResult.getTeam();
                             MessageHelper.getInstance().onCreateTeamMessage(team);
                             WritableMap id = Arguments.createMap();
                             id.putString("teamId", team.getId());
@@ -925,9 +936,9 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
 
 
         NIMClient.getService(TeamService.class).addMembers(teamId, array2ListString(accounts))
-                .setCallback(new RequestCallbackWrapper<Void>() {
+                .setCallback(new RequestCallbackWrapper<List<String>>() {
                     @Override
-                    public void onResult(int code, Void aVoid, Throwable throwable) {
+                    public void onResult(int code, List<String> strings, Throwable throwable) {
                         if (code == ResponseCode.RES_SUCCESS) {
                             promise.resolve("" + code);
                         } else if (code == ResponseCode.RES_TEAM_INVITE_SUCCESS) {

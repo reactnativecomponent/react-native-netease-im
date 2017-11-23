@@ -3,8 +3,8 @@ package com.netease.im.contact;
 import com.netease.im.uikit.cache.FriendDataCache;
 import com.netease.im.uikit.cache.NimUserInfoCache;
 import com.netease.im.uikit.contact.core.ContactProvider;
-import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
+import com.netease.nimlib.sdk.uinfo.model.UserInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,9 +17,9 @@ import java.util.List;
 public class DefaultContactProvider implements ContactProvider {
 
     @Override
-    public List<UserInfoProvider.UserInfo> getUserInfoOfMyFriends() {
+    public List<UserInfo> getUserInfoOfMyFriends() {
         List<NimUserInfo> nimUsers = NimUserInfoCache.getInstance().getAllUsersOfMyFriend();
-        List<UserInfoProvider.UserInfo> users = new ArrayList<>(nimUsers.size());
+        List<UserInfo> users = new ArrayList<>(nimUsers.size());
         if (!nimUsers.isEmpty()) {
             users.addAll(nimUsers);
         }

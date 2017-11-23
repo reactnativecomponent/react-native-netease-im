@@ -6,8 +6,8 @@ import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallbackWrapper;
 import com.netease.nimlib.sdk.ResponseCode;
 import com.netease.nimlib.sdk.friend.FriendService;
-import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
+import com.netease.nimlib.sdk.uinfo.model.UserInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +19,7 @@ import java.util.List;
 
 public class BlackListObserver {
 
-    List<UserInfoProvider.UserInfo> items = new ArrayList<>();
+    List<UserInfo> items = new ArrayList<>();
 
     public void startBlackList() {
         items.clear();
@@ -89,7 +89,7 @@ public class BlackListObserver {
 
         int index = -1;
         for (int i = 0; i < items.size(); i++) {
-            UserInfoProvider.UserInfo item = items.get(i);
+            UserInfo item = items.get(i);
             if (contactId.equals(item.getAccount())) {
                 index = i;
                 break;

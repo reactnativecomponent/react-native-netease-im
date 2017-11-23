@@ -50,10 +50,11 @@ import com.netease.nimlib.sdk.msg.model.AttachmentProgress;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.msg.model.RecentContact;
 import com.netease.nimlib.sdk.msg.model.SystemMessage;
+import com.netease.nimlib.sdk.team.constant.TeamMessageNotifyTypeEnum;
 import com.netease.nimlib.sdk.team.model.Team;
 import com.netease.nimlib.sdk.team.model.TeamMember;
-import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
+import com.netease.nimlib.sdk.uinfo.model.UserInfo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -138,7 +139,7 @@ public class ReactCache {
                         map.putString("teamType", Integer.toString(team.getType().getValue()));
                         imagePath = team.getIcon();
                         map.putString("memberCount", Integer.toString(team.getMemberCount()));
-                        map.putString("mute", boolean2String(!team.mute()));
+                        map.putString("mute", getMessageNotifyType(team.getMessageNotifyType()));
                     }
                 }
                 map.putString("imagePath", imagePath);
@@ -591,10 +592,10 @@ public class ReactCache {
         }
     }
 
-    public static Object createBlackList(List<UserInfoProvider.UserInfo> data) {
+    public static Object createBlackList(List<UserInfo> data) {
         WritableArray array = Arguments.createArray();
         if (data != null) {
-            for (UserInfoProvider.UserInfo userInfo : data) {
+            for (UserInfo userInfo : data) {
                 if (userInfo != null) {
                     WritableMap writableMap = Arguments.createMap();
                     writableMap.putString("contactId", userInfo.getAccount());
@@ -635,6 +636,18 @@ public class ReactCache {
         return writableArray;
     }
 
+    static String getMessageNotifyType(TeamMessageNotifyTypeEnum notifyTypeEnum){
+        String notify = "1";
+        if(notifyTypeEnum==TeamMessageNotifyTypeEnum.All){
+            notify = "1";
+        }else if(notifyTypeEnum==TeamMessageNotifyTypeEnum.Manager){
+            notify = "0";
+        }else if(notifyTypeEnum==TeamMessageNotifyTypeEnum.Mute){
+            notify = "0";
+        }
+        return notify;
+    }
+
     public static Object createTeamInfo(Team team) {
         WritableMap writableMap = Arguments.createMap();
         if (team != null) {
@@ -646,7 +659,7 @@ public class ReactCache {
             writableMap.putString("introduce", team.getIntroduce());
             writableMap.putString("createTime", TimeUtil.getTimeShowString(team.getCreateTime(), true));
             writableMap.putString("creator", team.getCreator());
-            writableMap.putString("mute", boolean2String(!team.mute()));
+            writableMap.putString("mute", getMessageNotifyType(team.getMessageNotifyType()));
             writableMap.putString("memberCount", Integer.toString(team.getMemberCount()));
             writableMap.putString("memberLimit", Integer.toString(team.getMemberLimit()));
         }

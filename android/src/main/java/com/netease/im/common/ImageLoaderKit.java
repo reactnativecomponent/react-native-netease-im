@@ -11,7 +11,7 @@ import com.netease.im.uikit.common.media.BitmapUtil;
 import com.netease.im.uikit.common.util.log.LogUtil;
 import com.netease.nimlib.sdk.nos.model.NosThumbParam;
 import com.netease.nimlib.sdk.nos.util.NosThumbImageUtil;
-import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
+import com.netease.nimlib.sdk.uinfo.model.UserInfo;
 import com.nostra13.universalimageloader.cache.disc.impl.ext.LruDiskCache;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
@@ -149,7 +149,7 @@ public class ImageLoaderKit {
             return;
         }
 
-        UserInfoProvider.UserInfo userInfo;
+        UserInfo userInfo;
         for (String account : accounts) {
             userInfo = IMApplication.getUserInfoProvider().getUserInfo(account);
             if (userInfo != null) {
