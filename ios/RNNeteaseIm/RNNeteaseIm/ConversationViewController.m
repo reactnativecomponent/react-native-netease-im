@@ -633,7 +633,7 @@
     }else if(message.session.sessionType == NIMSessionTypeTeam){//群
         
         NIMTeam *team = [[[NIMSDK sharedSDK] teamManager]teamById:message.session.sessionId];
-        needToPlay = team.notifyForNewMsg;
+        needToPlay = team.notifyStateForNewMsg == NIMTeamNotifyStateAll ? YES : NO;
     }
     if (needToPlay) {
         [self.player stop];

@@ -90,7 +90,7 @@ NSMutableArray *_myTeams;
     if ([type isEqualToString:@"1"]){
         option.type = NIMTeamTypeAdvanced;
     }
-    [[NIMSDK sharedSDK].teamManager createTeam:option users:accounts completion:^(NSError *error, NSString *teamId) {
+    [[NIMSDK sharedSDK].teamManager createTeam:option users:accounts completion:^(NSError * _Nullable error, NSString * _Nullable teamId, NSArray<NSString *> * _Nullable failedUserIds) {
         if (!error) {
             NSDictionary *dic = @{@"teamId":teamId};
             succ(dic);
@@ -213,7 +213,8 @@ NSMutableArray *_myTeams;
                 [teamDic setObject:[NSString stringWithFormat:@"%ld", team.memberNumber ] forKey:@"memberCount"];
                 [teamDic setObject:[NSString stringWithFormat:@"%ld",team.level] forKey:@"memberLimit"];
                 [teamDic setObject:[NSString stringWithFormat:@"%f", team.createTime ] forKey:@"createTime"];
-                [teamDic setObject:[NSString stringWithFormat:@"%d", team.notifyForNewMsg ] forKey:@"mute"];
+                NSString *strMute = team.notifyStateForNewMsg == NIMTeamNotifyStateAll ? @"1" : @"0";
+                [teamDic setObject:[NSString stringWithFormat:@"%@", strMute ] forKey:@"mute"];
                 [teamDic setObject:[NSString stringWithFormat:@"%ld",team.joinMode] forKey:@"verifyType"];
                 [teamDic setObject:[NSString stringWithFormat:@"%ld",team.beInviteMode] forKey:@"teamBeInviteMode"];
                 NSArray *keys = [teamDic allKeys];
@@ -271,7 +272,8 @@ NSMutableArray *_myTeams;
             [teamDic setObject:[NSString stringWithFormat:@"%ld", team.memberNumber ] forKey:@"memberCount"];
             [teamDic setObject:[NSString stringWithFormat:@"%ld",team.level] forKey:@"memberLimit"];
             [teamDic setObject:[NSString stringWithFormat:@"%f", team.createTime ] forKey:@"createTime"];
-            [teamDic setObject:[NSString stringWithFormat:@"%d", team.notifyForNewMsg ] forKey:@"mute"];
+            NSString *strMute = team.notifyStateForNewMsg == NIMTeamNotifyStateAll ? @"1" : @"0";
+            [teamDic setObject:[NSString stringWithFormat:@"%d", strMute ] forKey:@"mute"];
             [teamDic setObject:[NSString stringWithFormat:@"%ld",team.joinMode] forKey:@"verifyType"];
             [teamDic setObject:[NSString stringWithFormat:@"%ld",team.beInviteMode] forKey:@"teamBeInviteMode"];
             [teamDic setObject:[NSString stringWithFormat:@"%ld",team.inviteMode] forKey:@"teamInviteMode"];
@@ -380,21 +382,17 @@ NSMutableArray *_myTeams;
 
 //开启/关闭消息提醒
 -(void)muteTeam:(NSString *)teamId mute:(NSString *)mute Succ:(Success)succ Err:(Errors)err{
-    BOOL on;
+    NSInteger notifyState = NIMTeamNotifyStateNone;//不接受任何群消息通知
     if ([mute isEqualToString:@"1"]) {
-        on = true;
-    }else{
-        on = false;
+        notifyState = NIMTeamNotifyStateAll;
     }
-    [[[NIMSDK sharedSDK] teamManager] updateNotifyState:on
-                                                 inTeam:teamId
-                                             completion:^(NSError *error) {
-                                                 if (!error) {
-                                                     succ(@"200");
-                                                 }else{
-                                                     err(error);
-                                                 }
-                                             }];
+    [[NIMSDK sharedSDK].teamManager updateNotifyState:notifyState inTeam:teamId completion:^(NSError * _Nullable error) {
+         if (!error) {
+             succ(@"200");
+         }else{
+             err(error);
+         }
+    }];
 
 }
 //解散群组
