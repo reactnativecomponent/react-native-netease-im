@@ -227,6 +227,12 @@ UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTy
              <meta-data
                         android:name="com.netease.nim.appKey"
                         android:value="App Key" />
+            <!--添加新的 IPC 数据共享机制，替换不安全的多进程读写 SharedPreference-->
+            <provider
+                android:name="com.netease.nimlib.ipc.NIMContentProvider"
+                android:authorities="com.dowin.react.ETengPay.ipc.provider"
+                android:exported="false"
+                android:process=":core" />
 
 ```
 
