@@ -117,7 +117,7 @@ public class MainApplication extends Application implements ReactApplication {
 #### iOS配置
 install with CocoaPods
 ```
-pod 'NIMSDK'
+pod 'NIMSDK', '4.4.0'
 pod 'SSZipArchive', '~> 1.2'
 pod 'Reachability', '~> 3.1.1'
 pod 'CocoaLumberjack', '~> 2.0.0-rc2'
@@ -125,7 +125,7 @@ pod 'FMDB', '~>2.5'
 ```
 Run `pod install`
 
-在工程target的`Build Phases->Link Binary with Libraries`中加入`、libsqlite3.tbd、libc++、libz.tbd、CoreTelephony.framework`
+在工程target的`Build Phases->Link Binary with Libraries`中加入`、libsqlite3.0.tbd、libc++.tbd、libz.tbd、CoreTelephony.framework、AVFoundation.framework、CoreMedia.framework、CoreMotion.framework`
 
 
 
@@ -133,7 +133,7 @@ Run `pod install`
 
 ```
 ...
-#import <NIMSDK/NIMS
+#import <NIMSDK/NIMSDK.h>
 #import "NTESSDKConfigDelegate.h"
 @interface AppDelegate ()
 @property (nonatomic,strong) NTESSDKConfigDelegate *sdkConfigDelegate;
@@ -241,7 +241,7 @@ UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTy
 ### 引入包
 
 ```
-import NIM from 'react-native-netease-im';
+import {NimSession} from 'react-native-netease-im';
 ```
 
 ### API
