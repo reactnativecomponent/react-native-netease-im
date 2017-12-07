@@ -24,13 +24,13 @@ react-native link react-native-netease-im
 ```
 
 #### 手动link~（如果不能够自动link）
-#####ios
+##### ios
+```
 a.打开XCode's工程中, 右键点击Libraries文件夹 ➜ Add Files to <...>
 b.去node_modules ➜ react-native-netease-im ➜ ios ➜ 选择 RNNeteaseIm.xcodeproj
 c.在工程Build Phases ➜ Link Binary With Libraries中添加libRNNeteaseIm.a
-
-#####Android
-
+```
+##### Android
 ```
 // file: android/settings.gradle
 ...
