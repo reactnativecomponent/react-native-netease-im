@@ -212,7 +212,7 @@ UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTy
     <permission
         android:name="com.im.demo.permission.RECEIVE_MSG"
         android:protectionLevel="signature"/>
-    <!-- 接收 SDK 消息广播权限， 第三方 APP 接入时，请将 com.netease.nim.demo 替换为自己的包名 -->
+    <!-- 接收 SDK 消息广播权限， 第三方 APP 接入时，请将 com.im.demo 替换为自己的包名 -->
     <uses-permission android:name="com.im.demo.permission.RECEIVE_MSG"/>
     <!-- 小米推送 -->
     <permission
@@ -230,7 +230,7 @@ UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTy
             <!--添加新的 IPC 数据共享机制，替换不安全的多进程读写 SharedPreference-->
             <provider
                 android:name="com.netease.nimlib.ipc.NIMContentProvider"
-                android:authorities="com.dowin.react.ETengPay.ipc.provider"
+                android:authorities="com.im.demo.ipc.provider"
                 android:exported="false"
                 android:process=":core" />
 
