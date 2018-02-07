@@ -39,6 +39,7 @@ import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
 import com.netease.nimlib.sdk.msg.model.CustomNotification;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
+import com.netease.nimlib.sdk.msg.model.RevokeMsgNotification;
 import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
 import com.netease.nimlib.sdk.util.NIMUtil;
 
@@ -243,6 +244,10 @@ public class IMApplication {
         public String makeTicker(String nick, IMMessage message) {
             return null; // 采用SDK默认文案
         }
+        @Override
+        public String makeRevokeMsgTip(String revokeAccount, IMMessage item) {
+            return MessageUtil.getRevokeTipContent(item, revokeAccount);
+        }
     };
 
 
@@ -288,14 +293,14 @@ public class IMApplication {
     }
 
     private static void registerMsgRevokeObserver() {
-        NIMClient.getService(MsgServiceObserve.class).observeRevokeMessage(new Observer<IMMessage>() {
+        NIMClient.getService(MsgServiceObserve.class).observeRevokeMessage(new Observer<RevokeMsgNotification>() {
             @Override
-            public void onEvent(IMMessage message) {
-                if (message == null) {
+            public void onEvent(RevokeMsgNotification message) {
+                if (message == null && message.getMessage() == null) {
                     return;
                 }
 
-                MessageHelper.getInstance().onRevokeMessage(message);
+                MessageHelper.getInstance().onRevokeMessage(message.getMessage());
             }
         }, true);
     }

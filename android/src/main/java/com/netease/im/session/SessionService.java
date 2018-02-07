@@ -55,6 +55,7 @@ import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.msg.model.MemberPushOption;
 import com.netease.nimlib.sdk.msg.model.MessageReceipt;
 import com.netease.nimlib.sdk.msg.model.QueryDirectionEnum;
+import com.netease.nimlib.sdk.msg.model.RevokeMsgNotification;
 import com.netease.nimlib.sdk.team.model.Team;
 
 import java.io.File;
@@ -408,9 +409,11 @@ public class SessionService {
     /**
      * 消息撤回观察者
      */
-    Observer<IMMessage> revokeMessageObserver = new Observer<IMMessage>() {
+    Observer<RevokeMsgNotification> revokeMessageObserver = new Observer<RevokeMsgNotification>() {
         @Override
-        public void onEvent(IMMessage message) {
+        public void onEvent(RevokeMsgNotification item) {
+            if (item == null) {return;}
+            IMMessage message = item.getMessage();
             if (message == null || sessionId == null || !sessionId.equals(message.getSessionId())) {
                 return;
             }

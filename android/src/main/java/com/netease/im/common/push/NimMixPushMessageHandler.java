@@ -51,8 +51,8 @@ public class NimMixPushMessageHandler implements MixPushMessageHandler {
     }
 
     @Override
-    public boolean cleanHuaWeiNotifications() {
-        return false;
+    public boolean cleanMixPushNotifications(int pushType) {
+        return true;
     }
 
     private ComponentName initLaunchComponent(Context context) {
