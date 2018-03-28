@@ -2,19 +2,16 @@
  * Created by dowin on 2017/8/2.
  */
 'use strict'
-import { NativeModules,Platform } from 'react-native';
-
-const { RNNeteaseIm } = NativeModules;
+import { NativeModules,Platform } from 'react-native'
+const { RNNeteaseIm } = NativeModules
 class Team {
-
-    /** ******************************team 群组****************************************** **/
     /**
      * 群列表
      * @param keyword
      * @returns {*}
      */
     getTeamList(keyword){
-        return RNNeteaseIm.getTeamList(keyword);
+        return RNNeteaseIm.getTeamList(keyword)
     }
 
     /**
@@ -22,7 +19,7 @@ class Team {
      * @returns {*} @see observeTeam
      */
     startTeamList(){
-        return RNNeteaseIm.startTeamList();
+        return RNNeteaseIm.startTeamList()
     }
 
     /**
@@ -30,7 +27,7 @@ class Team {
      * @returns {*}
      */
     stopTeamList(){
-        return RNNeteaseIm.stopTeamList();
+        return RNNeteaseIm.stopTeamList()
     }
 
     /**
@@ -39,7 +36,7 @@ class Team {
      * @returns {*}
      */
     getTeamInfo(teamId){
-        return RNNeteaseIm.getTeamInfo(teamId);
+        return RNNeteaseIm.getTeamInfo(teamId)
     }
 
     /**
@@ -48,8 +45,8 @@ class Team {
      * @param needNotify 开启/关闭消息提醒
      * @returns {*}
      */
-    setTeamNotify(teamId,needNotify){
-        return RNNeteaseIm.setTeamNotify(teamId,needNotify);
+    setTeamNotify(teamId, needNotify){
+        return RNNeteaseIm.setTeamNotify(teamId, needNotify)
     }
 
     /**
@@ -58,8 +55,8 @@ class Team {
      * @param needNotify 开启/关闭消息提醒
      * @returns {*}
      */
-    setMessageNotify(contactId,needNotify){
-        return RNNeteaseIm.setMessageNotify(contactId,needNotify);
+    setMessageNotify(contactId, needNotify){
+        return RNNeteaseIm.setMessageNotify(contactId,needNotify)
     }
     /**
      * 群成员禁言
@@ -69,7 +66,7 @@ class Team {
      * @returns {*}
      */
     setTeamMemberMute(teamId, contactId, mute){
-        return RNNeteaseIm.setTeamMemberMute(teamId, contactId, mute);
+        return RNNeteaseIm.setTeamMemberMute(teamId, contactId, mute)
     }
     /**
      * 获取服务器群资料
@@ -77,7 +74,7 @@ class Team {
      * @returns {*}
      */
     fetchTeamInfo(teamId){
-        return RNNeteaseIm.fetchTeamInfo(teamId);
+        return RNNeteaseIm.fetchTeamInfo(teamId)
     }
 
     /**
@@ -86,7 +83,7 @@ class Team {
      * @returns {*}
      */
     fetchTeamMemberList(teamId){
-        return RNNeteaseIm.fetchTeamMemberList(teamId);
+        return RNNeteaseIm.fetchTeamMemberList(teamId)
     }
 
     /**
@@ -96,7 +93,7 @@ class Team {
      * @returns {*}
      */
     fetchTeamMemberInfo(teamId,contactId){
-        return RNNeteaseIm.fetchTeamMemberInfo(teamId,contactId);
+        return RNNeteaseIm.fetchTeamMemberInfo(teamId, contactId)
     }
 
     /**
@@ -106,8 +103,8 @@ class Team {
      * @param nick
      * @returns {*}
      */
-    updateMemberNick(teamId,contactId,nick){
-        return RNNeteaseIm.updateMemberNick(teamId,contactId,nick);
+    updateMemberNick(teamId, contactId, nick){
+        return RNNeteaseIm.updateMemberNick(teamId, contactId, nick)
     }
 
     /**
@@ -140,7 +137,7 @@ class Team {
      * @param promise
      */
     updateTeam(teamId, fieldType, value){
-        return RNNeteaseIm.updateTeam(teamId, fieldType, value);
+        return RNNeteaseIm.updateTeam(teamId, fieldType, value)
     }
 
     /**
@@ -150,7 +147,7 @@ class Team {
      * @returns {*}
      */
     applyJoinTeam(teamId, reason){
-        return RNNeteaseIm.applyJoinTeam(teamId, reason);
+        return RNNeteaseIm.applyJoinTeam(teamId, reason)
     }
 
     /**
@@ -159,7 +156,7 @@ class Team {
      * @returns {*}
      */
     dismissTeam(teamId){
-        return RNNeteaseIm.dismissTeam(teamId);
+        return RNNeteaseIm.dismissTeam(teamId)
     }
 
     /**
@@ -169,7 +166,7 @@ class Team {
      * @returns {*}
      */
     addMembers(teamId, accounts){
-        return RNNeteaseIm.addMembers(teamId, accounts);
+        return RNNeteaseIm.addMembers(teamId, accounts)
     }
 
     /**
@@ -179,7 +176,7 @@ class Team {
      * @returns {*}
      */
     removeMember(teamId, account){
-        return RNNeteaseIm.removeMember(teamId, account);
+        return RNNeteaseIm.removeMember(teamId, account)
     }
 
     /**
@@ -188,7 +185,7 @@ class Team {
      * @returns {*}
      */
     quitTeam(teamId){
-        return RNNeteaseIm.quitTeam(teamId);
+        return RNNeteaseIm.quitTeam(teamId)
     }
 
     /**
@@ -199,7 +196,7 @@ class Team {
      * @returns {*}
      */
     transferTeam(teamId, account, quit){
-        return RNNeteaseIm.transferTeam(teamId, account, quit);
+        return RNNeteaseIm.transferTeam(teamId, account, quit)
     }
 
     /**
@@ -209,7 +206,7 @@ class Team {
      * @returns {*}
      */
     updateTeamName(teamId, teamName){
-        return RNNeteaseIm.updateTeamName(teamId, teamName);
+        return RNNeteaseIm.updateTeamName(teamId, teamName)
     }
 }
-export default new Team();
+export default new Team()

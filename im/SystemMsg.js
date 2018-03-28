@@ -2,51 +2,44 @@
  * Created by dowin on 2017/8/2.
  */
 'use strict'
-import { NativeModules,Platform } from 'react-native';
-
-const { RNNeteaseIm } = NativeModules;
+import { NativeModules,Platform } from 'react-native'
+const { RNNeteaseIm } = NativeModules
 class SystemMsg {
-    /** ******************************systemMsg 系统通知****************************************** **/
-
     /**
      * 进入系统通知消息
      * @returns {*} @see observeReceiveSystemMsg
      */
     startSystemMsg(){
-        return RNNeteaseIm.startSystemMsg();
+        return RNNeteaseIm.startSystemMsg()
     }
-
     /**
      * 退出系统通知消息
      * @returns {*}
      */
     stopSystemMsg(){
-        return RNNeteaseIm.stopSystemMsg();
+        return RNNeteaseIm.stopSystemMsg()
     }
-
     /**
      * 开始系统通知计数监听
      * @returns {*} @see observeUnreadCountChange
      */
     startSystemMsgUnreadCount(){
-        return RNNeteaseIm.startSystemMsgUnreadCount();
+        return RNNeteaseIm.startSystemMsgUnreadCount()
     }
-
     /**
      * 停止系统通知计数监听
      * @returns {*}
      */
     stopSystemMsgUnreadCount(){
-        return RNNeteaseIm.stopSystemMsgUnreadCount();
+        return RNNeteaseIm.stopSystemMsgUnreadCount()
     }
     /**
      * 查询系统通知列表
      * @returns {*}
      */
-    querySystemMessagesBlock(offset,limit){
-        return RNNeteaseIm.querySystemMessagesBlock(offset,limit);
+    querySystemMessagesBlock(offset, limit){
+        return RNNeteaseIm.querySystemMessagesBlock(offset, limit)
     }
-
     /**
      * 通过/拒绝 系统通知
      * @param type
@@ -57,13 +50,13 @@ class SystemMsg {
      * @param timestamp
      * @returns {*}
      */
-    onSystemNotificationDeal(type,messageId,targetId,fromAccount,pass,timestamp){
-        if(type==='0'){
-            return RNNeteaseIm.passApply(messageId, targetId,fromAccount,pass,timestamp);
-        }else if(type==='2'){
-            return RNNeteaseIm.acceptInvite(messageId,targetId,fromAccount,pass,timestamp);
-        }else if(type==='5'){
-            return RNNeteaseIm.ackAddFriendRequest(messageId,fromAccount,pass,timestamp);
+    onSystemNotificationDeal(type,messageId, targetId, fromAccount, pass, timestamp){
+        if (type==='0') {
+            return RNNeteaseIm.passApply(messageId, targetId, fromAccount, pass, timestamp)
+        } else if (type==='2') {
+            return RNNeteaseIm.acceptInvite(messageId, targetId, fromAccount, pass, timestamp)
+        } else if (type==='5') {
+            return RNNeteaseIm.ackAddFriendRequest(messageId, fromAccount, pass, timestamp)
         }
     }
 
@@ -75,11 +68,11 @@ class SystemMsg {
      * @param timestamp ios使用
      * @returns {*}
      */
-    ackAddFriendRequest(messageId,contactId,pass,timestamp){
-        if(Platform.OS === 'ios'){
-            return RNNeteaseIm.ackAddFriendRequest(contactId,pass,timestamp);
+    ackAddFriendRequest(messageId, contactId, pass, timestamp){
+        if (Platform.OS === 'ios') {
+            return RNNeteaseIm.ackAddFriendRequest(contactId, pass, timestamp);
         }
-        return RNNeteaseIm.ackAddFriendRequest(messageId,contactId,pass,timestamp);
+        return RNNeteaseIm.ackAddFriendRequest(messageId, contactId, pass, timestamp)
     }
 
     /**
@@ -91,8 +84,8 @@ class SystemMsg {
      * @param timestamp ios使用
      * @returns {*}
      */
-    passApply(messageId, targetId,fromAccount,pass,timestamp){
-        return RNNeteaseIm.passApply(messageId, targetId,fromAccount,pass,timestamp);
+    passApply(messageId, targetId, fromAccount, pass, timestamp){
+        return RNNeteaseIm.passApply(messageId, targetId, fromAccount, pass, timestamp)
     }
 
     /**
@@ -104,8 +97,8 @@ class SystemMsg {
      * @param timestamp ios使用
      * @returns {*}
      */
-    acceptInvite(messageId,targetId,fromAccount,pass,timestamp){
-        return RNNeteaseIm.acceptInvite(messageId,targetId,fromAccount,pass,timestamp);
+    acceptInvite(messageId, targetId, fromAccount, pass, timestamp){
+        return RNNeteaseIm.acceptInvite(messageId, targetId, fromAccount, pass, timestamp)
     }
     /**
      * 删除系统通知
@@ -113,8 +106,8 @@ class SystemMsg {
      * @param timestamp
      * @returns {*}
      */
-    deleteSystemMessage(fromAccount,timestamp){
-        return RNNeteaseIm.deleteSystemMessage(fromAccount,timestamp);
+    deleteSystemMessage(fromAccount, timestamp){
+        return RNNeteaseIm.deleteSystemMessage(fromAccount, timestamp)
     }
 
     /**
@@ -122,7 +115,7 @@ class SystemMsg {
      * @returns {*}
      */
     clearSystemMessages(){
-        return RNNeteaseIm.clearSystemMessages();
+        return RNNeteaseIm.clearSystemMessages()
     }
 
     /**
@@ -130,7 +123,7 @@ class SystemMsg {
      * @returns {*}
      */
     resetSystemMessageUnreadCount(){
-        return RNNeteaseIm.resetSystemMessageUnreadCount();
+        return RNNeteaseIm.resetSystemMessageUnreadCount()
     }
 }
-export default new SystemMsg();
+export default new SystemMsg()

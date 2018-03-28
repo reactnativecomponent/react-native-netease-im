@@ -1,21 +1,20 @@
 'use strict'
-import { NativeModules,Platform, NetInfo } from 'react-native';
-
-const { RNNeteaseIm,PinYin } = NativeModules;
+import { NativeModules,Platform, NetInfo } from 'react-native'
+const { RNNeteaseIm,PinYin } = NativeModules
 
 class Utils {
     /**
      * 清除数据缓存
      */
     cleanCache() {
-        return RNNeteaseIm.cleanCache();
+        return RNNeteaseIm.cleanCache()
     }
 
     /**
      * 获取缓存大小
      */
     getCacheSize() {
-        return RNNeteaseIm.getCacheSize();
+        return RNNeteaseIm.getCacheSize()
     }
 
     /**
@@ -24,22 +23,19 @@ class Utils {
     networkIsConnected() {//0：无网络，1：有网络
         if (Platform.OS === 'ios') {
             if (RNNeteaseIm.getNetWorkStatus() === '1') {
-                return true;
+                return true
             }
-            return false;
+            return false
         } else {
-            return NetInfo.isConnected.fetch().done();
+            return NetInfo.isConnected.fetch().done()
         }
     }
-
-    /** ******************************播放 ****************************************** **/
-
     /**
      * 播放录音
      * @returns {*}
      */
     play(filepath) {
-        return RNNeteaseIm.play(filepath);
+        return RNNeteaseIm.play(filepath)
     }
 
     /**
@@ -50,9 +46,9 @@ class Utils {
      */
     playLocacl(name, type) {
         if (Platform.OS === 'ios') {
-            return RNNeteaseIm.playLocal(name, type);
+            return RNNeteaseIm.playLocal(name, type)
         }
-        return RNNeteaseIm.playLocal('assets:///' + name + '.' + type, type);
+        return RNNeteaseIm.playLocal('assets:///' + name + '.' + type, type)
     }
 
     /**
@@ -60,11 +56,11 @@ class Utils {
      * @returns {*}
      */
     stopPlay() {
-        return RNNeteaseIm.stopPlay();
+        return RNNeteaseIm.stopPlay()
     }
 
     sortPinYin(o, key) {
-        return PinYin.sortPinYin(o, key);
+        return PinYin.sortPinYin(o, key)
     }
 
 
@@ -73,7 +69,7 @@ class Utils {
      * @returns {*}
      */
     fetchNetInfo() {
-        return RNNeteaseIm.fetchNetInfo();
+        return RNNeteaseIm.fetchNetInfo()
     }
 
     /**
@@ -82,9 +78,9 @@ class Utils {
      * @returns {*}
      */
     setupWebViewUserAgent() {
-        RNNeteaseIm.setupWebViewUserAgent();
+        RNNeteaseIm.setupWebViewUserAgent()
     }
 
 }
 
-export default new Utils();
+export default new Utils()
