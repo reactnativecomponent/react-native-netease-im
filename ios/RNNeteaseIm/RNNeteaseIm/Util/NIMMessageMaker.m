@@ -84,6 +84,11 @@
             text = [NSString stringWithFormat:@"[名片]%@", [attachment.dataDict objectForKey:@"name"]];
         }
             break;
+        case CustomMessgeTypeCustom: //自定义
+        {
+            text = [NSString stringWithFormat:@"%@", [attachment.dataDict objectForKey:@"pushContent"]];
+        }
+            break;
         default:
             text = @"发来了一条未知消息";
             break;

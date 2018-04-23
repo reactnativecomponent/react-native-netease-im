@@ -397,12 +397,23 @@
                 }
             }
                 break;
+            case CustomMessgeTypeCustom: //自定义
+            {
+                text = [self dealWithCustomData:obj.dataDict];
+            }
+                break;
             default:
                 text = @"[未知消息]";
                 break;
         }
     }
     return text;
+}
+
+//处理自定义消息
+- (NSString *)dealWithCustomData:(NSDictionary *)dict{
+    NSString *recentContent = [self stringFromKey:@"recentContent" andDict:dict];
+    return recentContent;
 }
 
 //处理拆红包消息

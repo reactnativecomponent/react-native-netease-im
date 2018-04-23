@@ -90,7 +90,7 @@
         }
     }
 }
-
+//聊天界面历史记录
 -(void)localSession:(NSInteger)index cerrentmessageId:(NSString *)currentMessageID success:(Success)succe err:(Errors)err{
     _index = index;
     [[NIMSDK sharedSDK].conversationManager markAllMessagesReadInSession:_session];
@@ -320,6 +320,12 @@
                         [dic setObject:@"card" forKey:@"msgType"];
                     }
                         break;
+                    case CustomMessgeTypeCustom://自定义
+                    {
+                        [dic setObject:obj.dataDict  forKey:@"extend"];
+                        [dic setObject:@"custom" forKey:@"msgType"];
+                    }
+                        break;
                     default:
                     {
                         [dic setObject:obj.dataDict  forKey:@"extend"];
@@ -418,25 +424,14 @@
 }
 
 //发送自定义消息
--(void)sendCustomMessage:(  NSString *)attachment config:(  NSString *)config{
-    NIMMessage *message;
-    NIMObject *obj = [NIMObject initNIMObject];
-    obj.attachment =attachment;
-    message = [NIMMessageMaker msgWithCustom:obj andeSession:_session];
-    if ([self isFriendToSendMessage:message]) {
-        [[NIMSDK sharedSDK].chatManager sendMessage:message toSession:_session error:nil];
-    }
+-(void)sendCustomMessage:(NSDictionary *)dataDict{
+    NSString *strW = [dataDict objectForKey:@"Width"] ? [NSString stringWithFormat:@"%@",[dataDict objectForKey:@"Width"]] : @"0";
+    NSString *strH = [dataDict objectForKey:@"Height"] ? [NSString stringWithFormat:@"%@",[dataDict objectForKey:@"Height"]] : @"0";
+    [dataDict setValue:strW forKey:@"Width"];
+    [dataDict setValue:strH forKey:@"Height"];
+    [self sendCustomMessage:CustomMessgeTypeCustom data:dataDict];
 }
 
-//发送地理位置消息
--(void)sendLocationMessage:(  NSString *)latitude longitude:(  NSString *)longitude address:(  NSString *)address{
-    NIMLocationObject *locaObj = [[NIMLocationObject alloc]initWithLatitude:[latitude doubleValue] longitude:[longitude doubleValue] title:address];
-    NIMKitLocationPoint *locationPoint = [[NIMKitLocationPoint alloc]initWithLocationObject:locaObj];
-    NIMMessage *message = [NIMMessageMaker msgWithLocation:locationPoint andeSession:_session];
-    if ([self isFriendToSendMessage:message]) {
-        [[NIMSDK sharedSDK].chatManager sendMessage:message toSession:_session error:nil];
-    }
-}
 //发送自定义消息2
 -(void)sendCustomMessage:(NSInteger )custType data:(NSDictionary *)dataDict{
     NIMMessage *message;
@@ -444,6 +439,17 @@
     obj.custType = custType;
     obj.dataDict = dataDict;
     message = [NIMMessageMaker msgWithCustomAttachment:obj andeSession:_session];
+    if ([self isFriendToSendMessage:message]) {
+        [[NIMSDK sharedSDK].chatManager sendMessage:message toSession:_session error:nil];
+    }
+}
+
+
+//发送地理位置消息
+-(void)sendLocationMessage:(  NSString *)latitude longitude:(  NSString *)longitude address:(  NSString *)address{
+    NIMLocationObject *locaObj = [[NIMLocationObject alloc]initWithLatitude:[latitude doubleValue] longitude:[longitude doubleValue] title:address];
+    NIMKitLocationPoint *locationPoint = [[NIMKitLocationPoint alloc]initWithLocationObject:locaObj];
+    NIMMessage *message = [NIMMessageMaker msgWithLocation:locationPoint andeSession:_session];
     if ([self isFriendToSendMessage:message]) {
         [[NIMSDK sharedSDK].chatManager sendMessage:message toSession:_session error:nil];
     }
@@ -943,7 +949,6 @@
         [dic2 setObject:notiObj forKey:@"extend"];
         
     }else if (message.messageType == NIMMessageTypeCustom) {
-//            [dic setObject:@"custom" forKey:@"msgType"];
         NIMCustomObject *customObject = message.messageObject;
         DWCustomAttachment *obj = customObject.attachment;
         if (obj) {
@@ -990,6 +995,12 @@
                 {
                     [dic2 setObject:obj.dataDict  forKey:@"extend"];
                     [dic2 setObject:@"card" forKey:@"msgType"];
+                }
+                    break;
+                case CustomMessgeTypeCustom://自定义
+                {
+                    [dic2 setObject:obj.dataDict  forKey:@"extend"];
+                    [dic2 setObject:@"custom" forKey:@"msgType"];
                 }
                     break;
                 default:

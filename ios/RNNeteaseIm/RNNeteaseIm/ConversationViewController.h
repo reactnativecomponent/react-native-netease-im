@@ -36,7 +36,7 @@ typedef void(^Errors)(id erro);
 //发送视频
 -(void)sendTextMessage:(  NSString *)path duration:(  NSString *)duration width:(  NSString *)width height:(  NSString *)height displayName:(  NSString *)displayName;
 //发送自定义消息
--(void)sendCustomMessage:(  NSString *)attachment config:(  NSString *)config;
+-(void)sendCustomMessage:(NSDictionary *)dataDict;
 //发送地理位置消息
 -(void)sendLocationMessage:(  NSString *)latitude longitude:(  NSString *)longitude address:(  NSString *)address;
 //发送提醒消息

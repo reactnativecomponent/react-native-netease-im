@@ -186,6 +186,15 @@ class Session {
         return RNNeteaseIm.sendBankTransferMessage(amount, comments, serialNo)
     }
     /**
+     * 发送自定义消息
+     * @param attachment 自定义消息内容{Width:260,Height:100,pushContent:'发来一条自定义消息',recentContent:'[自定义消息]'}
+     * Width 消息宽度，Height：消息高度， pushContent：推送消息内容， recentContent：最近会话显示的内容，
+     * @returns {*}
+     */
+    sendCustomMessage(attachment){
+        return RNNeteaseIm.sendCustomMessage(attachment);
+    }
+    /**
      * 开启录音权限
      * @returns {*}
      */

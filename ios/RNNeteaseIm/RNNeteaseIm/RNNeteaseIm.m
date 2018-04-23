@@ -336,8 +336,8 @@ RCT_EXPORT_METHOD(sendAudioMessage:(nonnull  NSString *)file duration:(nonnull  
     [[ConversationViewController initWithConversationViewController]sendAudioMessage:file duration:duration];
 }
 //发送自定义消息
-RCT_EXPORT_METHOD(sendCustomMessage:(nonnull  NSString *)attachment config:(nonnull  NSString *)config){
-    [[ConversationViewController initWithConversationViewController]sendCustomMessage:attachment config:config];
+RCT_EXPORT_METHOD(sendCustomMessage:(nonnull  NSDictionary *)attachment){
+    [[ConversationViewController initWithConversationViewController]sendCustomMessage:attachment];
 }
 //发送视频消息
 RCT_EXPORT_METHOD(sendVideoMessage:(nonnull  NSString *)file duration:(nonnull  NSString *)duration width:(nonnull  NSString *)width height:(nonnull  NSString *)height displayName:(nonnull  NSString *)displayName){
