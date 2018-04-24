@@ -65,20 +65,9 @@
 
 - (void)playMessageAudioTip
 {
-//    UINavigationController *nav = [NTESMainTabController instance].selectedViewController;
-//    BOOL needPlay = YES;
-//    for (UIViewController *vc in nav.viewControllers) {
-//        if ([vc isKindOfClass:[NIMSessionViewController class]] ||  [vc isKindOfClass:[NTESLiveViewController class]] || [vc isKindOfClass:[NTESNetChatViewController class]])
-//        {
-//            needPlay = NO;
-//            break;
-//        }
-//    }
-//    if (needPlay) {
-//        [self.player stop];
-//        [[AVAudioSession sharedInstance] setCategory: AVAudioSessionCategoryAmbient error:nil];
-//        [self.player play];
-//    }
+    [self.player stop];
+    [[AVAudioSession sharedInstance] setCategory: AVAudioSessionCategoryAmbient error:nil];
+    [self.player play];
 }
 //检测是不是消息助手发来的转账消息提醒
 - (void)checkTranferMessage:(NSArray *)messages{
