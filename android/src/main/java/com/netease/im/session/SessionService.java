@@ -494,6 +494,45 @@ public class SessionService {
                 });
     }
 
+    /**
+     * @param anchor 起始时间点的消息，不能为 null
+     * @param limit 本次查询的消息条数上限(最多 100 条)
+     * @param onMessageQueryListListener 回调
+     */
+    public void pullMessageHistory(IMMessage anchor, final int limit, final OnMessageQueryListListener onMessageQueryListListener) {
+        if (anchor == null) {
+            anchor = MessageBuilder.createEmptyMessage(sessionId, sessionTypeEnum, 0);
+        }
+        getMsgService().pullMessageHistory(anchor,limit,true)
+                .setCallback(new RequestCallbackWrapper<List<IMMessage>>() {
+                    @Override
+                    public void onResult(int code, List<IMMessage> result, Throwable exception) {
+                        if (code == ResponseCode.RES_SUCCESS) {
+                            if (result != null && result.size() > 0) {
+                                Collections.reverse(result);
+                                fistMessage = result.get(0);
+                                updateShowTimeItem(result, true);
+
+                                final int size = result.size();
+                                boolean isLimit = size >= limit;
+                                List<IMMessage> r = onQuery(result);
+
+                                if (r.size() == 0) {
+                                    pullMessageHistory(fistMessage, size - r.size(), onMessageQueryListListener);
+                                } else {
+                                    onMessageQueryListListener.onResult(code, r, timedItems);
+                                    if (r.size() < size && isLimit) {
+                                        fistMessage = result.get(0);
+                                    }
+                                }
+                                return;
+                            }
+                        }
+                        onMessageQueryListListener.onResult(code, null, null);
+                    }
+                });
+    }
+
     List<IMMessage> onQuery(List<IMMessage> result) {//TODO
 
 

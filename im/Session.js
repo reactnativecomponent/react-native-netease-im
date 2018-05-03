@@ -84,6 +84,19 @@ class Session {
     queryMessageListHistory(sessionId, sessionType, timeLong, direction, limit, asc){
         return RNNeteaseIm.queryMessageListHistory(sessionId, sessionType, timeLong, direction, limit, asc)
     }
+
+    /**
+     * 拉取云端聊天内容
+     * @param messageId
+     * @param limit 查询结果的条数限制
+     * @returns {*}  @see 回调返回最近所有消息记录
+     */
+    pullMessageHistory(messageId,limit){
+        return RNNeteaseIm.pullMessageHistory(messageId,limit);
+    }
+
+    /** ******************************发送 消息****************************************** **/
+
     /**
      *1.发送文本消息
      * @param content 文本内容

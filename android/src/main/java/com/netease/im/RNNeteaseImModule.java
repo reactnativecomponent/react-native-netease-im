@@ -1589,6 +1589,35 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
 
     }
 
+    /**
+     *
+     * @param messageId 最旧的消息ID
+     * @param limit     查询结果的条数限制
+     * @param promise
+     */
+    @ReactMethod
+    private void pullMessageHistory(String messageId, final int limit, final Promise promise) {
+        LogUtil.w(TAG, "pullMessageHistory： msgId = " + messageId +  ", limit = " + limit);
+        sessionService.queryMessage(messageId, new SessionService.OnMessageQueryListener() {
+            @Override
+            public int onResult(int code, IMMessage message) {
+                sessionService.pullMessageHistory(message, limit, new SessionService.OnMessageQueryListListener() {
+                    @Override
+                    public int onResult(int code, List<IMMessage> messageList, Set<String> timedItems) {
+                        if (messageList == null || messageList.isEmpty()) {
+                            promise.reject(code + "", "");
+                        } else {
+                            Object a = ReactCache.createMessageList(messageList);
+                            promise.resolve(a);
+                        }
+                        return 0;
+                    }
+                });
+                return 0;
+            }
+        });
+    }
+
     private QueryDirectionEnum getQueryDirection(String direction) {
         QueryDirectionEnum directionEnum = QueryDirectionEnum.QUERY_NEW;
         if ("old".equals(direction)) {
