@@ -289,7 +289,14 @@ RCT_EXPORT_METHOD(queryMessageListEx:(nonnull  NSString *)messageId limit:(int)l
     } err:^(id erro) {
         reject(@"-1",erro, nil);
     }];
-    
+}
+//服务器历史记录
+RCT_EXPORT_METHOD(queryMessageListClo:(nonnull NSString *)messageId limit:(int)limit resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
+    [[ConversationViewController initWithConversationViewController]cloudSession:limit currentmessageId:messageId success:^(id param) {
+        resolve(param);
+    } err:^(id erro) {
+        reject(@"-1",erro, nil);
+    }];
 }
 //本地历史记录
 RCT_EXPORT_METHOD(queryMessageEx:(nonnull  NSString *)sessionId sessionType:(nonnull  NSString *)sessionType timeLong:(nonnull  NSString *)timeLong direction:(nonnull  NSString *)direction limit:(nonnull  NSString *)limit   asc:(BOOL)asc resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){

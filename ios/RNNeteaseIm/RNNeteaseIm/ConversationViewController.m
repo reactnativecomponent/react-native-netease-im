@@ -90,6 +90,40 @@
         }
     }
 }
+
+-(void)cloudSession:(NSInteger)index currentmessageId:(NSString *)currentMessageID success:(Success)success err:(Errors)err{
+    _index = index;
+    if (currentMessageID.length != 0) {
+        NSArray *currentMessages = [[[NIMSDK sharedSDK] conversationManager] messagesInSession:_session messageIds:@[currentMessageID] ];
+        NIMMessage *currentM = currentMessages[0];
+        NIMHistoryMessageSearchOption *option = [[NIMHistoryMessageSearchOption alloc] init];
+        option.limit = index;
+        option.startTime = 0;
+        option.endTime = currentM.timestamp;
+        option.currentMessage = currentM;
+        option.sync = YES; //当设为NO时currentMessage结果可能为0导致crash
+        
+        [[[NIMSDK sharedSDK] conversationManager] fetchMessageHistory:_session option:option result:^(NSError * _Nullable error, NSArray<NIMMessage *> * _Nullable messages) {
+            if (messages.count != 0) {
+                NSMutableArray *result = [self setTimeArr:messages];
+                result = (NSMutableArray *)[[result reverseObjectEnumerator] allObjects];
+                success(result);
+            }else{
+                err(@"暂无更多");
+            }
+            
+        }];
+    }
+    else{
+        NSArray *messageArr =  [[[NIMSDK sharedSDK] conversationManager]messagesInSession:_session message:nil limit: index];
+        if ([self setTimeArr:messageArr].count != 0) {
+            NSMutableDictionary *dic = [[self setTimeArr:messageArr] objectAtIndex:[self setTimeArr:messageArr].count - 1];
+            [[NSUserDefaults standardUserDefaults]setObject:[dic objectForKey:@"time"] forKey:@"timestamp"];
+        }
+        success([self setTimeArr:messageArr]);
+    }
+}
+
 //聊天界面历史记录
 -(void)localSession:(NSInteger)index cerrentmessageId:(NSString *)currentMessageID success:(Success)succe err:(Errors)err{
     _index = index;

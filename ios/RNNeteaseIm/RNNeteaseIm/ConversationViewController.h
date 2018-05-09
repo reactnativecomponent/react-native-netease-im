@@ -15,6 +15,7 @@ typedef void(^Errors)(id erro);
 
 +(instancetype)initWithConversationViewController;
 -(void)localSession:(NSInteger)index cerrentmessageId:(NSString *)currentMessageID success:(Success)succe err:(Errors)err;
+-(void)cloudSession:(NSInteger)index currentmessageId:(NSString *)currentMessageID success:(Success)succes err:(Errors)err;
 -(void)startSession:(NSString *)sessionID withType:(NSString *)type;
 -(void)stopSession;
 -(void)sendAudioRecode:(NSString *)filePath;
