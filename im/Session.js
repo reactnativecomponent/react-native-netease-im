@@ -62,15 +62,7 @@ class Session {
     queryMessageListEx(messageId, limit){
         return RNNeteaseIm.queryMessageListEx(messageId, limit)
     }
-    /**
-     * 获取最近聊天内容
-     * @param messageId
-     * @param limit 查询结果的条数限制
-     * @returns {*}  @see 回调返回最近所有消息记录
-     */
-    queryMessageListClo(messageId,limit){
-        return RNNeteaseIm.queryMessageListClo(messageId,limit);
-    }
+
     /**
      * 获取最近聊天内容
      * @param sessionId 聊天会话ID,

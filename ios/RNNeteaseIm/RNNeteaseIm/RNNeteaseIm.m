@@ -26,7 +26,7 @@
 
 - (instancetype)init{
     if (self = [super init]) {
-        
+
     }
     [self initController];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(clickObserveNotification:) name:@"ObservePushNotification" object:nil];
@@ -130,7 +130,7 @@ RCT_EXPORT_METHOD(getRecentContactList:(RCTPromiseResolveBlock)resolve
     } andError:^(NSString *error) {
         reject(@"-1",error,nil);
     }];
-    
+
 }
 ////清空聊天记录
 //RCT_EXPORT_METHOD(clearMessage:(nonnull  NSString *)sessionId type:(nonnull  NSString *)type){
@@ -154,7 +154,7 @@ RCT_EXPORT_METHOD(fetchUserInfo:(nonnull NSString * )contactId   resolve:(RCTPro
 }
 //保存好友备注
 RCT_EXPORT_METHOD(updateUserInfo:(nonnull NSString * )contactId  alias:(nonnull NSString *)alias resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
-    
+
     [[ContactViewController initWithContactViewController] upDateUserInfo:contactId alias:alias Success:^(id param) {
         resolve(param);
     } error:^(NSString *error) {
@@ -214,9 +214,9 @@ RCT_EXPORT_METHOD(getFriendList:(nonnull NSString *)keyword resolve:(RCTPromiseR
 
 //通讯录好友
 RCT_EXPORT_METHOD(stopFriendList){
-    
+
     [[ContactViewController initWithContactViewController] disealloc];
-    
+
 }
 //删除好友
 RCT_EXPORT_METHOD(deleteFriend:(nonnull  NSString *)contactId resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
@@ -291,7 +291,7 @@ RCT_EXPORT_METHOD(queryMessageListEx:(nonnull  NSString *)messageId limit:(int)l
     }];
 }
 //服务器历史记录
-RCT_EXPORT_METHOD(queryMessageListClo:(nonnull NSString *)messageId limit:(int)limit resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
+RCT_EXPORT_METHOD(pullMessageHistory:(nonnull NSString *)messageId limit:(int)limit resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
     [[ConversationViewController initWithConversationViewController]cloudSession:limit currentmessageId:messageId success:^(id param) {
         resolve(param);
     } err:^(id erro) {
@@ -319,7 +319,7 @@ RCT_EXPORT_METHOD(revokeMessage:(nonnull NSString *)messageId  resolve:(RCTPromi
 //重发消息
 RCT_EXPORT_METHOD(resendMessage:(nonnull NSString *)messageId){
     [[ConversationViewController initWithConversationViewController]resendMessage:messageId];
-    
+
 }
 
 //删除会话内容
@@ -455,7 +455,7 @@ RCT_EXPORT_METHOD(getTeamList:(nonnull NSString *)keyWord resolve:(RCTPromiseRes
 
 //开始获取群组
 RCT_EXPORT_METHOD(startTeamList){
-    
+
     [[TeamViewController initWithTeamViewController]initWithDelegate];
 }
 
@@ -549,7 +549,7 @@ RCT_EXPORT_METHOD(updateTeam:(nonnull NSString *)teamId fieldType:(nonnull NSStr
 
 //申请加入群组
 RCT_EXPORT_METHOD(applyJoinTeam:(nonnull NSString *)teamId reason:(nonnull NSString *)reason  resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
-    
+
     [[TeamViewController initWithTeamViewController]applyJoinTeam:teamId message:reason Succ:^(id param) {
         resolve(param);
     } Err:^(id erro) {
@@ -623,17 +623,17 @@ RCT_EXPORT_METHOD(getCacheSize:(RCTPromiseResolveBlock)resolve reject:(RCTPromis
         }
     }
     CGFloat docSize = [self folderSizeAtPath:strDocPath];
-    
+
     NSString *libraryPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) objectAtIndex:0];
     NSString *libCachePath =  [libraryPath stringByAppendingPathComponent:@"Caches"];
     CGFloat libSize = [self folderSizeAtPath:libCachePath];
-    
+
     NSString *tmpPath = NSTemporaryDirectory();
     NSString *tmpNimPath = [tmpPath stringByAppendingPathComponent:@"NIM"];
     NSString *tmpPickPath = [tmpPath stringByAppendingPathComponent:@"react-native-image-crop-picker"];
     CGFloat tmpNimSize = [self folderSizeAtPath:tmpNimPath];
     CGFloat tmpPickSize = [self folderSizeAtPath:tmpPickPath];
-    
+
     NSString *allSize = [NSString stringWithFormat:@"%f",docSize+libSize+tmpNimSize+tmpPickSize];
     NSLog(@"allSize:%@   documentPath:%@",allSize,documentPath);
     resolve(allSize);
@@ -655,13 +655,13 @@ RCT_EXPORT_METHOD(cleanCache){
     }
     NSArray *ResourcesFiles = [[NSFileManager defaultManager] subpathsOfDirectoryAtPath:strDocPath error:nil];
     [self deleteFilesWithPath:strDocPath andFiles:ResourcesFiles];
-    
+
     //Library
     NSString *libraryPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) objectAtIndex:0];
     NSString *libCachePath =  [libraryPath stringByAppendingPathComponent:@"Caches"];
     NSArray *libFiles = [[NSFileManager defaultManager] subpathsOfDirectoryAtPath:libCachePath error:nil];
     [self deleteFilesWithPath:libCachePath andFiles:libFiles];
-    
+
     NSString *tmpPath = NSTemporaryDirectory();
     NSString *tmpNimPath = [tmpPath stringByAppendingPathComponent:@"NIM"];
     NSString *tmpPickPath = [tmpPath stringByAppendingPathComponent:@"react-native-image-crop-picker"];
@@ -669,7 +669,7 @@ RCT_EXPORT_METHOD(cleanCache){
     [self deleteFilesWithPath:tmpNimPath andFiles:tmpNimFiles];
     NSArray *tmpPickFiles = [[NSFileManager defaultManager] subpathsOfDirectoryAtPath:tmpPickPath error:nil];
     [self deleteFilesWithPath:tmpPickPath andFiles:tmpPickFiles];
-    
+
     [self removAllRecentSessions];
 }
 
@@ -792,7 +792,7 @@ RCT_EXPORT_METHOD(cleanCache){
             default:
                 break;
         }
-        
+
     };
 }
 
