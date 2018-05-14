@@ -54,7 +54,7 @@ class Session {
         return RNNeteaseIm.stopSession()
     }
     /**
-     * 获取最近聊天内容
+     * 获取云端聊天记录
      * @param messageId
      * @param limit 查询结果的条数限制
      * @returns {*}  @see 回调返回最近所有消息记录
