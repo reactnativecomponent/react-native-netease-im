@@ -21,7 +21,7 @@
 }
 
 
-- (BOOL)removeSessionWhenDeleteMessages{
+- (BOOL)removeSessionWheDeleteMessages{
     return [[[NSUserDefaults standardUserDefaults] objectForKey:@"enabled_remove_recent_session"] boolValue];
 }
 
@@ -310,7 +310,7 @@
                 "chatroom_retry_count %zd\n"\
                 "sync_when_remote_fetch_messages %zd\n"\
                 "\n\n\n",
-                [self removeSessionWhenDeleteMessages],
+                [self removeSessionWheDeleteMessages],
                 [self localSearchOrderByTimeDesc],
                 [self autoRemoveRemoteSession],
                 [self autoRemoveSnapMessage],

@@ -10,11 +10,12 @@
 #define PrefixHeader_pch
 #import <NIMSDK.h>
 #import <Foundation/Foundation.h>
+#import "NTESGlobalMacro.h"
 #import "NIMKitInfo.h"
 #import "NIMKitUtil.h"
 #import "NIMKitInfoFetchOption.h"
 #import <CocoaLumberjack/CocoaLumberjack.h>
-#import <NIMAVChat/NIMAVChat.h>
+#import "NIMAVChat.h"
 #import "NIMKit.h"
 #import "NIMObject.h"
 #import "DWCustomAttachment.h"
