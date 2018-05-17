@@ -3,6 +3,8 @@ import NimFriend from './im/Friend'
 import NimSession from './im/Session'
 import NimSystemMsg from './im/SystemMsg'
 import NimTeam from './im/Team'
+import VideoManager from './src/VideoManager'
+import VideoView from './src/VideoView'
 /**
  *监听列表
  *observeRecentContact 最近会话
@@ -20,9 +22,12 @@ import NimTeam from './im/Team'
  *observeOnKick 被踢出下线
  */
 export {
-    NimUtils,
-    NimFriend,
-    NimSession,
-    NimSystemMsg,
-    NimTeam,
+	NimUtils,
+	NimFriend,
+	NimSession,
+	NimSystemMsg,
+	NimTeam,
+
+	VideoManager,
+	VideoView,
 }
