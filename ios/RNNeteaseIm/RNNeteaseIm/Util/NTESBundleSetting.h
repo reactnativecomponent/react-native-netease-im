@@ -7,8 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "NIMGlobalDefs.h"
-#import "NIMAVChatDefs.h"
 
 //部分API提供了额外的选项，如删除消息会有是否删除会话的选项,为了测试方便提供配置参数
 //上层开发只需要按照策划需求选择一种适合自己项目的选项即可，这个设置只是为了方便测试不同的case下API的正确性
@@ -17,7 +15,9 @@
 
 + (instancetype)sharedConfig;
 
-- (BOOL)removeSessionWheDeleteMessages;             //删除消息时是否同时删除会话项
+- (BOOL)removeSessionWhenDeleteMessages;             //删除消息时是否同时删除会话项
+
+- (BOOL)dropTableWhenDeleteMessages;                //删除消息的同时是否删除消息表
 
 - (BOOL)localSearchOrderByTimeDesc;                 //本地搜索消息顺序 YES表示按时间戳逆序搜索,NO表示按照时间戳顺序搜索
 
@@ -37,6 +37,14 @@
 
 - (NSArray *)ignoreTeamNotificationTypes;           //需要忽略的群通知类型
 
+- (BOOL)enableSyncWhenFetchRemoteMessages;          //拉取云消息时是否需要存储到本地
+
+- (BOOL)countTeamNotification;                      //是否将群通知计入未读
+
+- (NSInteger)maximumLogDays;                        //日志最大存在天数
+
+- (BOOL)animatedImageThumbnailEnabled;              //支持动图缩略图
+
 #pragma mark - 网络通话和白板
 - (BOOL)serverRecordAudio;                          //服务器录制语音
 
@@ -45,9 +53,11 @@
 - (BOOL)serverRecordWhiteboardData;                 //服务器录制白板数据
 
 
-- (BOOL)videochatDisableAutoCropping;               //禁用自动裁剪画面
+- (NIMNetCallVideoCrop)videochatVideoCrop;          //视频画面裁剪比例
 
 - (BOOL)videochatAutoRotateRemoteVideo;             //自动旋转视频聊天远端画面
+
+- (UIViewContentMode)videochatRemoteVideoContentMode; //对端画面的填充模式
 
 - (NIMNetCallVideoQuality)preferredVideoQuality;    //期望的视频发送清晰度
 
@@ -67,6 +77,12 @@
 
 - (BOOL)voiceDetect;                                //语音检测开关
 
+- (BOOL)audioHowlingSuppress;                       //啸叫抑制
+
 - (BOOL)preferHDAudio;                              //期望高清语音
+
+- (NIMAVChatScene)scene;                            //音视频场景设置
+
+- (NSInteger)chatroomRetryCount;                    //进聊天室重试次数
 
 @end

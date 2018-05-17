@@ -1,19 +1,20 @@
 //
 //  PrefixHeader.pch
-//  RNNeteaseIm
+//  RNNimAvchat
 //
-//  Created by Dowin on 2017/5/9.
-//  Copyright © 2017年 Dowin. All rights reserved.
+//  Created by zpd106.
+//  Copyright © 2018. All rights reserved.
 //
+
 #ifndef PrefixHeader_pch
 #define PrefixHeader_pch
 #import <NIMSDK.h>
-#import "NTESGlobalMacro.h"
+#import <Foundation/Foundation.h>
 #import "NIMKitInfo.h"
 #import "NIMKitUtil.h"
 #import "NIMKitInfoFetchOption.h"
 #import <CocoaLumberjack/CocoaLumberjack.h>
-#import "NIMAVChat.h"
+#import <NIMAVChat/NIMAVChat.h>
 #import "NIMKit.h"
 #import "NIMObject.h"
 #import "DWCustomAttachment.h"
@@ -40,6 +41,12 @@ static DDLogLevel ddLogLevel = DDLogLevelInfo;
 #define CustomMessgeTypeAccountNotice  8   //账户通知，与账户金额相关变动 account_notice
 #define CustomMessgeTypeRedPacketOpenMessage  9     //发送拆红包
 #define CustomMessgeTypeBusinessCard  10     //名片
-#define CustomMessgeTypeCustom  102     //名片
+
+#define dispatch_async_main_safe(block)\
+if ([NSThread isMainThread]) {\
+block();\
+} else {\
+dispatch_async(dispatch_get_main_queue(), block);\
+}
 
 #endif /* PrefixHeader_pch */
