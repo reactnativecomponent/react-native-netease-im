@@ -31,7 +31,7 @@ RCT_EXPORT_VIEW_PROPERTY(height, NSInteger);
 - (UIView *)view
 {
     NSLog(@"%s view:%@",TAG,self);
-    _vcv = [[RNVideoChatView alloc] initWithFrame: CGRectMake(0, 0, 400, 550)];
+//    _vcv = [[RNVideoChatView alloc] initWithFrame: CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
     return _vcv;
 }
 
@@ -45,7 +45,7 @@ RCT_EXPORT_VIEW_PROPERTY(height, NSInteger);
         [[NIMSDK sharedSDK].systemNotificationManager addDelegate:self];
         [[NIMAVChatSDK sharedSDK].netCallManager addDelegate:self];
     }
-    //_vcv = [[RNVideoChatView alloc] initWithFrame: CGRectMake(0, 0, 200, 350)];
+    _vcv = [[RNVideoChatView alloc] initWithFrame: CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
     [self setSendState];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(clickObserveNotification:) name:@"ObservePushNotification" object:nil];
     
