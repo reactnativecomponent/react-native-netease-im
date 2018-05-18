@@ -37,8 +37,8 @@ class ViewManager {
      *
      * @returns {*}
      */
-    hungup() {
-        return RNVideoChatManager.hungup();
+    hangup() {
+        return RNVideoChatManager.hangup();
     }
 
 }
