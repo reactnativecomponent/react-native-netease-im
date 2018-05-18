@@ -84,6 +84,11 @@
     return self;
 }
 
+-(void)viewDidDisappear:(BOOL)animated{
+    [_remoteGLView removeFromSuperview];
+    _remoteGLView = nil;
+}
+
 - (void)dealloc{
     NSLog(@"%s dealloc",TAG);
     [[NIMAVChatSDK sharedSDK].netCallManager removeDelegate:self];
@@ -438,8 +443,7 @@
     [self dismiss:nil];
 }
 
-- (void)onHangup:(UInt64)callID
-              by:(NSString *)user{
+- (void)onHangup:(UInt64)callID by:(NSString *)user{
     if (self.callInfo.callID == callID) {
         if (self.callInfo.localRecording) {
             __weak typeof(self) wself = self;
@@ -450,7 +454,7 @@
         else {
             [self dismiss:nil];
         }
-    }else if(self.callInfo.callID == 0){
+    }else{
         [self dismiss:nil];
     }
 }
@@ -688,8 +692,8 @@
 {
     option.autoRotateRemoteVideo = [[NTESBundleSetting sharedConfig] videochatAutoRotateRemoteVideo];
     option.webrtcCompatible = YES;
-    option.serverRecordAudio     = [[NTESBundleSetting sharedConfig] serverRecordAudio];
-    option.serverRecordVideo     = [[NTESBundleSetting sharedConfig] serverRecordVideo];
+    option.serverRecordAudio     = YES;
+    option.serverRecordVideo     = YES;
     option.preferredVideoEncoder = [[NTESBundleSetting sharedConfig] perferredVideoEncoder];
     option.preferredVideoDecoder = [[NTESBundleSetting sharedConfig] perferredVideoDecoder];
     option.videoMaxEncodeBitrate = [[NTESBundleSetting sharedConfig] videoMaxEncodeKbps] * 1000;
