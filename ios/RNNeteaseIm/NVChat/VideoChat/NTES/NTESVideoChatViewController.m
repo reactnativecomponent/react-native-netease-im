@@ -103,14 +103,13 @@
     // 初始化remoteView
     _remoteView = [[UIImageView alloc] init];
     _remoteView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
-    _remoteView.backgroundColor = [UIColor greenColor];
     [self.view setAutoresizesSubviews:YES];
     [self.view addSubview: _remoteView];
     [self initUI];
     
     _smallView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 100, 100)];
-    _smallView.backgroundColor = [UIColor redColor];
-    [_remoteView addSubview:_smallView];
+    //_smallView.backgroundColor = [UIColor redColor];
+    //[_remoteView addSubview:_smallView];
     self.localView = _smallView;
     
     NSLog(@"%s viewDidLoad:%@",TAG,self.view);

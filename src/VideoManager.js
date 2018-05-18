@@ -22,5 +22,24 @@ class ViewManager {
         return RNVideoChatManager.logout()
     }
 
+    /**
+     *
+     * @param type bool值,true表示接听
+     * @param callId
+     * @param caller
+     * @returns {*|Request}
+     */
+    accept(type, callId, caller) {
+        return RNVideoChatManager.accept(type, callId, caller);
+    }
+
+    /**
+     *
+     * @returns {*}
+     */
+    hungup() {
+        return RNVideoChatManager.hungup();
+    }
+
 }
 export default new ViewManager()
