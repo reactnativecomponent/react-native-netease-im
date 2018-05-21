@@ -571,7 +571,7 @@
     NSLog(@"%s initRemoteGLView",TAG);
     _remoteGLView = [[NTESGLView alloc] initWithFrame:_remoteView.bounds];
     // [_remoteGLView setContentMode:[[NTESBundleSetting sharedConfig] videochatRemoteVideoContentMode]];
-    [_remoteGLView setContentMode:UIViewContentModeCenter];
+    [_remoteGLView setContentMode:UIViewContentModeScaleAspectFill];
     [_remoteGLView setBackgroundColor:[UIColor clearColor]];
     _remoteGLView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     NSLog(@"%s initRemoteGLView: _remoteGLView %@",TAG, _remoteGLView);
