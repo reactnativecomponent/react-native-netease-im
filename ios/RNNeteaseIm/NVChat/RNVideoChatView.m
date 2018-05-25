@@ -64,7 +64,8 @@
     NSLog(@"%s call:%@", TAG, callee);
     dispatch_async(dispatch_get_main_queue(), ^{
         if(_vc != nil){
-            [_vc startCall:callee];
+            //[_vc startCall:callee];
+            [_vc startByCaller];
         }
     });
 }

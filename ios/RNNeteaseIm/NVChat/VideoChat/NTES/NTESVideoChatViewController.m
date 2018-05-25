@@ -112,9 +112,9 @@
     [self.view addSubview: _remoteView];
     [self initUI];
     
-    _smallView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 100, 100)];
+    _smallView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 150, 200)];
     //_smallView.backgroundColor = [UIColor redColor];
-    //[_remoteView addSubview:_smallView];
+    [_remoteView addSubview:_smallView];
     self.localView = _smallView;
     
     NSLog(@"%s viewDidLoad:%@",TAG,self.view);
@@ -302,13 +302,17 @@
 
 - (void)startByCaller{
     self.callInfo.isStart = YES;
-    NSArray *callees = [NSArray arrayWithObjects:self.callInfo.callee, nil];
+    NSArray *callees = [NSArray arrayWithObjects:@"5aeab45bcc68c7600f54dcea", nil];
     
     NIMNetCallOption *option = [[NIMNetCallOption alloc] init];
-    option.extendMessage = @"音视频请求扩展信息";
-    option.apnsContent = [NSString stringWithFormat:@"%@请求", self.callInfo.callType == NIMNetCallTypeAudio ? @"网络通话" : @"视频聊天"];
-    option.apnsSound = @"video_chat_tip_receiver.aac";
-    [self fillUserSetting:option];
+    //option.extendMessage = @"音视频请求扩展信息";
+    option.apnsContent = [NSString stringWithFormat:@"%@请求", self.callInfo.callType == NIMNetCallTypeAudio ? @"网络+通话" : @"视频+聊天"];
+    //option.apnsSound = @"video_chat_tip_receiver.aac";
+    option.apnsPayload = @{@"content-available" : @1};
+    option.webrtcCompatible = YES;
+    option.serverRecordAudio     = YES;
+    option.serverRecordVideo     = YES;
+    //[self fillUserSetting:option];
     
     option.videoCaptureParam.startWithCameraOn = (self.callInfo.callType == NIMNetCallTypeVideo);
     
@@ -575,7 +579,7 @@
     [_remoteGLView setBackgroundColor:[UIColor clearColor]];
     _remoteGLView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     NSLog(@"%s initRemoteGLView: _remoteGLView %@",TAG, _remoteGLView);
-    [_remoteView addSubview:_remoteGLView];
+    [_remoteView insertSubview:_remoteGLView belowSubview:_smallView];
 #endif
 }
 
