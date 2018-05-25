@@ -60,34 +60,11 @@ RCT_EXPORT_VIEW_PROPERTY(height, NSInteger);
         [[NIMAVChatSDK sharedSDK].netCallManager control:callID type:NIMNetCallControlTypeBusyLine];
         return;
     };
-    
     // 通知给js
-//    NIMModel *model = [NIMModel initShareMD];
-//    NSDictionary *dd = @{@"status": @YES, @"callid": [NSString stringWithFormat:@"%llu",callID], @"from": caller};
-//    model.videoReceive = dd;
+    NIMModel *model = [NIMModel initShareMD];
+    NSDictionary *dd = @{@"status": @YES, @"callid": [NSString stringWithFormat:@"%llu",callID], @"from": caller};
+    model.videoReceive = dd;
     
-    
-    // 发送给推送
-    NSTimeInterval timestamp = [[NSDate date] timeIntervalSince1970];
-    NSDictionary *dict = @{@"caller": caller, @"callid":[NSString stringWithFormat:@"%llu",callID]};
-    NSDictionary *dataDict = @{@"type":@"21",@"data":@{@"dict": dict,@"timestamp":[NSString stringWithFormat:@"%f",timestamp], @"sessionId":[[NIMSDK sharedSDK].loginManager currentAccount],@"sessionType":[NSString stringWithFormat:@"%@",@"视频请求"]}};
-    
-    
-    NSString *content = [self jsonStringWithDictionary:dataDict];
-    NIMSession *session = [NIMSession session:[[NIMSDK sharedSDK].loginManager currentAccount] type:NIMSessionTypeP2P];
-    NIMCustomSystemNotification *notifi = [[NIMCustomSystemNotification alloc]initWithContent:content];
-    notifi.sendToOnlineUsersOnly = NO;
-    NIMCustomSystemNotificationSetting *setting = [[NIMCustomSystemNotificationSetting alloc]init];
-    setting.shouldBeCounted = YES;
-    setting.apnsEnabled = YES;
-    setting.apnsWithPrefix = YES;
-    notifi.setting = setting;
-    notifi.apnsContent = @"通话请求";
-    notifi.apnsPayload = dataDict;
-    
-    [[NIMSDK sharedSDK].systemNotificationManager sendCustomNotification:notifi toSession:session completion:^(NSError *error) {
-        NSLog(@"notifi %@", error);
-    }];
 }
 // dict字典转json字符串
 - (NSString *)jsonStringWithDictionary:(NSDictionary *)dict
@@ -106,6 +83,7 @@ RCT_EXPORT_VIEW_PROPERTY(height, NSInteger);
 
 - (void)clickObserveNotification:(NSNotification *)noti{
     NSLog(@"%s clickObserveNotification:%@",TAG,noti);
+    [[UIApplication sharedApplication] cancelAllLocalNotifications];
     NSDictionary *dict = noti.object;
     NSMutableDictionary *notiDict = [NSMutableDictionary dictionaryWithDictionary:[dict objectForKey:@"dict"]];
     NSString *strDict = [notiDict objectForKey:@"data"];
