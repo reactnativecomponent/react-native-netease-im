@@ -30,5 +30,6 @@ typedef void(^onSuccess)(NSInteger index,id param);
 @property(nonatomic,strong)NSDictionary *audioDic;
 @property (strong, nonatomic) NSDictionary *deleteMessDict;//撤销时删除的消息ID
 @property (strong, nonatomic) NSDictionary *accountNoticeDict;//接收到资金变动的消息
+@property(nonatomic,strong)NSMutableArray *videoProgress;
 - (void)insertMessages:(NSArray *)messages;
 @end

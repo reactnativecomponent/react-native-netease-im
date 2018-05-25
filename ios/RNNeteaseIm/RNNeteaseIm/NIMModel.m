@@ -153,4 +153,10 @@
     }
 }
 
+- (void)setVideoProgress:(NSMutableArray *)videoProgress{
+    if (self.myBlock) {
+        self.myBlock(17, videoProgress);
+    }
+}
+
 @end

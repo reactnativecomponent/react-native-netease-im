@@ -341,8 +341,10 @@ RCT_EXPORT_METHOD(sendCustomMessage:(nonnull  NSDictionary *)attachment){
 }
 //发送视频消息
 RCT_EXPORT_METHOD(sendVideoMessage:(nonnull  NSString *)file duration:(nonnull  NSString *)duration width:(nonnull  NSString *)width height:(nonnull  NSString *)height displayName:(nonnull  NSString *)displayName){
-    [[ConversationViewController initWithConversationViewController]sendTextMessage:file duration:duration width:width height:height displayName:displayName];
+    [[ConversationViewController initWithConversationViewController]sendVideoMessage:file duration:duration width:width height:height displayName:displayName];
+
 }
+
 //发送地理位置消息
 RCT_EXPORT_METHOD(sendLocationMessage:(nonnull  NSString *)latitude longitude:(nonnull  NSString *)longitude address:(nonnull  NSString *)address){
     [[ConversationViewController initWithConversationViewController]sendLocationMessage:latitude longitude:longitude address:address];
@@ -781,6 +783,10 @@ RCT_EXPORT_METHOD(cleanCache){
             case 16:
                 //资金变动通知
                 [_bridge.eventDispatcher sendDeviceEventWithName:@"observeAccountNotice" body:param];
+                break;
+            case 17:
+                //下载视频完成通知
+                [_bridge.eventDispatcher sendDeviceEventWithName:@"observeDownloadVideoNotice" body:param];
                 break;
             default:
                 break;
