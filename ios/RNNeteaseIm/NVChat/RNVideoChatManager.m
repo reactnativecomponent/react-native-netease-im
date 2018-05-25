@@ -83,6 +83,7 @@ RCT_EXPORT_VIEW_PROPERTY(height, NSInteger);
 
 - (void)clickObserveNotification:(NSNotification *)noti{
     NSLog(@"%s clickObserveNotification:%@",TAG,noti);
+    [[UIApplication sharedApplication] cancelAllLocalNotifications];
     NSDictionary *dict = noti.object;
     NSMutableDictionary *notiDict = [NSMutableDictionary dictionaryWithDictionary:[dict objectForKey:@"dict"]];
     NSString *strDict = [notiDict objectForKey:@"data"];
@@ -170,11 +171,7 @@ RCT_EXPORT_VIEW_PROPERTY(height, NSInteger);
 RCT_EXPORT_METHOD(login:(nonnull NSString *)account token:(nonnull NSString *)token
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject){
-    /*
-     accid2: '5acd8c6cd487e1c0f053625e',
-     token2: 'ea82d7bae42545a6ba3a51a9940f06bc',
-     */
-    [[NIMSDK sharedSDK].loginManager login:@"5acd8c6cd487e1c0f053625e" token:@"ea82d7bae42545a6ba3a51a9940f06bc" completion:^(NSError *error) {
+    [[NIMSDK sharedSDK].loginManager login:account token:token completion:^(NSError *error) {
         if (!error) {
             resolve(account);
         }else{

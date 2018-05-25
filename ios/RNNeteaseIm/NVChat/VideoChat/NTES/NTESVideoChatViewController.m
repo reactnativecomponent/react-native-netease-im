@@ -302,12 +302,12 @@
 
 - (void)startByCaller{
     self.callInfo.isStart = YES;
-    NSArray *callees = [NSArray arrayWithObjects:@"5aeab45bcc68c7600f54dcea", nil];
+    NSArray *callees = [NSArray arrayWithObjects:self.callInfo.callee, nil];
     
     NIMNetCallOption *option = [[NIMNetCallOption alloc] init];
-    //option.extendMessage = @"音视频请求扩展信息";
-    option.apnsContent = [NSString stringWithFormat:@"%@请求", self.callInfo.callType == NIMNetCallTypeAudio ? @"网络+通话" : @"视频+聊天"];
-    //option.apnsSound = @"video_chat_tip_receiver.aac";
+    option.extendMessage = @"音视频请求扩展信息";
+    option.apnsContent = [NSString stringWithFormat:@"%@请求", self.callInfo.callType == NIMNetCallTypeAudio ? @"网络通话" : @"视频聊天"];
+    option.apnsSound = @"video_chat_tip_receiver.aac";
     option.apnsPayload = @{@"content-available" : @1};
     option.webrtcCompatible = YES;
     option.serverRecordAudio     = YES;
