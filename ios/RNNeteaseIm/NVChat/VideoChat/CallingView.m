@@ -49,6 +49,7 @@
     imv.frame = CGRectMake(0, 0, 220, 220);
     imv.center = CGPointMake(screenW/2, screenH/2);
     imv.layer.cornerRadius = 110;
+    imv.layer.masksToBounds = YES;
     [self addSubview:imv];
 }
 
