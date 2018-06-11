@@ -83,8 +83,8 @@
     [self insertSubview:_reject aboveSubview:_callingView];
     
     _minimize = [UIButton buttonWithType:UIButtonTypeCustom];
-    _minimize.frame = CGRectMake(30, 30, 80, 30);
-    [_minimize setBackgroundImage:[UIImage imageNamed:@"full-screen"] forState:UIControlStateNormal];
+    _minimize.frame = CGRectMake(30, 30, 30, 30);
+    [_minimize setBackgroundImage:[UIImage imageNamed:@"shrink"] forState:UIControlStateNormal];
     //[_minimize setTitle:@"最小化" forState:UIControlStateNormal];
     [_minimize addTarget:self action:@selector(minimizeEvent) forControlEvents:UIControlEventTouchUpInside];
     [self insertSubview:_minimize aboveSubview:_bigView];
