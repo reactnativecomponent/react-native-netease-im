@@ -84,7 +84,8 @@
     
     _minimize = [UIButton buttonWithType:UIButtonTypeCustom];
     _minimize.frame = CGRectMake(30, 30, 80, 30);
-    [_minimize setTitle:@"最小化" forState:UIControlStateNormal];
+    [_minimize setBackgroundImage:[UIImage imageNamed:@"full-screen"] forState:UIControlStateNormal];
+    //[_minimize setTitle:@"最小化" forState:UIControlStateNormal];
     [_minimize addTarget:self action:@selector(minimizeEvent) forControlEvents:UIControlEventTouchUpInside];
     [self insertSubview:_minimize aboveSubview:_bigView];
     _maximize = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(maximizeEvent)];
