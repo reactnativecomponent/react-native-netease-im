@@ -132,6 +132,8 @@
 		346FA77620CE4EF400433E8E /* video_chat_tip_sender.aac */ = {isa = PBXFileReference; lastKnownFileType = file; path = video_chat_tip_sender.aac; sourceTree = "<group>"; };
 		346FA77720CE4EF400433E8E /* avatar_nurse.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = avatar_nurse.png; sourceTree = "<group>"; };
 		346FA77820CE4EF400433E8E /* video_chat_tip_receiver.aac */ = {isa = PBXFileReference; lastKnownFileType = file; path = video_chat_tip_receiver.aac; sourceTree = "<group>"; };
+		346FA77B20CE540400433E8E /* full-screen@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "full-screen@3x.png"; sourceTree = "<group>"; };
+		346FA77C20CE540500433E8E /* full-screen@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "full-screen@2x.png"; sourceTree = "<group>"; };
 		4E27A5C91ED5417100543BFC /* RNNotificationCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNNotificationCenter.h; sourceTree = "<group>"; };
 		4E27A5CA1ED5417100543BFC /* RNNotificationCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNNotificationCenter.m; sourceTree = "<group>"; };
 		4E354E851ECBE72700CD6587 /* NIMObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMObject.h; sourceTree = "<group>"; };
@@ -338,6 +340,8 @@
 		346FA77520CE4EF400433E8E /* source */ = {
 			isa = PBXGroup;
 			children = (
+				346FA77C20CE540500433E8E /* full-screen@2x.png */,
+				346FA77B20CE540400433E8E /* full-screen@3x.png */,
 				346FA77620CE4EF400433E8E /* video_chat_tip_sender.aac */,
 				346FA77720CE4EF400433E8E /* avatar_nurse.png */,
 				346FA77820CE4EF400433E8E /* video_chat_tip_receiver.aac */,

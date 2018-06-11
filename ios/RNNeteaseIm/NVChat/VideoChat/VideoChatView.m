@@ -83,8 +83,9 @@
     [self insertSubview:_reject aboveSubview:_callingView];
     
     _minimize = [UIButton buttonWithType:UIButtonTypeCustom];
-    _minimize.frame = CGRectMake(30, 30, 80, 30);
-    [_minimize setTitle:@"最小化" forState:UIControlStateNormal];
+    _minimize.frame = CGRectMake(30, 30, 30, 30);
+    [_minimize setBackgroundImage:[UIImage imageNamed:@"shrink"] forState:UIControlStateNormal];
+    //[_minimize setTitle:@"最小化" forState:UIControlStateNormal];
     [_minimize addTarget:self action:@selector(minimizeEvent) forControlEvents:UIControlEventTouchUpInside];
     [self insertSubview:_minimize aboveSubview:_bigView];
     _maximize = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(maximizeEvent)];
@@ -136,7 +137,7 @@
     _reject.hidden = YES;
     _minimize.hidden = YES;
     _maximize.enabled = YES;
-    _pan.enabled = YES;
+    //_pan.enabled = YES;
 }
 
 - (void)maximizeEvent{
@@ -149,7 +150,7 @@
         _reject.hidden = NO;
         _minimize.hidden = NO;
         _maximize.enabled = NO;
-        _pan.enabled = NO;
+        //_pan.enabled = NO;
     }];
 }
 
