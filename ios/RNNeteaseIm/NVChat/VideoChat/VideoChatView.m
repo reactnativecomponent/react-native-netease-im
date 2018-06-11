@@ -362,7 +362,7 @@
 }
 
 - (void)sendNotification:(NSString*)type{
-    [[NSNotificationCenter defaultCenter] postNotificationName:VideoChatViewNotification object:@{type:type}];
+    [[NSNotificationCenter defaultCenter] postNotificationName:VideoChatViewNotification object:@{@"type":type}];
 }
 
 - (void)dealloc{
