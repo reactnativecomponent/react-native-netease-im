@@ -7,14 +7,14 @@
 //
 
 #import "RNVideoChatManager.h"
-#import "RNVideoChatView.h"
+//#import "RNVideoChatView.h"
 #import "NIMModel.h"
+#import "VideoChatView.h"
 
-#define TAG "RNVideoChatManager"
 
 @interface RNVideoChatManager ()<NIMSystemNotificationManagerDelegate,NIMNetCallManagerDelegate>
 
-@property (nonatomic) RNVideoChatView  *vcv;
+//@property (nonatomic) RNVideoChatView  *vcv;
 
 @end
 
@@ -30,9 +30,8 @@ RCT_EXPORT_VIEW_PROPERTY(height, NSInteger);
 
 - (UIView *)view
 {
-    NSLog(@"%s view:%@",TAG,self);
 //    _vcv = [[RNVideoChatView alloc] initWithFrame: CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
-    return _vcv;
+    return nil;
 }
 
 - (void)dealloc{
@@ -45,8 +44,12 @@ RCT_EXPORT_VIEW_PROPERTY(height, NSInteger);
         [[NIMSDK sharedSDK].systemNotificationManager addDelegate:self];
         [[NIMAVChatSDK sharedSDK].netCallManager addDelegate:self];
     }
-    _vcv = [[RNVideoChatView alloc] initWithFrame: CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
+//    VideoChatView *controller = [[VideoChatView alloc] init];
+//    UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+//    [keyWindow addSubview:controller];
+    //_vcv = [[RNVideoChatView alloc] initWithFrame: CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
     [self setSendState];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(observeVideoChatViewNotification:) name:@"VideoChatViewNotification" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(clickObserveNotification:) name:@"ObservePushNotification" object:nil];
     
     return self;
@@ -60,11 +63,12 @@ RCT_EXPORT_VIEW_PROPERTY(height, NSInteger);
         [[NIMAVChatSDK sharedSDK].netCallManager control:callID type:NIMNetCallControlTypeBusyLine];
         return;
     };
-    // 通知给js
-    NIMModel *model = [NIMModel initShareMD];
-    NSDictionary *dd = @{@"status": @YES, @"callid": [NSString stringWithFormat:@"%llu",callID], @"from": caller};
-    model.videoReceive = dd;
-    
+    VideoChatView *chatView = [[VideoChatView alloc] init];
+    chatView.callInfo.callID = callID;
+    chatView.callInfo.caller = caller;
+    UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+    [keyWindow addSubview:chatView];
+    [chatView playSenderRing];
 }
 // dict字典转json字符串
 - (NSString *)jsonStringWithDictionary:(NSDictionary *)dict
@@ -81,8 +85,21 @@ RCT_EXPORT_VIEW_PROPERTY(height, NSInteger);
     return nil;
 }
 
+- (void)observeVideoChatViewNotification:(NSNotification*)noti{
+    NSDictionary *dic = noti.object;
+    if ([dic[@"type"] isEqualToString:Resize]) {
+        [_bridge.eventDispatcher sendDeviceEventWithName:@"onVideoResize" body:nil];
+    }else if ([dic[@"type"] isEqualToString:Start]){
+        [_bridge.eventDispatcher sendDeviceEventWithName:@"onVideoStart" body:nil];
+    }else if ([dic[@"type"] isEqualToString:End]){
+        [_bridge.eventDispatcher sendDeviceEventWithName:@"onVideoEnd" body:nil];
+    }
+    else{
+        
+    }
+}
+
 - (void)clickObserveNotification:(NSNotification *)noti{
-    NSLog(@"%s clickObserveNotification:%@",TAG,noti);
     [[UIApplication sharedApplication] cancelAllLocalNotifications];
     NSDictionary *dict = noti.object;
     NSMutableDictionary *notiDict = [NSMutableDictionary dictionaryWithDictionary:[dict objectForKey:@"dict"]];
@@ -103,11 +120,17 @@ RCT_EXPORT_VIEW_PROPERTY(height, NSInteger);
             }
         }
     }
+    if ([notiDict[@"nim"] isEqualToString:@"1"] && !notiDict[@"type"]) {
+        if ([[dict objectForKey:@"type"] isEqualToString:@"launch"]) {
+            [_bridge.eventDispatcher sendDeviceEventWithName:@"observeLaunchPushEvent" body:nil];
+        }else{
+            [_bridge.eventDispatcher sendDeviceEventWithName:@"observeBackgroundPushEvent" body:nil];
+        }
+    }
 }
 
 #pragma mark - NIMSystemNotificationManagerDelegate
 - (void)onReceiveCustomSystemNotification:(NIMCustomSystemNotification *)notification{//接收自定义通知
-    NSLog(@"%s onReceiveCustomSystemNotification:%@",TAG,notification);
     NSDictionary *notiDict = [self dictChangeFromJson:notification.content];
     if (notiDict){
         NSInteger notiType = [[notiDict objectForKey:@"type"] integerValue];
@@ -177,7 +200,6 @@ RCT_EXPORT_METHOD(login:(nonnull NSString *)account token:(nonnull NSString *)to
         }else{
             NSString *strEorr = @"登录失败";
             reject(@"-1",strEorr, nil);
-            NSLog(@"%s login:%@, %@",TAG,strEorr,error);
         }
     }];
 }
@@ -189,20 +211,18 @@ RCT_EXPORT_METHOD(logout){
 
 //拨号
 RCT_EXPORT_METHOD(call:(nonnull  NSString *)callee){
-    NSLog(@"%s call:%@", TAG, callee);
-    [_vcv call:callee];
+    //[_vcv call:callee];
 }
 
 //接听/拒绝
 RCT_EXPORT_METHOD(accept:(BOOL )type callid:(NSString *)callID from:(NSString *)caller){
-    NSLog(@"%s accept:%d, %@, %@", TAG, type, callID, caller);
-    [_vcv accept:type callid:callID from:caller];
+    //[_vcv accept:type callid:callID from:caller];
 }
 
 //关闭
 RCT_EXPORT_METHOD(hangup){
-    NSLog(@"%s hangup", TAG);
-    [_vcv hangup];
+    //[_vcv hangup];
+    [[NSNotificationCenter defaultCenter] postNotificationName:VideoChatHangup object:nil];
 }
 
 
