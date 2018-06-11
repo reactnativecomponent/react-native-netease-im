@@ -137,7 +137,7 @@
     _reject.hidden = YES;
     _minimize.hidden = YES;
     _maximize.enabled = YES;
-    _pan.enabled = YES;
+    //_pan.enabled = YES;
 }
 
 - (void)maximizeEvent{
@@ -150,7 +150,7 @@
         _reject.hidden = NO;
         _minimize.hidden = NO;
         _maximize.enabled = NO;
-        _pan.enabled = NO;
+        //_pan.enabled = NO;
     }];
 }
 
