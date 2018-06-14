@@ -11,7 +11,8 @@
 #import "NTESGLView.h"
 #import "CallingView.h"
 #import <AVFoundation/AVFoundation.h>
-
+#define iPhoneX     (screenW == 375.f && screenH == 812.f)
+#define navHeight iPhoneX?84:64
 @interface VideoChatView() <NIMNetCallManagerDelegate, UIGestureRecognizerDelegate>{
     CGFloat centerX_, centerY_;
     CGFloat viewHalfH_, viewhalfW_;
@@ -52,7 +53,7 @@
         [manager addDelegate:self];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hangup) name:VideoChatHangup object:nil];
         _initFrame = frame;
-        _lastFrame = CGRectMake(frame.size.width-100, 20, 100, 150);
+        _lastFrame = CGRectMake(frame.size.width-100, navHeight, 100, 150);
         [self makeView];
     }
     return self;
@@ -66,7 +67,7 @@
     _bigView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
     [self addSubview: _bigView];
     
-    _smallView = [[UIView alloc] initWithFrame:CGRectMake(self.frame.size.width-100, 20, 100, 150)];
+    _smallView = [[UIView alloc] initWithFrame:CGRectMake(self.frame.size.width-100, navHeight-44, 100, 150)];
     _smallView.backgroundColor = [UIColor blackColor];
     [self insertSubview:_smallView aboveSubview:_bigView];
     
@@ -137,20 +138,20 @@
     _reject.hidden = YES;
     _minimize.hidden = YES;
     _maximize.enabled = YES;
-    //_pan.enabled = YES;
+    _pan.enabled = YES;
 }
 
 - (void)maximizeEvent{
     [UIView animateWithDuration:0.2 animations:^{
         self.frame = _initFrame;
-    } completion:^(BOOL finished) {
         _bigView.frame = self.bounds;
         _remoteGLView.frame = _bigView.bounds;
+    } completion:^(BOOL finished) {
         _smallView.hidden = NO;
         _reject.hidden = NO;
         _minimize.hidden = NO;
         _maximize.enabled = NO;
-        //_pan.enabled = NO;
+        _pan.enabled = NO;
     }];
 }
 
@@ -270,9 +271,7 @@
 }
 
 - (void)onRemoteYUVReady:(NSData *)yuvData width:(NSUInteger)width height:(NSUInteger)height from:(NSString *)user{
-    if (([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive)) {
-        [self.remoteGLView render:yuvData width:width height:height];
-    }
+    [self.remoteGLView render:yuvData width:width height:height];
 }
 
 - (void)onControl:(UInt64)callID from:(NSString *)user type:(NIMNetCallControlType)control{
