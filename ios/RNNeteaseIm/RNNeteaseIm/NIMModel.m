@@ -71,7 +71,7 @@
 //未读条数
 -(void)setUnreadCount:(NSInteger)unreadCount{
     if (self.myBlock) {
-        self.myBlock(6, [NSString stringWithFormat:@"%ld",unreadCount]);
+        self.myBlock(6, [NSString stringWithFormat:@"%d",unreadCount]);
     }
     
 }
@@ -197,4 +197,11 @@
         }
     }
 }
+
+- (void)setVideoProgress:(NSMutableArray *)videoProgress{
+    if (self.myBlock) {
+        self.myBlock(17, videoProgress);
+    }
+}
+
 @end
