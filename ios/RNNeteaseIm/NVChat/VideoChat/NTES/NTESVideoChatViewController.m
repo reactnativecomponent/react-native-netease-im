@@ -309,7 +309,7 @@
     option.apnsContent = [NSString stringWithFormat:@"%@请求", self.callInfo.callType == NIMNetCallTypeAudio ? @"网络通话" : @"视频聊天"];
     option.apnsSound = @"video_chat_tip_receiver.aac";
     option.apnsPayload = @{@"content-available" : @1};
-    option.webrtcCompatible = YES;
+    //option.webrtcCompatible = YES;
     option.serverRecordAudio     = YES;
     option.serverRecordVideo     = YES;
     //[self fillUserSetting:option];
@@ -695,7 +695,7 @@
 - (void)fillUserSetting:(NIMNetCallOption *)option
 {
     option.autoRotateRemoteVideo = [[NTESBundleSetting sharedConfig] videochatAutoRotateRemoteVideo];
-    option.webrtcCompatible = YES;
+    //option.webrtcCompatible = YES;
     option.serverRecordAudio     = YES;
     option.serverRecordVideo     = YES;
     option.preferredVideoEncoder = [[NTESBundleSetting sharedConfig] perferredVideoEncoder];

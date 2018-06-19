@@ -325,7 +325,7 @@
 - (void)fillUserSetting:(NIMNetCallOption *)option
 {
     option.autoRotateRemoteVideo = [[NTESBundleSetting sharedConfig] videochatAutoRotateRemoteVideo];
-    option.webrtcCompatible = YES;
+    //option.webrtcCompatible = YES;
     option.serverRecordAudio     = YES;
     option.serverRecordVideo     = YES;
     option.preferredVideoEncoder = [[NTESBundleSetting sharedConfig] perferredVideoEncoder];
