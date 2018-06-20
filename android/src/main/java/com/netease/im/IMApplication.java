@@ -32,6 +32,7 @@ import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.SDKOptions;
 import com.netease.nimlib.sdk.StatusBarNotificationConfig;
 import com.netease.nimlib.sdk.auth.LoginInfo;
+import com.netease.nimlib.sdk.mixpush.MixPushConfig;
 import com.netease.nimlib.sdk.mixpush.MixPushService;
 import com.netease.nimlib.sdk.mixpush.NIMPushClient;
 import com.netease.nimlib.sdk.msg.MessageNotifierCustomization;
@@ -86,14 +87,15 @@ public class IMApplication {
     private static StatusBarNotificationConfig statusBarNotificationConfig;
     private static boolean DEBUG = false;
 
-    public static void init(Context context, Class mainActivityClass, @DrawableRes int notify_msg_drawable_id, MiPushConfig miPushConfig) {
+    public static void init(Context context, Class mainActivityClass, @DrawableRes int notify_msg_drawable_id, MixPushConfig mixPushConfig) {
         IMApplication.context = context.getApplicationContext();
         IMApplication.mainActivityClass = mainActivityClass;
         IMApplication.notify_msg_drawable_id = notify_msg_drawable_id;
 
+        SDKOptions options = getOptions(context);
         // 注册小米推送appID 、appKey 以及在云信管理后台添加的小米推送证书名称，该逻辑放在 NIMClient init 之前
-        if (miPushConfig != null) {
-            NIMPushClient.registerMiPush(context, miPushConfig.certificate, miPushConfig.appID, miPushConfig.appKey);
+        if (mixPushConfig != null) {
+            options.mixPushConfig = mixPushConfig;
         }
 
         NIMClient.init(context, getLoginInfo(), getOptions(context));
@@ -106,7 +108,7 @@ public class IMApplication {
             PinYin.init(context);
             PinYin.validate();
 
-            if (miPushConfig != null) {
+            if (mixPushConfig != null) {
                 NIMClient.getService(MixPushService.class).enable(true);
             }
             // 初始化Kit模块
