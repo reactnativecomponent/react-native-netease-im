@@ -74,12 +74,15 @@
     _callingView = [[CallingView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
     [self insertSubview:_callingView aboveSubview:_smallView];
     
-    _accept = [self buttonWithColor:[UIColor colorWithRed:47/255.0f green:216/255.0f blue:173/255.0f alpha:1] title:@"接听"];
-    _accept.frame = CGRectMake(self.frame.size.width/2-140, self.frame.size.height-110, 115, 55);
+    _accept = [self buttonWithColor:[UIColor colorWithRed:47/255.0f green:216/255.0f blue:173/255.0f alpha:1] title:@"accept"];
+    CGSize size = _accept.frame.size;
+    CGFloat gapH = 88;
+    CGFloat gapV = 50;
+    _accept.frame = CGRectMake(self.frame.size.width/2-gapH/2-size.width, self.frame.size.height-gapV-size.height, size.width, size.height);
     [_accept addTarget:self action:@selector(buttonEvent:) forControlEvents:UIControlEventTouchUpInside];
     [self insertSubview:_accept aboveSubview:_callingView];
-    _reject = [self buttonWithColor:[UIColor colorWithRed:255/255.0f green:98/255.0f blue:98/255.0f alpha:1] title:@"挂断"];
-    _reject.frame = CGRectMake(CGRectGetMaxX(_accept.frame)+50, CGRectGetMinY(_accept.frame), 115, 55);
+    _reject = [self buttonWithColor:[UIColor colorWithRed:255/255.0f green:98/255.0f blue:98/255.0f alpha:1] title:@"hangup"];
+    _reject.frame = CGRectMake(CGRectGetMaxX(_accept.frame)+gapH, CGRectGetMinY(_accept.frame), size.width, size.height);
     [_reject addTarget:self action:@selector(buttonEvent:) forControlEvents:UIControlEventTouchUpInside];
     [self insertSubview:_reject aboveSubview:_callingView];
     
@@ -100,10 +103,13 @@
 
 -(UIButton*)buttonWithColor:(UIColor*)backgroundColor title:(NSString*)title{
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [btn setBackgroundColor: backgroundColor];
-    [btn setTitle:title forState:UIControlStateNormal];
-    [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    btn.layer.cornerRadius = 25;
+    UIImage *image = [UIImage imageNamed:title];
+    [btn setBackgroundImage:image forState:UIControlStateNormal];
+    btn.frame = CGRectMake(0, 0, image.size.width, image.size.height);
+    //[btn setBackgroundColor: backgroundColor];
+    //[btn setTitle:title forState:UIControlStateNormal];
+    //[btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    //btn.layer.cornerRadius = 25;
     return btn;
 }
 
@@ -178,7 +184,7 @@
         [self sendNotification:Start];
         _callingView.hidden = YES;
         _accept.hidden = YES;
-        _reject.frame = CGRectMake(screenW/2-62, screenH-110, 115, 55);
+        _reject.center = CGPointMake(screenW/2, CGRectGetMidY(_accept.frame));
     }
     else if (btn==_reject){
         if (self.callInfo.isStart) {
