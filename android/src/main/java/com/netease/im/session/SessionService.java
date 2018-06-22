@@ -34,6 +34,7 @@ import com.netease.im.uikit.uinfo.UserInfoHelper;
 import com.netease.im.uikit.uinfo.UserInfoObservable;
 import com.netease.nimlib.sdk.AbortableFuture;
 import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.NIMSDK;
 import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.RequestCallbackWrapper;
@@ -56,6 +57,7 @@ import com.netease.nimlib.sdk.msg.model.MemberPushOption;
 import com.netease.nimlib.sdk.msg.model.MessageReceipt;
 import com.netease.nimlib.sdk.msg.model.QueryDirectionEnum;
 import com.netease.nimlib.sdk.msg.model.RevokeMsgNotification;
+import com.netease.nimlib.sdk.msg.model.TeamMessageReceipt;
 import com.netease.nimlib.sdk.team.model.Team;
 
 import java.io.File;
@@ -306,23 +308,37 @@ public class SessionService {
         return true;
     }
 
+    public void sendMsgReceipt(@NonNull List<IMMessage> messageList) {
+        IMMessage message = getLastReceiptMessage(messageList);
+        sendSingleReceipt(message);
+    }
+
+    public void sendSingleReceipt(IMMessage message) {
+        if (sessionTypeEnum == SessionTypeEnum.P2P) {
+            sendP2PReceipt(message);
+        } else if (sessionTypeEnum == SessionTypeEnum.Team) {
+            sendTeamReceipt(message);
+        }
+    }
+
     /**
      * 发送已读回执（需要过滤）
      *
-     * @param messageList
+     * @param message
      */
 
-    public void sendMsgReceipt(@NonNull List<IMMessage> messageList) {
-        if (sessionId == null || sessionTypeEnum != SessionTypeEnum.P2P) {
+    public void sendP2PReceipt(@NonNull IMMessage message) {
+        if (sessionId == null || !sendReceiptCheck(message)) {
             return;
         }
+        getMsgService().sendMessageReceipt(sessionId, message);
+    }
 
-        IMMessage message = getLastReceiptMessage(messageList);
+    public void sendTeamReceipt(@NonNull IMMessage message) {
         if (!sendReceiptCheck(message)) {
             return;
         }
-
-        getMsgService().sendMessageReceipt(sessionId, message);
+        NIMSDK.getTeamService().sendTeamMessageReceipt(message);
     }
 
     /**
@@ -341,6 +357,13 @@ public class SessionService {
     };
 
     /**
+     *
+     */
+    private void receiveTeamReceipt() { //TODO
+
+    }
+
+    /**
      * 收到已读回执（更新VH的已读label）
      */
 
@@ -356,6 +379,13 @@ public class SessionService {
             ReactCache.emit(ReactCache.observeMsgStatus, a);
         }
     }
+
+    private Observer<List<TeamMessageReceipt>> teamMessageReceiptObserver = new Observer<List<TeamMessageReceipt>>() {
+        @Override
+        public void onEvent(List<TeamMessageReceipt> teamMessageReceipts) {
+            receiveTeamReceipt();
+        }
+    };
 
     /**
      * 收到已读回执
@@ -567,6 +597,7 @@ public class SessionService {
         MsgServiceObserve service = getService(MsgServiceObserve.class);
         service.observeReceiveMessage(incomingMessageObserver, register);
         service.observeMessageReceipt(messageReceiptObserver, register);
+        service.observeTeamMessageReceipt(teamMessageReceiptObserver, register);
 
         service.observeMsgStatus(messageStatusObserver, register);
 //        service.observeAttachmentProgress(attachmentProgressObserver, register);
