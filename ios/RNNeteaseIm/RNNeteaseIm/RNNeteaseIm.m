@@ -346,6 +346,10 @@ RCT_EXPORT_METHOD(sendAudioMessage:(nonnull  NSString *)file duration:(nonnull  
 RCT_EXPORT_METHOD(sendCustomMessage:(nonnull  NSDictionary *)attachment){
     [[ConversationViewController initWithConversationViewController]sendCustomMessage:attachment];
 }
+//发送群已读消息回执
+RCT_EXPORT_METHOD(sendMessageReceit:(nonnull  NSString *)msgId){
+    [[ConversationViewController initWithConversationViewController] sendMessageReceit:msgId];
+}
 //发送视频消息
 RCT_EXPORT_METHOD(sendVideoMessage:(nonnull  NSString *)file duration:(nonnull  NSString *)duration width:(nonnull  NSString *)width height:(nonnull  NSString *)height displayName:(nonnull  NSString *)displayName){
     [[ConversationViewController initWithConversationViewController]sendVideoMessage:file duration:duration width:width height:height displayName:displayName];

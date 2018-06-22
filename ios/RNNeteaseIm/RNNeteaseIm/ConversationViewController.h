@@ -50,6 +50,8 @@ typedef void(^Errors)(id erro);
 - (void)sendRedPacketOpenMessage:(NSString *)sendId hasRedPacket:(NSString *)hasRedPacket serialNo:(NSString *)serialNo;
 //发送名片消息
 - (void)sendCardMessage:(NSString *)type sessionId:(NSString *)sessionId name:(NSString *)name imgPath:(NSString *)strImgPath;
+//发送群消息已读回执
+- (void)sendMessageReceit:(NSString *)msgId;
 
 //转发消息
 -(void)forwardMessage:(NSString *)messageId sessionId:(NSString *)sessionId sessionType:(NSString *)sessionType content:(NSString *)content success:(Success)succe;

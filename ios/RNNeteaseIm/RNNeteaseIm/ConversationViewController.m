@@ -443,6 +443,9 @@
 //发送文字消息
 -(void)sendMessage:(NSString *)mess andApnsMembers:(NSArray *)members{
     NIMMessage *message = [NIMMessageMaker msgWithText:mess andApnsMembers:members andeSession:_session];
+    NIMMessageSetting *setting = [[NIMMessageSetting alloc] init];
+    setting.teamReceiptEnabled = YES;
+    message.setting = setting;
     //发送消息
     if ([self isFriendToSendMessage:message]) {
         [[NIMSDK sharedSDK].chatManager sendMessage:message toSession:_session error:nil];
@@ -453,6 +456,9 @@
     UIImage *img = [[UIImage alloc]initWithContentsOfFile:path];
     NIMMessage *message = [NIMMessageMaker msgWithImage:img andeSession:_session];
 //    NIMMessage *message = [NIMMessageMaker msgWithImagePath:path];
+    NIMMessageSetting *setting = [[NIMMessageSetting alloc] init];
+    setting.teamReceiptEnabled = YES;
+    message.setting = setting;
     if ([self isFriendToSendMessage:message]) {
         [[NIMSDK sharedSDK].chatManager sendMessage:message toSession:_session error:nil];
     }
@@ -574,6 +580,14 @@
     }
     NSDictionary *dict = @{@"type":type,@"name":name,@"imgPath":strImgPath,@"sessionId":sessionId};
     [self sendCustomMessage:CustomMessgeTypeBusinessCard data:dict];
+}
+
+//发送群消息已读回执
+- (void)sendMessageReceit:(NSString *)msgId{
+    NSArray *currentMessage = [[[NIMSDK sharedSDK] conversationManager] messagesInSession:_session messageIds:@[msgId] ];
+    NIMMessage *currentM = currentMessage[0];
+    NIMMessageReceipt *mReceipt = [[NIMMessageReceipt alloc] initWithMessage:currentM];
+    [[NIMSDK sharedSDK].chatManager sendMessageReceipt:mReceipt completion:nil];
 }
 
 // dict字典转json字符串
@@ -725,9 +739,8 @@
 
 - (void)onRecvMessageReceipt:(NIMMessageReceipt *)receipt
 {
-    
     NIMModel *mode = [NIMModel initShareMD];
-    mode.receipt = @"1";
+    mode.receipt = receipt.messageId;
 }
 
 //写到RNNotificationCenter去了
