@@ -180,7 +180,7 @@ class Session {
 
     /**
      *
-     * @param messageId
+     * @param messageId, Android 端群聊、P2P 都支持
      * @returns {*}
      */
     sendMessageReceipt(messageId){
