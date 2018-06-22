@@ -583,7 +583,7 @@
 }
 
 //发送群消息已读回执
-- (void)sendMessageReceit:(NSString *)msgId{
+- (void)sendMessageReceipt:(NSString *)msgId{
     NSArray *currentMessage = [[[NIMSDK sharedSDK] conversationManager] messagesInSession:_session messageIds:@[msgId] ];
     NIMMessage *currentM = currentMessage[0];
     NIMMessageReceipt *mReceipt = [[NIMMessageReceipt alloc] initWithMessage:currentM];

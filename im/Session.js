@@ -183,8 +183,8 @@ class Session {
      * @param messageId
      * @returns {*}
      */
-    sendMessageReceit(messageId){
-        return RNNeteaseIm.sendMessageReceit(messageId)
+    sendMessageReceipt(messageId){
+        return RNNeteaseIm.sendMessageReceipt(messageId)
     }
 
     /**
