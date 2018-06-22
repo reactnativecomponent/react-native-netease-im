@@ -177,6 +177,16 @@ class Session {
     sendCardMessage(type, name, imgPath, sessionId){
         return RNNeteaseIm.sendCardMessage(type, name, imgPath, sessionId)
     }
+
+    /**
+     *
+     * @param messageId
+     * @returns {*}
+     */
+    sendMessageReceit(messageId){
+        return RNNeteaseIm.sendMessageReceit(messageId)
+    }
+
     /**
      * 拆红包
      * @param sendId 发送红包的sessionId
