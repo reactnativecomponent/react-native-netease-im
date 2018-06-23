@@ -66,7 +66,7 @@ RCT_EXPORT_VIEW_PROPERTY(height, NSInteger);
     VideoChatView *chatView = [[VideoChatView alloc] init];
     chatView.callInfo.callID = callID;
     chatView.callInfo.caller = caller;
-    UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+    UIWindow *keyWindow = [[[UIApplication sharedApplication] windows] lastObject ];
     [keyWindow addSubview:chatView];
     [chatView playSenderRing];
 }
