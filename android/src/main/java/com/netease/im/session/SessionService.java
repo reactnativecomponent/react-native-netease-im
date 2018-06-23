@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.facebook.react.bridge.Arguments;
@@ -33,6 +34,7 @@ import com.netease.im.uikit.session.helper.MessageListPanelHelper;
 import com.netease.im.uikit.uinfo.UserInfoHelper;
 import com.netease.im.uikit.uinfo.UserInfoObservable;
 import com.netease.nimlib.sdk.AbortableFuture;
+import com.netease.nimlib.sdk.InvocationFuture;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.NIMSDK;
 import com.netease.nimlib.sdk.Observer;
@@ -334,11 +336,31 @@ public class SessionService {
         getMsgService().sendMessageReceipt(sessionId, message);
     }
 
-    public void sendTeamReceipt(@NonNull IMMessage message) {
+    /**
+     * 发送群回执，依赖于商业收费
+     * @param message
+     */
+    public void sendTeamReceipt(@NonNull IMMessage message) { // TODO
         if (!sendReceiptCheck(message)) {
             return;
         }
-        NIMSDK.getTeamService().sendTeamMessageReceipt(message);
+        InvocationFuture result = NIMSDK.getTeamService().sendTeamMessageReceipt(message);
+        result.setCallback(new RequestCallback() {
+            @Override
+            public void onSuccess(Object param) {
+                Log.i("receipt", "success");
+            }
+
+            @Override
+            public void onFailed(int code) {
+                Log.i("receipt", "fail");
+            }
+
+            @Override
+            public void onException(Throwable exception) {
+                Log.i("receipt", "exception");
+            }
+        });
     }
 
     /**
@@ -357,7 +379,7 @@ public class SessionService {
     };
 
     /**
-     *
+     * 监听回执，依赖于商务收费
      */
     private void receiveTeamReceipt() { //TODO
 
@@ -701,6 +723,8 @@ public class SessionService {
     public void sendTextMessage(String content, List<String> selectedMembers, OnSendMessageListener onSendMessageListener) {
 
         IMMessage message = MessageBuilder.createTextMessage(sessionId, sessionTypeEnum, content);
+        message.setMsgAck();
+        message.needMsgAck(); // 所有消息都设为需要已读回执的
 
         if (selectedMembers != null && !selectedMembers.isEmpty()) {
             MemberPushOption option = createMemPushOption(selectedMembers, message);
