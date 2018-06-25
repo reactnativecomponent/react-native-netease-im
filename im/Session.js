@@ -36,7 +36,7 @@ class Session {
     deleteRecentContact(recentContactId){
         return RNNeteaseIm.deleteRecentContact(recentContactId)
     }
-    markAllMessagesRead{
+    markAllMessagesRead(){
         return RNNRNNeteaseIm.markAllMessagesRead;
     }
     /**
