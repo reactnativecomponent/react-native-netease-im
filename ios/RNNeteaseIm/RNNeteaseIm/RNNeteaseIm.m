@@ -274,6 +274,10 @@ RCT_EXPORT_METHOD(setAllread){
 RCT_EXPORT_METHOD(clearSystemMessages){
     [[NoticeViewController initWithNoticeViewController] deleAllNotic];
 }
+//标记所有消息已读
+RCT_EXPORT_METHOD(markAllMessagesRead){
+    [[NIMSDK sharedSDK].conversationManager markAllMessagesRead];
+}
 //会话开始
 RCT_EXPORT_METHOD(startSession:(nonnull  NSString *)sessionId type:(nonnull  NSString *)type){
     [[ConversationViewController initWithConversationViewController]startSession:sessionId withType:type];
