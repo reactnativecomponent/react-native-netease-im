@@ -323,9 +323,10 @@
         [[NIMAVChatSDK sharedSDK].netCallManager hangup:self.callInfo.callID];
         self.chatRoom = nil;
     }
-    [self removeFromSuperview];
     [self sendNotification:End];
-    //[self dismissViewControllerAnimated:YES completion:nil];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self removeFromSuperview];
+    });
 }
 
 - (void)fillUserSetting:(NIMNetCallOption *)option
