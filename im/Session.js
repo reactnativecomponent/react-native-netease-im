@@ -36,6 +36,9 @@ class Session {
     deleteRecentContact(recentContactId){
         return RNNeteaseIm.deleteRecentContact(recentContactId)
     }
+    markAllMessagesRead(){
+        return RNNRNNeteaseIm.markAllMessagesRead;
+    }
     /**
      * 进入聊天会话
      * @param sessionId
