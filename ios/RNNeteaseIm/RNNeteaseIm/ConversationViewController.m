@@ -193,7 +193,9 @@
                 [fromUser setObject:@"" forKey:tem];
             }
         }
-        [dic setObject:[NSString stringWithFormat:@"%@", message.text] forKey:@"text"];
+        NSString *text = nil;
+        text = [self ifNeedConvert:message.remoteExt]?message.remoteExt[@"convertedText"]:[NSString stringWithFormat:@"%@", message.text];
+        [dic setObject:text forKey:@"text"];
         [dic setObject:[NSString stringWithFormat:@"%@", message.session.sessionId] forKey:@"sessionId"];
         [dic setObject:[NSString stringWithFormat:@"%ld", message.session.sessionType] forKey:@"sessionType"];
         switch (message.deliveryState) {
@@ -893,7 +895,9 @@
             [fromUser setObject:@"" forKey:tem];
         }
     }
-    [dic2 setObject:[NSString stringWithFormat:@"%@", message.text] forKey:@"text"];
+    NSString *text = nil;
+    text = [self ifNeedConvert:message.remoteExt]?message.remoteExt[@"convertedText"]:[NSString stringWithFormat:@"%@", message.text];
+    [dic2 setObject:text forKey:@"text"];
     [dic2 setObject:[NSString stringWithFormat:@"%@", message.session.sessionId] forKey:@"sessionId"];
     [dic2 setObject:[NSString stringWithFormat:@"%ld", message.session.sessionType] forKey:@"sessionType"];
     switch (message.deliveryState) {
@@ -1314,6 +1318,17 @@
     }else{
         return YES;
     }
+}
+
+- (BOOL)ifNeedConvert:(id)obj{
+    if ([obj isKindOfClass:[NSDictionary class]]) {
+        NSString *text = obj[@"convertedText"];
+        BOOL need = [obj[@"needConvertText"] boolValue];
+        if (need && [text isKindOfClass:[NSString class]] && text.length) {
+            return YES;
+        }
+    }
+    return NO;
 }
 
 @end
