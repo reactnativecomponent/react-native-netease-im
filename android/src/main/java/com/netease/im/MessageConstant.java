@@ -38,6 +38,8 @@ public class MessageConstant {
 
     public class Message {
 
+        public static final String NEED_CONVERT_TEXT = "needConvertText";
+        public static final String CONVERTED_TEXT = "convertedText";
         public static final String MSG_ID = "msgId";
         public static final String MSG_TYPE = "msgType";
         public static final String IS_OUTGOING = "isOutgoing";
