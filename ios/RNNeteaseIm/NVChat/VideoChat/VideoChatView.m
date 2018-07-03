@@ -67,7 +67,7 @@
     _bigView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
     [self addSubview: _bigView];
     
-    _smallView = [[UIView alloc] initWithFrame:CGRectMake(self.frame.size.width-100, navHeight-44, 100, 150)];
+    _smallView = [[UIView alloc] initWithFrame:CGRectMake(self.frame.size.width-100, navHeight-34, 100, 150)];
     _smallView.backgroundColor = [UIColor blackColor];
     [self insertSubview:_smallView aboveSubview:_bigView];
     
@@ -87,7 +87,7 @@
     [self insertSubview:_reject aboveSubview:_callingView];
     
     _minimize = [UIButton buttonWithType:UIButtonTypeCustom];
-    _minimize.frame = CGRectMake(30, 30, 30, 30);
+    _minimize.frame = CGRectMake(30, navHeight-34, 30, 30);
     [_minimize setBackgroundImage:[UIImage imageNamed:@"shrink"] forState:UIControlStateNormal];
     //[_minimize setTitle:@"最小化" forState:UIControlStateNormal];
     [_minimize addTarget:self action:@selector(minimizeEvent) forControlEvents:UIControlEventTouchUpInside];
