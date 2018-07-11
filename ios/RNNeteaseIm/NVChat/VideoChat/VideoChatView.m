@@ -52,6 +52,8 @@
         id<NIMNetCallManager> manager = [NIMAVChatSDK sharedSDK].netCallManager;
         [manager addDelegate:self];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hangup) name:VideoChatHangup object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyBoardDidShowNoti:) name:UIKeyboardDidShowNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyBoardDidHideNoti:) name:UIKeyboardWillHideNotification object:nil];
         _initFrame = frame;
         _lastFrame = CGRectMake(frame.size.width-100, navHeight, 100, 150);
         [self makeView];
@@ -369,6 +371,21 @@
 
 - (void)sendNotification:(NSString*)type{
     [[NSNotificationCenter defaultCenter] postNotificationName:VideoChatViewNotification object:@{@"type":type}];
+}
+
+- (void)keyBoardDidShowNoti:(NSNotification*)noti{
+    UIView *view = self;
+    [self removeFromSuperview];
+    UIWindow *keyWindow = [[[UIApplication sharedApplication] windows] lastObject ];
+    [keyWindow addSubview:view];
+}
+
+- (void)keyBoardDidHideNoti:(NSNotification*)noti{
+    UIView *view = self;
+    [self removeFromSuperview];
+    UIWindow *keyWindow = [[UIApplication sharedApplication] keyWindow];
+    //UIWindow *keyWindow = [[[UIApplication sharedApplication] windows] lastObject ];
+    [keyWindow addSubview:view];
 }
 
 - (void)dealloc{
