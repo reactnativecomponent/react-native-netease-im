@@ -1000,7 +1000,7 @@
         [dic2 setObject:locationObj forKey:@"extend"];
         
     }else if(message.messageType == NIMMessageTypeTip){//提醒类消息
-        [dic2 setObject:@"notification" forKey:@"msgType"];
+        [dic2 setObject:@"tip" forKey:@"msgType"];
         NSMutableDictionary *notiObj = [NSMutableDictionary dictionary];
         [notiObj setObject:message.text forKey:@"tipMsg"];
         [dic2 setObject:notiObj forKey:@"extend"];
