@@ -681,7 +681,7 @@
         [[NIMSDK sharedSDK].conversationManager markAllMessagesReadInSession:_session];
         
         if (![message.from isEqualToString:[NIMSDK sharedSDK].loginManager.currentAccount]) {
-            [self playTipsMusicWithMessage:message];
+            //[self playTipsMusicWithMessage:message];
         }
     }
 }
