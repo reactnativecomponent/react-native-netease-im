@@ -35,7 +35,7 @@ typedef void(^Errors)(id erro);
 //发送音频
 -(void)sendAudioMessage:(  NSString *)file duration:(  NSString *)duration;
 //发送视频
--(void)sendTextMessage:(  NSString *)path duration:(  NSString *)duration width:(  NSString *)width height:(  NSString *)height displayName:(  NSString *)displayName;
+-(void)sendVideoMessage:(  NSString *)path duration:(  NSString *)duration width:(  NSString *)width height:(  NSString *)height displayName:(  NSString *)displayName;
 //发送自定义消息
 -(void)sendCustomMessage:(NSDictionary *)dataDict;
 //发送地理位置消息
@@ -50,6 +50,8 @@ typedef void(^Errors)(id erro);
 - (void)sendRedPacketOpenMessage:(NSString *)sendId hasRedPacket:(NSString *)hasRedPacket serialNo:(NSString *)serialNo;
 //发送名片消息
 - (void)sendCardMessage:(NSString *)type sessionId:(NSString *)sessionId name:(NSString *)name imgPath:(NSString *)strImgPath;
+//发送群消息已读回执
+- (void)sendMessageReceipt:(NSString *)msgId;
 
 //转发消息
 -(void)forwardMessage:(NSString *)messageId sessionId:(NSString *)sessionId sessionType:(NSString *)sessionType content:(NSString *)content success:(Success)succe;

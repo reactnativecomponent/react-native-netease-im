@@ -274,6 +274,10 @@ RCT_EXPORT_METHOD(setAllread){
 RCT_EXPORT_METHOD(clearSystemMessages){
     [[NoticeViewController initWithNoticeViewController] deleAllNotic];
 }
+//标记所有消息已读
+RCT_EXPORT_METHOD(markAllMessagesRead){
+    [[NIMSDK sharedSDK].conversationManager markAllMessagesRead];
+}
 //会话开始
 RCT_EXPORT_METHOD(startSession:(nonnull  NSString *)sessionId type:(nonnull  NSString *)type){
     [[ConversationViewController initWithConversationViewController]startSession:sessionId withType:type];
@@ -299,7 +303,7 @@ RCT_EXPORT_METHOD(pullMessageHistory:(nonnull NSString *)messageId limit:(int)li
     }];
 }
 //本地历史记录
-RCT_EXPORT_METHOD(queryMessageEx:(nonnull  NSString *)sessionId sessionType:(nonnull  NSString *)sessionType timeLong:(nonnull  NSString *)timeLong direction:(nonnull  NSString *)direction limit:(nonnull  NSString *)limit   asc:(BOOL)asc resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
+RCT_EXPORT_METHOD(queryMessageListHistory:(nonnull  NSString *)sessionId sessionType:(nonnull  NSString *)sessionType timeLong:(nonnull  NSString *)timeLong direction:(nonnull  NSString *)direction limit:(nonnull  NSString *)limit   asc:(BOOL)asc resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
     [[ConversationViewController initWithConversationViewController]localSessionList:sessionId sessionType:sessionType timeLong:timeLong direction:direction limit:limit asc:asc success:^(id param) {
         resolve(param);
     }];
@@ -346,10 +350,16 @@ RCT_EXPORT_METHOD(sendAudioMessage:(nonnull  NSString *)file duration:(nonnull  
 RCT_EXPORT_METHOD(sendCustomMessage:(nonnull  NSDictionary *)attachment){
     [[ConversationViewController initWithConversationViewController]sendCustomMessage:attachment];
 }
+//发送群已读消息回执
+RCT_EXPORT_METHOD(sendMessageReceipt:(nonnull  NSString *)msgId){
+    [[ConversationViewController initWithConversationViewController] sendMessageReceipt:msgId];
+}
 //发送视频消息
 RCT_EXPORT_METHOD(sendVideoMessage:(nonnull  NSString *)file duration:(nonnull  NSString *)duration width:(nonnull  NSString *)width height:(nonnull  NSString *)height displayName:(nonnull  NSString *)displayName){
-    [[ConversationViewController initWithConversationViewController]sendTextMessage:file duration:duration width:width height:height displayName:displayName];
+    [[ConversationViewController initWithConversationViewController]sendVideoMessage:file duration:duration width:width height:height displayName:displayName];
+
 }
+
 //发送地理位置消息
 RCT_EXPORT_METHOD(sendLocationMessage:(nonnull  NSString *)latitude longitude:(nonnull  NSString *)longitude address:(nonnull  NSString *)address){
     [[ConversationViewController initWithConversationViewController]sendLocationMessage:latitude longitude:longitude address:address];
@@ -788,6 +798,10 @@ RCT_EXPORT_METHOD(cleanCache){
             case 16:
                 //资金变动通知
                 [_bridge.eventDispatcher sendDeviceEventWithName:@"observeAccountNotice" body:param];
+                break;
+            case 17:
+                //下载视频完成通知
+                [_bridge.eventDispatcher sendDeviceEventWithName:@"observeDownloadVideoNotice" body:param];
                 break;
             default:
                 break;

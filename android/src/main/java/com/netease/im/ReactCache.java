@@ -1037,6 +1037,16 @@ public class ReactCache {
 
         }
         itemMap.putString(MessageConstant.Message.MSG_TEXT, text);
+        // 添加自定义拓展字段
+        if(item.getRemoteExtension() != null) {
+            Boolean needConvertText = (Boolean)item.getRemoteExtension().get(MessageConstant.Message.NEED_CONVERT_TEXT);
+            String convertedText = (String)item.getRemoteExtension().get(MessageConstant.Message.CONVERTED_TEXT);
+            itemMap.putBoolean(MessageConstant.Message.NEED_CONVERT_TEXT, needConvertText);
+            itemMap.putString(MessageConstant.Message.CONVERTED_TEXT, convertedText);
+            if (needConvertText && convertedText != null) {
+                itemMap.putString(MessageConstant.Message.MSG_TEXT, convertedText);
+            }
+        }
 
         return itemMap;
     }

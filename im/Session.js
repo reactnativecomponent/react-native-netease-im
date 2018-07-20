@@ -36,6 +36,9 @@ class Session {
     deleteRecentContact(recentContactId){
         return RNNeteaseIm.deleteRecentContact(recentContactId)
     }
+    markAllMessagesRead(){
+        return RNNeteaseIm.markAllMessagesRead();
+    }
     /**
      * 进入聊天会话
      * @param sessionId
@@ -54,7 +57,7 @@ class Session {
         return RNNeteaseIm.stopSession()
     }
     /**
-     * 获取最近聊天内容
+     * 获取云端聊天记录
      * @param messageId
      * @param limit 查询结果的条数限制
      * @returns {*}  @see 回调返回最近所有消息记录
@@ -177,6 +180,16 @@ class Session {
     sendCardMessage(type, name, imgPath, sessionId){
         return RNNeteaseIm.sendCardMessage(type, name, imgPath, sessionId)
     }
+
+    /**
+     *
+     * @param messageId, Android 端群聊、P2P 都支持
+     * @returns {*}
+     */
+    sendMessageReceipt(messageId){
+        return RNNeteaseIm.sendMessageReceipt(messageId)
+    }
+
     /**
      * 拆红包
      * @param sendId 发送红包的sessionId

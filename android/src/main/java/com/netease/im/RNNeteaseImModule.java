@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.WindowManager;
 import android.widget.Toast;
 
@@ -50,6 +51,7 @@ import com.netease.im.uikit.permission.annotation.OnMPermissionGranted;
 import com.netease.im.uikit.permission.annotation.OnMPermissionNeverAskAgain;
 import com.netease.im.uikit.session.helper.MessageHelper;
 import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.NIMSDK;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.RequestCallbackWrapper;
 import com.netease.nimlib.sdk.ResponseCode;
@@ -1977,6 +1979,19 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
                 promise.resolve("" + succeeded);
             }
         });
+    }
+
+    @ReactMethod
+    public void sendMessageReceipt(String messageId) {
+        Log.i("receipt", messageId);
+        sessionService.queryMessage(messageId, new SessionService.OnMessageQueryListener() {
+            @Override
+            public int onResult(int code, IMMessage message) {
+                SessionService.getInstance().sendSingleReceipt(message);
+                return 0;
+            }
+        });
+
     }
 
     void showTip(final String tip) {
