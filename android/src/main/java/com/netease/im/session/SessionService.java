@@ -160,9 +160,9 @@ public class SessionService {
             if (!this.mute && m.getDirect() == MsgDirectionEnum.In) {
                 if (showMsg(m)) {
                     if (m.getAttachment() != null && (m.getAttachment() instanceof RedPacketAttachement)) {
-                        AudioPlayService.getInstance().playAudio(handler, ReactCache.getReactContext(), AudioManager.STREAM_RING, "raw", "rp");
+//                        AudioPlayService.getInstance().playAudio(handler, ReactCache.getReactContext(), AudioManager.STREAM_RING, "raw", "rp");
                     } else {
-                        AudioPlayService.getInstance().playAudio(handler, ReactCache.getReactContext(), AudioManager.STREAM_RING, "raw", "msg");
+//                        AudioPlayService.getInstance().playAudio(handler, ReactCache.getReactContext(), AudioManager.STREAM_RING, "raw", "msg");
                     }
                 }
 
