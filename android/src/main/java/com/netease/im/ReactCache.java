@@ -860,7 +860,7 @@ public class ReactCache {
         itemMap.putString(MessageConstant.Message.MSG_ID, item.getUuid());
 
         itemMap.putString(MessageConstant.Message.MSG_TYPE, getMessageType(item));
-        itemMap.putString(MessageConstant.Message.TIME_STRING, Long.toString(item.getTime() / 1000));
+        itemMap.putString(MessageConstant.Message.TIME_STRING, Long.toString(item.getTime()));
         itemMap.putString(MessageConstant.Message.SESSION_ID, item.getSessionId());
         itemMap.putString(MessageConstant.Message.SESSION_TYPE, Integer.toString(item.getSessionType().getValue()));
 
