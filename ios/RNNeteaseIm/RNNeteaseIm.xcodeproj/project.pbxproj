@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3459305620AD448F00A1FEC0 /* RNVideoChatManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3459301E20AD448F00A1FEC0 /* RNVideoChatManager.m */; };
 		3459305720AD448F00A1FEC0 /* UIAlertView+NTESBlock.m in Sources */ = {isa = PBXBuildFile; fileRef = 3459302120AD448F00A1FEC0 /* UIAlertView+NTESBlock.m */; };
 		3459305820AD448F00A1FEC0 /* GLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3459302520AD448F00A1FEC0 /* GLView.m */; };
 		3459305920AD448F00A1FEC0 /* NTESGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3459302620AD448F00A1FEC0 /* NTESGLView.m */; };
@@ -29,8 +28,6 @@
 		3459306920AD448F00A1FEC0 /* IJKSDLGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3459304B20AD448F00A1FEC0 /* IJKSDLGLView.m */; };
 		3459306A20AD448F00A1FEC0 /* ijksdl_timer.c in Sources */ = {isa = PBXBuildFile; fileRef = 3459305320AD448F00A1FEC0 /* ijksdl_timer.c */; };
 		3459306B20AD448F00A1FEC0 /* RNVideoChatView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3459305520AD448F00A1FEC0 /* RNVideoChatView.m */; };
-		346FA77920CE4EF400433E8E /* CallingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 346FA77320CE4EF400433E8E /* CallingView.m */; };
-		346FA77A20CE4EF400433E8E /* VideoChatView.m in Sources */ = {isa = PBXBuildFile; fileRef = 346FA77420CE4EF400433E8E /* VideoChatView.m */; };
 		4E27A5CB1ED5417100543BFC /* RNNotificationCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E27A5CA1ED5417100543BFC /* RNNotificationCenter.m */; };
 		4E354E871ECBE72700CD6587 /* NIMObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E354E861ECBE72700CD6587 /* NIMObject.m */; };
 		4E354EC01ECC2E3400CD6587 /* NSDictionary+NTESJson.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E354EBF1ECC2E3400CD6587 /* NSDictionary+NTESJson.m */; };
@@ -77,11 +74,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		3459301E20AD448F00A1FEC0 /* RNVideoChatManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNVideoChatManager.m; sourceTree = "<group>"; };
 		3459301F20AD448F00A1FEC0 /* UIAlertView+NTESBlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertView+NTESBlock.h"; sourceTree = "<group>"; };
 		3459302020AD448F00A1FEC0 /* RNVideoChatView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNVideoChatView.h; sourceTree = "<group>"; };
 		3459302120AD448F00A1FEC0 /* UIAlertView+NTESBlock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertView+NTESBlock.m"; sourceTree = "<group>"; };
-		3459302220AD448F00A1FEC0 /* RNVideoChatManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNVideoChatManager.h; sourceTree = "<group>"; };
 		3459302420AD448F00A1FEC0 /* NTESGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTESGLView.h; sourceTree = "<group>"; };
 		3459302520AD448F00A1FEC0 /* GLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLView.m; sourceTree = "<group>"; };
 		3459302620AD448F00A1FEC0 /* NTESGLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTESGLView.m; sourceTree = "<group>"; };
@@ -125,22 +120,6 @@
 		3459305320AD448F00A1FEC0 /* ijksdl_timer.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.objc; fileEncoding = 4; path = ijksdl_timer.c; sourceTree = "<group>"; };
 		3459305420AD448F00A1FEC0 /* GLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLView.h; sourceTree = "<group>"; };
 		3459305520AD448F00A1FEC0 /* RNVideoChatView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNVideoChatView.m; sourceTree = "<group>"; };
-		346FA77120CE4EF400433E8E /* VideoChatView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoChatView.h; sourceTree = "<group>"; };
-		346FA77220CE4EF400433E8E /* CallingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CallingView.h; sourceTree = "<group>"; };
-		346FA77320CE4EF400433E8E /* CallingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CallingView.m; sourceTree = "<group>"; };
-		346FA77420CE4EF400433E8E /* VideoChatView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoChatView.m; sourceTree = "<group>"; };
-		346FA77620CE4EF400433E8E /* video_chat_tip_sender.aac */ = {isa = PBXFileReference; lastKnownFileType = file; path = video_chat_tip_sender.aac; sourceTree = "<group>"; };
-		346FA77820CE4EF400433E8E /* video_chat_tip_receiver.aac */ = {isa = PBXFileReference; lastKnownFileType = file; path = video_chat_tip_receiver.aac; sourceTree = "<group>"; };
-		346FA77B20CE540400433E8E /* full-screen@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "full-screen@3x.png"; sourceTree = "<group>"; };
-		346FA77C20CE540500433E8E /* full-screen@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "full-screen@2x.png"; sourceTree = "<group>"; };
-		34C56AF420DA5D4800E858B1 /* accept@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "accept@3x.png"; sourceTree = "<group>"; };
-		34C56AF520DA5D4800E858B1 /* avatar_nurse@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "avatar_nurse@2x.png"; sourceTree = "<group>"; };
-		34C56AF620DA5D4800E858B1 /* shrink@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "shrink@3x.png"; sourceTree = "<group>"; };
-		34C56AF720DA5D4800E858B1 /* hangup@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "hangup@3x.png"; sourceTree = "<group>"; };
-		34C56AF820DA5D4800E858B1 /* avatar_nurse@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "avatar_nurse@3x.png"; sourceTree = "<group>"; };
-		34C56AF920DA5D4800E858B1 /* accept@2x..png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "accept@2x..png"; sourceTree = "<group>"; };
-		34C56AFA20DA5D4800E858B1 /* shrink@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "shrink@2x.png"; sourceTree = "<group>"; };
-		34C56AFB20DA5D4800E858B1 /* hangup@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "hangup@2x.png"; sourceTree = "<group>"; };
 		4E27A5C91ED5417100543BFC /* RNNotificationCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNNotificationCenter.h; sourceTree = "<group>"; };
 		4E27A5CA1ED5417100543BFC /* RNNotificationCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNNotificationCenter.m; sourceTree = "<group>"; };
 		4E354E851ECBE72700CD6587 /* NIMObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIMObject.h; sourceTree = "<group>"; };
@@ -223,8 +202,6 @@
 		3459301D20AD448F00A1FEC0 /* NVChat */ = {
 			isa = PBXGroup;
 			children = (
-				3459302220AD448F00A1FEC0 /* RNVideoChatManager.h */,
-				3459301E20AD448F00A1FEC0 /* RNVideoChatManager.m */,
 				3459301F20AD448F00A1FEC0 /* UIAlertView+NTESBlock.h */,
 				3459302120AD448F00A1FEC0 /* UIAlertView+NTESBlock.m */,
 				3459302020AD448F00A1FEC0 /* RNVideoChatView.h */,
@@ -237,15 +214,10 @@
 		3459302320AD448F00A1FEC0 /* VideoChat */ = {
 			isa = PBXGroup;
 			children = (
-				346FA77220CE4EF400433E8E /* CallingView.h */,
-				346FA77320CE4EF400433E8E /* CallingView.m */,
-				346FA77120CE4EF400433E8E /* VideoChatView.h */,
-				346FA77420CE4EF400433E8E /* VideoChatView.m */,
 				3459302420AD448F00A1FEC0 /* NTESGLView.h */,
 				3459302620AD448F00A1FEC0 /* NTESGLView.m */,
 				3459305420AD448F00A1FEC0 /* GLView.h */,
 				3459302520AD448F00A1FEC0 /* GLView.m */,
-				346FA77520CE4EF400433E8E /* source */,
 				3459302720AD448F00A1FEC0 /* Model */,
 				3459302A20AD448F00A1FEC0 /* NTES */,
 				3459302D20AD448F00A1FEC0 /* ijksdl */,
@@ -342,25 +314,6 @@
 				3459304D20AD448F00A1FEC0 /* IJKSDLGLView.h */,
 			);
 			path = ios;
-			sourceTree = "<group>";
-		};
-		346FA77520CE4EF400433E8E /* source */ = {
-			isa = PBXGroup;
-			children = (
-				34C56AF920DA5D4800E858B1 /* accept@2x..png */,
-				34C56AF420DA5D4800E858B1 /* accept@3x.png */,
-				34C56AF520DA5D4800E858B1 /* avatar_nurse@2x.png */,
-				34C56AF820DA5D4800E858B1 /* avatar_nurse@3x.png */,
-				34C56AFB20DA5D4800E858B1 /* hangup@2x.png */,
-				34C56AF720DA5D4800E858B1 /* hangup@3x.png */,
-				34C56AFA20DA5D4800E858B1 /* shrink@2x.png */,
-				34C56AF620DA5D4800E858B1 /* shrink@3x.png */,
-				346FA77C20CE540500433E8E /* full-screen@2x.png */,
-				346FA77B20CE540400433E8E /* full-screen@3x.png */,
-				346FA77620CE4EF400433E8E /* video_chat_tip_sender.aac */,
-				346FA77820CE4EF400433E8E /* video_chat_tip_receiver.aac */,
-			);
-			path = source;
 			sourceTree = "<group>";
 		};
 		4E5B47381EC1788F00D74E72 = {
@@ -536,7 +489,6 @@
 				3459305F20AD448F00A1FEC0 /* renderer_rgb.c in Sources */,
 				4E5B47D01EC17A0D00D74E72 /* NTESSpellingCenter.m in Sources */,
 				3459305820AD448F00A1FEC0 /* GLView.m in Sources */,
-				3459305620AD448F00A1FEC0 /* RNVideoChatManager.m in Sources */,
 				3459306A20AD448F00A1FEC0 /* ijksdl_timer.c in Sources */,
 				4E5B49B71EC1AE5600D74E72 /* NIMKitUtil.m in Sources */,
 				3459306920AD448F00A1FEC0 /* IJKSDLGLView.m in Sources */,
@@ -556,13 +508,11 @@
 				4E6BA8EC1EC2D23A00630D77 /* NIMKitTimerHolder.m in Sources */,
 				4E5B47CA1EC17A0D00D74E72 /* NTESContactDataMember.m in Sources */,
 				3459306520AD448F00A1FEC0 /* yuv420p.fsh.c in Sources */,
-				346FA77920CE4EF400433E8E /* CallingView.m in Sources */,
 				4E3DD02F1EF384A900012CB7 /* DWCustomAttachmentDecoder.m in Sources */,
 				3459306120AD448F00A1FEC0 /* renderer_yuv420sp.c in Sources */,
 				4E5B47781EC1793600D74E72 /* RNNeteaseIm.m in Sources */,
 				3459306220AD448F00A1FEC0 /* shader.c in Sources */,
 				4E5B47C61EC17A0D00D74E72 /* NIMModel.m in Sources */,
-				346FA77A20CE4EF400433E8E /* VideoChatView.m in Sources */,
 				4EC4FCCF1ECA9BDB00F3DA5E /* NSString+NIMKit.m in Sources */,
 				4E5B47CF1EC17A0D00D74E72 /* NTESPinyinConverter.m in Sources */,
 				3459306620AD448F00A1FEC0 /* yuv420sp.fsh.c in Sources */,
