@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <NIMSDK/NIMSDK.h>
 
 @interface NetCallChatInfo : NSObject
 
