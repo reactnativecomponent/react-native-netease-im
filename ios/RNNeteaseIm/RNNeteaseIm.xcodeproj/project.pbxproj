@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3459305620AD448F00A1FEC0 /* RNVideoChatManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3459301E20AD448F00A1FEC0 /* RNVideoChatManager.m */; };
 		3459305720AD448F00A1FEC0 /* UIAlertView+NTESBlock.m in Sources */ = {isa = PBXBuildFile; fileRef = 3459302120AD448F00A1FEC0 /* UIAlertView+NTESBlock.m */; };
 		3459305820AD448F00A1FEC0 /* GLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3459302520AD448F00A1FEC0 /* GLView.m */; };
 		3459305920AD448F00A1FEC0 /* NTESGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3459302620AD448F00A1FEC0 /* NTESGLView.m */; };
@@ -75,11 +74,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		3459301E20AD448F00A1FEC0 /* RNVideoChatManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNVideoChatManager.m; sourceTree = "<group>"; };
 		3459301F20AD448F00A1FEC0 /* UIAlertView+NTESBlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertView+NTESBlock.h"; sourceTree = "<group>"; };
 		3459302020AD448F00A1FEC0 /* RNVideoChatView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNVideoChatView.h; sourceTree = "<group>"; };
 		3459302120AD448F00A1FEC0 /* UIAlertView+NTESBlock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertView+NTESBlock.m"; sourceTree = "<group>"; };
-		3459302220AD448F00A1FEC0 /* RNVideoChatManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNVideoChatManager.h; sourceTree = "<group>"; };
 		3459302420AD448F00A1FEC0 /* NTESGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTESGLView.h; sourceTree = "<group>"; };
 		3459302520AD448F00A1FEC0 /* GLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLView.m; sourceTree = "<group>"; };
 		3459302620AD448F00A1FEC0 /* NTESGLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTESGLView.m; sourceTree = "<group>"; };
@@ -205,8 +202,6 @@
 		3459301D20AD448F00A1FEC0 /* NVChat */ = {
 			isa = PBXGroup;
 			children = (
-				3459302220AD448F00A1FEC0 /* RNVideoChatManager.h */,
-				3459301E20AD448F00A1FEC0 /* RNVideoChatManager.m */,
 				3459301F20AD448F00A1FEC0 /* UIAlertView+NTESBlock.h */,
 				3459302120AD448F00A1FEC0 /* UIAlertView+NTESBlock.m */,
 				3459302020AD448F00A1FEC0 /* RNVideoChatView.h */,
@@ -494,7 +489,6 @@
 				3459305F20AD448F00A1FEC0 /* renderer_rgb.c in Sources */,
 				4E5B47D01EC17A0D00D74E72 /* NTESSpellingCenter.m in Sources */,
 				3459305820AD448F00A1FEC0 /* GLView.m in Sources */,
-				3459305620AD448F00A1FEC0 /* RNVideoChatManager.m in Sources */,
 				3459306A20AD448F00A1FEC0 /* ijksdl_timer.c in Sources */,
 				4E5B49B71EC1AE5600D74E72 /* NIMKitUtil.m in Sources */,
 				3459306920AD448F00A1FEC0 /* IJKSDLGLView.m in Sources */,
