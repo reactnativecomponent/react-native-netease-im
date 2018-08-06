@@ -51,7 +51,6 @@ import com.netease.im.uikit.permission.annotation.OnMPermissionGranted;
 import com.netease.im.uikit.permission.annotation.OnMPermissionNeverAskAgain;
 import com.netease.im.uikit.session.helper.MessageHelper;
 import com.netease.nimlib.sdk.NIMClient;
-import com.netease.nimlib.sdk.NIMSDK;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.RequestCallbackWrapper;
 import com.netease.nimlib.sdk.ResponseCode;
@@ -1519,6 +1518,41 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
     }
 
     /**
+     * 创建发给RN的消息列表，自动处理空昵称的情况
+     * @param messageList
+     * @param promise
+     */
+    private void createMessageList(final List<IMMessage> messageList, final Promise promise) {
+        List<String> accountList = new ArrayList<>();
+        String myAccount = LoginService.getInstance().getAccount();
+        for (int i = 0; i < messageList.size(); i++) {
+            IMMessage msg = messageList.get(i);
+            String fromAccount = msg.getFromAccount();
+
+            // 如果是自己，不处理
+            if (TextUtils.equals(myAccount, fromAccount))
+                continue;
+
+            if (msg.getFromNick() == null && !accountList.contains(fromAccount)) {
+                accountList.add(fromAccount);
+            }
+        }
+
+        if (accountList.size() != 0) {
+            NimUserInfoCache.getInstance().getUserInfoFromRemote(accountList, new RequestCallbackWrapper<List<NimUserInfo>>() {
+                @Override
+                public void onResult(int code, List<NimUserInfo> result, Throwable exception) {
+                    Object a = ReactCache.createMessageList(messageList);
+                    promise.resolve(a);
+                }
+            });
+        } else {
+            Object a = ReactCache.createMessageList(messageList);
+            promise.resolve(a);
+        }
+    }
+
+    /**
      * 查询聊天内容
      *
      * @param sessionId
@@ -1549,8 +1583,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
                     public void onResult(int code, List<IMMessage> result, Throwable exception) {
                         if (code == ResponseCode.RES_SUCCESS) {
                             if (result != null && result.size() > 0) {
-                                Object a = ReactCache.createMessageList(result);
-                                promise.resolve(a);
+                                createMessageList(result, promise);
                                 return;
 
                             }
@@ -1579,8 +1612,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
                         if (messageList == null || messageList.isEmpty()) {
                             promise.reject("" + code, "");
                         } else {
-                            Object a = ReactCache.createMessageList(messageList);
-                            promise.resolve(a);
+                            createMessageList(messageList, promise);
                         }
                         return 0;
                     }
@@ -1592,25 +1624,23 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
     }
 
     /**
-     *
      * @param messageId 最旧的消息ID
      * @param limit     查询结果的条数限制
      * @param promise
      */
     @ReactMethod
     private void pullMessageHistory(String messageId, final int limit, final Promise promise) {
-        LogUtil.w(TAG, "pullMessageHistory： msgId = " + messageId +  ", limit = " + limit);
+        LogUtil.w(TAG, "pullMessageHistory： msgId = " + messageId + ", limit = " + limit);
         sessionService.queryMessage(messageId, new SessionService.OnMessageQueryListener() {
             @Override
             public int onResult(int code, IMMessage message) {
                 sessionService.pullMessageHistory(message, limit, new SessionService.OnMessageQueryListListener() {
                     @Override
-                    public int onResult(int code, List<IMMessage> messageList, Set<String> timedItems) {
+                    public int onResult(int code, final List<IMMessage> messageList, Set<String> timedItems) {
                         if (messageList == null || messageList.isEmpty()) {
                             promise.reject(code + "", "");
                         } else {
-                            Object a = ReactCache.createMessageList(messageList);
-                            promise.resolve(a);
+                            createMessageList(messageList, promise);
                         }
                         return 0;
                     }
