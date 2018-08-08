@@ -36,37 +36,13 @@
 - (void)clickObserveNotification:(NSNotification *)noti{
     NSDictionary *dict = noti.object;
     NSMutableDictionary *param = [NSMutableDictionary dictionaryWithDictionary:[dict objectForKey:@"dict"]];
-    NSString *strDict = [param objectForKey:@"sessionBody"];
-    if ([strDict length]) {
-        NSDictionary *dataDict = [self dictChangeFromJson:strDict];
-        NSMutableDictionary *mutaDict = [NSMutableDictionary dictionaryWithDictionary:dataDict];
-        NSString *strType = [mutaDict objectForKey:@"sessionType"];
-        NSString *strSessionId = [mutaDict objectForKey:@"sessionId"];
-        NSString *strSessionName = @"";
-        if ([strType isEqualToString:@"0"]) {//点对点
-            NIMUser *user = [[NIMSDK sharedSDK].userManager userInfo:strSessionId];
-            if ([user.alias length]) {
-                strSessionName = user.alias;
-            }else{
-                NIMUserInfo *userInfo = user.userInfo;
-                strSessionName = userInfo.nickName;
-            }
-        }else{//群主
-            NIMTeam *team = [[[NIMSDK sharedSDK] teamManager]teamById:strSessionId];
-            strSessionName = team.teamName;
-        }
-        if (!strSessionName) {
-            strSessionName = @"";
-        }
-        [mutaDict setObject:strSessionName forKey:@"sessionName"];
-        [param setObject:mutaDict forKey:@"sessionBody"];
+    if (param[@"nim"] && param[@"type"]==nil) {
         if ([[dict objectForKey:@"type"] isEqualToString:@"launch"]) {
             [_bridge.eventDispatcher sendDeviceEventWithName:@"observeLaunchPushEvent" body:param];
         }else{
             [_bridge.eventDispatcher sendDeviceEventWithName:@"observeBackgroundPushEvent" body:param];
         }
     }
-
 }
 
 - (NSDictionary *)dictChangeFromJson:(NSString *)strJson{
