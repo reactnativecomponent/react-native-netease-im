@@ -1519,6 +1519,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
 
     /**
      * 创建发给RN的消息列表，自动处理空昵称的情况
+     *
      * @param messageList
      * @param promise
      */
@@ -1530,10 +1531,25 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
             String fromAccount = msg.getFromAccount();
 
             // 如果是自己，不处理
-            if (TextUtils.equals(myAccount, fromAccount))
+            if (TextUtils.isEmpty(fromAccount) || TextUtils.equals(myAccount, fromAccount))
                 continue;
 
-            if (msg.getFromNick() == null && !accountList.contains(fromAccount)) {
+            String fromNick = null;
+            String displayName;
+
+            try {
+                fromNick = msg.getFromNick();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            if (msg.getSessionType() == SessionTypeEnum.Team && !TextUtils.equals(LoginService.getInstance().getAccount(), fromAccount)) {
+                displayName = TeamDataCache.getInstance().getTeamMemberDisplayName(msg.getSessionId(), fromAccount);
+            } else {
+                displayName = !TextUtils.isEmpty(fromNick) ? fromNick : NimUserInfoCache.getInstance().getUserDisplayName(fromAccount);
+            }
+
+            if (fromAccount.equals(displayName) && !accountList.contains(fromAccount)) {
                 accountList.add(fromAccount);
             }
         }
