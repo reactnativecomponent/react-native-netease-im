@@ -164,8 +164,11 @@ public class NimUserInfoCache {
     public NimUserInfo getUserInfo(String account) {
         if (!hasUser(account)) {
             LogUtil.e(TAG, "getUserInfo null, account=" + account + ", account2UserMap=" + account2UserMap);
-            getUserInfoFromRemote(account, null);
-            return null;
+            NimUserInfo user = NIMClient.getService(UserService.class).getUserInfo(account);
+            if (user == null) {
+                getUserInfoFromRemote(account, null);
+            }
+            return user;
         }
 
         return account2UserMap.get(account);
