@@ -200,11 +200,8 @@ UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTy
 在`android/app/build.gradle`里，defaultConfig栏目下添加如下代码：
 ```
 manifestPlaceholders = [
-    ......
-
-    "NIM_KEY": "云信appId"
- 
-    ......
+	// 如果有多项，每一项之间需要用逗号分隔
+    NIM_KEY: "云信的APPID"    //在此修改云信APPID
 ]
 ```
 在`AndroidManifest.xml`里，添加如下代码：
