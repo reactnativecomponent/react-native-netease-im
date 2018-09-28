@@ -198,9 +198,6 @@ UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTy
 
 #### Android配置
 
-在`android/app/build.gradle`里，defaultConfig栏目下添加如下代码：
-
-
 在`AndroidManifest.xml`里，添加如下代码：
 ```
 < manifest
