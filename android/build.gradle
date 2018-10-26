@@ -34,6 +34,6 @@ repositories {
 dependencies {
     compile fileTree(include: '*.jar', dir: 'libs')
     compile 'com.facebook.react:react-native:+'
-    compile 'com.netease.nimlib:basesdk:5.2.0'
-    compile 'com.netease.nimlib:push:5.2.0'
+    compile 'com.netease.nimlib:basesdk:5.7.0'
+    compile 'com.netease.nimlib:push:5.7.0'
 }
