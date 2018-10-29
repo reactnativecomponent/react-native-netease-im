@@ -310,10 +310,16 @@
     option.apnsSound = @"video_chat_tip_receiver.aac";
     option.apnsPayload = @{@"content-available" : @1};
     //option.webrtcCompatible = YES;
-    option.serverRecordAudio     = YES;
-    option.serverRecordVideo     = YES;
+    //option.serverRecordAudio     = YES;
+    //option.serverRecordVideo     = YES;
     //[self fillUserSetting:option];
-    
+  
+    NIMNetCallServerRecord *recordOpt = [[NIMNetCallServerRecord alloc] init];
+    recordOpt.enableServerAudioRecording = YES;
+    recordOpt.enableServerVideoRecording = YES;
+    recordOpt.enableServerHostRecording = YES;
+    option.serverRecord = recordOpt;
+  
     option.videoCaptureParam.startWithCameraOn = (self.callInfo.callType == NIMNetCallTypeVideo);
     
     __weak typeof(self) wself = self;
