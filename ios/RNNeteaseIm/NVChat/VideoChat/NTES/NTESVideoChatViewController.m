@@ -702,15 +702,22 @@
 {
     option.autoRotateRemoteVideo = [[NTESBundleSetting sharedConfig] videochatAutoRotateRemoteVideo];
     //option.webrtcCompatible = YES;
-    option.serverRecordAudio     = YES;
-    option.serverRecordVideo     = YES;
+    //option.serverRecordAudio     = YES;
+    //option.serverRecordVideo     = YES;
+  
+    NIMNetCallServerRecord *recordOpt = [[NIMNetCallServerRecord alloc] init];
+    recordOpt.enableServerAudioRecording = YES;
+    recordOpt.enableServerVideoRecording = YES;
+    recordOpt.enableServerHostRecording = YES;
+    option.serverRecord = recordOpt;
+  
     option.preferredVideoEncoder = [[NTESBundleSetting sharedConfig] perferredVideoEncoder];
     option.preferredVideoDecoder = [[NTESBundleSetting sharedConfig] perferredVideoDecoder];
     option.videoMaxEncodeBitrate = [[NTESBundleSetting sharedConfig] videoMaxEncodeKbps] * 1000;
     option.autoDeactivateAudioSession = [[NTESBundleSetting sharedConfig] autoDeactivateAudioSession];
     option.audioDenoise = [[NTESBundleSetting sharedConfig] audioDenoise];
     option.voiceDetect = [[NTESBundleSetting sharedConfig] voiceDetect];
-    option.audioHowlingSuppress = [[NTESBundleSetting sharedConfig] audioHowlingSuppress];
+    //option.audioHowlingSuppress = [[NTESBundleSetting sharedConfig] audioHowlingSuppress];
     option.preferHDAudio =  [[NTESBundleSetting sharedConfig] preferHDAudio];
     option.scene = [[NTESBundleSetting sharedConfig] scene];
     
