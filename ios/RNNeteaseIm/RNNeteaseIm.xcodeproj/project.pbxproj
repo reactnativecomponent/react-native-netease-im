@@ -569,6 +569,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -617,6 +618,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -637,8 +639,6 @@
 		4E5B474B1EC1788F00D74E72 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BITCODE_GENERATION_MODE = bitcode;
-				ENABLE_BITCODE = NO;
 				GCC_PREFIX_HEADER = RNNeteaseIm/PrefixHeader.pch;
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/../../../react-native/React/**",
@@ -654,8 +654,6 @@
 		4E5B474C1EC1788F00D74E72 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BITCODE_GENERATION_MODE = bitcode;
-				ENABLE_BITCODE = NO;
 				GCC_PREFIX_HEADER = RNNeteaseIm/PrefixHeader.pch;
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/../../../react-native/React/**",
