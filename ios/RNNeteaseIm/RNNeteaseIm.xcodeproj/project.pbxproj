@@ -637,6 +637,7 @@
 		4E5B474B1EC1788F00D74E72 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				BITCODE_GENERATION_MODE = bitcode;
 				GCC_PREFIX_HEADER = RNNeteaseIm/PrefixHeader.pch;
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/../../../react-native/React/**",
@@ -652,6 +653,7 @@
 		4E5B474C1EC1788F00D74E72 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				BITCODE_GENERATION_MODE = bitcode;
 				GCC_PREFIX_HEADER = RNNeteaseIm/PrefixHeader.pch;
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/../../../react-native/React/**",
