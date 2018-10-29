@@ -638,6 +638,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BITCODE_GENERATION_MODE = bitcode;
+				ENABLE_BITCODE = NO;
 				GCC_PREFIX_HEADER = RNNeteaseIm/PrefixHeader.pch;
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/../../../react-native/React/**",
@@ -654,6 +655,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BITCODE_GENERATION_MODE = bitcode;
+				ENABLE_BITCODE = NO;
 				GCC_PREFIX_HEADER = RNNeteaseIm/PrefixHeader.pch;
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/../../../react-native/React/**",
