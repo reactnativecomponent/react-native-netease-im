@@ -35,6 +35,7 @@ import com.netease.nimlib.sdk.friend.FriendService;
 import com.netease.nimlib.sdk.friend.model.AddFriendNotify;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.attachment.AudioAttachment;
+import com.netease.nimlib.sdk.msg.attachment.FileAttachment;
 import com.netease.nimlib.sdk.msg.attachment.ImageAttachment;
 import com.netease.nimlib.sdk.msg.attachment.LocationAttachment;
 import com.netease.nimlib.sdk.msg.attachment.MsgAttachment;
@@ -636,13 +637,13 @@ public class ReactCache {
         return writableArray;
     }
 
-    static String getMessageNotifyType(TeamMessageNotifyTypeEnum notifyTypeEnum){
+    static String getMessageNotifyType(TeamMessageNotifyTypeEnum notifyTypeEnum) {
         String notify = "1";
-        if(notifyTypeEnum==TeamMessageNotifyTypeEnum.All){
+        if (notifyTypeEnum == TeamMessageNotifyTypeEnum.All) {
             notify = "1";
-        }else if(notifyTypeEnum==TeamMessageNotifyTypeEnum.Manager){
+        } else if (notifyTypeEnum == TeamMessageNotifyTypeEnum.Manager) {
             notify = "0";
-        }else if(notifyTypeEnum==TeamMessageNotifyTypeEnum.Mute){
+        } else if (notifyTypeEnum == TeamMessageNotifyTypeEnum.Mute) {
             notify = "0";
         }
         return notify;
@@ -955,6 +956,19 @@ public class ReactCache {
                 } else {
                     text = item.getContent();
                 }
+            } else if (item.getMsgType() == MsgTypeEnum.file) {
+                FileAttachment fileAttachment = (FileAttachment) attachment;
+                WritableMap fileObj = Arguments.createMap();
+                fileObj.putString(MessageConstant.File.PATH, fileAttachment.getPath());
+                fileObj.putDouble(MessageConstant.File.SIZE, fileAttachment.getSize());
+                fileObj.putString(MessageConstant.File.MD5, fileAttachment.getMd5());
+                fileObj.putString(MessageConstant.File.URL, fileAttachment.getUrl());
+                fileObj.putString(MessageConstant.File.DISPLAY_NAME, fileAttachment.getDisplayName());
+                fileObj.putString(MessageConstant.File.EXTENSION, fileAttachment.getExtension());
+                fileObj.putBoolean(MessageConstant.File.FORCE_UPLOAD, fileAttachment.isForceUpload());
+
+                itemMap.putMap(MESSAGE_EXTEND, fileObj);
+
             } else if (item.getMsgType() == MsgTypeEnum.custom) {//自定义消息
                 try {
                     CustomAttachment customAttachment = (CustomAttachment) attachment;
@@ -1038,9 +1052,9 @@ public class ReactCache {
         }
         itemMap.putString(MessageConstant.Message.MSG_TEXT, text);
         // 添加自定义拓展字段
-        if(item.getRemoteExtension() != null) {
-            Boolean needConvertText = (Boolean)item.getRemoteExtension().get(MessageConstant.Message.NEED_CONVERT_TEXT);
-            String convertedText = (String)item.getRemoteExtension().get(MessageConstant.Message.CONVERTED_TEXT);
+        if (item.getRemoteExtension() != null) {
+            Boolean needConvertText = (Boolean) item.getRemoteExtension().get(MessageConstant.Message.NEED_CONVERT_TEXT);
+            String convertedText = (String) item.getRemoteExtension().get(MessageConstant.Message.CONVERTED_TEXT);
             itemMap.putBoolean(MessageConstant.Message.NEED_CONVERT_TEXT, needConvertText);
             itemMap.putString(MessageConstant.Message.CONVERTED_TEXT, convertedText);
             if (needConvertText && convertedText != null) {

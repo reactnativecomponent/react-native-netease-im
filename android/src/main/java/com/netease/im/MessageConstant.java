@@ -144,4 +144,14 @@ public class MessageConstant {
         public final static String DB = "db";
         public final static String TIME = "time";
     }
+
+    public static class File {
+        public final static String PATH = "path";
+        public final static String SIZE = "size";
+        public final static String MD5 = "md5";
+        public final static String URL = "url";
+        public final static String DISPLAY_NAME = "displayName";
+        public final static String EXTENSION = "extension";
+        public final static String FORCE_UPLOAD = "forceUpload";
+    }
 }
