@@ -413,12 +413,25 @@
           [dic setObject:@"file" forKey:@"msgType"];
           NIMFileObject *object = message.messageObject;
           NSMutableDictionary *fileObj = [NSMutableDictionary dictionary];
-          [fileObj setObject:[NSString stringWithFormat:@"%@", [object path] ] forKey:@"path"];
           [fileObj setObject:@([object fileLength]) forKey:@"size"];
           [fileObj setObject:[NSString stringWithFormat:@"%@",[object md5]] forKey:@"md5"];
           [fileObj setObject:[NSString stringWithFormat:@"%@",[object url]] forKey:@"url"];
           [fileObj setObject:[NSString stringWithFormat:@"%@",[object displayName]] forKey:@"displayName"];
           [fileObj setObject:[NSString stringWithFormat:@"%@",[[object displayName] pathExtension]] forKey:@"extension"];
+          // 如果文件存在，则设置path的值
+          if(message.attachmentDownloadState == NIMMessageAttachmentDownloadStateDownloaded){
+            NSLog(@"附件下载完成");
+            [fileObj setObject:[NSString stringWithFormat:@"%@", [object path] ] forKey:@"path"];
+          }else if(message.attachmentDownloadState == NIMMessageAttachmentDownloadStateNeedDownload){
+            NSLog(@"附件未下载");
+            [fileObj setObject:@"" forKey:@"path"];
+          }else if(message.attachmentDownloadState == NIMMessageAttachmentDownloadStateDownloading){
+            NSLog(@"附件下载中");
+            [fileObj setObject:@"" forKey:@"path"];
+          }else if(message.attachmentDownloadState == NIMMessageAttachmentDownloadStateFailed){
+            NSLog(@"附件下载失败");
+            [fileObj setObject:@"" forKey:@"path"];
+          }
           [dic setObject:fileObj forKey:@"extend"];
         }else{
             [dic setObject:@"unknown" forKey:@"msgType"];
@@ -749,6 +762,33 @@
         [[AVAudioSession sharedInstance] setCategory: AVAudioSessionCategoryAmbient error:nil];
         [self.player play];
     }
+}
+
+- (void)downloadAttachment:(NSString *)messageId completion:(nullable NIMDownloadCompleteBlock)completion{
+    NSArray *currentMessage = [[[NIMSDK sharedSDK] conversationManager] messagesInSession:_session messageIds:@[messageId]];
+    __block NIMMessage *message = currentMessage[0];
+    NSString* path = nil;
+    NSString* url = nil;
+    if(message.messageType == NIMMessageTypeImage){
+      NIMImageObject* obj = message.messageObject;
+      path = obj.path;
+      url = obj.url;
+    }else if(message.messageType == NIMMessageTypeFile){
+      NIMFileObject* obj = message.messageObject;
+      path = obj.path;
+      url = obj.url;
+    }
+    __weak typeof(self) wself = self;
+    [[NIMSDK sharedSDK].resourceManager download:url filepath:path progress:^(float progress) {
+    } completion:^(NSError *error) {
+      if (wself) {
+        if (completion) {
+          [[NIMSDK sharedSDK].conversationManager updateMessage:message forSession:_session completion:nil];
+          [self refrashMessage:message From:message.isOutgoingMsg ? @"send" : @"receive"];
+          completion(error);
+        }
+      }
+    }];
 }
 
 - (void)fetchMessageAttachment:(NIMMessage *)message progress:(float)progress
@@ -1126,12 +1166,25 @@
       [dic2 setObject:@"file" forKey:@"msgType"];
       NIMFileObject *object = message.messageObject;
       NSMutableDictionary *fileObj = [NSMutableDictionary dictionary];
-      [fileObj setObject:[NSString stringWithFormat:@"%@", [object path] ] forKey:@"path"];
       [fileObj setObject:@([object fileLength]) forKey:@"size"];
       [fileObj setObject:[NSString stringWithFormat:@"%@",[object md5]] forKey:@"md5"];
       [fileObj setObject:[NSString stringWithFormat:@"%@",[object url]] forKey:@"url"];
       [fileObj setObject:[NSString stringWithFormat:@"%@",[object displayName]] forKey:@"displayName"];
       [fileObj setObject:[NSString stringWithFormat:@"%@",[[object displayName] pathExtension]] forKey:@"extension"];
+      // 如果文件存在，则设置path的值
+      if(message.attachmentDownloadState == NIMMessageAttachmentDownloadStateDownloaded){
+        NSLog(@"附件下载完成");
+        [fileObj setObject:[NSString stringWithFormat:@"%@", [object path] ] forKey:@"path"];
+      }else if(message.attachmentDownloadState == NIMMessageAttachmentDownloadStateNeedDownload){
+        NSLog(@"附件未下载");
+        [fileObj setObject:@"" forKey:@"path"];
+      }else if(message.attachmentDownloadState == NIMMessageAttachmentDownloadStateDownloading){
+        NSLog(@"附件下载中");
+        [fileObj setObject:@"" forKey:@"path"];
+      }else if(message.attachmentDownloadState == NIMMessageAttachmentDownloadStateFailed){
+        NSLog(@"附件下载失败");
+        [fileObj setObject:@"" forKey:@"path"];
+      }
       [dic2 setObject:fileObj forKey:@"extend"];
     }else{
         [dic2 setObject:@"unknown" forKey:@"msgType"];

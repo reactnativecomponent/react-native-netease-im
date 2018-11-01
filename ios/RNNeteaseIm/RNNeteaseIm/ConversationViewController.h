@@ -81,4 +81,7 @@ typedef void(^Errors)(id erro);
 - (NIMMessage *)msgWithTip:(NSString *)tip;
 //重发消息
 - (void)resendMessage:(NSString *)messageID;
+
+//下载附件
+- (void)downloadAttachment:(NSString *)messageId completion:(nullable NIMDownloadCompleteBlock)completion;
 @end

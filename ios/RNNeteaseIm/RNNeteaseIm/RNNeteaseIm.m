@@ -856,4 +856,15 @@ RCT_EXPORT_METHOD(setupWebViewUserAgent){
     return strNetWork;
 }
 
+// 下载附件
+RCT_EXPORT_METHOD(downloadAttachment:(NSString *)messageId isThumb:(NSString*)isThumb resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
+  [[ConversationViewController initWithConversationViewController] downloadAttachment:messageId completion:^(NSError * _Nullable error) {
+    if(error){
+      reject(@"",@"下载失败",error);
+    }else{
+      resolve(messageId);
+    }
+  }];
+}
+
 @end
