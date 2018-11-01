@@ -1122,6 +1122,17 @@
                     break;
             }
         }
+    }else if(message.messageType == NIMMessageTypeFile){
+      [dic2 setObject:@"file" forKey:@"msgType"];
+      NIMFileObject *object = message.messageObject;
+      NSMutableDictionary *fileObj = [NSMutableDictionary dictionary];
+      [fileObj setObject:[NSString stringWithFormat:@"%@", [object path] ] forKey:@"path"];
+      [fileObj setObject:@([object fileLength]) forKey:@"size"];
+      [fileObj setObject:[NSString stringWithFormat:@"%@",[object md5]] forKey:@"md5"];
+      [fileObj setObject:[NSString stringWithFormat:@"%@",[object url]] forKey:@"url"];
+      [fileObj setObject:[NSString stringWithFormat:@"%@",[object displayName]] forKey:@"displayName"];
+      [fileObj setObject:[NSString stringWithFormat:@"%@",[[object displayName] pathExtension]] forKey:@"extension"];
+      [dic2 setObject:fileObj forKey:@"extend"];
     }else{
         [dic2 setObject:@"unknown" forKey:@"msgType"];
         NSMutableDictionary *unknowObj = [NSMutableDictionary dictionary];
