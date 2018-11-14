@@ -98,7 +98,7 @@ public class IMApplication {
             options.mixPushConfig = mixPushConfig;
         }
 
-        NIMClient.init(context, getLoginInfo(), getOptions(context));
+        NIMClient.init(context, getLoginInfo(), options);
         // crash handler
 //        AppCrashHandler.getInstance(context);
         if (NIMUtil.isMainProcess(IMApplication.context)) {
