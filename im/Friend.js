@@ -1,7 +1,9 @@
-/**
- * Created by dowin on 2017/8/2.
+/*
+ * @Author: huangjun
+ * @Date: 2019-03-06 16:28:25
+ * @Last Modified by: huangjun
+ * @Last Modified time: 2019-03-06 16:51:34
  */
-'use strict'
 import { NativeModules,Platform } from 'react-native'
 const { RNNeteaseIm } = NativeModules
 class Friend {
