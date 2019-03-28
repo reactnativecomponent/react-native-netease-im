@@ -32,6 +32,7 @@ import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.SDKOptions;
 import com.netease.nimlib.sdk.StatusBarNotificationConfig;
 import com.netease.nimlib.sdk.auth.LoginInfo;
+import com.netease.nimlib.sdk.mixpush.MixPushConfig;
 import com.netease.nimlib.sdk.mixpush.MixPushService;
 import com.netease.nimlib.sdk.mixpush.NIMPushClient;
 import com.netease.nimlib.sdk.msg.MessageNotifierCustomization;
@@ -93,7 +94,11 @@ public class IMApplication {
 
         // 注册小米推送appID 、appKey 以及在云信管理后台添加的小米推送证书名称，该逻辑放在 NIMClient init 之前
         if (miPushConfig != null) {
-            NIMPushClient.registerMiPush(context, miPushConfig.certificate, miPushConfig.appID, miPushConfig.appKey);
+            MixPushConfig mixPushConfig = new MixPushConfig();
+            mixPushConfig.xmCertificateName = miPushConfig.certificate;
+            mixPushConfig.xmAppId = miPushConfig.appID;
+            mixPushConfig.xmAppKey = miPushConfig.appKey;
+            NIMPushClient.initPush(new MixPushConfig());
         }
 
         NIMClient.init(context, getLoginInfo(), getOptions(context));

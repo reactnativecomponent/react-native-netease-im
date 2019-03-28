@@ -5,9 +5,6 @@ React Native的网易云信插件
 [react-native-chat-demo](https://github.com/reactnativecomponent/react-native-chat-demo)
 
 #### 注意事项: 
-
-##### 1.react-native版本需要0.47.0及以上NIMSDK对应版本4.7.0
-
 ##### 2.普通帐号不要使用5位数，因为5位数设定是系统帐号，尽量使用6位或者6位以上
 
 ## 如何安装
@@ -117,11 +114,8 @@ public class MainApplication extends Application implements ReactApplication {
 #### iOS配置
 install with CocoaPods
 ```
-pod 'NIMSDK', '4.9.0'
-pod 'SSZipArchive', '~> 1.2'
-pod 'Reachability', '~> 3.1.1'
+pod 'NIMSDK', '5.6.0'
 pod 'CocoaLumberjack', '~> 2.0.0-rc2'
-pod 'FMDB', '~>2.5' 
 ```
 Run `pod install`
 
@@ -197,10 +191,13 @@ UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTy
 ```
 
 #### Android配置
-
 在`android/app/build.gradle`里，defaultConfig栏目下添加如下代码：
-
-
+```
+manifestPlaceholders = [
+	// 如果有多项，每一项之间需要用逗号分隔
+    NIM_KEY: "云信的APPID"    //在此修改云信APPID
+]
+```
 在`AndroidManifest.xml`里，添加如下代码：
 ```
 < manifest
