@@ -12,7 +12,7 @@ React Native的网易云信插件
 ### 1.首先安装npm包
 
 ```bash
-npm install react-native-netease-im --save
+npm install react-native-netease-im --save 或者 yarn add react-native-netease-im
 ```
 
 ### 2.link
@@ -114,14 +114,10 @@ public class MainApplication extends Application implements ReactApplication {
 #### iOS配置
 install with CocoaPods
 ```
-pod 'NIMSDK', '5.6.0'
+pod 'NIMSDK', '6.2.0'
 pod 'CocoaLumberjack', '~> 2.0.0-rc2'
 ```
 Run `pod install`
-
-在工程target的`Build Phases->Link Binary with Libraries`中加入`、libsqlite3.0.tbd、libc++.tbd、libz.tbd、CoreTelephony.framework、AVFoundation.framework、CoreMedia.framework、CoreMotion.framework`
-
-
 
 在你工程的`AppDelegate.m`文件中添加如下代码：
 
@@ -198,43 +194,7 @@ manifestPlaceholders = [
     NIM_KEY: "云信的APPID"    //在此修改云信APPID
 ]
 ```
-在`AndroidManifest.xml`里，添加如下代码：
-```
-< manifest
-
-    ......
-
-    <!-- SDK 权限申明, 第三方 APP 接入时，请将 com.im.demo 替换为自己的包名 -->
-    <!-- 和下面的 uses-permission 一起加入到你的 AndroidManifest 文件中。 -->
-    <permission
-        android:name="com.im.demo.permission.RECEIVE_MSG"
-        android:protectionLevel="signature"/>
-    <!-- 接收 SDK 消息广播权限， 第三方 APP 接入时，请将 com.im.demo 替换为自己的包名 -->
-    <uses-permission android:name="com.im.demo.permission.RECEIVE_MSG"/>
-    <!-- 小米推送 -->
-    <permission
-        android:name="com.im.demo.permission.MIPUSH_RECEIVE"
-        android:protectionLevel="signature"/>
-    <uses-permission android:name="com.im.demo.permission.MIPUSH_RECEIVE"/>
-
-    ......
-    < application
-            ......
-            <!-- 设置你的网易聊天App Key -->
-             <meta-data
-                        android:name="com.netease.nim.appKey"
-                        android:value="App Key" />
-            <!--添加新的 IPC 数据共享机制，替换不安全的多进程读写 SharedPreference-->
-            <provider
-                android:name="com.netease.nimlib.ipc.NIMContentProvider"
-                android:authorities="com.im.demo.ipc.provider"
-                android:exported="false"
-                android:process=":core" />
-
-```
-
 ## 如何使用
-
 ### 引入包
 
 ```
