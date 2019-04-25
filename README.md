@@ -75,8 +75,9 @@ public class MainActivity extends ReactActivity {
 
 ```java
 ...
-import com.netease.im.RNNeteaseImPackage;  // 在public class MainApplication之前import
+import com.netease.im.RNNeteaseImPackage;
 import com.netease.im.IMApplication;
+import com.netease.nimlib.sdk.mixpush.MixPushConfig;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -101,9 +102,16 @@ public class MainApplication extends Application implements ReactApplication {
   }
    @Override
   public void onCreate() {
-    //初始化方法appId以及appKey在小米开放平台获取，小米推送证书名称在网易云信后台设置
-    IMApplication.setDebugAble(BuildConfig.DEBUG);
-    IMApplication.init(this, MainActivity.class,R.drawable.ic_stat_notify_msg,new    IMApplication.MiPushConfig("小米推送证书名称","小米推送appId","小米推送的appKey"));
+    // IMApplication.setDebugAble(BuildConfig.DEBUG);
+    // 推送配置，没有可传null
+    MixPushConfig config = new MixPushConfig();
+    // 小米证书配置，没有可不填
+    config.xmAppId = "";
+    config.xmAppKey = "";
+    config.xmCertificateName = "";
+    // 华为推送配置，没有可不填
+    config.hwCertificateName = "";
+    IMApplication.init(this, MainActivity.class,R.drawable.ic_stat_notify_msg, config);
    ...
   }
 }
@@ -114,14 +122,10 @@ public class MainApplication extends Application implements ReactApplication {
 #### iOS配置
 install with CocoaPods
 ```
-pod 'NIMSDK', '5.6.0'
+pod 'NIMSDK', '6.2.0'
 pod 'CocoaLumberjack', '~> 2.0.0-rc2'
 ```
-Run `pod install`
-
-在工程target的`Build Phases->Link Binary with Libraries`中加入`、libsqlite3.0.tbd、libc++.tbd、libz.tbd、CoreTelephony.framework、AVFoundation.framework、CoreMedia.framework、CoreMotion.framework`
-
-
+进入/ios目录执行 `pod install`
 
 在你工程的`AppDelegate.m`文件中添加如下代码：
 
@@ -204,18 +208,18 @@ manifestPlaceholders = [
 
     ......
 
-    <!-- SDK 权限申明, 第三方 APP 接入时，请将 com.im.demo 替换为自己的包名 -->
+    <!-- SDK 权限申明 -->
     <!-- 和下面的 uses-permission 一起加入到你的 AndroidManifest 文件中。 -->
     <permission
-        android:name="com.im.demo.permission.RECEIVE_MSG"
+        android:name="${applicationId}.permission.RECEIVE_MSG"
         android:protectionLevel="signature"/>
-    <!-- 接收 SDK 消息广播权限， 第三方 APP 接入时，请将 com.im.demo 替换为自己的包名 -->
-    <uses-permission android:name="com.im.demo.permission.RECEIVE_MSG"/>
+    <!-- 接收 SDK 消息广播权限 -->
+    <uses-permission android:name="${applicationId}.permission.RECEIVE_MSG"/>
     <!-- 小米推送 -->
     <permission
         android:name="com.im.demo.permission.MIPUSH_RECEIVE"
         android:protectionLevel="signature"/>
-    <uses-permission android:name="com.im.demo.permission.MIPUSH_RECEIVE"/>
+    <uses-permission android:name="${applicationId}.permission.MIPUSH_RECEIVE"/>
 
     ......
     < application
@@ -224,14 +228,20 @@ manifestPlaceholders = [
              <meta-data
                         android:name="com.netease.nim.appKey"
                         android:value="App Key" />
-            <!--添加新的 IPC 数据共享机制，替换不安全的多进程读写 SharedPreference-->
-            <provider
-                android:name="com.netease.nimlib.ipc.NIMContentProvider"
-                android:authorities="com.im.demo.ipc.provider"
-                android:exported="false"
-                android:process=":core" />
+
 
 ```
+在`build.gradle`里，添加如下代码：
+```
+allprojects {
+    repositories {
+
+      // 添加行
+       maven {url 'http://developer.huawei.com/repo/'}
+    }
+}
+```
+
 
 ## 如何使用
 

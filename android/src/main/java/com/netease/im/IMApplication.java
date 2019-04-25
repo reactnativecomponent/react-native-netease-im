@@ -44,6 +44,7 @@ import com.netease.nimlib.sdk.msg.model.RevokeMsgNotification;
 import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
 import com.netease.nimlib.sdk.util.NIMUtil;
 
+
 /**
  * Created by dowin on 2017/4/28.
  */
@@ -51,21 +52,21 @@ import com.netease.nimlib.sdk.util.NIMUtil;
 public class IMApplication {
 
 
-    public static class MiPushConfig {
-
-        public String certificate;
-        public String appID;
-        public String appKey;
-
-        /**
-         * 注册小米推送证书名称 、推送appID 以及在云信管理后台添加的appKey
-         */
-        public MiPushConfig(String certificate, String appID, String appKey) {
-            this.certificate = certificate;
-            this.appID = appID;
-            this.appKey = appKey;
-        }
-    }
+//    public static class MiPushConfig {
+//
+//        public String certificate;
+//        public String appID;
+//        public String appKey;
+//
+//        /**
+//         * 注册小米推送证书名称 、推送appID 以及在云信管理后台添加的appKey
+//         */
+//        public MiPushConfig(String certificate, String appID, String appKey) {
+//            this.certificate = certificate;
+//            this.appID = appID;
+//            this.appKey = appKey;
+//        }
+//    }
 
     // context
     private static Context context;
@@ -87,21 +88,20 @@ public class IMApplication {
     private static StatusBarNotificationConfig statusBarNotificationConfig;
     private static boolean DEBUG = false;
 
-    public static void init(Context context, Class mainActivityClass, @DrawableRes int notify_msg_drawable_id, MiPushConfig miPushConfig) {
+    public static void init(Context context, Class mainActivityClass, @DrawableRes int notify_msg_drawable_id, MixPushConfig miPushConfig) {
         IMApplication.context = context.getApplicationContext();
         IMApplication.mainActivityClass = mainActivityClass;
         IMApplication.notify_msg_drawable_id = notify_msg_drawable_id;
 
         // 注册小米推送appID 、appKey 以及在云信管理后台添加的小米推送证书名称，该逻辑放在 NIMClient init 之前
-        if (miPushConfig != null) {
-            MixPushConfig mixPushConfig = new MixPushConfig();
-            mixPushConfig.xmCertificateName = miPushConfig.certificate;
-            mixPushConfig.xmAppId = miPushConfig.appID;
-            mixPushConfig.xmAppKey = miPushConfig.appKey;
-            NIMPushClient.initPush(new MixPushConfig());
-        }
-
-        NIMClient.init(context, getLoginInfo(), getOptions(context));
+//        if (miPushConfig != null) {
+//            MixPushConfig mixPushConfig = new MixPushConfig();
+//            mixPushConfig.xmCertificateName = miPushConfig.certificate;
+//            mixPushConfig.xmAppId = miPushConfig.appID;
+//            mixPushConfig.xmAppKey = miPushConfig.appKey;
+//            NIMPushClient.initPush(new MixPushConfig());
+//        }
+        NIMClient.init(context, getLoginInfo(), getOptions(context, miPushConfig));
         // crash handler
 //        AppCrashHandler.getInstance(context);
         if (NIMUtil.isMainProcess(IMApplication.context)) {
@@ -161,7 +161,7 @@ public class IMApplication {
         return Environment.getExternalStorageDirectory() + "/" + context.getPackageName() + "/nim";
     }
 
-    private static SDKOptions getOptions(Context context) {
+    private static SDKOptions getOptions(Context context, MixPushConfig miPushConfig) {
         SDKOptions options = new SDKOptions();
 
         // 如果将新消息通知提醒托管给SDK完成，需要添加以下配置。
@@ -194,6 +194,11 @@ public class IMApplication {
         //asyncInitSDK 支持异步 SDK 初始化
         //teamNotificationMessageMarkUnread 登录选项添加群通知消息是否计入未读数开关
         //sdkStorageRootPath 配置的外置存储缓存根目录
+
+        // 推送配置
+        if(miPushConfig!=null) {
+            options.mixPushConfig = miPushConfig;
+        }
 
         return options;
     }
