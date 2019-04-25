@@ -12,7 +12,7 @@ React Native的网易云信插件
 ### 1.首先安装npm包
 
 ```bash
-npm install react-native-netease-im --save
+npm install react-native-netease-im --save 或者 yarn add react-native-netease-im
 ```
 
 ### 2.link
@@ -244,7 +244,6 @@ allprojects {
 
 
 ## 如何使用
-
 ### 引入包
 
 ```
