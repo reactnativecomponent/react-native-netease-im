@@ -77,7 +77,7 @@ public class MainActivity extends ReactActivity {
 ...
 import com.netease.im.RNNeteaseImPackage;
 import com.netease.im.IMApplication;
-import com.netease.nimlib.sdk.mixpush.MixPushConfig;
+import com.netease.im.ImPushConfig;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -104,7 +104,7 @@ public class MainApplication extends Application implements ReactApplication {
   public void onCreate() {
     // IMApplication.setDebugAble(BuildConfig.DEBUG);
     // 推送配置，没有可传null
-    MixPushConfig config = new MixPushConfig();
+     ImPushConfig config = new ImPushConfig();
     // 小米证书配置，没有可不填
     config.xmAppId = "";
     config.xmAppKey = "";
