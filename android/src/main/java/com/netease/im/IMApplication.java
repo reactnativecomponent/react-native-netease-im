@@ -52,22 +52,6 @@ import com.netease.nimlib.sdk.util.NIMUtil;
 public class IMApplication {
 
 
-//    public static class MiPushConfig {
-//
-//        public String certificate;
-//        public String appID;
-//        public String appKey;
-//
-//        /**
-//         * 注册小米推送证书名称 、推送appID 以及在云信管理后台添加的appKey
-//         */
-//        public MiPushConfig(String certificate, String appID, String appKey) {
-//            this.certificate = certificate;
-//            this.appID = appID;
-//            this.appKey = appKey;
-//        }
-//    }
-
     // context
     private static Context context;
 
@@ -88,7 +72,7 @@ public class IMApplication {
     private static StatusBarNotificationConfig statusBarNotificationConfig;
     private static boolean DEBUG = false;
 
-    public static void init(Context context, Class mainActivityClass, @DrawableRes int notify_msg_drawable_id, MixPushConfig miPushConfig) {
+    public static void init(Context context, Class mainActivityClass, @DrawableRes int notify_msg_drawable_id, ImPushConfig miPushConfig) {
         IMApplication.context = context.getApplicationContext();
         IMApplication.mainActivityClass = mainActivityClass;
         IMApplication.notify_msg_drawable_id = notify_msg_drawable_id;
@@ -161,7 +145,7 @@ public class IMApplication {
         return Environment.getExternalStorageDirectory() + "/" + context.getPackageName() + "/nim";
     }
 
-    private static SDKOptions getOptions(Context context, MixPushConfig miPushConfig) {
+    private static SDKOptions getOptions(Context context, ImPushConfig miPushConfig) {
         SDKOptions options = new SDKOptions();
 
         // 如果将新消息通知提醒托管给SDK完成，需要添加以下配置。
@@ -195,9 +179,15 @@ public class IMApplication {
         //teamNotificationMessageMarkUnread 登录选项添加群通知消息是否计入未读数开关
         //sdkStorageRootPath 配置的外置存储缓存根目录
 
+
         // 推送配置
         if(miPushConfig!=null) {
-            options.mixPushConfig = miPushConfig;
+            MixPushConfig pushConfig = new MixPushConfig();
+            pushConfig.xmAppId = miPushConfig.xmAppId;
+            pushConfig.xmAppKey = miPushConfig.xmAppKey;
+            pushConfig.xmCertificateName = miPushConfig.xmCertificateName;
+            pushConfig.hwCertificateName = miPushConfig.hwCertificateName;
+            options.mixPushConfig = pushConfig;
         }
 
         return options;

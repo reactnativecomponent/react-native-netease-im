@@ -911,7 +911,7 @@ public class SessionService {
 
             @Override
             public void onException(Throwable throwable) {
-//                LogUtil.w(TAG, "throwable:" + throwable.getLocalizedMessage());
+                LogUtil.w(TAG, "throwable:" + throwable.getLocalizedMessage());
             }
         });
         onMessageStatusChange(message, true);
