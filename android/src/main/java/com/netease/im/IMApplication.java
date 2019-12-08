@@ -6,7 +6,7 @@ import android.content.pm.ApplicationInfo;
 import android.graphics.Color;
 import android.location.LocationProvider;
 import android.os.Environment;
-import android.support.annotation.DrawableRes;
+import androidx.annotation.DrawableRes;
 import android.text.TextUtils;
 import android.util.Log;
 
