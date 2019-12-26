@@ -873,4 +873,8 @@ RCT_EXPORT_METHOD(setupWebViewUserAgent){
     return strNetWork;
 }
 
++ (BOOL)requiresMainQueueSetup{
+    return YES;
+}
+
 @end
