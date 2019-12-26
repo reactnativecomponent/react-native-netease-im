@@ -9,6 +9,14 @@
 #import "RNNeteaseIm.h"
 #import "RCTUtils.h"
 #import "RNNotificationCenter.h"
+#import "NIMModel.h"
+#import "NIMViewController.h"
+#import "ContactViewController.h"
+#import "NoticeViewController.h"
+#import "TeamViewController.h"
+#import "ConversationViewController.h"
+#import "BankListViewController.h"
+#import "ImConfig.h"
 
 #define kDevice_Is_iPhoneX ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(1125, 2436), [[UIScreen mainScreen] currentMode].size) : NO)
 

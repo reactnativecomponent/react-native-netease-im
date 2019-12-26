@@ -10,6 +10,7 @@
 #import "NSString+NIMKit.h"
 #import "NIMKitLocationPoint.h"
 
+
 @implementation NIMMessageMaker
 
 + (NIMMessage*)msgWithText:(NSString*)text andApnsMembers:(NSArray *)members andeSession:(NIMSession *)session

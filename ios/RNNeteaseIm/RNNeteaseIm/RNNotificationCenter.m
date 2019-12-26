@@ -12,6 +12,8 @@
 #import "NIMMessageMaker.h"
 #import "NIMModel.h"
 #import "ConversationViewController.h"
+#import "ImConfig.h"
+
 @interface RNNotificationCenter () <NIMSystemNotificationManagerDelegate,NIMChatManagerDelegate>
 @property (nonatomic,strong) AVAudioPlayer *player; //播放提示音
 @end
@@ -29,7 +31,7 @@
 }
 - (void)start
 {
-    DDLogInfo(@"Notification Center Setup");
+//    DDLogInfo(@"Notification Center Setup");
 }
 - (instancetype)init {
     self = [super init];

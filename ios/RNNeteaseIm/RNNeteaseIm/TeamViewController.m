@@ -7,6 +7,7 @@
 //
 
 #import "TeamViewController.h"
+#import "ImConfig.h"
 
 @interface TeamViewController ()<NIMTeamManagerDelegate>
 {
@@ -184,7 +185,7 @@ NSMutableArray *_myTeams;
             }
         }
         else{
-            DDLogDebug(@"Jion team failed: %@", error.localizedDescription);
+            
             switch (error.code) {
                 case NIMRemoteErrorCodeTeamAlreadyIn:
                     err(@"已经在群里");
@@ -194,7 +195,7 @@ NSMutableArray *_myTeams;
                     break;
             }
         }
-        DDLogDebug(@"Jion team status: %zd", applyStatus);
+        
     
     }];
 }
@@ -273,7 +274,7 @@ NSMutableArray *_myTeams;
             [teamDic setObject:[NSString stringWithFormat:@"%ld",team.level] forKey:@"memberLimit"];
             [teamDic setObject:[NSString stringWithFormat:@"%f", team.createTime ] forKey:@"createTime"];
             NSString *strMute = team.notifyStateForNewMsg == NIMTeamNotifyStateAll ? @"1" : @"0";
-            [teamDic setObject:[NSString stringWithFormat:@"%d", strMute ] forKey:@"mute"];
+            [teamDic setObject:[NSString stringWithFormat:@"%@", strMute ] forKey:@"mute"];
             [teamDic setObject:[NSString stringWithFormat:@"%ld",team.joinMode] forKey:@"verifyType"];
             [teamDic setObject:[NSString stringWithFormat:@"%ld",team.beInviteMode] forKey:@"teamBeInviteMode"];
             [teamDic setObject:[NSString stringWithFormat:@"%ld",team.inviteMode] forKey:@"teamInviteMode"];

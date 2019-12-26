@@ -7,6 +7,7 @@
 //
 
 #import "NTESGroupedDataCollection.h"
+#import "ImConfig.h"
 
 @interface Pair : NSObject
 

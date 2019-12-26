@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "ImConfig.h"
 
 @interface NIMObject : NSObject<NIMCustomAttachment>
 +(instancetype)initNIMObject;

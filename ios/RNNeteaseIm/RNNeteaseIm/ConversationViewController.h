@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "NIMModel.h"
+#import "ImConfig.h"
 
 typedef void(^Success)(id param);
 typedef void(^Errors)(id erro);
@@ -17,7 +17,7 @@ typedef void(^Errors)(id erro);
 -(void)localSession:(NSInteger)index cerrentmessageId:(NSString *)currentMessageID success:(Success)succe err:(Errors)err;
 -(void)startSession:(NSString *)sessionID withType:(NSString *)type;
 -(void)stopSession;
--(void)sendAudioRecode:(NSString *)filePath;
+//-(void)sendAudioRecode:(NSString *)filePath;
 /**
  *  会话页详细配置
  */

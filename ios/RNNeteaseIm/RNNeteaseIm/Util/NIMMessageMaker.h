@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <NIMSDK/NIMSDK.h>
+#import "ImConfig.h"
 
 @class NIMKitLocationPoint;
 

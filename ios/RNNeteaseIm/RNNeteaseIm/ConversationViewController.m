@@ -24,12 +24,13 @@
     NSString *_sessionID;
     NSString *_type;
     NSInteger _index;
-    NIMSession *_session;
+    
     NSMutableArray *_sessionArr;
     
 }
 @property (nonatomic,strong) AVAudioPlayer *player; //播放提示音
 @property (nonatomic,strong) AVAudioPlayer *redPacketPlayer; //播放提示音
+@property (nonatomic,strong) NIMSession *_session;
 //@property (nonatomic,strong) NIMKitMediaFetcher *mediaFetcher;
 
 @end
@@ -77,7 +78,7 @@
 -(void)startSession:(NSString *)sessionID withType:(NSString *)type{
     _sessionID = sessionID;
     _type = type;
-    _session = [NIMSession session:_sessionID type:[_type integerValue]];
+    self._session = [NIMSession session:_sessionID type:[_type integerValue]];
     _sessionArr = [NSMutableArray array];
     [self addListener];
 }
@@ -88,7 +89,7 @@
 
 //重发消息
 - (void)resendMessage:(NSString *)messageID{
-    NSArray *currentMessage = [[[NIMSDK sharedSDK] conversationManager] messagesInSession:_session messageIds:@[messageID] ];
+    NSArray *currentMessage = [[[NIMSDK sharedSDK] conversationManager] messagesInSession:self._session messageIds:@[messageID] ];
     NIMMessage *currentM = currentMessage[0];
     NSString *isFriend = [currentM.localExt objectForKey:@"isFriend"];
     if ([isFriend length]) {
@@ -104,12 +105,12 @@
 //聊天界面历史记录
 -(void)localSession:(NSInteger)index cerrentmessageId:(NSString *)currentMessageID success:(Success)succe err:(Errors)err{
     _index = index;
-    [[NIMSDK sharedSDK].conversationManager markAllMessagesReadInSession:_session];
+    [[NIMSDK sharedSDK].conversationManager markAllMessagesReadInSession:self._session];
     if (currentMessageID.length != 0) {
         
-        NSArray *currentMessage = [[[NIMSDK sharedSDK] conversationManager] messagesInSession:_session messageIds:@[currentMessageID] ];
+        NSArray *currentMessage = [[[NIMSDK sharedSDK] conversationManager] messagesInSession:self._session messageIds:@[currentMessageID] ];
         NIMMessage *currentM = currentMessage[0];
-        NSArray *messageArr =  [[[NIMSDK sharedSDK] conversationManager]messagesInSession:_session message:currentM limit: index];
+        NSArray *messageArr =  [[[NIMSDK sharedSDK] conversationManager]messagesInSession:self._session message:currentM limit: index];
         if (messageArr.count != 0) {
             succe([self setTimeArr:messageArr]);
         }else{
@@ -119,7 +120,7 @@
         
     }
     else{
-        NSArray *messageArr =  [[[NIMSDK sharedSDK] conversationManager]messagesInSession:_session message:nil limit: index];
+        NSArray *messageArr =  [[[NIMSDK sharedSDK] conversationManager]messagesInSession:self._session message:nil limit: index];
         if ([self setTimeArr:messageArr].count != 0) {
             NSMutableDictionary *dic = [[self setTimeArr:messageArr] objectAtIndex:[self setTimeArr:messageArr].count - 1];
             [[NSUserDefaults standardUserDefaults]setObject:[dic objectForKey:@"time"] forKey:@"timestamp"];
@@ -129,7 +130,7 @@
 }
 //更新录音消息为已播放
 - (void)updateAudioMessagePlayStatus:(NSString *)messageID{
-    NSArray *messages = [[[NIMSDK sharedSDK] conversationManager] messagesInSession:_session messageIds:@[messageID] ];
+    NSArray *messages = [[[NIMSDK sharedSDK] conversationManager] messagesInSession:self._session messageIds:@[messageID] ];
     if (messages.count) {
         NIMMessage *tmpMessage = messages.firstObject;
         tmpMessage.isPlayed = YES;
@@ -400,27 +401,27 @@
 //发送录音
 -(void)sendAudioMessage:(  NSString *)file duration:(  NSString *)duration{
     if (file) {
-        NIMMessage *message = [NIMMessageMaker msgWithAudio:file andeSession:_session];
+        NIMMessage *message = [NIMMessageMaker msgWithAudio:file andeSession:self._session];
         if ([self isFriendToSendMessage:message]) {
-             [[[NIMSDK sharedSDK] chatManager] sendMessage:message toSession:_session error:nil];
+             [[[NIMSDK sharedSDK] chatManager] sendMessage:message toSession:self._session error:nil];
         }
     }
 }
 //发送文字消息
 -(void)sendMessage:(NSString *)mess andApnsMembers:(NSArray *)members{
-    NIMMessage *message = [NIMMessageMaker msgWithText:mess andApnsMembers:members andeSession:_session];
+    NIMMessage *message = [NIMMessageMaker msgWithText:mess andApnsMembers:members andeSession:self._session];
     //发送消息
     if ([self isFriendToSendMessage:message]) {
-        [[NIMSDK sharedSDK].chatManager sendMessage:message toSession:_session error:nil];
+        [[NIMSDK sharedSDK].chatManager sendMessage:message toSession:self._session error:nil];
     }
 }
 //发送图片
 -(void)sendImageMessages:(  NSString *)path  displayName:(  NSString *)displayName{
     UIImage *img = [[UIImage alloc]initWithContentsOfFile:path];
-    NIMMessage *message = [NIMMessageMaker msgWithImage:img andeSession:_session];
+    NIMMessage *message = [NIMMessageMaker msgWithImage:img andeSession:self._session];
 //    NIMMessage *message = [NIMMessageMaker msgWithImagePath:path];
     if ([self isFriendToSendMessage:message]) {
-        [[NIMSDK sharedSDK].chatManager sendMessage:message toSession:_session error:nil];
+        [[NIMSDK sharedSDK].chatManager sendMessage:message toSession:self._session error:nil];
     }
 }
 
@@ -435,10 +436,10 @@
     if ([path hasPrefix:@"file:///private"]) {
         path = [path stringByReplacingOccurrencesOfString:@"file:///private" withString:@""];
     }
-            message = [NIMMessageMaker msgWithVideo:path andeSession:_session];
+            message = [NIMMessageMaker msgWithVideo:path andeSession:self._session];
 //        }
         if ([self isFriendToSendMessage:message]) {
-            [[NIMSDK sharedSDK].chatManager sendMessage:message toSession:_session error:nil];
+            [[NIMSDK sharedSDK].chatManager sendMessage:message toSession:self._session error:nil];
         }
 //    }];
 }
@@ -458,9 +459,9 @@
     DWCustomAttachment *obj = [[DWCustomAttachment alloc]init];
     obj.custType = custType;
     obj.dataDict = dataDict;
-    message = [NIMMessageMaker msgWithCustomAttachment:obj andeSession:_session];
+    message = [NIMMessageMaker msgWithCustomAttachment:obj andeSession:self._session];
     if ([self isFriendToSendMessage:message]) {
-        [[NIMSDK sharedSDK].chatManager sendMessage:message toSession:_session error:nil];
+        [[NIMSDK sharedSDK].chatManager sendMessage:message toSession:self._session error:nil];
     }
 }
 
@@ -469,9 +470,9 @@
 -(void)sendLocationMessage:(  NSString *)latitude longitude:(  NSString *)longitude address:(  NSString *)address{
     NIMLocationObject *locaObj = [[NIMLocationObject alloc]initWithLatitude:[latitude doubleValue] longitude:[longitude doubleValue] title:address];
     NIMKitLocationPoint *locationPoint = [[NIMKitLocationPoint alloc]initWithLocationObject:locaObj];
-    NIMMessage *message = [NIMMessageMaker msgWithLocation:locationPoint andeSession:_session];
+    NIMMessage *message = [NIMMessageMaker msgWithLocation:locationPoint andeSession:self._session];
     if ([self isFriendToSendMessage:message]) {
-        [[NIMSDK sharedSDK].chatManager sendMessage:message toSession:_session error:nil];
+        [[NIMSDK sharedSDK].chatManager sendMessage:message toSession:self._session error:nil];
     }
 }
 
@@ -506,11 +507,11 @@
     DWCustomAttachment *obj = [[DWCustomAttachment alloc]init];
     obj.custType = CustomMessgeTypeRedPacketOpenMessage;
     obj.dataDict = dict;
-    message = [NIMMessageMaker msgWithCustomAttachment:obj andeSession:_session];
+    message = [NIMMessageMaker msgWithCustomAttachment:obj andeSession:self._session];
     NSTimeInterval timestamp = [[NSDate date] timeIntervalSince1970];
     message.timestamp = timestamp;
     if(![sendId isEqualToString:strMyId]){
-        NSDictionary *dataDict = @{@"type":@"2",@"data":@{@"dict":dict,@"timestamp":[NSString stringWithFormat:@"%f",timestamp],@"sessionId":_session.sessionId,@"sessionType":[NSString stringWithFormat:@"%zd",_session.sessionType]}};
+        NSDictionary *dataDict = @{@"type":@"2",@"data":@{@"dict":dict,@"timestamp":[NSString stringWithFormat:@"%f",timestamp],@"sessionId":self._session.sessionId,@"sessionType":[NSString stringWithFormat:@"%zd",self._session.sessionType]}};
         
         NSString *content = [self jsonStringWithDictionary:dataDict];
         NIMSession *redSession = [NIMSession session:sendId type:NIMSessionTypeP2P];
@@ -523,7 +524,7 @@
         notifi.apnsPayload = dataDict;
         [[NIMSDK sharedSDK].systemNotificationManager sendCustomNotification:notifi toSession:redSession completion:nil];//发送自定义通知
     }
-    [[NIMSDK sharedSDK].conversationManager saveMessage:message forSession:_session completion:nil];
+    [[NIMSDK sharedSDK].conversationManager saveMessage:message forSession:self._session completion:nil];
     
 }
 
@@ -596,10 +597,10 @@
             NSString * tip = @"消息已发出，但被对方拒收了";
             NIMMessage *tipMessage = [self msgWithTip:tip];
             tipMessage.timestamp = message.timestamp;
-            [[NIMSDK sharedSDK].conversationManager saveMessage:tipMessage forSession:_session completion:nil];
+            [[NIMSDK sharedSDK].conversationManager saveMessage:tipMessage forSession:self._session completion:nil];
         }
         message.localExt = @{@"isFriend":@"NO"};
-        [[NIMSDK sharedSDK].conversationManager updateMessage:message forSession:_session completion:nil];
+        [[NIMSDK sharedSDK].conversationManager updateMessage:message forSession:self._session completion:nil];
         [self refrashMessage:message From:@"send"];
     }
     NIMModel *model = [NIMModel initShareMD];
@@ -628,7 +629,7 @@
         NIMMessageReceipt *receipt = [[NIMMessageReceipt alloc] initWithMessage:message];
         [[[NIMSDK sharedSDK] chatManager] sendMessageReceipt:receipt completion:nil];
         //标记已读消息
-        [[NIMSDK sharedSDK].conversationManager markAllMessagesReadInSession:_session];
+        [[NIMSDK sharedSDK].conversationManager markAllMessagesReadInSession:self._session];
         
         if (![message.from isEqualToString:[NIMSDK sharedSDK].loginManager.currentAccount]) {
             [self playTipsMusicWithMessage:message];
@@ -723,7 +724,7 @@
 - (void)recordAudio:(NSString *)filePath didCompletedWithError:(NSError *)error {
     if(!error) {
         if ([self recordFileCanBeSend:filePath]) {
-            [[[NIMSDK sharedSDK] chatManager] sendMessage:[NIMMessageMaker msgWithAudio:filePath andeSession:_session] toSession:_session error:nil];
+            [[[NIMSDK sharedSDK] chatManager] sendMessage:[NIMMessageMaker msgWithAudio:filePath andeSession:self._session] toSession:self._session error:nil];
         }else{
             [self showRecordFileNotSendReason];
         }
@@ -817,7 +818,7 @@
         NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data
                                                              options:0
                                                                error:nil];
-        if ([dict jsonInteger:NTESNotifyID] == NTESCommandTyping &&_session.sessionType == NIMSessionTypeP2P && [notification.sender isEqualToString:_session.sessionId])
+        if ([dict jsonInteger:NTESNotifyID] == NTESCommandTyping && self._session.sessionType == NIMSessionTypeP2P && [notification.sender isEqualToString:self._session.sessionId])
         {
             NSLog(@"正在输入...");
         }
@@ -1108,7 +1109,7 @@
 //转发消息
 -(void)forwardMessage:(NSString *)messageId sessionId:(NSString *)sessionId sessionType:(NSString *)sessionType content:(NSString *)content success:(Success)succe{
     NIMSession *session = [NIMSession session:sessionId type:[sessionType integerValue]];
-    NSArray *currentMessage = [[[NIMSDK sharedSDK] conversationManager] messagesInSession:_session messageIds:@[messageId]];
+    NSArray *currentMessage = [[[NIMSDK sharedSDK] conversationManager] messagesInSession:self._session messageIds:@[messageId]];
     NIMMessage *message = currentMessage[0];
     [[NIMSDK sharedSDK].chatManager forwardMessage:message toSession:session error:nil];
     //发送消息
@@ -1119,16 +1120,19 @@
 }
 //撤回消息
 -(void)revokeMessage:(NSString *)messageId success:(Success)succe{
-    NSArray *currentMessage = [[[NIMSDK sharedSDK] conversationManager] messagesInSession:_session messageIds:@[messageId]];
+    NSArray *currentMessage = [[[NIMSDK sharedSDK] conversationManager] messagesInSession:self._session messageIds:@[messageId]];
     NIMMessage *currentmessage = currentMessage[0];
 //    __weak typeof(self) weakSelf = self;
     [[NIMSDK sharedSDK].chatManager revokeMessage:currentmessage completion:^(NSError * _Nullable error) {
         if (error) {
             if (error.code == NIMRemoteErrorCodeDomainExpireOld) {
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"发送时间超过2分钟的消息，不能被撤回" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-                [alert show];
+                UIAlertController *alterVC = [UIAlertController alertControllerWithTitle:@"" message:@"发送时间超过2分钟的消息，不能被撤回" preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *sureAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                    
+                }];
+                [alterVC addAction:sureAction];
+                [self presentViewController:alterVC animated:NO completion:nil];
             }else{
-                DDLogError(@"revoke message eror code %zd",error.code);
                 NSLog(@"消息撤回失败，请重试");
             }
         }
@@ -1143,14 +1147,14 @@
             [NIMModel initShareMD].deleteMessDict = deleteDict;
             
             // saveMessage 方法执行成功后会触发 onRecvMessages: 回调，但是这个回调上来的 NIMMessage 时间为服务器时间，和界面上的时间有一定出入，所以要提前先在界面上插入一个和被删消息的界面时间相符的 Tip, 当触发 onRecvMessages: 回调时，组件判断这条消息已经被插入过了，就会忽略掉。
-            [[NIMSDK sharedSDK].conversationManager saveMessage:tipMessage forSession:_session completion:nil];
+            [[NIMSDK sharedSDK].conversationManager saveMessage:tipMessage forSession:self._session completion:nil];
         }
     }];
     
 }
 //删除一条信息
 -(void)deleteMsg:(NSString *)messageId{
-    NSArray *currentMessage = [[[NIMSDK sharedSDK] conversationManager] messagesInSession:_session messageIds:@[messageId]];
+    NSArray *currentMessage = [[[NIMSDK sharedSDK] conversationManager] messagesInSession:self._session messageIds:@[messageId]];
     NIMMessage *message = currentMessage[0];
     [[NIMSDK sharedSDK].conversationManager deleteMessage:message];
 }
@@ -1242,13 +1246,13 @@
 }
 //判断是不是好友
 - (BOOL)isFriendToSendMessage:(NIMMessage *)message{
-    if (_session.sessionType == NIMSessionTypeP2P) {//点对点
-        NSString *strSessionId = _session.sessionId;
+    if (self._session.sessionType == NIMSessionTypeP2P) {//点对点
+        NSString *strSessionId = self._session.sessionId;
         if ([[NIMSDK sharedSDK].userManager isMyFriend:strSessionId]) {//判断是否为自己好友
             return YES;
         }else{
             message.localExt = @{@"isFriend":@"NO"};
-            [[NIMSDK sharedSDK].conversationManager saveMessage:message forSession:_session completion:nil];
+            [[NIMSDK sharedSDK].conversationManager saveMessage:message forSession:self._session completion:nil];
             NSString *strSessionName = @"";
             NIMUser *user = [[NIMSDK sharedSDK].userManager userInfo:strSessionId];
             if ([user.alias length]) {
@@ -1261,7 +1265,7 @@
             NSString * tip = [NSString stringWithFormat:@"%@开启了朋友验证，你还不是他（她）朋友。请先发送朋友验证请求，对方验证通过后，才能聊天。发送朋友验证",strSessionName];
             NIMMessage *tipMessage = [self msgWithTip:tip];
             tipMessage.timestamp = message.timestamp+1;
-            [[NIMSDK sharedSDK].conversationManager saveMessage:tipMessage forSession:_session completion:nil];
+            [[NIMSDK sharedSDK].conversationManager saveMessage:tipMessage forSession:self._session completion:nil];
             return NO;
         }
     }else{

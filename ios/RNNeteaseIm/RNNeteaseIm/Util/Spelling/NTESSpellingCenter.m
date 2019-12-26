@@ -8,6 +8,7 @@
 
 #import "NTESSpellingCenter.h"
 #import "NTESPinyinConverter.h"
+#import "ImConfig.h"
 
 #define SPELLING_UNIT_FULLSPELLING          @"f"
 #define SPELLING_UNIT_SHORTSPELLING         @"s"
@@ -84,10 +85,8 @@
     @synchronized(self)
     {
         NSInteger count = [_spellingCache count];
-        DDLogDebug(@"Spelling Cache Entries %zd", count);
         if (count >= kMaxEntriesCount)
         {
-            DDLogDebug(@"Clear Spelling Cache %zd Entries",count);
             [_spellingCache removeAllObjects];
         }
         if (_spellingCache)

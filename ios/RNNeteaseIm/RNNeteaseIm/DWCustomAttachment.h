@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "ImConfig.h"
 
 @interface DWCustomAttachment : NSObject<NIMCustomAttachment>
 @property (assign, nonatomic) NSInteger custType;

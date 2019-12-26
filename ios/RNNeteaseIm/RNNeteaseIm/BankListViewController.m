@@ -7,6 +7,7 @@
 //
 
 #import "BankListViewController.h"
+#import "ImConfig.h"
 
 @interface BankListViewController ()
 

@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import "ImConfig.h"
 
 @interface NTESSDKConfigDelegate : NSObject<NIMSDKConfigDelegate>
 

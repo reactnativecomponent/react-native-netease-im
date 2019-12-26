@@ -6,6 +6,7 @@
 //  Copyright (c) 2013年 Netease. All rights reserved.
 //
 
+#import "ImConfig.h"
 
 @implementation NSDictionary (NTESJson)
 

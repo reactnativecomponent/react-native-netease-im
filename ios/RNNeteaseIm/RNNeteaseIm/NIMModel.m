@@ -9,6 +9,7 @@
 #import "NIMModel.h"
 
 @implementation NIMModel
+
 +(instancetype)initShareMD{
     static NIMModel *nimModel =nil;
     static dispatch_once_t onceToken;

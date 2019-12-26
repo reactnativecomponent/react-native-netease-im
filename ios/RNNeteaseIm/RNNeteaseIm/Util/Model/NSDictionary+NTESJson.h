@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
+
 @interface NSDictionary (NTESJson)
 - (NSString *)jsonString: (NSString *)key;
 
