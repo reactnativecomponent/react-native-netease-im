@@ -7,12 +7,26 @@ React Native的网易云信插件
 #### 注意事项: 
 ##### 2.普通帐号不要使用5位数，因为5位数设定是系统帐号，尽量使用6位或者6位以上
 
+###<label style="color:red">目前iOS版本已升级版本为3.0.0，支持react native 0.60.0及以上。0.60.0以下版本请使用2.1.0版本</label>
+
 ## 如何安装
+
+## *iOS-3.0.0版*
+
+### 1.首先安装npm包，无需link
+
+```bash
+npm install react-native-netease-im
+```
+
+
+---
+## *iOS-2.1.0版*
 
 ### 1.首先安装npm包
 
 ```bash
-npm install react-native-netease-im --save 或者 yarn add react-native-netease-im
+npm install react-native-netease-im@2.1.0 --save 或者 yarn add react-native-netease-im@2.1.0
 ```
 
 ### 2.link
@@ -120,12 +134,28 @@ public class MainApplication extends Application implements ReactApplication {
 
 ### 3.工程配置
 #### iOS配置
-install with CocoaPods
+
+### 1.添加依赖库
+
+### *iOS-3.0.0版*
+###因为react native0.60x版本之后默认是使用 CocoaPod，所以无需手动在Podfile文件中添加依赖库，直接进入ios文件夹中pod install
+
+```bash
+cd ios
+pod install
+```
+---
+
+## *iOS-2.1.0版*
+
+###进入/ios目录，在Podfile文件中添加以下依赖库
 ```
 pod 'NIMSDK', '6.2.0'
 pod 'CocoaLumberjack', '~> 2.0.0-rc2'
 ```
-进入/ios目录执行 `pod install`
+执行 `pod install`
+
+### 2.导入头文件和初始化SDK
 
 在你工程的`AppDelegate.m`文件中添加如下代码：
 
