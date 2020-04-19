@@ -6,7 +6,6 @@ import android.content.pm.ApplicationInfo;
 import android.graphics.Color;
 import android.location.LocationProvider;
 import android.os.Environment;
-import android.support.annotation.DrawableRes;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -43,6 +42,8 @@ import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.msg.model.RevokeMsgNotification;
 import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
 import com.netease.nimlib.sdk.util.NIMUtil;
+
+import androidx.annotation.DrawableRes;
 
 
 /**

@@ -3,7 +3,6 @@ package com.netease.im.session;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Handler;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.widget.Toast;
 
@@ -68,6 +67,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import androidx.annotation.NonNull;
 
 import static com.netease.nimlib.sdk.NIMClient.getService;
 

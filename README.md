@@ -7,62 +7,47 @@ React Native的网易云信插件
 #### 注意事项: 
 ##### 2.普通帐号不要使用5位数，因为5位数设定是系统帐号，尽量使用6位或者6位以上
 
----
-## **目前iOS版本已升级版本为3.0.0，支持react native 0.60.0及以上。0.60.0以下版本请使用2.1.0版本**
----
-
-## 如何安装
-
-## **iOS-3.0.0版**
-
-### 1.首先安装npm包，无需link
+### 1.安装
 
 ```bash
-npm install react-native-netease-im
+npm install react-native-netease-im 或者 yarn add react-native-netease-im 
+cd ios
+pod install
 ```
+### 2.配置
 
+#### 2.1 android配置
 
-## **iOS-2.1.0版**
-
-### 1.首先安装npm包
-
-```bash
-npm install react-native-netease-im@2.1.0 --save 或者 yarn add react-native-netease-im@2.1.0
+在`android/app/build.gradle`里，defaultConfig栏目下添加如下代码：
 ```
+multiDexEnabled true
+manifestPlaceholders = [
+	// 如果有多项，每一项之间需要用逗号分隔
+    NIM_KEY: "云信的APPID"    //在此修改云信APPID
+]
+```
+在`AndroidManifest.xml`里，添加如下代码：
+```
+< manifest
 
-### 2.link
-```bash
-react-native link react-native-netease-im
-```
+    ......
 
-#### 手动link~（如果不能够自动link）
-##### ios
-```
-a.打开XCode's工程中, 右键点击Libraries文件夹 ➜ Add Files to <...>
-b.去node_modules ➜ react-native-netease-im ➜ ios ➜ 选择 RNNeteaseIm.xcodeproj
-c.在工程Build Phases ➜ Link Binary With Libraries中添加libRNNeteaseIm.a
-```
-##### Android
-```
-// file: android/settings.gradle
-...
+    <!-- SDK 权限申明 -->
+    <permission
+        android:name="${applicationId}.permission.RECEIVE_MSG"
+        android:protectionLevel="signature"/>
+    <!-- 接收 SDK 消息广播权限 -->
+    <uses-permission android:name="${applicationId}.permission.RECEIVE_MSG"/>
 
-include ':react-native-netease-im'
-project(':react-native-netease-im').projectDir = new File(settingsDir, '../node_modules/react-native-netease-im/android')
-```
+    ......
+    < application
+            ......
+            <!-- 设置你的网易聊天App Key -->
+     <meta-data android:name="com.netease.nim.appKey" android:value="${NIM_KEY}" />
+
 
 ```
-// file: android/app/build.gradle
-...
-
-dependencies {
-    ...
-    compile project(':react-native-netease-im')
-}
-```
-
 `android/app/src/main/java/<你的包名>/MainActivity.java`
-
 ```
 import com.netease.im.uikit.permission.MPermission;
 import com.netease.im.RNNeteaseImModule;
@@ -88,7 +73,7 @@ public class MainActivity extends ReactActivity {
 
 `android/app/src/main/java/<你的包名>/MainApplication.java`中添加如下两行：
 
-```java
+```
 ...
 import com.netease.im.RNNeteaseImPackage;
 import com.netease.im.IMApplication;
@@ -96,26 +81,7 @@ import com.netease.im.ImPushConfig;
 
 public class MainApplication extends Application implements ReactApplication {
 
-  private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
-    @Override
-    protected boolean getUseDeveloperSupport() {
-      return BuildConfig.DEBUG;
-    }
-
-    @Override
-    protected List<ReactPackage> getPackages() {
-      return Arrays.<ReactPackage>asList(
-          new RNNeteaseImPackage(), // 然后添加这一行
-          new MainReactPackage()
-      );
-    }
-  };
-
   @Override
-  public ReactNativeHost getReactNativeHost() {
-      return mReactNativeHost;
-  }
-   @Override
   public void onCreate() {
     // IMApplication.setDebugAble(BuildConfig.DEBUG);
     // 推送配置，没有可传null
@@ -132,31 +98,8 @@ public class MainApplication extends Application implements ReactApplication {
 }
 ```
 
+#### 2.2 ios配置
 
-### 3.工程配置
-#### iOS配置
-
-### 1.添加依赖库
-
-## **iOS-3.0.0版**
-### 因为react native0.60x版本之后默认是使用 CocoaPod，所以无需手动在Podfile文件中添加依赖库，直接进入ios文件夹中pod install
-
-```bash
-cd ios
-pod install
-```
-
-
-## **iOS-2.1.0版**
-
-### 进入/ios目录，在Podfile文件中添加以下依赖库
-```
-pod 'NIMSDK', '6.2.0'
-pod 'CocoaLumberjack', '~> 2.0.0-rc2'
-```
-执行 `pod install`
----
-### 2.导入头文件和初始化SDK
 
 在你工程的`AppDelegate.m`文件中添加如下代码：
 
@@ -225,53 +168,6 @@ UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTy
 }
 ```
 
-#### Android配置
-在`android/app/build.gradle`里，defaultConfig栏目下添加如下代码：
-```
-manifestPlaceholders = [
-	// 如果有多项，每一项之间需要用逗号分隔
-    NIM_KEY: "云信的APPID"    //在此修改云信APPID
-]
-```
-在`AndroidManifest.xml`里，添加如下代码：
-```
-< manifest
-
-    ......
-
-    <!-- SDK 权限申明 -->
-    <!-- 和下面的 uses-permission 一起加入到你的 AndroidManifest 文件中。 -->
-    <permission
-        android:name="${applicationId}.permission.RECEIVE_MSG"
-        android:protectionLevel="signature"/>
-    <!-- 接收 SDK 消息广播权限 -->
-    <uses-permission android:name="${applicationId}.permission.RECEIVE_MSG"/>
-    <!-- 小米推送 -->
-    <permission
-        android:name="com.im.demo.permission.MIPUSH_RECEIVE"
-        android:protectionLevel="signature"/>
-    <uses-permission android:name="${applicationId}.permission.MIPUSH_RECEIVE"/>
-
-    ......
-    < application
-            ......
-            <!-- 设置你的网易聊天App Key -->
-             <meta-data
-                        android:name="com.netease.nim.appKey"
-                        android:value="App Key" />
-
-
-```
-在`build.gradle`里，添加如下代码：
-```
-allprojects {
-    repositories {
-
-      // 添加行
-       maven {url 'http://developer.huawei.com/repo/'}
-    }
-}
-```
 
 
 ## 如何使用
@@ -291,7 +187,7 @@ NativeAppEventEmitter.addListener("observeRecentContact",(data)=>{
   console.log(data); //返回会话列表和未读数
 })；
 ```
-#### 推送
+#### 推送(推送配置参考官方文档即可)
 ```
 //程序运行时获取的推送点击事件
 NativeAppEventEmitter.addListener("observeLaunchPushEvent",(data)=>{

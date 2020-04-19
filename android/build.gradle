@@ -42,13 +42,13 @@ repositories {
 }
 
 dependencies {
-    compile fileTree(include: '*.jar', dir: 'libs')
-    compile 'com.facebook.react:react-native:+'
+    implementation fileTree(include: '*.jar', dir: 'libs')
+    implementation 'com.facebook.react:react-native:+'
     // 基础功能 (必需)
     implementation 'com.netease.nimlib:basesdk:6.3.0'
     implementation 'com.netease.nimlib:push:6.3.0'
     implementation 'com.alibaba:fastjson:1.2.57'
-    implementation 'com.huawei.android.hms:push:2.6.0.301'
+    // implementation 'com.huawei.hms:push:3.0.3.301'
     implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
 
 }

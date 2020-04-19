@@ -147,31 +147,31 @@
             </intent-filter>
         </receiver>
         <!--华为推送-->
-        <provider
-            android:name="com.huawei.hms.update.provider.UpdateProvider"
-            android:authorities="${applicationId}.hms.update.provider"
-            android:exported="false"
-            android:grantUriPermissions="true" />
-        <!-- 云信华为推送消息广播 -->
-        <receiver android:name="com.netease.nimlib.mixpush.hw.HWPushReceiver">
-            <intent-filter android:priority="0x7fffffff">
-                <action android:name="com.huawei.android.push.intent.REGISTRATION" />
-                <action android:name="com.huawei.android.push.intent.RECEIVE" />
-                <action android:name="com.huawei.android.push.intent.CLICK" />
-                <action android:name="com.huawei.intent.action.PUSH_STATE" />
-            </intent-filter>
-            <meta-data
-                android:name="CS_cloud_ablitity"
-                android:value="successRateAnalytics" />
-        </receiver>
+<!--        <provider-->
+<!--            android:name="com.huawei.hms.update.provider.UpdateProvider"-->
+<!--            android:authorities="${applicationId}.hms.update.provider"-->
+<!--            android:exported="false"-->
+<!--            android:grantUriPermissions="true" />-->
+<!--        &lt;!&ndash; 云信华为推送消息广播 &ndash;&gt;-->
+<!--        <receiver android:name="com.netease.nimlib.mixpush.hw.HWPushReceiver">-->
+<!--            <intent-filter android:priority="0x7fffffff">-->
+<!--                <action android:name="com.huawei.android.push.intent.REGISTRATION" />-->
+<!--                <action android:name="com.huawei.android.push.intent.RECEIVE" />-->
+<!--                <action android:name="com.huawei.android.push.intent.CLICK" />-->
+<!--                <action android:name="com.huawei.intent.action.PUSH_STATE" />-->
+<!--            </intent-filter>-->
+<!--            <meta-data-->
+<!--                android:name="CS_cloud_ablitity"-->
+<!--                android:value="successRateAnalytics" />-->
+<!--        </receiver>-->
 
-        <!-- 兼容性广播 -->
-        <receiver android:name="com.huawei.hms.support.api.push.PushReceiver">
-            <intent-filter>
-                <!-- 接收通道发来的通知栏消息，兼容老版本Push -->
-                <action android:name="com.huawei.intent.action.PUSH" />
-            </intent-filter>
-        </receiver>
+<!--        &lt;!&ndash; 兼容性广播 &ndash;&gt;-->
+<!--        <receiver android:name="com.huawei.hms.support.api.push.PushReceiver">-->
+<!--            <intent-filter>-->
+<!--                &lt;!&ndash; 接收通道发来的通知栏消息，兼容老版本Push &ndash;&gt;-->
+<!--                <action android:name="com.huawei.intent.action.PUSH" />-->
+<!--            </intent-filter>-->
+<!--        </receiver>-->
         <!--网络-->
         <receiver android:name=".receiver.NetworkReceiver">
             <intent-filter>

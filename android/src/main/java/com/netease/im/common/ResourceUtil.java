@@ -1,9 +1,9 @@
 package com.netease.im.common;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.StringRes;
-
 import com.netease.im.IMApplication;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
 
 /**
  * Created by dowin on 2017/4/28.
