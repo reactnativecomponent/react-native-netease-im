@@ -4,19 +4,20 @@ React Native的网易云信插件
 ## Demo
 [react-native-chat-demo](https://github.com/reactnativecomponent/react-native-chat-demo)
 
-#### 注意事项: 
+### 注意事项: 
 ##### 2.普通帐号不要使用5位数，因为5位数设定是系统帐号，尽量使用6位或者6位以上
 
-### 1.安装
 
+## 1.安装 
+- ###  0.60以下请使用2.1.0版本
 ```bash
 npm install react-native-netease-im 或者 yarn add react-native-netease-im 
 cd ios
 pod install
 ```
-### 2.配置
 
-#### 2.1 android配置
+## 2.配置
+### 2.1 android配置
 
 在`android/app/build.gradle`里，defaultConfig栏目下添加如下代码：
 ```
