@@ -804,30 +804,30 @@ RCT_EXPORT_METHOD(cleanCache){
 }
 
 //获取网络状态权限
-RCT_EXPORT_METHOD(getNetWorkStatus:(RCTPromiseResolveBlock)resolve
-                  reject:(RCTPromiseRejectBlock)reject){
-    //int type = 0;//0:无网络, 1:2G, 2:3G, 3:4G, 4:LTE准4G，5：wifi
-    if (kDevice_Is_iPhoneX){//iPhone X 目前未找到获取状态栏网络状态，先设置为1
-        resolve(@(1));
-    }else{
-        NSString *strNetWork = [self getNetStatus];
-        if ([strNetWork isEqualToString:@"NOTFOUND"]) {
-            resolve(@(0));
-        }else{
-            resolve(@(1));
-        }
-    }
-}
-//设置webview UA
-RCT_EXPORT_METHOD(setupWebViewUserAgent){
-    if (!strUserAgent.length) {
-        NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-        NSString *userAgent = [[[UIWebView alloc] init] stringByEvaluatingJavaScriptFromString:@"navigator.userAgent"];
-        strUserAgent = [userAgent stringByAppendingFormat:@" Feima/%@ NetType/", version];
-    }
-    NSString *strNetWork = [self getNetStatus];
-    [[NSUserDefaults standardUserDefaults] registerDefaults:@{@"UserAgent":[NSString stringWithFormat:@"%@%@",strUserAgent,strNetWork]}];
-}
+// RCT_EXPORT_METHOD(getNetWorkStatus:(RCTPromiseResolveBlock)resolve
+//                   reject:(RCTPromiseRejectBlock)reject){
+//     //int type = 0;//0:无网络, 1:2G, 2:3G, 3:4G, 4:LTE准4G，5：wifi
+//     if (kDevice_Is_iPhoneX){//iPhone X 目前未找到获取状态栏网络状态，先设置为1
+//         resolve(@(1));
+//     }else{
+//         NSString *strNetWork = [self getNetStatus];
+//         if ([strNetWork isEqualToString:@"NOTFOUND"]) {
+//             resolve(@(0));
+//         }else{
+//             resolve(@(1));
+//         }
+//     }
+// }
+// //设置webview UA
+// RCT_EXPORT_METHOD(setupWebViewUserAgent){
+//     if (!strUserAgent.length) {
+//         NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+//         NSString *userAgent = [[[UIWebView alloc] init] stringByEvaluatingJavaScriptFromString:@"navigator.userAgent"];
+//         strUserAgent = [userAgent stringByAppendingFormat:@" Feima/%@ NetType/", version];
+//     }
+//     NSString *strNetWork = [self getNetStatus];
+//     [[NSUserDefaults standardUserDefaults] registerDefaults:@{@"UserAgent":[NSString stringWithFormat:@"%@%@",strUserAgent,strNetWork]}];
+// }
 
 //获取网络状态
 - (NSString *)getNetStatus{

@@ -1,3 +1,10 @@
+/*
+ * @Descripttion: 工具类
+ * @Author: huangjun
+ * @Date: 2020-09-16 11:31:07
+ * @LastEditors: huangjun
+ * @LastEditTime: 2020-09-16 11:33:56
+ */
 'use strict';
 import {NativeModules, Platform, NetInfo} from 'react-native';
 const {RNNeteaseIm, PinYin} = NativeModules;
@@ -17,20 +24,7 @@ class Utils {
     return RNNeteaseIm.getCacheSize();
   }
 
-  /**
-   * 获取网络状态
-   */
-  networkIsConnected() {
-    //0：无网络，1：有网络
-    if (Platform.OS === 'ios') {
-      if (RNNeteaseIm.getNetWorkStatus() === '1') {
-        return true;
-      }
-      return false;
-    } else {
-      return NetInfo.isConnected.fetch().done();
-    }
-  }
+
   /**
    * 播放录音
    * @returns {*}
@@ -70,15 +64,6 @@ class Utils {
    */
   fetchNetInfo() {
     return RNNeteaseIm.fetchNetInfo();
-  }
-
-  /**
-   * 仅限IOS
-   * 设置webview UA
-   * @returns {*}
-   */
-  setupWebViewUserAgent() {
-    RNNeteaseIm.setupWebViewUserAgent();
   }
 }
 
