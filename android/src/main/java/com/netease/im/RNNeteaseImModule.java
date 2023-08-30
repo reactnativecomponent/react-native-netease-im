@@ -154,7 +154,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
 
         NIMClient.getService(AuthService.class).openLocalCache(contactId);
         LogUtil.w(TAG, "s:" + NIMClient.getStatus().name());
-        LoginService.getInstance().login(new LoginInfo(contactId, token), new RequestCallback<LoginInfo>() {
+        LoginService.getInstance().login(new LoginInfo.LoginInfoBuilder(contactId,token,1,"").build(), new RequestCallback<LoginInfo>() {
             @Override
             public void onSuccess(LoginInfo loginInfo) {
 

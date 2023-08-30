@@ -59,7 +59,7 @@
         <!-- 声明网易云通信后台辅助服务 -->
         <service
             android:name="com.netease.nimlib.job.NIMJobService"
-            android:exported="true"
+            android:exported="false"
             android:permission="android.permission.BIND_JOB_SERVICE"
             android:process=":core" />
 
@@ -173,7 +173,7 @@
 <!--            </intent-filter>-->
 <!--        </receiver>-->
         <!--网络-->
-        <receiver android:name=".receiver.NetworkReceiver">
+        <receiver android:exported="false" android:name=".receiver.NetworkReceiver">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
                 <category android:name="android.intent.category.DEFAULT"/>
@@ -183,7 +183,14 @@
             android:name="com.netease.nimlib.ipc.NIMContentProvider"
             android:authorities="${applicationId}.ipc.provider"
             android:exported="false"
-            android:process=":core" />
+            android:process=":core" 
+            />
+         <!-- <provider
+            android:name="com.netease.nimlib.ipc.cp.provider.PreferenceContentProvider"
+            android:authorities="com.netease.nim.demo.ipc.provider.preference"
+            android:exported="false" 
+            tools:replace="android:authorities"
+            /> -->
     </application>
 </manifest>
   

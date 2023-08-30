@@ -45,8 +45,11 @@ dependencies {
     implementation fileTree(include: '*.jar', dir: 'libs')
     implementation 'com.facebook.react:react-native:+'
     // 基础功能 (必需)
-    implementation 'com.netease.nimlib:basesdk:6.3.0'
-    implementation 'com.netease.nimlib:push:6.3.0'
+    implementation 'com.netease.nimlib:basesdk:9.12.2'
+    implementation 'com.netease.nimlib:push:9.12.2'
+    implementation "com.netease.nimlib:lucene:9.12.2"
+    implementation "net.zetetic:android-database-sqlcipher:4.5.3"
+    implementation "androidx.sqlite:sqlite:2.1.0"
     implementation 'com.alibaba:fastjson:1.2.57'
     // implementation 'com.huawei.hms:push:3.0.3.301'
     implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'

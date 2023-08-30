@@ -183,8 +183,6 @@ public class TeamNotificationHelper {
                 }
             } else if (field.getKey() == TeamFieldEnum.Extension) {
                 sb.append("群扩展字段被更新为 " + field.getValue());
-            } else if (field.getKey() == TeamFieldEnum.Ext_Server) {
-                sb.append("群扩展字段(服务器)被更新为 " + field.getValue());
             } else if (field.getKey() == TeamFieldEnum.ICON) {
                 sb.append("群头像已更新");
             } else if (field.getKey() == TeamFieldEnum.InviteMode) {

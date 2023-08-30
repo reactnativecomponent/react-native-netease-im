@@ -17,6 +17,7 @@
 #import "ConversationViewController.h"
 #import "BankListViewController.h"
 #import "ImConfig.h"
+#import <React/RCTLog.h>
 
 #define kDevice_Is_iPhoneX ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(1125, 2436), [[UIScreen mainScreen] currentMode].size) : NO)
 
@@ -101,15 +102,22 @@ RCT_EXPORT_METHOD(login:(nonnull NSString *)account token:(nonnull NSString *)to
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject){
     //请将 NIMMyAccount 以及 NIMMyToken 替换成您自己提交到此App下的账号和密码
-    [[NIMSDK sharedSDK].loginManager login:account token:token completion:^(NSError *error) {
-        if (!error) {
-            resolve(account);
-        }else{
-            NSString *strEorr = @"登录失败";
-            reject(@"-1",strEorr, nil);
-            NSLog(@"%@:%@",strEorr,error);
-        }
-    }];
+    [[[NIMSDK sharedSDK] loginManager] login:account token:token authType:NIMSDKAuthTypeDynamicToken loginExt:@"" completion:^(NSError *error)
+        {
+         if (!error) {
+             resolve(account);
+         }else{
+             NSString *strEorr = @"登录失败";
+             reject(@"-1",strEorr, nil);
+             NSLog(@"%@:%@",strEorr,error);
+         }
+        }];
+    
+//    NIMAutoLoginData *loginData = [[NIMAutoLoginData alloc] init];
+//    loginData.account = account;
+//    loginData.token = token;
+//    [[[NIMSDK sharedSDK] loginManager] autoLogin:loginData];
+    
     [NIMViewController initWithController].strToken = token;
     [NIMViewController initWithController].strAccount = account;
 }
@@ -334,6 +342,7 @@ RCT_EXPORT_METHOD(clearMessage:(nonnull  NSString *)sessionId sessionId:(nonnull
 //发送文字消息,atUserIds为@用户名单，@功能仅适用于群组
 RCT_EXPORT_METHOD(sendTextMessage:(nonnull  NSString *)content atUserIds:(NSArray *)atUserIds){
     [[ConversationViewController initWithConversationViewController]sendMessage:content andApnsMembers:atUserIds];
+    RCTLogWarn(@"RCT_EXPORT_METHOD sendTextMessage at %@", content);
 }
 //发送图片消息
 RCT_EXPORT_METHOD(sendImageMessages:(nonnull  NSString *)file  displayName:(nonnull  NSString *)displayName){

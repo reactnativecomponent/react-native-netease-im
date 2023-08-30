@@ -11,6 +11,7 @@ import com.netease.im.common.ImageLoaderKit;
 import com.netease.im.uikit.cache.NimUserInfoCache;
 import com.netease.im.uikit.cache.TeamDataCache;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
+import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.team.model.Team;
 import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
 import com.netease.nimlib.sdk.uinfo.model.UserInfo;
@@ -97,6 +98,11 @@ public class DefalutUserInfoProvider implements UserInfoProvider {
             }
         }
         return bm;
+    }
+
+    @Override
+    public String getDisplayTitleForMessageNotifier(IMMessage message) {
+        return null;
     }
 
     public Bitmap getTeamIcon(String teamId) {
