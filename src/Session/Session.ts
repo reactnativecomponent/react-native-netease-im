@@ -1,5 +1,6 @@
 import { NativeModules, Platform } from "react-native";
 import {
+  CustomMessageType,
   NimSessionType,
   QueryDirectionEnum,
   SendAttachmentType,
@@ -207,11 +208,15 @@ function sendCardMessage(
 /**
  * 拆红包
  * @param sendId 发送红包的sessionId
- * @param hasRedPacket 是否还有红包 '0' '1'是已经拆完
+ * @param hasRedPacket '0': mantled, '1': dismantled
  * @param serialNo 流水号
  * @returns {*}
  */
-function sendRedPacketOpenMessage(sendId, hasRedPacket, serialNo) {
+function sendRedPacketOpenMessage(
+  sendId: string,
+  hasRedPacket: string,
+  serialNo: string
+) {
   return RNNeteaseIm.sendRedPacketOpenMessage(sendId, hasRedPacket, serialNo);
 }
 /**
@@ -223,16 +228,20 @@ function sendRedPacketOpenMessage(sendId, hasRedPacket, serialNo) {
  * @param serialNo 流水号
  * @returns {*}
  */
-function sendBankTransferMessage(amount, comments, serialNo) {
+function sendBankTransferMessage(
+  amount: string,
+  comments: string,
+  serialNo: string
+) {
   return RNNeteaseIm.sendBankTransferMessage(amount, comments, serialNo);
 }
 /**
  * 发送自定义消息
  * @param attachment 自定义消息内容{Width:260,Height:100,pushContent:'发来一条自定义消息',recentContent:'[自定义消息]'}
- * Width 消息宽度，Height：消息高度， pushContent：推送消息内容， recentContent：最近会话显示的内容，
+ * width, height of message, pushContent: string, recentContent: string[]
  * @returns {*}
  */
-function sendCustomMessage(attachment) {
+function sendCustomMessage(attachment: CustomMessageType) {
   return RNNeteaseIm.sendCustomMessage(attachment);
 }
 /**
@@ -273,7 +282,12 @@ function cancelAudioRecord() {
  * @param content
  * @returns {*}
  */
-function sendForwardMessage(messageId, sessionId, sessionType, content) {
+function sendForwardMessage(
+  messageId: string,
+  sessionId: string,
+  sessionType: NimSessionType,
+  content: string
+) {
   return RNNeteaseIm.sendForwardMessage(
     messageId,
     sessionId,
@@ -286,7 +300,7 @@ function sendForwardMessage(messageId, sessionId, sessionType, content) {
  * @param messageId
  * @returns {*}
  */
-function revokeMessage(messageId) {
+function revokeMessage(messageId: string) {
   return RNNeteaseIm.revokeMessage(messageId);
 }
 
@@ -295,7 +309,7 @@ function revokeMessage(messageId) {
  * @param messageId
  * @returns {*}
  */
-function resendMessage(messageId) {
+function resendMessage(messageId: string) {
   return RNNeteaseIm.resendMessage(messageId);
 }
 /**
@@ -303,7 +317,7 @@ function resendMessage(messageId) {
  * @param messageId
  * @returns {*}
  */
-function deleteMessage(messageId) {
+function deleteMessage(messageId: string) {
   return RNNeteaseIm.deleteMessage(messageId);
 }
 /**
@@ -311,7 +325,7 @@ function deleteMessage(messageId) {
  * @param messageId
  * @returns {*}
  */
-function clearMessage(sessionId, type) {
+function clearMessage(sessionId: string, type: NimSessionType) {
   return RNNeteaseIm.clearMessage(sessionId, type);
 }
 
@@ -320,17 +334,19 @@ function clearMessage(sessionId, type) {
  * @param messageId
  * @returns {*}
  */
-function downloadAttachment(messageId) {
+function downloadAttachment(messageId: string) {
   return RNNeteaseIm.downloadAttachment(messageId, "0");
 }
+
 /**
  * 更新录音消息是否播放过的状态
  * @param messageId
  * @returns {*}
  */
-function updateAudioMessagePlayStatus(messageId) {
+function updateAudioMessagePlayStatus(messageId: string) {
   return RNNeteaseIm.updateAudioMessagePlayStatus(messageId);
 }
+
 function getLaunch() {
   if (Platform.OS === "android") {
     return RNNeteaseIm.getLaunch();

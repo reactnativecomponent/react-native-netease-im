@@ -32,3 +32,10 @@ export enum SendAttachmentType {
   ONE_TO_MANY_FIXED_AMOUNT = "1",
   ONE_TO_MANY_RANDOM_AMOUNT = "2",
 }
+
+export interface CustomMessageType {
+  width: number;
+  height: number;
+  pushContent: string;
+  recentContent: string[];
+}
