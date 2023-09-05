@@ -1,6 +1,6 @@
 import NimUtils from "./Utils";
 import NimFriend from "./im/Friend";
-// import NimSession from "./im/Session";
+import NimSession from "./im/Session";
 import NimSystemMsg from "./im/SystemMsg";
 import NimTeam from "./im/Team";
 

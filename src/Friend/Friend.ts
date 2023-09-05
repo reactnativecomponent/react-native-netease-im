@@ -1,4 +1,5 @@
 import { NativeModules } from "react-native";
+import { NIMAddFriendVerifyEnum, NIMUserInfo } from "./friend.type";
 const { RNNeteaseIm } = NativeModules;
 
 /**
@@ -36,7 +37,7 @@ function fetchUserInfo(contactId: string) {
  * @param contactId {'NIMUserInfoUpdateTagNick':'昵称'}
  * @returns {*}
  */
-function updateMyUserInfo(userInFo) {
+function updateMyUserInfo(userInFo: NIMUserInfo) {
   return RNNeteaseIm.updateMyUserInfo(userInFo);
 }
 /**
@@ -44,7 +45,7 @@ function updateMyUserInfo(userInFo) {
  * @param contactId
  * @returns {*}
  */
-function updateUserInfo(contactId, alias) {
+function updateUserInfo(contactId: string, alias: string) {
   return RNNeteaseIm.updateUserInfo(contactId, alias);
 }
 /**
@@ -52,16 +53,16 @@ function updateUserInfo(contactId, alias) {
  * @param keyword
  * @returns {*}
  */
-function getFriendList(keyword) {
+function getFriendList(keyword: string) {
   return RNNeteaseIm.getFriendList(keyword);
 }
 /**
  * 添加好友
  * @param contactId
- * @param msg 备注
+ * @param msg remark
  * @returns {*}
  */
-function addFriend(contactId, msg) {
+function addFriend(contactId: string, msg: string) {
   return RNNeteaseIm.addFriend(contactId, msg);
 }
 
@@ -72,7 +73,11 @@ function addFriend(contactId, msg) {
  * @param msg 备注
  * @returns {*}
  */
-function addFriendWithType(contactId, verifyType, msg) {
+function addFriendWithType(
+  contactId: string,
+  verifyType: NIMAddFriendVerifyEnum,
+  msg
+) {
   return RNNeteaseIm.addFriendWithType(contactId, verifyType, msg);
 }
 /**
@@ -80,7 +85,7 @@ function addFriendWithType(contactId, verifyType, msg) {
  * @param contactId
  * @returns {*}
  */
-function deleteFriend(contactId) {
+function deleteFriend(contactId: string) {
   return RNNeteaseIm.deleteFriend(contactId);
 }
 /**
@@ -108,14 +113,14 @@ function getBlackList() {
  * 加入黑名单
  * @returns {*}
  */
-function addToBlackList(contactId) {
+function addToBlackList(contactId: string) {
   return RNNeteaseIm.addToBlackList(contactId);
 }
 /**
  * 移出黑名单
  * @returns {*}
  */
-function removeFromBlackList(contactId) {
+function removeFromBlackList(contactId: string) {
   return RNNeteaseIm.removeFromBlackList(contactId);
 }
 
@@ -134,4 +139,5 @@ export const NIMFriend = {
   getBlackList,
   addToBlackList,
   removeFromBlackList,
+  stopBlackList,
 };

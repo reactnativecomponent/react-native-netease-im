@@ -1,4 +1,4 @@
-export enum NimSessionType {
+export enum NIMSessionTypeEnum {
   None = "None",
   P2P = "P2P",
   Team = "Team",
@@ -9,12 +9,12 @@ export enum NimSessionType {
   QChat = "QChat",
 }
 
-export enum QueryDirectionEnum {
+export enum NIMQueryDirectionEnum {
   QUERY_OLD = "QUERY_OLD",
   QUERY_NEW = "QUERY_NEW",
 }
 
-export enum CustomAttachmentType {
+export enum NIMCustomAttachmentEnum {
   RedPacket = "redpacket",
   BankTransfer = "transfer",
   BankTransferSystem = "system",
@@ -27,7 +27,7 @@ export enum CustomAttachmentType {
   Card = "card",
 }
 
-export enum SendAttachmentType {
+export enum NIMSendAttachmentEnum {
   ONE_TO_ONE = "0",
   ONE_TO_MANY_FIXED_AMOUNT = "1",
   ONE_TO_MANY_RANDOM_AMOUNT = "2",

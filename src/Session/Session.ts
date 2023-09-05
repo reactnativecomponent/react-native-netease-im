@@ -1,9 +1,9 @@
 import { NativeModules, Platform } from "react-native";
 import {
   CustomMessageType,
-  NimSessionType,
-  QueryDirectionEnum,
-  SendAttachmentType,
+  NIMSessionTypeEnum,
+  NIMQueryDirectionEnum,
+  NIMSendAttachmentEnum,
 } from "./session.type";
 const { RNNeteaseIm } = NativeModules;
 
@@ -44,7 +44,7 @@ function deleteRecentContact(recentContactId: string) {
  * @param type
  * @returns {*} @see observeReceiveMessage 接收最近20消息记录
  */
-function startSession(sessionId: string, type: NimSessionType) {
+function startSession(sessionId: string, type: NIMSessionTypeEnum) {
   return RNNeteaseIm.startSession(sessionId, type);
 }
 
@@ -77,9 +77,9 @@ function queryMessageListEx(messageId: string, limit: number) {
 //TODO: change 'asc' params to boolean in native code
 function queryMessageListHistory(
   sessionId: string,
-  sessionType: NimSessionType,
+  sessionType: NIMSessionTypeEnum,
   timeLong: string,
-  direction: QueryDirectionEnum,
+  direction: NIMQueryDirectionEnum,
   limit: number,
   asc: boolean
 ) {
@@ -182,7 +182,7 @@ function sendTipMessage(content: string) {
  * @returns {*}
  */
 function sendRedPacketMessage(
-  type: SendAttachmentType,
+  type: NIMSendAttachmentEnum,
   comments: string,
   serialNo: string
 ) {
@@ -198,7 +198,7 @@ function sendRedPacketMessage(
  * @returns {*}
  */
 function sendCardMessage(
-  type: SendAttachmentType,
+  type: NIMSendAttachmentEnum,
   name: string,
   imgPath: string,
   sessionId: string
@@ -285,7 +285,7 @@ function cancelAudioRecord() {
 function sendForwardMessage(
   messageId: string,
   sessionId: string,
-  sessionType: NimSessionType,
+  sessionType: NIMSessionTypeEnum,
   content: string
 ) {
   return RNNeteaseIm.sendForwardMessage(
@@ -325,7 +325,7 @@ function deleteMessage(messageId: string) {
  * @param messageId
  * @returns {*}
  */
-function clearMessage(sessionId: string, type: NimSessionType) {
+function clearMessage(sessionId: string, type: NIMSessionTypeEnum) {
   return RNNeteaseIm.clearMessage(sessionId, type);
 }
 
