@@ -189,7 +189,7 @@ function addMembers(teamId: string, accounts: string[]) {
  * @param account['abc12']
  * @returns {*}
  */
-function removeMember(teamId: string, account: string) {
+function removeMember(teamId: string, account: string[]) {
   return RNNeteaseIm.removeMember(teamId, account);
 }
 
@@ -223,7 +223,7 @@ function updateTeamName(teamId: string, teamName: string) {
   return RNNeteaseIm.updateTeamName(teamId, teamName);
 }
 
-export const NIMTeam = {
+export const NimTeam = {
   getTeamList,
   startTeamList,
   stopTeamList,

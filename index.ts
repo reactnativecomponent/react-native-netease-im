@@ -1,4 +1,7 @@
-import { NIMFriend } from "./src/Friend/Friend";
+import { NimUtils } from "./Utils";
+import { NimTeam } from "./src/Team/Team";
+import { NimSystemMsg } from "./src/SystemMsg/SystemMsg";
+import { NimFriend } from "./src/Friend/Friend";
 import { NimSession } from "./src/Session/Session";
 
-export { NimSession, NIMFriend };
+export { NimSession, NimFriend, NimSystemMsg, NimTeam, NimUtils };

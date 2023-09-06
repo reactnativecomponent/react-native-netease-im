@@ -124,7 +124,7 @@ function removeFromBlackList(contactId: string) {
   return RNNeteaseIm.removeFromBlackList(contactId);
 }
 
-export const NIMFriend = {
+export const NimFriend = {
   startFriendList,
   stopFriendList,
   getUserInfo,
