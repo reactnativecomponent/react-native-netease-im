@@ -1,3 +1,8 @@
+import {
+  NIMMessageStatusEnum,
+  NIMMessageTypeEnum,
+} from "../Message/message.type";
+
 export enum NIMSessionTypeEnum {
   None = "None",
   P2P = "P2P",
@@ -38,4 +43,18 @@ export interface CustomMessageType {
   height: number;
   pushContent: string;
   recentContent: string[];
+}
+
+export interface NimSessionType {
+  account: string;
+  msgStatus: NIMMessageStatusEnum;
+  msgType: NIMMessageTypeEnum;
+  sessionType: NIMSessionTypeEnum;
+  messageId: string;
+  content: string;
+  time: string;
+  unreadCount: string;
+  contactId: string;
+  imagePath: string;
+  name: string;
 }
