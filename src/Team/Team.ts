@@ -1,16 +1,19 @@
-/**
- * Created by dowin on 2017/8/2.
- */
-'use strict';
-import {NativeModules} from 'react-native';
-const {RNNeteaseIm} = NativeModules;
-class Team {
+import { NativeModules } from "react-native";
+import {
+  NIMCreateTeamOptionsType,
+  NIMCreateTeamTypeEnum,
+  NIMTeamMessageNotifyEnum,
+  NIMUpdateTeamFieldEnum,
+} from "./team.type";
+const { RNNeteaseIm } = NativeModules;
+
+class NimTeam {
   /**
    * 群列表
    * @param keyword
    * @returns {*}
    */
-  getTeamList(keyword) {
+  getTeamList(keyword: string) {
     return RNNeteaseIm.getTeamList(keyword);
   }
 
@@ -45,7 +48,7 @@ class Team {
    * @param needNotify 开启/关闭消息提醒
    * @returns {*}
    */
-  setTeamNotify(teamId, needNotify) {
+  setTeamNotify(teamId: string, needNotify: boolean) {
     return RNNeteaseIm.setTeamNotify(teamId, needNotify);
   }
 
@@ -55,7 +58,7 @@ class Team {
    * @param needNotify 开启/关闭消息提醒
    * @returns {*}
    */
-  setMessageNotify(contactId, needNotify) {
+  setMessageNotify(contactId: string, needNotify: boolean) {
     return RNNeteaseIm.setMessageNotify(contactId, needNotify);
   }
   /**
@@ -65,7 +68,11 @@ class Team {
    * @param mute 开启/关闭禁言
    * @returns {*}
    */
-  setTeamMemberMute(teamId, contactId, mute) {
+  setTeamMemberMute(
+    teamId: string,
+    contactId: string,
+    mute: NIMTeamMessageNotifyEnum
+  ) {
     return RNNeteaseIm.setTeamMemberMute(teamId, contactId, mute);
   }
   /**
@@ -73,7 +80,7 @@ class Team {
    * @param teamId
    * @returns {*}
    */
-  fetchTeamInfo(teamId) {
+  fetchTeamInfo(teamId: string) {
     return RNNeteaseIm.fetchTeamInfo(teamId);
   }
 
@@ -82,7 +89,7 @@ class Team {
    * @param teamId
    * @returns {*}
    */
-  fetchTeamMemberList(teamId) {
+  fetchTeamMemberList(teamId: string) {
     return RNNeteaseIm.fetchTeamMemberList(teamId);
   }
 
@@ -92,7 +99,7 @@ class Team {
    * @param contactId
    * @returns {*}
    */
-  fetchTeamMemberInfo(teamId, contactId) {
+  fetchTeamMemberInfo(teamId: string, contactId: string) {
     return RNNeteaseIm.fetchTeamMemberInfo(teamId, contactId);
   }
 
@@ -103,7 +110,7 @@ class Team {
    * @param nick
    * @returns {*}
    */
-  updateMemberNick(teamId, contactId, nick) {
+  updateMemberNick(teamId: string, contactId: string, nick: string) {
     return RNNeteaseIm.updateMemberNick(teamId, contactId, nick);
   }
 
@@ -120,7 +127,11 @@ class Team {
    * @param accounts 创建时添加的好友账号ID['abc11','abc12','abc13']
    * @returns {*}
    */
-  createTeam(fields, type, accounts) {
+  createTeam(
+    fields: NIMCreateTeamOptionsType,
+    type: NIMCreateTeamTypeEnum,
+    accounts: string[]
+  ) {
     return RNNeteaseIm.createTeam(fields, type, accounts);
   }
   /**
@@ -136,7 +147,7 @@ class Team {
    * @param value
    * @param promise
    */
-  updateTeam(teamId, fieldType, value) {
+  updateTeam(teamId: string, fieldType: NIMUpdateTeamFieldEnum, value: string) {
     return RNNeteaseIm.updateTeam(teamId, fieldType, value);
   }
 
@@ -146,7 +157,7 @@ class Team {
    * @param reason
    * @returns {*}
    */
-  applyJoinTeam(teamId, reason) {
+  applyJoinTeam(teamId: string, reason: string) {
     return RNNeteaseIm.applyJoinTeam(teamId, reason);
   }
 
@@ -155,7 +166,7 @@ class Team {
    * @param teamId
    * @returns {*}
    */
-  dismissTeam(teamId) {
+  dismissTeam(teamId: string) {
     return RNNeteaseIm.dismissTeam(teamId);
   }
 
@@ -165,7 +176,7 @@ class Team {
    * @param accounts ['abc11','abc12','abc13']
    * @returns {*}
    */
-  addMembers(teamId, accounts) {
+  addMembers(teamId: string, accounts: string[]) {
     return RNNeteaseIm.addMembers(teamId, accounts);
   }
 
@@ -175,7 +186,7 @@ class Team {
    * @param account['abc12']
    * @returns {*}
    */
-  removeMember(teamId, account) {
+  removeMember(teamId: string, account: string[]) {
     return RNNeteaseIm.removeMember(teamId, account);
   }
 
@@ -184,7 +195,7 @@ class Team {
    * @param teamId
    * @returns {*}
    */
-  quitTeam(teamId) {
+  quitTeam(teamId: string) {
     return RNNeteaseIm.quitTeam(teamId);
   }
 
@@ -195,7 +206,7 @@ class Team {
    * @param quit
    * @returns {*}
    */
-  transferTeam(teamId, account, quit) {
+  transferTeam(teamId: string, account: string, quit: "true" | "false") {
     return RNNeteaseIm.transferTeam(teamId, account, quit);
   }
 
@@ -205,8 +216,9 @@ class Team {
    * @param teamName
    * @returns {*}
    */
-  updateTeamName(teamId, teamName) {
+  updateTeamName(teamId: string, teamName: string) {
     return RNNeteaseIm.updateTeamName(teamId, teamName);
   }
 }
-export default new Team();
+
+export default new NimTeam();

@@ -1,23 +1,33 @@
-
 {
   "name": "react-native-netease-im",
   "version": "3.0.0",
   "description": "网易云信ReactNative插件",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
     "react-native"
   ],
-  "repository" :
-  { "type" : "git",
-    "url" : "https://github.com/reactnativecomponent/react-native-netease-im.git"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/96VuHoangDuy/react-native-netease-im.git"
   },
   "author": "",
   "license": "",
   "peerDependencies": {
     "react-native": ">=0.60.0"
-
-  }
+  },
+  "dependencies": {
+    "source-map-loader": "^4.0.1",
+    "ts-loader": "^9.4.4"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.4",
+    "@types/react": "^18.2.21",
+    "@types/react-native": "^0.72.2",
+    "@types/react-test-renderer": "^18.0.0",
+    "typescript": "^5.2.2"
+  },
+  "types": "dist/index.d.ts"
 }

@@ -1,12 +1,8 @@
-/*
- * @Author: huangjun
- * @Date: 2019-03-06 16:28:25
- * @Last Modified by: huangjun
- * @Last Modified time: 2020-04-19 17:26:46
- */
-import {NativeModules} from 'react-native';
-const {RNNeteaseIm} = NativeModules;
-class Friend {
+import { NativeModules } from "react-native";
+import { NIMAddFriendVerifyEnum, NIMUserInfo } from "./friend.type";
+const { RNNeteaseIm } = NativeModules;
+
+class NimFriend {
   /**
    * 进入好友
    * @returns {*} @see observeFriend
@@ -26,7 +22,7 @@ class Friend {
    * @param contactId
    * @returns {*}
    */
-  getUserInfo(contactId) {
+  getUserInfo(contactId: string) {
     return RNNeteaseIm.getUserInfo(contactId);
   }
   /**
@@ -34,7 +30,7 @@ class Friend {
    * @param contactId
    * @returns {*}
    */
-  fetchUserInfo(contactId) {
+  fetchUserInfo(contactId: string) {
     return RNNeteaseIm.fetchUserInfo(contactId);
   }
   /**
@@ -42,7 +38,7 @@ class Friend {
    * @param contactId {'NIMUserInfoUpdateTagNick':'昵称'}
    * @returns {*}
    */
-  updateMyUserInfo(userInFo) {
+  updateMyUserInfo(userInFo: NIMUserInfo) {
     return RNNeteaseIm.updateMyUserInfo(userInFo);
   }
   /**
@@ -50,7 +46,7 @@ class Friend {
    * @param contactId
    * @returns {*}
    */
-  updateUserInfo(contactId, alias) {
+  updateUserInfo(contactId: string, alias: string) {
     return RNNeteaseIm.updateUserInfo(contactId, alias);
   }
   /**
@@ -58,16 +54,16 @@ class Friend {
    * @param keyword
    * @returns {*}
    */
-  getFriendList(keyword) {
+  getFriendList(keyword: string) {
     return RNNeteaseIm.getFriendList(keyword);
   }
   /**
    * 添加好友
    * @param contactId
-   * @param msg 备注
+   * @param msg remark
    * @returns {*}
    */
-  addFriend(contactId, msg) {
+  addFriend(contactId: string, msg: string) {
     return RNNeteaseIm.addFriend(contactId, msg);
   }
 
@@ -78,7 +74,11 @@ class Friend {
    * @param msg 备注
    * @returns {*}
    */
-  addFriendWithType(contactId, verifyType, msg) {
+  addFriendWithType(
+    contactId: string,
+    verifyType: NIMAddFriendVerifyEnum,
+    msg: string
+  ) {
     return RNNeteaseIm.addFriendWithType(contactId, verifyType, msg);
   }
   /**
@@ -86,7 +86,7 @@ class Friend {
    * @param contactId
    * @returns {*}
    */
-  deleteFriend(contactId) {
+  deleteFriend(contactId: string) {
     return RNNeteaseIm.deleteFriend(contactId);
   }
   /**
@@ -114,15 +114,16 @@ class Friend {
    * 加入黑名单
    * @returns {*}
    */
-  addToBlackList(contactId) {
+  addToBlackList(contactId: string) {
     return RNNeteaseIm.addToBlackList(contactId);
   }
   /**
    * 移出黑名单
    * @returns {*}
    */
-  removeFromBlackList(contactId) {
+  removeFromBlackList(contactId: string) {
     return RNNeteaseIm.removeFromBlackList(contactId);
   }
 }
-export default new Friend();
+
+export default new NimFriend();

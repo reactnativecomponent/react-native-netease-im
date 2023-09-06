@@ -1,16 +1,20 @@
-/**
- * Created by dowin on 2017/8/2.
- */
-import {NativeModules, Platform} from 'react-native';
-const {RNNeteaseIm} = NativeModules;
-class Session {
+import { NativeModules, Platform } from "react-native";
+import {
+  CustomMessageType,
+  NIMSessionTypeEnum,
+  NIMQueryDirectionEnum,
+  NIMSendAttachmentEnum,
+} from "./session.type";
+const { RNNeteaseIm } = NativeModules;
+
+class NimSession {
   /**
    * 登陆
    * @param account
    * @param token
    * @returns {*} @see observeRecentContact observeOnlineStatus
    */
-  login(contactId, token) {
+  login(contactId: string, token: string) {
     return RNNeteaseIm.login(contactId, token);
   }
   /**
@@ -32,7 +36,7 @@ class Session {
    * @param recentContactId
    * @returns {*}
    */
-  deleteRecentContact(recentContactId) {
+  deleteRecentContact(recentContactId: string) {
     return RNNeteaseIm.deleteRecentContact(recentContactId);
   }
   /**
@@ -41,7 +45,7 @@ class Session {
    * @param type
    * @returns {*} @see observeReceiveMessage 接收最近20消息记录
    */
-  startSession(sessionId, type) {
+  startSession(sessionId: string, type: NIMSessionTypeEnum) {
     return RNNeteaseIm.startSession(sessionId, type);
   }
 
@@ -58,7 +62,7 @@ class Session {
    * @param limit 查询结果的条数限制
    * @returns {*}  @see 回调返回最近所有消息记录
    */
-  queryMessageListEx(messageId, limit) {
+  queryMessageListEx(messageId: string, limit: number) {
     return RNNeteaseIm.queryMessageListEx(messageId, limit);
   }
   /**
@@ -71,13 +75,14 @@ class Session {
    * @param asc 查询结果的排序规则，如果为 true，结果按照时间升级排列，如果为 false，按照时间降序排列
    * @returns {*}  @see 回调返回最近所有消息记录
    */
+  //TODO: change 'asc' params to boolean in native code
   queryMessageListHistory(
-    sessionId,
-    sessionType,
-    timeLong,
-    direction,
-    limit,
-    asc,
+    sessionId: string,
+    sessionType: NIMSessionTypeEnum,
+    timeLong: string,
+    direction: NIMQueryDirectionEnum,
+    limit: number,
+    asc: boolean
   ) {
     return RNNeteaseIm.queryMessageListHistory(
       sessionId,
@@ -85,7 +90,7 @@ class Session {
       timeLong,
       direction,
       limit,
-      asc,
+      asc
     );
   }
   /**
@@ -93,7 +98,7 @@ class Session {
    * @param content 文本内容
    * @param atUserIds @的群成员ID ["abc","abc12"]
    */
-  sendTextMessage(content, atUserIds) {
+  sendTextMessage(content: string, atUserIds?: string[]) {
     return RNNeteaseIm.sendTextMessage(content, atUserIds);
   }
 
@@ -104,13 +109,13 @@ class Session {
    * @param displayName 文件显示名字，如果第三方 APP 不关注，可为空
    * @returns {*}
    */
-  sendImageMessages(file, displayName) {
-    if (Platform.OS === 'ios') {
+  sendImageMessages(file: string, displayName?: string) {
+    if (Platform.OS === "ios") {
       return RNNeteaseIm.sendImageMessages(file, displayName);
     }
     return RNNeteaseIm.sendImageMessage(
-      file.replace('file://', ''),
-      displayName,
+      file.replace("file://", ""),
+      displayName
     );
   }
   /**
@@ -119,7 +124,7 @@ class Session {
    * @param duration 音频持续时间，单位是ms
    * @returns {*}
    */
-  sendAudioMessage(file, duration) {
+  sendAudioMessage(file: string, duration: string) {
     return RNNeteaseIm.sendAudioMessage(file, duration);
   }
 
@@ -132,13 +137,19 @@ class Session {
    * @param displayName 视频显示名，可为空
    * @returns {*}
    */
-  sendVideoMessage(file, duration, width, height, displayName) {
+  sendVideoMessage(
+    file: string,
+    duration: string,
+    width: number,
+    height: number,
+    displayName?: string
+  ) {
     return RNNeteaseIm.sendVideoMessage(
       file,
       duration,
       width,
       height,
-      displayName,
+      displayName
     );
   }
   /**
@@ -148,7 +159,7 @@ class Session {
    * @param address 地址信息描述
    * @returns {*}
    */
-  sendLocationMessage(latitude, longitude, address) {
+  sendLocationMessage(latitude: string, longitude: string, address: string) {
     return RNNeteaseIm.sendLocationMessage(latitude, longitude, address);
   }
   /**
@@ -156,7 +167,7 @@ class Session {
    * @param content
    * @returns {*}
    */
-  sendTipMessage(content) {
+  sendTipMessage(content: string) {
     return RNNeteaseIm.sendTipMessage(content);
   }
 
@@ -170,7 +181,11 @@ class Session {
    * @param serialNo 流水号
    * @returns {*}
    */
-  sendRedPacketMessage(type, comments, serialNo) {
+  sendRedPacketMessage(
+    type: NIMSendAttachmentEnum,
+    comments: string,
+    serialNo: string
+  ) {
     return RNNeteaseIm.sendRedPacketMessage(type, comments, serialNo);
   }
 
@@ -182,17 +197,26 @@ class Session {
    * @param sessionId
    * @returns {*}
    */
-  sendCardMessage(type, name, imgPath, sessionId) {
+  sendCardMessage(
+    type: NIMSendAttachmentEnum,
+    name: string,
+    imgPath: string,
+    sessionId: string
+  ) {
     return RNNeteaseIm.sendCardMessage(type, name, imgPath, sessionId);
   }
   /**
    * 拆红包
    * @param sendId 发送红包的sessionId
-   * @param hasRedPacket 是否还有红包 '0' '1'是已经拆完
+   * @param hasRedPacket '0': mantled, '1': dismantled
    * @param serialNo 流水号
    * @returns {*}
    */
-  sendRedPacketOpenMessage(sendId, hasRedPacket, serialNo) {
+  sendRedPacketOpenMessage(
+    sendId: string,
+    hasRedPacket: string,
+    serialNo: string
+  ) {
     return RNNeteaseIm.sendRedPacketOpenMessage(sendId, hasRedPacket, serialNo);
   }
   /**
@@ -204,16 +228,16 @@ class Session {
    * @param serialNo 流水号
    * @returns {*}
    */
-  sendBankTransferMessage(amount, comments, serialNo) {
+  sendBankTransferMessage(amount: string, comments: string, serialNo: string) {
     return RNNeteaseIm.sendBankTransferMessage(amount, comments, serialNo);
   }
   /**
    * 发送自定义消息
    * @param attachment 自定义消息内容{Width:260,Height:100,pushContent:'发来一条自定义消息',recentContent:'[自定义消息]'}
-   * Width 消息宽度，Height：消息高度， pushContent：推送消息内容， recentContent：最近会话显示的内容，
+   * width, height of message, pushContent: string, recentContent: string[]
    * @returns {*}
    */
-  sendCustomMessage(attachment) {
+  sendCustomMessage(attachment: CustomMessageType) {
     return RNNeteaseIm.sendCustomMessage(attachment);
   }
   /**
@@ -254,12 +278,17 @@ class Session {
    * @param content
    * @returns {*}
    */
-  sendForwardMessage(messageId, sessionId, sessionType, content) {
+  sendForwardMessage(
+    messageId: string,
+    sessionId: string,
+    sessionType: NIMSessionTypeEnum,
+    content: string
+  ) {
     return RNNeteaseIm.sendForwardMessage(
       messageId,
       sessionId,
       sessionType,
-      content,
+      content
     );
   }
   /**
@@ -267,7 +296,7 @@ class Session {
    * @param messageId
    * @returns {*}
    */
-  revokeMessage(messageId) {
+  revokeMessage(messageId: string) {
     return RNNeteaseIm.revokeMessage(messageId);
   }
 
@@ -276,7 +305,7 @@ class Session {
    * @param messageId
    * @returns {*}
    */
-  resendMessage(messageId) {
+  resendMessage(messageId: string) {
     return RNNeteaseIm.resendMessage(messageId);
   }
   /**
@@ -284,7 +313,7 @@ class Session {
    * @param messageId
    * @returns {*}
    */
-  deleteMessage(messageId) {
+  deleteMessage(messageId: string) {
     return RNNeteaseIm.deleteMessage(messageId);
   }
   /**
@@ -292,7 +321,7 @@ class Session {
    * @param messageId
    * @returns {*}
    */
-  clearMessage(sessionId, type) {
+  clearMessage(sessionId: string, type: NIMSessionTypeEnum) {
     return RNNeteaseIm.clearMessage(sessionId, type);
   }
 
@@ -301,21 +330,24 @@ class Session {
    * @param messageId
    * @returns {*}
    */
-  downloadAttachment(messageId) {
-    return RNNeteaseIm.downloadAttachment(messageId, '0');
+  downloadAttachment(messageId: string) {
+    return RNNeteaseIm.downloadAttachment(messageId, "0");
   }
+
   /**
    * 更新录音消息是否播放过的状态
    * @param messageId
    * @returns {*}
    */
-  updateAudioMessagePlayStatus(messageId) {
+  updateAudioMessagePlayStatus(messageId: string) {
     return RNNeteaseIm.updateAudioMessagePlayStatus(messageId);
   }
+
   getLaunch() {
-    if (Platform.OS === 'android') {
+    if (Platform.OS === "android") {
       return RNNeteaseIm.getLaunch();
     }
   }
 }
-export default new Session();
+
+export default new NimSession();
