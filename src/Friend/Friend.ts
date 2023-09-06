@@ -77,7 +77,7 @@ class NimFriend {
   addFriendWithType(
     contactId: string,
     verifyType: NIMAddFriendVerifyEnum,
-    msg
+    msg: string
   ) {
     return RNNeteaseIm.addFriendWithType(contactId, verifyType, msg);
   }
