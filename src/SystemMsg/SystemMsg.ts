@@ -92,14 +92,14 @@ class NimSystemMsg {
    * 通过/拒绝对方好友请求
    * @param messageId Android 使用
    * @param contactId
-   * @param pass 通过/拒绝
+   * @param pass 0: reject, 1: accept
    * @param timestamp ios使用
    * @returns {*}
    */
   ackAddFriendRequest(
     messageId: string,
     contactId: string,
-    pass: boolean,
+    pass: "0" | "1",
     timestamp: string
   ) {
     if (Platform.OS === "ios") {
