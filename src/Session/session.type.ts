@@ -12,6 +12,8 @@ export enum NIMSessionTypeEnum {
   Ysf = "Ysf",
   ChatRoom = "ChatRoom",
   QChat = "QChat",
+  onlineService = "online_service",
+  systemMessage = "system_message",
 }
 
 export enum NIMQueryDirectionEnum {
