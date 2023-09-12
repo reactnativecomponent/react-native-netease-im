@@ -1,15 +1,7 @@
-/*
- * @Descripttion: 工具类
- * @Author: huangjun
- * @Date: 2020-09-16 11:31:07
- * @LastEditors: huangjun
- * @LastEditTime: 2020-09-16 11:33:56
- */
-'use strict';
-import {NativeModules, Platform, NetInfo} from 'react-native';
-const {RNNeteaseIm, PinYin} = NativeModules;
+import { NativeModules, Platform } from "react-native";
+const { RNNeteaseIm, PinYin } = NativeModules;
 
-class Utils {
+class NimUtils {
   /**
    * 清除数据缓存
    */
@@ -24,12 +16,11 @@ class Utils {
     return RNNeteaseIm.getCacheSize();
   }
 
-
   /**
    * 播放录音
    * @returns {*}
    */
-  play(filepath) {
+  play(filepath: string) {
     return RNNeteaseIm.play(filepath);
   }
 
@@ -39,11 +30,11 @@ class Utils {
    * type：音乐类型，如：'mp3'
    * @returns {*}
    */
-  playLocacl(name, type) {
-    if (Platform.OS === 'ios') {
+  playLocal(name: string, type: string) {
+    if (Platform.OS === "ios") {
       return RNNeteaseIm.playLocal(name, type);
     }
-    return RNNeteaseIm.playLocal('assets:///' + name + '.' + type, type);
+    return RNNeteaseIm.playLocal("assets:///" + name + "." + type, type);
   }
 
   /**
@@ -54,12 +45,12 @@ class Utils {
     return RNNeteaseIm.stopPlay();
   }
 
-  sortPinYin(o, key) {
+  sortPinYin(o: any, key: string) {
     return PinYin.sortPinYin(o, key);
   }
 
   /**
-   * 仅限Android
+   * Android only
    * @returns {*}
    */
   fetchNetInfo() {
@@ -67,4 +58,4 @@ class Utils {
   }
 }
 
-export default new Utils();
+export default new NimUtils();

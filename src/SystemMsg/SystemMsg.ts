@@ -1,11 +1,8 @@
-/**
- * Created by dowin on 2017/8/2.
- */
-'use strict';
-import {NativeModules, Platform} from 'react-native';
-const {RNNeteaseIm} = NativeModules;
+import { NativeModules, Platform } from "react-native";
+import { NIMSystemMsgTypeEnum } from "./systemMsg.type";
+const { RNNeteaseIm } = NativeModules;
 
-class SystemMsg {
+class NimSystemMsg {
   /**
    * 进入系统通知消息
    * @returns {*} @see observeReceiveSystemMsg
@@ -38,7 +35,7 @@ class SystemMsg {
    * 查询系统通知列表
    * @returns {*}
    */
-  querySystemMessagesBlock(offset, limit) {
+  querySystemMessagesBlock(offset: string, limit: string) {
     return RNNeteaseIm.querySystemMessagesBlock(offset, limit);
   }
   /**
@@ -52,36 +49,42 @@ class SystemMsg {
    * @returns {*}
    */
   onSystemNotificationDeal(
-    type,
-    messageId,
-    targetId,
-    fromAccount,
-    pass,
-    timestamp,
+    type: NIMSystemMsgTypeEnum,
+    messageId: string,
+    targetId: string,
+    fromAccount: string,
+    pass: boolean,
+    timestamp: string
   ) {
-    if (type === '0') {
-      return RNNeteaseIm.passApply(
-        messageId,
-        targetId,
-        fromAccount,
-        pass,
-        timestamp,
-      );
-    } else if (type === '2') {
-      return RNNeteaseIm.acceptInvite(
-        messageId,
-        targetId,
-        fromAccount,
-        pass,
-        timestamp,
-      );
-    } else if (type === '5') {
-      return RNNeteaseIm.ackAddFriendRequest(
-        messageId,
-        fromAccount,
-        pass,
-        timestamp,
-      );
+    switch (type) {
+      case NIMSystemMsgTypeEnum.PassFriendApply:
+        return RNNeteaseIm.passApply(
+          messageId,
+          targetId,
+          fromAccount,
+          pass,
+          timestamp
+        );
+
+      case NIMSystemMsgTypeEnum.AcceptInvite:
+        return RNNeteaseIm.acceptInvite(
+          messageId,
+          targetId,
+          fromAccount,
+          pass,
+          timestamp
+        );
+
+      case NIMSystemMsgTypeEnum.AckAddFriendRequest:
+        return RNNeteaseIm.ackAddFriendRequest(
+          messageId,
+          fromAccount,
+          pass,
+          timestamp
+        );
+
+      default:
+        break;
     }
   }
 
@@ -89,19 +92,24 @@ class SystemMsg {
    * 通过/拒绝对方好友请求
    * @param messageId Android 使用
    * @param contactId
-   * @param pass 通过/拒绝
+   * @param pass 0: reject, 1: accept
    * @param timestamp ios使用
    * @returns {*}
    */
-  ackAddFriendRequest(messageId, contactId, pass, timestamp) {
-    if (Platform.OS === 'ios') {
+  ackAddFriendRequest(
+    messageId: string,
+    contactId: string,
+    pass: "0" | "1",
+    timestamp: string
+  ) {
+    if (Platform.OS === "ios") {
       return RNNeteaseIm.ackAddFriendRequest(contactId, pass, timestamp);
     }
     return RNNeteaseIm.ackAddFriendRequest(
       messageId,
       contactId,
       pass,
-      timestamp,
+      timestamp
     );
   }
 
@@ -114,13 +122,19 @@ class SystemMsg {
    * @param timestamp ios使用
    * @returns {*}
    */
-  passApply(messageId, targetId, fromAccount, pass, timestamp) {
+  passApply(
+    messageId: string,
+    targetId: string,
+    fromAccount: string,
+    pass: boolean,
+    timestamp: string
+  ) {
     return RNNeteaseIm.passApply(
       messageId,
       targetId,
       fromAccount,
       pass,
-      timestamp,
+      timestamp
     );
   }
 
@@ -133,13 +147,19 @@ class SystemMsg {
    * @param timestamp ios使用
    * @returns {*}
    */
-  acceptInvite(messageId, targetId, fromAccount, pass, timestamp) {
+  acceptInvite(
+    messageId: string,
+    targetId: string,
+    fromAccount: string,
+    pass: boolean,
+    timestamp: string
+  ) {
     return RNNeteaseIm.acceptInvite(
       messageId,
       targetId,
       fromAccount,
       pass,
-      timestamp,
+      timestamp
     );
   }
   /**
@@ -148,7 +168,7 @@ class SystemMsg {
    * @param timestamp
    * @returns {*}
    */
-  deleteSystemMessage(fromAccount, timestamp) {
+  deleteSystemMessage(fromAccount: string, timestamp: string) {
     return RNNeteaseIm.deleteSystemMessage(fromAccount, timestamp);
   }
 
@@ -168,4 +188,5 @@ class SystemMsg {
     return RNNeteaseIm.resetSystemMessageUnreadCount();
   }
 }
-export default new SystemMsg();
+
+export default new NimSystemMsg();
