@@ -147,7 +147,7 @@ class NimTeam {
    * @param value
    * @param promise
    */
-  updateTeam(teamId: string, fieldType: NIMUpdateTeamFieldEnum, value: string) {
+  updateTeam(teamId: string, fieldType: NIMUpdateTeamFieldEnum, value: string): Promise<string> {
     return RNNeteaseIm.updateTeam(teamId, fieldType, value);
   }
 
@@ -162,11 +162,11 @@ class NimTeam {
   }
 
   /**
-   * 解散群组
+   * disband team
    * @param teamId
    * @returns {*}
    */
-  dismissTeam(teamId: string) {
+  dismissTeam(teamId: string): Promise<string> {
     return RNNeteaseIm.dismissTeam(teamId);
   }
 
@@ -176,17 +176,17 @@ class NimTeam {
    * @param accounts ['abc11','abc12','abc13']
    * @returns {*}
    */
-  addMembers(teamId: string, accounts: string[]) {
+  addMembers(teamId: string, accounts: string[]): Promise<string> {
     return RNNeteaseIm.addMembers(teamId, accounts);
   }
 
   /**
-   * 踢人出群
+   * remove a member
    * @param teamId
    * @param account['abc12']
    * @returns {*}
    */
-  removeMember(teamId: string, account: string[]) {
+  removeMember(teamId: string, account: string[]): Promise<string> {
     return RNNeteaseIm.removeMember(teamId, account);
   }
 
@@ -216,7 +216,7 @@ class NimTeam {
    * @param teamName
    * @returns {*}
    */
-  updateTeamName(teamId: string, teamName: string) {
+  updateTeamName(teamId: string, teamName: string): Promise<string> {
     return RNNeteaseIm.updateTeamName(teamId, teamName);
   }
 }
