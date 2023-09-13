@@ -17,6 +17,16 @@ class NimSession {
   login(contactId: string, token: string) {
     return RNNeteaseIm.login(contactId, token);
   }
+
+  /**
+   * 登陆
+   * @param account
+   * @param token
+   * @returns {*} @see observeRecentContact
+   */
+  autoLogin(contactId: string, token: string) {
+    return RNNeteaseIm.autoLogin(contactId, token);
+  }
   /**
    * 退出
    * @returns {*}

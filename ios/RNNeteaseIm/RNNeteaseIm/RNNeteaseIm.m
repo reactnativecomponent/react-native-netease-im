@@ -113,10 +113,21 @@ RCT_EXPORT_METHOD(login:(nonnull NSString *)account token:(nonnull NSString *)to
          }
         }];
     
-//    NIMAutoLoginData *loginData = [[NIMAutoLoginData alloc] init];
-//    loginData.account = account;
-//    loginData.token = token;
-//    [[[NIMSDK sharedSDK] loginManager] autoLogin:loginData];
+    [NIMViewController initWithController].strToken = token;
+    [NIMViewController initWithController].strAccount = account;
+}
+
+//手动登录
+RCT_EXPORT_METHOD(autoLogin:(nonnull NSString *)account token:(nonnull NSString *)token
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject){
+    
+    NIMAutoLoginData *loginData = [[NIMAutoLoginData alloc] init];
+    loginData.account = account;
+    loginData.token = token;
+    loginData.authType = NIMSDKAuthTypeDynamicToken;
+    loginData.loginExtension = @"";
+    [[[NIMSDK sharedSDK] loginManager] autoLogin:loginData];
     
     [NIMViewController initWithController].strToken = token;
     [NIMViewController initWithController].strAccount = account;
