@@ -219,6 +219,16 @@ class NimTeam {
   updateTeamName(teamId: string, teamName: string): Promise<string> {
     return RNNeteaseIm.updateTeamName(teamId, teamName);
   }
+
+  /**
+   * update my custom info
+   * @param newInfo: JSON string
+   * @param teamId: string
+   * @returns {*}
+   */
+  updateMyCustomInfo(newInfo: string, teamId: string): Promise<string> {
+    return RNNeteaseIm.updateMyCustomInfo(newInfo, teamId);
+  }
 }
 
 export default new NimTeam();

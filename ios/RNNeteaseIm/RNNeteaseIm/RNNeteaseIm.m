@@ -133,6 +133,29 @@ RCT_EXPORT_METHOD(autoLogin:(nonnull NSString *)account token:(nonnull NSString 
     [NIMViewController initWithController].strAccount = account;
 }
 
+//手动登录
+RCT_EXPORT_METHOD(updateMyCustomInfo:(nonnull NSString *)newInfo teamId:(nonnull NSString *)teamId
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject){
+    /// newInfo 自定义属性
+        NIMTeamHandler completion = ^(NSError * __nullable error)
+        {
+            if (error == nil) {
+                /// 更新自定义属性成功
+                NSLog(@"[Update my custom info as %@ succeed.]", newInfo);
+                resolve(@"ok");
+            } else {
+                /// 更新自定义属性失败
+                RCTLogWarn(@"[Update my custom info as %@ error.]", error);
+                reject(@"-1",error.description, nil);
+            }
+        };
+        /// 更新自定义属性
+        [[[NIMSDK sharedSDK] teamManager] updateMyCustomInfo:newInfo
+                                                      inTeam:teamId
+                                                  completion:completion];
+}
+
 //注销用户
 RCT_EXPORT_METHOD(logout){
     [[[NIMSDK sharedSDK] loginManager] logout:^(NSError *error){
