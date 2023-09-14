@@ -51,3 +51,7 @@ export enum NIMUpdateTeamFieldEnum {
   beInviteMode = "beInviteMode",
   teamUpdateMode = "teamUpdateMode",
 }
+
+export interface NIMCreateTeamResultType {
+  teamId: string;
+}

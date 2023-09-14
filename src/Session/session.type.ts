@@ -5,8 +5,8 @@ import {
 
 export enum NIMSessionTypeEnum {
   None = "None",
-  P2P = "P2P",
-  Team = "Team",
+  P2P = "0",
+  Team = "1",
   SUPER_TEAM = "SUPER_TEAM",
   System = "System",
   Ysf = "Ysf",
