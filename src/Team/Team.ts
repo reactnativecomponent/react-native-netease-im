@@ -2,9 +2,13 @@ import { NativeModules } from "react-native";
 import {
   NIMCreateTeamOptionsType,
   NIMCreateTeamTypeEnum,
+  NIMTeamDetailType,
+  NIMTeamItemType,
+  NIMTeamMemberType,
   NIMTeamMessageNotifyEnum,
   NIMUpdateTeamFieldEnum,
 } from "./team.type";
+import { NIMCommonBooleanType, NIMResponseCode } from "../utils/common.type";
 const { RNNeteaseIm } = NativeModules;
 
 class NimTeam {
@@ -13,7 +17,7 @@ class NimTeam {
    * @param keyword
    * @returns {*}
    */
-  getTeamList(keyword: string) {
+  getTeamList(keyword: string): Promise<NIMTeamItemType[]> {
     return RNNeteaseIm.getTeamList(keyword);
   }
 
@@ -38,7 +42,7 @@ class NimTeam {
    * @param teamId
    * @returns {*}
    */
-  getTeamInfo(teamId) {
+  getTeamInfo(teamId): Promise<NIMTeamDetailType> {
     return RNNeteaseIm.getTeamInfo(teamId);
   }
 
@@ -48,7 +52,10 @@ class NimTeam {
    * @param needNotify 开启/关闭消息提醒
    * @returns {*}
    */
-  setTeamNotify(teamId: string, needNotify: boolean) {
+  setTeamNotify(
+    teamId: string,
+    needNotify: NIMTeamMessageNotifyEnum
+  ): Promise<NIMResponseCode> {
     return RNNeteaseIm.setTeamNotify(teamId, needNotify);
   }
 
@@ -58,21 +65,24 @@ class NimTeam {
    * @param needNotify 开启/关闭消息提醒
    * @returns {*}
    */
-  setMessageNotify(contactId: string, needNotify: boolean) {
+  setMessageNotify(
+    contactId: string,
+    needNotify: NIMCommonBooleanType
+  ): Promise<NIMResponseCode> {
     return RNNeteaseIm.setMessageNotify(contactId, needNotify);
   }
   /**
    * 群成员禁言
    * @param teamId
    * @param contactId
-   * @param mute 开启/关闭禁言
+   * @param mute 0: false, 1: true
    * @returns {*}
    */
   setTeamMemberMute(
     teamId: string,
     contactId: string,
-    mute: NIMTeamMessageNotifyEnum
-  ) {
+    mute: NIMCommonBooleanType
+  ): Promise<NIMResponseCode> {
     return RNNeteaseIm.setTeamMemberMute(teamId, contactId, mute);
   }
   /**
@@ -80,7 +90,7 @@ class NimTeam {
    * @param teamId
    * @returns {*}
    */
-  fetchTeamInfo(teamId: string) {
+  fetchTeamInfo(teamId: string): Promise<NIMTeamDetailType> {
     return RNNeteaseIm.fetchTeamInfo(teamId);
   }
 
@@ -89,7 +99,7 @@ class NimTeam {
    * @param teamId
    * @returns {*}
    */
-  fetchTeamMemberList(teamId: string) {
+  fetchTeamMemberList(teamId: string): Promise<NIMTeamMemberType[]> {
     return RNNeteaseIm.fetchTeamMemberList(teamId);
   }
 
@@ -99,7 +109,10 @@ class NimTeam {
    * @param contactId
    * @returns {*}
    */
-  fetchTeamMemberInfo(teamId: string, contactId: string) {
+  fetchTeamMemberInfo(
+    teamId: string,
+    contactId: string
+  ): Promise<NIMTeamMemberType> {
     return RNNeteaseIm.fetchTeamMemberInfo(teamId, contactId);
   }
 
@@ -110,7 +123,11 @@ class NimTeam {
    * @param nick
    * @returns {*}
    */
-  updateMemberNick(teamId: string, contactId: string, nick: string) {
+  updateMemberNick(
+    teamId: string,
+    contactId: string,
+    nick: string
+  ): Promise<NIMResponseCode> {
     return RNNeteaseIm.updateMemberNick(teamId, contactId, nick);
   }
 
@@ -131,7 +148,7 @@ class NimTeam {
     fields: NIMCreateTeamOptionsType,
     type: NIMCreateTeamTypeEnum,
     accounts: string[]
-  ) {
+  ): Promise<NIMResponseCode> {
     return RNNeteaseIm.createTeam(fields, type, accounts);
   }
   /**
@@ -151,7 +168,7 @@ class NimTeam {
     teamId: string,
     fieldType: NIMUpdateTeamFieldEnum,
     value: string
-  ): Promise<string> {
+  ): Promise<NIMResponseCode> {
     return RNNeteaseIm.updateTeam(teamId, fieldType, value);
   }
 
@@ -161,7 +178,7 @@ class NimTeam {
    * @param reason
    * @returns {*}
    */
-  applyJoinTeam(teamId: string, reason: string) {
+  applyJoinTeam(teamId: string, reason: string): Promise<NIMResponseCode> {
     return RNNeteaseIm.applyJoinTeam(teamId, reason);
   }
 
@@ -170,7 +187,7 @@ class NimTeam {
    * @param teamId
    * @returns {*}
    */
-  dismissTeam(teamId: string): Promise<string> {
+  dismissTeam(teamId: string): Promise<NIMResponseCode> {
     return RNNeteaseIm.dismissTeam(teamId);
   }
 
@@ -180,7 +197,7 @@ class NimTeam {
    * @param accounts ['abc11','abc12','abc13']
    * @returns {*}
    */
-  addMembers(teamId: string, accounts: string[]): Promise<string> {
+  addMembers(teamId: string, accounts: string[]): Promise<NIMResponseCode> {
     return RNNeteaseIm.addMembers(teamId, accounts);
   }
 
@@ -190,7 +207,7 @@ class NimTeam {
    * @param account['abc12']
    * @returns {*}
    */
-  removeMember(teamId: string, account: string[]): Promise<string> {
+  removeMember(teamId: string, account: string[]): Promise<NIMResponseCode> {
     return RNNeteaseIm.removeMember(teamId, account);
   }
 
@@ -199,7 +216,7 @@ class NimTeam {
    * @param teamId
    * @returns {*}
    */
-  quitTeam(teamId: string) {
+  quitTeam(teamId: string): Promise<NIMResponseCode> {
     return RNNeteaseIm.quitTeam(teamId);
   }
 
@@ -207,10 +224,14 @@ class NimTeam {
    * 转让群组
    * @param targetId
    * @param account
-   * @param quit
+   * @param quit 0: false, 1: true
    * @returns {*}
    */
-  transferTeam(teamId: string, account: string, quit: "true" | "false") {
+  transferTeam(
+    teamId: string,
+    account: string,
+    quit: NIMCommonBooleanType
+  ): Promise<NIMResponseCode> {
     return RNNeteaseIm.transferTeam(teamId, account, quit);
   }
 
@@ -220,7 +241,7 @@ class NimTeam {
    * @param teamName
    * @returns {*}
    */
-  updateTeamName(teamId: string, teamName: string): Promise<string> {
+  updateTeamName(teamId: string, teamName: string): Promise<NIMResponseCode> {
     return RNNeteaseIm.updateTeamName(teamId, teamName);
   }
 

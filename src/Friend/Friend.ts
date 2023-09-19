@@ -1,5 +1,6 @@
 import { NativeModules } from "react-native";
-import { NIMAddFriendVerifyEnum, NIMUserInfo } from "./friend.type";
+import { NIMAddFriendVerifyEnum } from "./friend.type";
+import { NIMUserInfo } from "../User/user.type";
 const { RNNeteaseIm } = NativeModules;
 
 class NimFriend {

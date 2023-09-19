@@ -373,3 +373,8 @@ export interface NIMCommonErrorType {
   domain: string;
   userInfo: any;
 }
+
+export enum NIMCommonBooleanType {
+  FALSE = "0",
+  TRUE = "1",
+}

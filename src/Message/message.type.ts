@@ -1,3 +1,5 @@
+import { NIMSessionTypeEnum } from "../Session/session.type"
+
 export enum NIMMessageTypeEnum {
   TEXT = "text",
   VOICE = "voice",
@@ -25,4 +27,24 @@ export enum NIMMessageStatusEnum {
   SEND_SUCCESS = "send_succed",
   RECEIVE_READ = "receive_read",
   RECEIVE_UNREAD = "receive_unread",
+}
+
+export interface NIMMessage {
+  extend:{
+    tipMsg:string
+ },
+ fromUser:{
+    _id:string,
+    avatar:string,
+    name:string
+ },
+ isOutgoing:boolean,
+ isShowTime:boolean,
+ msgId:string,
+ msgType:NIMMessageTypeEnum,
+ sessionId:string,
+ sessionType:NIMSessionTypeEnum,
+ status:NIMMessageStatusEnum,
+ text:string,
+ timeString:string
 }
