@@ -644,6 +644,45 @@ RCT_EXPORT_METHOD(transferTeam:(nonnull NSString *)teamId account:(nonnull NSStr
         reject(@"-1",erro,nil);
     }];
 }
+
+// Add user to manager in team
+RCT_EXPORT_METHOD(addManagersToTeam:(nonnull NSString *)teamId userIds:(nonnull NSArray<NSString *>*)userIds resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
+
+    NIMTeamHandler completion = ^(NSError * __nullable error)
+        {
+            if (error == nil) {
+                NSLog(@"[Add manager in team %@ succeed.]", teamId);
+                resolve(teamId);
+                /// your code ...
+            } else {
+                NSLog(@"[NSError message: %@]", error);
+                reject(@"-1",error,nil);
+            }
+        };
+        [[[NIMSDK sharedSDK] teamManager] addManagersToTeam:teamId
+                                                      users:userIds
+                                                 completion:completion];
+}
+
+// Remove manager in team
+RCT_EXPORT_METHOD(removeManagersFromTeam:(nonnull NSString *)teamId userIds:(nonnull NSArray<NSString *>*)userIds resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
+
+    NIMTeamHandler completion = ^(NSError * __nullable error)
+        {
+            if (error == nil) {
+                NSLog(@"[Remove manager in team %@ succeed.]", teamId);
+                resolve(teamId);
+                /// your code ...
+            } else {
+                NSLog(@"[NSError message: %@]", error);
+                reject(@"-1",error,nil);
+            }
+        };
+        [[[NIMSDK sharedSDK] teamManager] removeManagersFromTeam:teamId
+                                                      users:userIds
+                                                 completion:completion];
+}
+
 //修改群昵称
 RCT_EXPORT_METHOD(updateTeamName:(nonnull NSString *)teamId nick:(nonnull NSString *)nick  resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
     [[TeamViewController initWithTeamViewController] updateTeamName:teamId nick:nick Succ:^(id param) {

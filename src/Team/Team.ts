@@ -147,7 +147,11 @@ class NimTeam {
    * @param value
    * @param promise
    */
-  updateTeam(teamId: string, fieldType: NIMUpdateTeamFieldEnum, value: string): Promise<string> {
+  updateTeam(
+    teamId: string,
+    fieldType: NIMUpdateTeamFieldEnum,
+    value: string
+  ): Promise<string> {
     return RNNeteaseIm.updateTeam(teamId, fieldType, value);
   }
 
@@ -228,6 +232,17 @@ class NimTeam {
    */
   updateMyCustomInfo(newInfo: string, teamId: string): Promise<string> {
     return RNNeteaseIm.updateMyCustomInfo(newInfo, teamId);
+  }
+
+  addManagersToTeam(teamId: string, userIds: Array<string>): Promise<string> {
+    return RNNeteaseIm.addManagersToTeam(teamId, userIds);
+  }
+
+  removeManagersFromTeam(
+    teamId: string,
+    userIds: Array<string>
+  ): Promise<string> {
+    return RNNeteaseIm.removeManagersFromTeam(teamId, userIds);
   }
 }
 
