@@ -254,6 +254,17 @@ class NimTeam {
   updateMyCustomInfo(newInfo: string, teamId: string): Promise<string> {
     return RNNeteaseIm.updateMyCustomInfo(newInfo, teamId);
   }
+
+  addManagersToTeam(teamId: string, userIds: Array<string>): Promise<string> {
+    return RNNeteaseIm.addManagersToTeam(teamId, userIds);
+  }
+
+  removeManagersFromTeam(
+    teamId: string,
+    userIds: Array<string>
+  ): Promise<string> {
+    return RNNeteaseIm.removeManagersFromTeam(teamId, userIds);
+  }
 }
 
 export default new NimTeam();
