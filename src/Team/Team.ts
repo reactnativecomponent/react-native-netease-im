@@ -245,15 +245,15 @@ class NimTeam {
     return RNNeteaseIm.updateTeamName(teamId, teamName);
   }
 
-  /**
-   * update my custom info
-   * @param newInfo: JSON string
-   * @param teamId: string
-   * @returns {*}
-   */
-  updateMyCustomInfo(newInfo: string, teamId: string): Promise<string> {
-    return RNNeteaseIm.updateMyCustomInfo(newInfo, teamId);
-  }
+  // /**
+  //  * update my custom info
+  //  * @param newInfo: JSON string
+  //  * @param teamId: string
+  //  * @returns {*}
+  //  */
+  // updateMyCustomInfo(newInfo: string, teamId: string): Promise<string> {
+  //   return RNNeteaseIm.updateMyCustomInfo(newInfo, teamId);
+  // }
 
   addManagersToTeam(teamId: string, userIds: Array<string>): Promise<string> {
     return RNNeteaseIm.addManagersToTeam(teamId, userIds);

@@ -542,6 +542,63 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
                 });
     }
 
+      /**
+     * add manager to Team
+     *
+     * @param teamId
+     * @param userIds
+     * @param promise
+     */
+    @ReactMethod
+    public void addManagersToTeam(String teamId, List<String> userIds, final Promise promise) {
+        NIMClient.getService(TeamService.class)
+            .addManagers(teamId, userIds)
+            .setCallback(new RequestCallback<List<TeamMember>>() {
+                    @Override
+                    public void onSuccess(List<TeamMember> managers) {
+                        promise.resolve("" + teamId);
+                    }
+
+                    @Override
+                    public void onFailed(int code) {
+                        promise.reject("" + code, "");
+                    }
+
+                    @Override
+                    public void onException(Throwable exception) {
+                    }
+            });
+    }
+
+    /**
+     * remove manager to Team
+     *
+     * @param teamId
+     * @param userIds
+     * @param promise
+     */
+    @ReactMethod
+    public void removeManagersFromTeam(String teamId, List<String> userIds, final Promise promise) {
+        NIMClient.getService(TeamService.class)
+            .removeManagers(teamId, userIds)
+            .setCallback(new RequestCallback<List<TeamMember>>() {
+                @Override
+                public void onSuccess(List<TeamMember> managers) {
+                    promise.resolve("" + teamId);
+                }
+
+                @Override
+                public void onFailed(int code) {
+                    promise.reject("" + code, "");
+                }
+
+                @Override
+                public void onException(Throwable exception) {
+                    // 错误
+                }
+            });
+    }
+
     /**
      * 获取本地群成员资料
      *
