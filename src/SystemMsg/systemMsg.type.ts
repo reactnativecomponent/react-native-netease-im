@@ -1,3 +1,5 @@
+import { NIMCommonBooleanType } from "../utils/common.type";
+
 export enum NIMSystemMsgTypeEnum {
   PassFriendApply = "0",
   AcceptInvite = "2",
@@ -31,7 +33,7 @@ export interface NIMSystemMsgType {
   avatar: string;
   content: string;
   fromAccount: string;
-  isVerify: "0" | "1";
+  isVerify: NIMCommonBooleanType;
   messageId: string;
   name: string;
   status: NIMSystemMsgStatusEnum;

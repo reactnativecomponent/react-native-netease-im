@@ -1,5 +1,6 @@
 import { NativeModules, Platform } from "react-native";
 import { NIMSystemMsgTypeEnum } from "./systemMsg.type";
+import { NIMCommonBooleanType } from "../utils/common.type";
 const { RNNeteaseIm } = NativeModules;
 
 class NimSystemMsg {
@@ -99,7 +100,7 @@ class NimSystemMsg {
   ackAddFriendRequest(
     messageId: string,
     contactId: string,
-    pass: "0" | "1",
+    pass: NIMCommonBooleanType,
     timestamp: string
   ) {
     if (Platform.OS === "ios") {

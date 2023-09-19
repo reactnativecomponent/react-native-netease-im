@@ -1,3 +1,6 @@
+import { NIMUserGenderEnum } from "../User/user.type";
+import { NIMCommonBooleanType } from "../utils/common.type";
+
 export enum NIMTeamMessageNotifyEnum {
   All = "0",
   Manager = "1",
@@ -54,4 +57,52 @@ export enum NIMUpdateTeamFieldEnum {
 
 export interface NIMCreateTeamResultType {
   teamId: string;
+}
+
+export interface NIMTeamItemType {
+  teamId: string;
+  name: string;
+  type: NIMCreateTeamTypeEnum;
+  avatar: string;
+}
+
+export interface NIMTeamDetailType {
+  announcement: string;
+  avatar: string;
+  createTime: string;
+  creator: string;
+  introduce: string;
+  memberCount: string;
+  memberLimit: string;
+  mute: NIMCommonBooleanType;
+  name: string;
+  teamBeInviteMode: NIMTeamBeInviteModeEnum;
+  teamId: string;
+  type: NIMCreateTeamTypeEnum;
+  verifyType: NIMCreateTeamVerifyEnum;
+}
+
+export interface NIMTeamMemberType {
+  alias: string;
+  avatar: string;
+  birthday: string;
+  contactId: string;
+  createTime: string;
+  customInfo: string;
+  email: string;
+  extension: string;
+  extensionMap: string;
+  gender: NIMUserGenderEnum;
+  isInBlackList: NIMCommonBooleanType;
+  isMe: NIMCommonBooleanType;
+  isMuted: NIMCommonBooleanType;
+  isMyFriend: NIMCommonBooleanType;
+  mobile: string;
+  mute: NIMCommonBooleanType;
+  name: string;
+  nickname: string;
+  signature: string;
+  teamId: string;
+  type: NIMCreateTeamTypeEnum;
+  userId: string;
 }
