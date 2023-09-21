@@ -89,6 +89,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import static com.netease.im.ReceiverMsgParser.getIntent;
@@ -550,9 +551,11 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
      * @param promise
      */
     @ReactMethod
-    public void addManagersToTeam(String teamId, List<String> userIds, final Promise promise) {
+    public void addManagersToTeam(String teamId, ReadableArray userIds, final Promise promise) {
+        ArrayList<String> strList = (ArrayList<String>)(ArrayList<?>)(userIds.toArrayList());
+
         NIMClient.getService(TeamService.class)
-            .addManagers(teamId, userIds)
+            .addManagers(teamId, strList)
             .setCallback(new RequestCallback<List<TeamMember>>() {
                     @Override
                     public void onSuccess(List<TeamMember> managers) {
@@ -578,9 +581,11 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
      * @param promise
      */
     @ReactMethod
-    public void removeManagersFromTeam(String teamId, List<String> userIds, final Promise promise) {
+    public void removeManagersFromTeam(String teamId, ReadableArray userIds, final Promise promise) {
+        ArrayList<String> strList = (ArrayList<String>)(ArrayList<?>)(userIds.toArrayList());
+
         NIMClient.getService(TeamService.class)
-            .removeManagers(teamId, userIds)
+            .removeManagers(teamId, strList)
             .setCallback(new RequestCallback<List<TeamMember>>() {
                 @Override
                 public void onSuccess(List<TeamMember> managers) {
