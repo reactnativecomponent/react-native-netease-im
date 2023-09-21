@@ -1418,18 +1418,25 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
         NIMClient.getService(MsgService.class).clearChattingHistory(sessionId, sessionTypeEnum);
     }
 
-    /**
+   /**
      * 更新用户资料
      *
-     * @param name
+     * @param newUserInfo
      * @param promise
      */
     @ReactMethod
-    public void updateMyUserInfo(String name, final Promise promise) {
+    public void updateMyUserInfo(ReadableMap newUserInfo, final Promise promise) {
         String contactId = LoginService.getInstance().getAccount();
-        NimUserInfoCache.getInstance().getUserInfoFromRemote(contactId, new RequestCallbackWrapper<NimUserInfo>() {
+        NimUserInfoCache.getInstance().updateMyUserInfo(newUserInfo.toHashMap(), new RequestCallbackWrapper() {
             @Override
-            public void onResult(int i, NimUserInfo userInfo, Throwable throwable) {
+            public void onResult(int code, Object result, Throwable exception) {
+                promise.resolve("200");
+            }
+
+            @Override
+            public void onFailed(int code) {
+                super.onFailed(code);
+                promise.reject("" + code, "");
             }
         });
     }

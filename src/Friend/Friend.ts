@@ -1,5 +1,5 @@
 import { NativeModules } from "react-native";
-import { NIMAddFriendVerifyEnum } from "./friend.type";
+import { NIMAddFriendVerifyEnum, UpdateProfileTypes } from "./friend.type";
 import { NIMUserInfo } from "../User/user.type";
 const { RNNeteaseIm } = NativeModules;
 
@@ -36,10 +36,10 @@ class NimFriend {
   }
   /**
    * 保存用户资料
-   * @param contactId {'NIMUserInfoUpdateTagNick':'昵称'}
+   * @param userInFo
    * @returns {*}
    */
-  updateMyUserInfo(userInFo: NIMUserInfo) {
+  updateMyUserInfo(userInFo: UpdateProfileTypes): Promise<string> {
     return RNNeteaseIm.updateMyUserInfo(userInFo);
   }
   /**

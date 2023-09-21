@@ -680,7 +680,8 @@ public class ReactCache {
             writableMap.putString("contactId", teamMember.getAccount());
             writableMap.putString("type", Integer.toString(teamMember.getType().getValue()));
             writableMap.putString("alias", NimUserInfoCache.getInstance().getUserDisplayName(teamMember.getAccount()));
-            writableMap.putString("name", TeamDataCache.getInstance().getTeamMemberDisplayName(teamMember.getTid(), teamMember.getAccount()));
+            //            writableMap.putString("name", TeamDataCache.getInstance().getTeamMemberDisplayName(teamMember.getTid(), teamMember.getAccount()));
+            writableMap.putString("name", NimUserInfoCache.getInstance().getUserDisplayName(teamMember.getAccount()));
             writableMap.putString("nickname", teamMember.getTeamNick());
 
             writableMap.putString("joinTime", TimeUtil.getTimeShowString(teamMember.getJoinTime(), true));

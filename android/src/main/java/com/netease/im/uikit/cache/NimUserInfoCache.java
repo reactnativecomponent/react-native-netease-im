@@ -49,6 +49,35 @@ public class NimUserInfoCache {
         clearUserCache();
     }
 
+     public  void  updateMyUserInfo(Map<String, Object> fields, final RequestCallback<String> callback) {
+        Map<String, UserInfoFieldEnum> mockUpKeys = new HashMap();
+        mockUpKeys.put("NIMUserInfoUpdateTagNick", UserInfoFieldEnum.Name);
+        mockUpKeys.put("NIMUserInfoUpdateTagAvatar", UserInfoFieldEnum.AVATAR);
+        mockUpKeys.put("NIMUserInfoUpdateTagSign", UserInfoFieldEnum.SIGNATURE);
+        mockUpKeys.put("NIMUserInfoUpdateTagGender", UserInfoFieldEnum.GENDER);
+        mockUpKeys.put("NIMUserInfoUpdateTagEmail", UserInfoFieldEnum.EMAIL);
+        mockUpKeys.put("NIMUserInfoUpdateTagBirth", UserInfoFieldEnum.BIRTHDAY);
+        mockUpKeys.put("NIMUserInfoUpdateTagMobile", UserInfoFieldEnum.MOBILE);
+        mockUpKeys.put("NIMUserInfoUpdateTagExt", UserInfoFieldEnum.EXTEND);
+
+        Map<UserInfoFieldEnum, Object> mapUserInfo = new HashMap<>();
+        for (Map.Entry<String, Object> entry : fields.entrySet()) {
+            mapUserInfo.put(mockUpKeys.get(entry.getKey()), entry.getValue());
+        }
+
+        NIMClient.getService(UserService.class).updateUserInfo(mapUserInfo).setCallback(new RequestCallbackWrapper() {
+            @Override
+            public void onResult(int code, Object result, Throwable exception) {
+                callback.onSuccess("200");
+            }
+
+            public void onFailed(int code) {
+                super.onFailed(code);
+                callback.onFailed(code);
+            }
+        });
+    }
+
     /**
      * 从云信服务器获取用户信息（重复请求处理）[异步]
      */
