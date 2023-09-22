@@ -126,6 +126,11 @@ public class TimeUtil {
     }
 
     public static String getTimeShowString(long milliseconds, boolean abbreviate) {
+
+        if(milliseconds != 0) {
+            return String.valueOf(milliseconds);
+        }
+
         String dataString;
         String timeStringBy24;
 
