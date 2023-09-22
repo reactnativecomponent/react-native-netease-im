@@ -82,6 +82,13 @@ export interface NIMTeamDetailType {
   verifyType: NIMCreateTeamVerifyEnum;
 }
 
+export enum NIMTeamMemberEnum {
+  Normal = '0',
+  Owner = '1',
+  Manager = '2',
+  Apply   = '3',
+}
+
 export interface NIMTeamMemberType {
   alias: string;
   avatar: string;
@@ -103,6 +110,6 @@ export interface NIMTeamMemberType {
   nickname: string;
   signature: string;
   teamId: string;
-  type: NIMCreateTeamTypeEnum;
+  type: NIMTeamMemberEnum;
   userId: string;
 }
