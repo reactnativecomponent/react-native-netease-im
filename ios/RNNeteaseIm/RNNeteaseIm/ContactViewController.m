@@ -186,11 +186,32 @@
 
 }
 //修改个人资料
--(void)updateMyUserInfo:(NSString *)strName{
-    [self fetchUserInfos:[NIMSDK sharedSDK].loginManager.currentAccount Success:^(id param) {
-        NSLog(@"更新成功");
-    } error:^(NSString *error) {
-        NSLog(@"更新失败");
+-(void)updateMyUserInfo:(NSDictionary<NSNumber *,id> *)newUserInfo Success:(Success )success error:(Error )err{
+    const NSDictionary* keys = @{
+        @"NIMUserInfoUpdateTagNick": @(NIMUserInfoUpdateTagNick),
+        @"NIMUserInfoUpdateTagAvatar": @(NIMUserInfoUpdateTagAvatar),
+        @"NIMUserInfoUpdateTagSign": @(NIMUserInfoUpdateTagSign),
+        @"NIMUserInfoUpdateTagGender": @(NIMUserInfoUpdateTagGender),
+        @"NIMUserInfoUpdateTagEmail": @(NIMUserInfoUpdateTagEmail),
+        @"NIMUserInfoUpdateTagBirth": @(NIMUserInfoUpdateTagBirth),
+        @"NIMUserInfoUpdateTagMobile": @(NIMUserInfoUpdateTagMobile),
+        @"NIMUserInfoUpdateTagExt": @(NIMUserInfoUpdateTagExt),
+    };
+    
+    NSMutableDictionary *mapDict = [[NSMutableDictionary alloc] init];
+    
+    for (id key in newUserInfo) {
+        NSNumber *keyId = [keys objectForKey: key];
+        mapDict[keyId] = [newUserInfo objectForKey:key];
+    }
+    
+    [[NIMSDK sharedSDK].userManager updateMyUserInfo:mapDict completion:^(NSError * _Nullable error) {
+         if (!error) {
+             NSLog(@"success ");
+             success(@"200");
+        }else{
+            err(error);
+        }
     }];
 }
 

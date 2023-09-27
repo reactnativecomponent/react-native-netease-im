@@ -212,8 +212,12 @@ RCT_EXPORT_METHOD(updateUserInfo:(nonnull NSString * )contactId  alias:(nonnull 
     }];
 }
 //保存用户信息
-RCT_EXPORT_METHOD(updateMyUserInfo:(nonnull  NSString *)userInFo){
-    [[ContactViewController initWithContactViewController] updateMyUserInfo:userInFo];
+RCT_EXPORT_METHOD(updateMyUserInfo:(NSDictionary<NSNumber *,id> *)userInFo resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
+    [[ContactViewController initWithContactViewController] updateMyUserInfo:userInFo Success:^(id param) {
+        resolve(param);
+    } error:^(NSString *error) {
+        reject(@"-1",error,nil);
+    }];
 }
 //添加好友
 RCT_EXPORT_METHOD(addFriend:(nonnull  NSString * )contactId msg:(nonnull  NSString * )msg resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){

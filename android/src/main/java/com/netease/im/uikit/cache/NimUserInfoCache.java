@@ -14,10 +14,12 @@ import com.netease.nimlib.sdk.friend.model.Friend;
 import com.netease.nimlib.sdk.uinfo.UserService;
 import com.netease.nimlib.sdk.uinfo.UserServiceObserve;
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
+import com.netease.nimlib.sdk.uinfo.constant.UserInfoFieldEnum;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -47,6 +49,35 @@ public class NimUserInfoCache {
 
     public void clear() {
         clearUserCache();
+    }
+
+     public  void  updateMyUserInfo(Map<String, Object> fields, final RequestCallback<String> callback) {
+        Map<String, UserInfoFieldEnum> mockUpKeys = new HashMap();
+        mockUpKeys.put("NIMUserInfoUpdateTagNick", UserInfoFieldEnum.Name);
+        mockUpKeys.put("NIMUserInfoUpdateTagAvatar", UserInfoFieldEnum.AVATAR);
+        mockUpKeys.put("NIMUserInfoUpdateTagSign", UserInfoFieldEnum.SIGNATURE);
+        mockUpKeys.put("NIMUserInfoUpdateTagGender", UserInfoFieldEnum.GENDER);
+        mockUpKeys.put("NIMUserInfoUpdateTagEmail", UserInfoFieldEnum.EMAIL);
+        mockUpKeys.put("NIMUserInfoUpdateTagBirth", UserInfoFieldEnum.BIRTHDAY);
+        mockUpKeys.put("NIMUserInfoUpdateTagMobile", UserInfoFieldEnum.MOBILE);
+        mockUpKeys.put("NIMUserInfoUpdateTagExt", UserInfoFieldEnum.EXTEND);
+
+        Map<UserInfoFieldEnum, Object> mapUserInfo = new HashMap<>();
+        for (Map.Entry<String, Object> entry : fields.entrySet()) {
+            mapUserInfo.put(mockUpKeys.get(entry.getKey()), entry.getValue());
+        }
+
+        NIMClient.getService(UserService.class).updateUserInfo(mapUserInfo).setCallback(new RequestCallbackWrapper() {
+            @Override
+            public void onResult(int code, Object result, Throwable exception) {
+                callback.onSuccess("200");
+            }
+
+            public void onFailed(int code) {
+                super.onFailed(code);
+                callback.onFailed(code);
+            }
+        });
     }
 
     /**
