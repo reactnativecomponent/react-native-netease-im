@@ -54,7 +54,7 @@ class NimTeam {
    */
   setTeamNotify(
     teamId: string,
-    needNotify: NIMTeamMessageNotifyEnum
+    needNotify: NIMCommonBooleanType
   ): Promise<NIMResponseCode> {
     return RNNeteaseIm.setTeamNotify(teamId, needNotify);
   }

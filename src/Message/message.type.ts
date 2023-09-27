@@ -1,4 +1,5 @@
-import { NIMSessionTypeEnum } from "../Session/session.type"
+import { NIMSessionTypeEnum } from "../Session/session.type";
+import { NIMCommonBooleanType } from "../utils/common.type";
 
 export enum NIMMessageTypeEnum {
   TEXT = "text",
@@ -30,21 +31,136 @@ export enum NIMMessageStatusEnum {
 }
 
 export interface NIMMessage {
-  extend:{
-    tipMsg:string
- },
- fromUser:{
-    _id:string,
-    avatar:string,
-    name:string
- },
- isOutgoing:boolean,
- isShowTime:boolean,
- msgId:string,
- msgType:NIMMessageTypeEnum,
- sessionId:string,
- sessionType:NIMSessionTypeEnum,
- status:NIMMessageStatusEnum,
- text:string,
- timeString:string
+  extend: {
+    tipMsg: string;
+  };
+  fromUser: {
+    _id: string;
+    avatar: string;
+    name: string;
+  };
+  isOutgoing: NIMCommonBooleanType;
+  isShowTime: NIMCommonBooleanType;
+  msgId: string;
+  msgType: NIMMessageTypeEnum;
+  sessionId: string;
+  sessionType: NIMSessionTypeEnum;
+  status: NIMMessageStatusEnum;
+  text: string;
+  timeString: string;
+}
+
+export enum NIMTranslateLanguageEnum {
+  SimplifiedChinese = "zh-CHS",
+  TraditionalChinese = "zh-CHT",
+  Vietnamese = "vi",
+  English = "en",
+  Indonesian = "id",
+  Italian = "it",
+  Spanish = "es",
+  Japanese = "ja",
+  Portuguese = "pt",
+  Korean = "ko",
+  French = "fr",
+  Russian = "ru",
+  German = "de",
+  Arabic = "ar",
+  Thai = "th",
+  Afrikaans = "af",
+  Bosnian = "bs",
+  Bulgarian = "bg",
+  Cantonese = "yue",
+  Catalan = "ca",
+  Croatian = "hr",
+  Czech = "cs",
+  Danish = "da",
+  Dutch = "nl",
+  Estonian = "et",
+  Fijian = "fj",
+  Finnish = "fi",
+  Greek = "el",
+  Haitian = "ht",
+  Hebrew = "he",
+  Hindi = "hi",
+  Hmong = "mww",
+  Hungarian = "hu",
+  Kiswahili = "sw",
+  Klingon = "tlh",
+  Latvian = "lv",
+  Lithuanian = "lt",
+  Malay = "ms",
+  Maltese = "mt",
+  Norwegian = "no",
+  Persian = "fa",
+  Polish = "pl",
+  QuerétaroOtomi = "otq",
+  Romanian = "ro",
+  SerbianCyrillic = "sr-Cyrl",
+  SerbianLatin = "sr-Latn",
+  Slovak = "sk",
+  Slovenian = "sl",
+  Swedish = "sv",
+  Tahitian = "ty",
+  Tongan = "to",
+  Turkish = "tr",
+  Ukrainian = "uk",
+  Urdu = "ur",
+  Welsh = "cy",
+  Yucatec = "yua",
+  Albanian = "sq",
+  Amharic = "am",
+  Armenian = "hy",
+  Azeerbaijani = "az",
+  Bangla = "bn",
+  Basque = "eu",
+  Belarusian = "be",
+  Cebuano = "ceb",
+  Corsican = "co",
+  Esperanto = "eo",
+  Filipino = "tl",
+  Frisian = "fy",
+  Galician = "gl",
+  Georgian = "ka",
+  Gujarati = "gu",
+  Hausa = "ha",
+  Hawaiian = "haw",
+  Icelandic = "is",
+  Igbo = "ig",
+  Irish = "ga",
+  Javanese = "jw",
+  Kannada = "kn",
+  Kazakh = "kk",
+  Khmer = "km",
+  Kurdish = "ku",
+  Kyrgyz = "ky",
+  Lao = "lo",
+  Latin = "la",
+  Luxembourgish = "lb",
+  Macedonian = "mk",
+  Malagasy = "mg",
+  Malayalam = "ml",
+  Maori = "mi",
+  Marathi = "mr",
+  Mongolian = "mn",
+  Myanmar = "my",
+  Nepali = "ne",
+  Nyanja = "ny",
+  Pashto = "ps",
+  Punjabi = "pa",
+  Samoan = "sm",
+  Scots = "gd",
+  Sesotho = "st",
+  Shona = "sn",
+  Sindhi = "sd",
+  Sinhala = "si",
+  Somali = "so",
+  Sundanese = "su",
+  Tajik = "tg",
+  Tamil = "ta",
+  Telugu = "te",
+  Uzbek = "uz",
+  Xhosa = "xh",
+  Yiddish = "yi",
+  Yoruba = "yo",
+  Zulu = "zu",
 }
