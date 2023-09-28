@@ -4,8 +4,10 @@ import android.text.TextUtils;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.netease.im.common.ImageLoaderKit;
 import com.netease.im.login.LoginService;
@@ -43,6 +45,7 @@ import com.netease.nimlib.sdk.msg.attachment.VideoAttachment;
 import com.netease.nimlib.sdk.msg.constant.MsgDirectionEnum;
 import com.netease.nimlib.sdk.msg.constant.MsgStatusEnum;
 import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
+import com.netease.nimlib.sdk.msg.constant.NotificationType;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.constant.SystemMessageStatus;
 import com.netease.nimlib.sdk.msg.constant.SystemMessageType;
@@ -51,10 +54,28 @@ import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.msg.model.RecentContact;
 import com.netease.nimlib.sdk.msg.model.SystemMessage;
 import com.netease.nimlib.sdk.team.constant.TeamMessageNotifyTypeEnum;
+import com.netease.nimlib.sdk.team.model.MemberChangeAttachment;
+//import com.netease.nimlib.sdk.team.model.MuteMemberAttachment;
 import com.netease.nimlib.sdk.team.model.Team;
 import com.netease.nimlib.sdk.team.model.TeamMember;
+//import com.netease.nimlib.sdk.team.model.UpdateTeamAttachment;
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
 import com.netease.nimlib.sdk.uinfo.model.UserInfo;
+
+//import com.netease.im.IMApplication;
+//import com.netease.im.R;
+//import com.netease.im.uikit.cache.TeamDataCache;
+//import com.netease.nimlib.sdk.msg.attachment.NotificationAttachment;
+//import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
+//import com.netease.nimlib.sdk.msg.model.IMMessage;
+//import com.netease.nimlib.sdk.team.constant.TeamAllMuteModeEnum;
+//import com.netease.nimlib.sdk.team.constant.TeamFieldEnum;
+//import com.netease.nimlib.sdk.team.constant.TeamTypeEnum;
+//import com.netease.nimlib.sdk.team.constant.VerifyTypeEnum;
+//import com.netease.nimlib.sdk.team.model.MemberChangeAttachment;
+//import com.netease.nimlib.sdk.team.model.MuteMemberAttachment;
+//import com.netease.nimlib.sdk.team.model.Team;
+//import com.netease.nimlib.sdk.team.model.UpdateTeamAttachment;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -63,6 +84,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import com.netease.nimlib.sdk.msg.attachment.NotificationAttachment;
 
 /**
  * Created by dowin on 2017/4/28.
@@ -183,6 +205,46 @@ public class ReactCache {
                             content = TeamNotificationHelper.getTeamNotificationText(contact.getContactId(),
                                     contact.getFromAccount(),
                                     (NotificationAttachment) contact.getAttachment());
+                            WritableMap notiObj = Arguments.createMap();
+//                    text = TeamNotificationHelper.getTeamNotificationText(item, item.getSessionId());
+
+                            NotificationAttachment attachment = (NotificationAttachment) contact.getAttachment();
+                            NotificationType operationType = attachment.getType();
+                            notiObj.putString("operationType", String.valueOf(operationType.getValue()));
+                            notiObj.putString("sourceId", contact.getFromAccount());
+
+                            switch (((NotificationAttachment) contact.getAttachment()).getType()) {
+                                case InviteMember:
+                                case KickMember:
+                                case PassTeamApply:
+                                case TransferOwner:
+                                case AddTeamManager:
+                                case RemoveTeamManager:
+                                case AcceptInvite:
+                                case MuteTeamMember:
+                                    MemberChangeAttachment memberAttachment = (MemberChangeAttachment) attachment;
+                                    ArrayList<String> targets = memberAttachment.getTargets();
+
+                                    WritableArray targetsWritableArray = Arguments.createArray();
+
+                                    for (String userId : targets) {
+                                        targetsWritableArray.pushString(userId);
+                                    }
+
+                                    notiObj.putArray("targets", targetsWritableArray);
+                                    break;
+                                case LeaveTeam:
+                                case DismissTeam:
+                                    notiObj.putArray("targets", null);
+                                    break;
+//                        case UpdateTeam:
+//                            text = buildUpdateTeamNotification(tid, fromAccount, (UpdateTeamAttachment) attachment);
+//                            break;
+                                default:
+                                    break;
+                            }
+
+                            map.putMap(MESSAGE_EXTEND, notiObj);
                         }
                         break;
                     default:
@@ -954,7 +1016,46 @@ public class ReactCache {
                 itemMap.putMap(MESSAGE_EXTEND, locationObj);
             } else if (item.getMsgType() == MsgTypeEnum.notification) {
                 if (item.getSessionType() == SessionTypeEnum.Team) {
-                    text = TeamNotificationHelper.getTeamNotificationText(item, item.getSessionId());
+                    WritableMap notiObj = Arguments.createMap();
+//                    text = TeamNotificationHelper.getTeamNotificationText(item, item.getSessionId());
+
+                    NotificationAttachment notiAttachment = (NotificationAttachment) attachment;
+                    NotificationType operationType = notiAttachment.getType();
+                    notiObj.putString("operationType", String.valueOf(operationType.getValue()));
+                    notiObj.putString("sourceId", item.getFromAccount());
+
+                    switch (((NotificationAttachment) item.getAttachment()).getType()) {
+                        case InviteMember:
+                        case KickMember:
+                        case PassTeamApply:
+                        case TransferOwner:
+                        case AddTeamManager:
+                        case RemoveTeamManager:
+                        case AcceptInvite:
+                        case MuteTeamMember:
+                            MemberChangeAttachment memberAttachment = (MemberChangeAttachment) notiAttachment;
+                            ArrayList<String> targets = memberAttachment.getTargets();
+
+                            WritableArray targetsWritableArray = Arguments.createArray();
+
+                            for (String userId : targets) {
+                                targetsWritableArray.pushString(userId);
+                            }
+
+                            notiObj.putArray("targets", targetsWritableArray);
+                            break;
+                        case LeaveTeam:
+                        case DismissTeam:
+                            notiObj.putArray("targets", null);
+                            break;
+//                        case UpdateTeam:
+//                            text = buildUpdateTeamNotification(tid, fromAccount, (UpdateTeamAttachment) attachment);
+//                            break;
+                        default:
+                            break;
+                    }
+
+                    itemMap.putMap(MESSAGE_EXTEND, notiObj);
                 } else {
                     text = item.getContent();
                 }
