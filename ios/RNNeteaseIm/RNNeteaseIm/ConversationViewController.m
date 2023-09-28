@@ -155,9 +155,50 @@
             succe(dict);
             NSLog(@"searchAllMessages: %@]", dict);
         } else {
-            err(error)
+            err(error);
         }
     }];
+}
+
+- (NSNumber *) getTypeOpretationType:(NIMTeamOperationType) operationType {
+    NSNumber *result = nil;
+
+    switch(operationType) {
+        case NIMTeamOperationTypeInvite:
+            result = @0;
+            break;
+        case NIMTeamOperationTypeKick:
+            result = @1;
+            break;
+        case NIMTeamOperationTypeLeave:
+            result = @2;
+            break;
+        case NIMTeamOperationTypeUpdate:
+            result = @3;
+            break;
+        case NIMTeamOperationTypeDismiss:
+            result = @4;
+            break;
+        case NIMTeamOperationTypeApplyPass:
+            result = @5;
+            break;
+        case NIMTeamOperationTypeTransferOwner:
+            result = @6;
+            break;
+        case NIMTeamOperationTypeAddManager:
+            result = @7;
+            break;
+        case NIMTeamOperationTypeRemoveManager:
+            result = @8;
+            break;
+        case NIMTeamOperationTypeAcceptInvitation:
+            result = @9;
+            break;
+        case NIMTeamOperationTypeMute:
+            result = @10;
+            break;
+    }
+    return result;
 }
 
 - (NSMutableDictionary *)setNotiTeamObj:(NIMMessage *)message {
@@ -1010,7 +1051,7 @@
         [dic2 setObject:notiObj forKey:@"extend"];
     }else if (message.messageType == NIMMessageTypeNotification) {
         [dic2 setObject:@"notification" forKey:@"msgType"];
-        [dic setObject:[self setNotiTeamObj:message] forKey:@"extend"];        
+        [dic2 setObject:[self setNotiTeamObj:message] forKey:@"extend"];        
     }else if (message.messageType == NIMMessageTypeCustom) {
         NIMCustomObject *customObject = message.messageObject;
         DWCustomAttachment *obj = customObject.attachment;
