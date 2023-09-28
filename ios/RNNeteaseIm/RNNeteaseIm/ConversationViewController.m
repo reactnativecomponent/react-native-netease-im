@@ -161,7 +161,7 @@
 }
 
 - (NSNumber *) getTypeOpretationType:(NIMTeamOperationType) operationType {
-    NSNumber *result = nil;
+    NSNumber *result = @-1;
 
     switch(operationType) {
         case NIMTeamOperationTypeInvite:
@@ -196,6 +196,8 @@
             break;
         case NIMTeamOperationTypeMute:
             result = @10;
+            break;
+        default:
             break;
     }
     return result;
