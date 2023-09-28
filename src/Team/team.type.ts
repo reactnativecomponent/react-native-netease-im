@@ -15,6 +15,20 @@ export enum NIMCreateTeamVerifyEnum {
   Private = "2",
 }
 
+export enum NIMTeamOperationType {
+  NIMTeamOperationTypeInvite = 0,
+  NIMTeamOperationTypeKick = 1,
+  NIMTeamOperationTypeLeave = 2,
+  NIMTeamOperationTypeUpdate = 3,
+  NIMTeamOperationTypeDismiss = 4,
+  NIMTeamOperationTypeApplyPass = 5,
+  NIMTeamOperationTypeTransferOwner = 6,
+  NIMTeamOperationTypeAddManager = 7,
+  NIMTeamOperationTypeRemoveManager = 8,
+  NIMTeamOperationTypeAcceptInvitation = 9,
+  NIMTeamOperationTypeMute = 10,
+}
+
 export enum NIMCreateTeamInviteModeEnum {
   Manager = "0",
   All = "1",

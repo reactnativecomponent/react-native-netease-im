@@ -1,4 +1,5 @@
-import { NIMSessionTypeEnum } from "../Session/session.type"
+import { NIMSessionTypeEnum } from "../Session/session.type";
+import { NIMTeamOperationType } from "../Team/team.type";
 
 export enum NIMMessageTypeEnum {
   TEXT = "text",
@@ -30,21 +31,24 @@ export enum NIMMessageStatusEnum {
 }
 
 export interface NIMMessage {
-  extend:{
-    tipMsg:string
- },
- fromUser:{
-    _id:string,
-    avatar:string,
-    name:string
- },
- isOutgoing:boolean,
- isShowTime:boolean,
- msgId:string,
- msgType:NIMMessageTypeEnum,
- sessionId:string,
- sessionType:NIMSessionTypeEnum,
- status:NIMMessageStatusEnum,
- text:string,
- timeString:string
+  extend?: {
+    tipMsg?: string;
+    sourceId?: string;
+    targets?: string[];
+    operationType?: NIMTeamOperationType;
+  };
+  fromUser: {
+    _id: string;
+    avatar: string;
+    name: string;
+  };
+  isOutgoing: boolean;
+  isShowTime: boolean;
+  msgId: string;
+  msgType: NIMMessageTypeEnum;
+  sessionId: string;
+  sessionType: NIMSessionTypeEnum;
+  status: NIMMessageStatusEnum;
+  text: string;
+  timeString: string;
 }

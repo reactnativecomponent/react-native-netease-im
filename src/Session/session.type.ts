@@ -2,6 +2,7 @@ import {
   NIMMessageStatusEnum,
   NIMMessageTypeEnum,
 } from "../Message/message.type";
+import { NIMTeamOperationType } from "../Team/team.type";
 
 export enum NIMSessionTypeEnum {
   None = "None",
@@ -59,4 +60,9 @@ export interface NimSessionType {
   contactId: string;
   imagePath: string;
   name: string;
+  extend?: {
+    sourceId?: string;
+    targets?: string[];
+    operationType?: NIMTeamOperationType;
+  };
 }

@@ -78,4 +78,8 @@ typedef void(^Errors)(id erro);
 - (NIMMessage *)msgWithTip:(NSString *)tip;
 //重发消息
 - (void)resendMessage:(NSString *)messageID;
+
+// search local Messages
+- (void) searchMessages:(NSString *)keyWords success:(Success)succe err:(Errors)err;
+
 @end

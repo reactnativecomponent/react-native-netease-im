@@ -293,6 +293,15 @@ RCT_EXPORT_METHOD(setMessageNotify:(nonnull NSString *)contactId needNotify:(non
     }];
 }
 
+//search local Messages
+RCT_EXPORT_METHOD(searchMessages:(nonnull NSString *)keyWords resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
+    [[ConversationViewController initWithConversationViewController] searchMessages:keyWords success:^(id param) {
+        resolve(param);
+    } err:^(id erro) {
+        reject(@"-1",erro,nil);
+    }];
+}
+
 //刷新最近会话列表
 - (void)updateMessageList{
     [[NIMViewController initWithController]getResouces];

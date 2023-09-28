@@ -137,6 +137,77 @@
     }
 }
 
+//search local Messages
+- (void)searchMessages:(NSString *)keyWords success:(Success)succe err:(Errors)err{
+    NIMMessageSearchOption *option = [[NIMMessageSearchOption alloc] init];
+    option.limit = 100;
+    option.searchContent = keyWords;
+
+    [[NIMSDK sharedSDK].conversationManager searchAllMessages:option result:^(NSError * _Nullable error, NSDictionary<NIMSession *,NSArray<NIMMessage *> *> * _Nullable messages) {
+        NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+
+        if (!error) {
+           for (NIMSession* key in messages) {
+                id value = [messages objectForKey:key];
+                
+                [dict setValue:[self setTimeArr:value] forKey:key.sessionId];
+            }
+            succe(dict);
+            NSLog(@"searchAllMessages: %@]", dict);
+        } else {
+            err(error)
+        }
+    }];
+}
+
+- (NSMutableDictionary *)setNotiTeamObj:(NIMMessage *)message {
+    NSMutableDictionary *notiObj = [NSMutableDictionary dictionary];
+    NIMNotificationObject *messageObject = message.messageObject;
+    NIMTeamNotificationContent *content = (NIMTeamNotificationContent*)messageObject.content;
+    
+//            const NSDictionary* keys = @{
+//              @"NIMTeamOperationTypeInvite":           @(0),
+//              @"NIMTeamOperationTypeKick":             @(1),
+//              @"NIMTeamOperationTypeLeave":            @(2),
+//              @"NIMTeamOperationTypeUpdate":           @(3),
+//              @"NIMTeamOperationTypeDismiss":          @(4),
+//              @"NIMTeamOperationTypeApplyPass":        @(5),
+//              @"NIMTeamOperationTypeTransferOwner":    @(6),
+//              @"NIMTeamOperationTypeAddManager":       @(7),
+//              @"NIMTeamOperationTypeRemoveManager":    @(8),
+//              @"NIMTeamOperationTypeAcceptInvitation": @(9),
+//              @"NIMTeamOperationTypeMute":             @(10),
+//          };
+//
+//            NSNumber *state = [keys objectForKey:content.operationType];
+                
+    NSString *sourceId = content.sourceID;
+    NSMutableArray *targets = [[NSMutableArray alloc] init];
+    for (NSString *item in content.targetIDs) {
+        [targets addObject:item];
+    }
+    
+    
+    switch (messageObject.notificationType) {
+        case NIMNotificationTypeTeam:
+        case NIMNotificationTypeChatroom:
+        {
+            
+            [notiObj setObject:sourceId forKey:@"sourceId"];
+            [notiObj setObject:targets forKey:@"targets"];
+            [notiObj setObject:[self getTypeOpretationType:content.operationType]  forKey:@"operationType"];
+            break;
+        }
+        case NIMNotificationTypeNetCall:{
+            [notiObj setObject:[NIMKitUtil messageTipContent:message]forKey:@"tipMsg"];
+            break;
+        }
+        default:
+            break;
+    }
+    
+    return notiObj;
+}
 
 -(NSMutableArray *)setTimeArr:(NSArray *)messageArr{
     NSMutableArray *sourcesArr = [NSMutableArray array];
@@ -266,25 +337,8 @@
             [dic setObject:notiObj forKey:@"extend"];
         }else if (message.messageType == NIMMessageTypeNotification) {
             [dic setObject:@"notification" forKey:@"msgType"];
-            NSMutableDictionary *notiObj = [NSMutableDictionary dictionary];
-            NIMNotificationObject *object = message.messageObject;
-            switch (object.notificationType) {
-                case NIMNotificationTypeTeam:
-                case NIMNotificationTypeChatroom:
-                {
-                    
-                    [notiObj setObject:[NIMKitUtil messageTipContent:message] forKey:@"tipMsg"];
-                    break;
-                }
-                case NIMNotificationTypeNetCall:{
-                    [notiObj setObject:[NIMKitUtil messageTipContent:message]forKey:@"tipMsg"];
-                    break;
-                }
-                default:
-                    break;
-            }
-            [dic setObject:notiObj forKey:@"extend"];
-            
+           
+            [dic setObject:[self setNotiTeamObj:message] forKey:@"extend"];
         }else if (message.messageType == NIMMessageTypeCustom) {
             NIMCustomObject *customObject = message.messageObject;
             DWCustomAttachment *obj = customObject.attachment;
@@ -956,27 +1010,7 @@
         [dic2 setObject:notiObj forKey:@"extend"];
     }else if (message.messageType == NIMMessageTypeNotification) {
         [dic2 setObject:@"notification" forKey:@"msgType"];
-        NSMutableDictionary *notiObj = [NSMutableDictionary dictionary];
-        NIMNotificationObject *object = message.messageObject;
-        switch (object.notificationType) {
-            case NIMNotificationTypeTeam:
-            case NIMNotificationTypeChatroom:
-            {
-                
-                [notiObj setObject:[NIMKitUtil messageTipContent:message] forKey:@"tipMsg"];
-                break;
-            }
-            case NIMNotificationTypeNetCall:{
-                [notiObj setObject:[NIMKitUtil messageTipContent:message]forKey:@"tipMsg"];
-                
-                
-                break;
-            }
-            default:
-                break;
-        }
-        [dic2 setObject:notiObj forKey:@"extend"];
-        
+        [dic setObject:[self setNotiTeamObj:message] forKey:@"extend"];        
     }else if (message.messageType == NIMMessageTypeCustom) {
         NIMCustomObject *customObject = message.messageObject;
         DWCustomAttachment *obj = customObject.attachment;
