@@ -1,6 +1,7 @@
 package com.netease.im;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
@@ -53,12 +54,16 @@ import com.netease.nimlib.sdk.msg.model.AttachmentProgress;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.msg.model.RecentContact;
 import com.netease.nimlib.sdk.msg.model.SystemMessage;
+import com.netease.nimlib.sdk.team.constant.TeamFieldEnum;
 import com.netease.nimlib.sdk.team.constant.TeamMessageNotifyTypeEnum;
+import com.netease.nimlib.sdk.team.constant.VerifyTypeEnum;
 import com.netease.nimlib.sdk.team.model.MemberChangeAttachment;
 //import com.netease.nimlib.sdk.team.model.MuteMemberAttachment;
 import com.netease.nimlib.sdk.team.model.Team;
 import com.netease.nimlib.sdk.team.model.TeamMember;
 //import com.netease.nimlib.sdk.team.model.UpdateTeamAttachment;
+import com.netease.nimlib.sdk.team.model.UpdateTeamAttachment;
+import com.netease.nimlib.sdk.uinfo.constant.UserInfoFieldEnum;
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
 import com.netease.nimlib.sdk.uinfo.model.UserInfo;
 
@@ -237,9 +242,32 @@ public class ReactCache {
                                 case DismissTeam:
                                     notiObj.putArray("targets", null);
                                     break;
-//                        case UpdateTeam:
-//                            text = buildUpdateTeamNotification(tid, fromAccount, (UpdateTeamAttachment) attachment);
-//                            break;
+                                case UpdateTeam:
+                                    Map<TeamFieldEnum, String> mockUpKeys = new HashMap();
+                                    mockUpKeys.put(TeamFieldEnum.Name, "NIMTeamUpdateTagName");
+                                    mockUpKeys.put(TeamFieldEnum.Introduce, "NIMTeamUpdateTagIntro");
+                                    mockUpKeys.put(TeamFieldEnum.Announcement, "NIMTeamUpdateTagAnouncement");
+                                    mockUpKeys.put(TeamFieldEnum.VerifyType, "NIMTeamUpdateTagJoinMode");
+                                    mockUpKeys.put(TeamFieldEnum.ICON, "NIMTeamUpdateTagAvatar");
+                                    mockUpKeys.put(TeamFieldEnum.InviteMode, "NIMTeamUpdateTagInviteMode");
+                                    mockUpKeys.put(TeamFieldEnum.BeInviteMode, "NIMTeamUpdateTagBeInviteMode");
+                                    mockUpKeys.put(TeamFieldEnum.TeamUpdateMode, "NIMTeamUpdateTagUpdateInfoMode");
+                                    mockUpKeys.put(TeamFieldEnum.AllMute, "NIMTeamUpdateTagMuteMode");
+
+                                    UpdateTeamAttachment updateTeamAttachment = (UpdateTeamAttachment) attachment;
+                                    Set<Map.Entry<TeamFieldEnum, Object>> updateTeamAttachmentDetail = updateTeamAttachment.getUpdatedFields().entrySet();
+                                    WritableMap updateDetail = Arguments.createMap();
+
+                                    for (Map.Entry<TeamFieldEnum, Object> field : updateTeamAttachmentDetail) {
+                                        updateDetail.putString("type", mockUpKeys.get(field.getKey()));
+                                        updateDetail.putString("value", field.getValue().toString());
+
+                                        // Log.d("tét field.toString", field.toString() );
+                                        // Log.d("tét field.getKey()", field.getKey().toString() );
+                                        // Log.d("tét field.getValue()", field.getValue().toString() );
+                                    }
+                                    notiObj.putMap("updateDetail", updateDetail);
+                                    break;
                                 default:
                                     break;
                             }
@@ -1048,9 +1076,32 @@ public class ReactCache {
                         case DismissTeam:
                             notiObj.putArray("targets", null);
                             break;
-//                        case UpdateTeam:
-//                            text = buildUpdateTeamNotification(tid, fromAccount, (UpdateTeamAttachment) attachment);
-//                            break;
+                        case UpdateTeam:
+                            Map<TeamFieldEnum, String> mockUpKeys = new HashMap();
+                            mockUpKeys.put(TeamFieldEnum.Name, "NIMTeamUpdateTagName");
+                            mockUpKeys.put(TeamFieldEnum.Introduce, "NIMTeamUpdateTagIntro");
+                            mockUpKeys.put(TeamFieldEnum.Announcement, "NIMTeamUpdateTagAnouncement");
+                            mockUpKeys.put(TeamFieldEnum.VerifyType, "NIMTeamUpdateTagJoinMode");
+                            mockUpKeys.put(TeamFieldEnum.ICON, "NIMTeamUpdateTagAvatar");
+                            mockUpKeys.put(TeamFieldEnum.InviteMode, "NIMTeamUpdateTagInviteMode");
+                            mockUpKeys.put(TeamFieldEnum.BeInviteMode, "NIMTeamUpdateTagBeInviteMode");
+                            mockUpKeys.put(TeamFieldEnum.TeamUpdateMode, "NIMTeamUpdateTagUpdateInfoMode");
+                            mockUpKeys.put(TeamFieldEnum.AllMute, "NIMTeamUpdateTagMuteMode");
+
+                            UpdateTeamAttachment updateTeamAttachment = (UpdateTeamAttachment) attachment;
+                            Set<Map.Entry<TeamFieldEnum, Object>> updateTeamAttachmentDetail = updateTeamAttachment.getUpdatedFields().entrySet();
+                            WritableMap updateDetail = Arguments.createMap();
+
+                            for (Map.Entry<TeamFieldEnum, Object> field : updateTeamAttachmentDetail) {
+                                updateDetail.putString("type", mockUpKeys.get(field.getKey()));
+                                updateDetail.putString("value", field.getValue().toString());
+
+                                // Log.d("tét field.toString", field.toString() );
+                                // Log.d("tét field.getKey()", field.getKey().toString() );
+                                // Log.d("tét field.getValue()", field.getValue().toString() );
+                            }
+                            notiObj.putMap("updateDetail", updateDetail);
+                            break;
                         default:
                             break;
                     }

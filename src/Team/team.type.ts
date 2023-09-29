@@ -29,6 +29,18 @@ export enum NIMTeamOperationType {
   NIMTeamOperationTypeMute = 10,
 }
 
+export enum NIMTeamOperationTypeUpdateDetail {
+  NIMTeamUpdateTagName = "NIMTeamUpdateTagName",
+  NIMTeamUpdateTagIntro = "NIMTeamUpdateTagIntro",
+  NIMTeamUpdateTagAnouncement = "NIMTeamUpdateTagAnouncement",
+  NIMTeamUpdateTagJoinMode = "NIMTeamUpdateTagJoinMode",
+  NIMTeamUpdateTagAvatar = "NIMTeamUpdateTagAvatar",
+  NIMTeamUpdateTagInviteMode = "NIMTeamUpdateTagInviteMode",
+  NIMTeamUpdateTagBeInviteMode = "NIMTeamUpdateTagBeInviteMode",
+  NIMTeamUpdateTagUpdateInfoMode = "NIMTeamUpdateTagUpdateInfoMode",
+  NIMTeamUpdateTagMuteMode = "NIMTeamUpdateTagMuteMode",
+}
+
 export enum NIMCreateTeamInviteModeEnum {
   Manager = "0",
   All = "1",
@@ -97,10 +109,10 @@ export interface NIMTeamDetailType {
 }
 
 export enum NIMTeamMemberEnum {
-  Normal = '0',
-  Owner = '1',
-  Manager = '2',
-  Apply   = '3',
+  Normal = "0",
+  Owner = "1",
+  Manager = "2",
+  Apply = "3",
 }
 
 export interface NIMTeamMemberType {

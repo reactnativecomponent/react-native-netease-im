@@ -235,14 +235,54 @@
         case NIMNotificationTypeTeam:
         case NIMNotificationTypeChatroom:
         {
-            
+            NSString *operationtype = [NIMKitUtil messageTipContent:message];
             [notiObj setObject:sourceId forKey:@"sourceId"];
             [notiObj setObject:targets forKey:@"targets"];
-            [notiObj setObject:[self getTypeOpretationType:content.operationType]  forKey:@"operationType"];
+            [notiObj setObject:operationtype  forKey:@"operationType"];
+            
+            if (content.operationType == NIMTeamOperationTypeUpdate) {
+                id attachment = [content attachment];
+                if ([attachment isKindOfClass:[NIMUpdateTeamInfoAttachment class]]) {
+                    NIMUpdateTeamInfoAttachment *teamAttachment = (NIMUpdateTeamInfoAttachment *)attachment;
+                    
+                    for (id key in teamAttachment.values) {
+                        NSLog(@"key: %@, value: %@ \n", key, [teamAttachment.values objectForKey:key]);
+                    }
+                    
+                    if ([teamAttachment.values count] == 1) {
+                        const NSDictionary* keys = @{
+                          @(NIMTeamUpdateTagName): @"NIMTeamUpdateTagName",
+                          @(NIMTeamUpdateTagIntro): @"NIMTeamUpdateTagIntro",
+                          @(NIMTeamUpdateTagAnouncement): @"NIMTeamUpdateTagAnouncement",
+                          @(NIMTeamUpdateTagJoinMode): @"NIMTeamUpdateTagJoinMode",
+                          @(NIMTeamUpdateTagAvatar): @"NIMTeamUpdateTagAvatar",
+                          @(NIMTeamUpdateTagInviteMode): @"NIMTeamUpdateTagInviteMode",
+                          @(NIMTeamUpdateTagBeInviteMode): @"NIMTeamUpdateTagBeInviteMode",
+                          @(NIMTeamUpdateTagUpdateInfoMode): @"NIMTeamUpdateTagUpdateInfoMode",
+                          @(NIMTeamUpdateTagMuteMode): @"NIMTeamUpdateTagMuteMode",
+                        };
+                        
+                        NSDictionary *mapDict = [[NSMutableDictionary alloc] init];
+
+                        for (id key in teamAttachment.values) {
+                            NSLog(@"keyzzz: %@, value: %@ \n", key, [teamAttachment.values objectForKey:key]);
+
+                            NSNumber *keyId = [keys objectForKey: key];
+                            NSString *value = [teamAttachment.values objectForKey:key];
+                            mapDict = @{@"type": keyId, @"value": value};
+                        }
+                        
+                        NSLog(@"Testtt %@", mapDict);
+
+                        [notiObj setObject:mapDict  forKey:@"updateDetail"];
+                    }
+                }
+            }
+           
             break;
         }
         case NIMNotificationTypeNetCall:{
-            [notiObj setObject:[NIMKitUtil messageTipContent:message]forKey:@"tipMsg"];
+            [notiObj setObject:[NIMKitUtil messageTipContent:message] forKey:@"tipMsg"];
             break;
         }
         default:

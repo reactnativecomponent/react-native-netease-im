@@ -1,5 +1,8 @@
 import { NIMSessionTypeEnum } from "../Session/session.type";
-import { NIMTeamOperationType } from "../Team/team.type";
+import {
+  NIMTeamOperationType,
+  NIMTeamOperationTypeUpdateDetail,
+} from "../Team/team.type";
 
 export enum NIMMessageTypeEnum {
   TEXT = "text",
@@ -36,6 +39,10 @@ export interface NIMMessage {
     sourceId?: string;
     targets?: string[];
     operationType?: NIMTeamOperationType;
+    updateDetail?: {
+      type: NIMTeamOperationTypeUpdateDetail;
+      value: any;
+    };
   };
   fromUser: {
     _id: string;
