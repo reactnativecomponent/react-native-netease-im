@@ -235,7 +235,7 @@
         case NIMNotificationTypeTeam:
         case NIMNotificationTypeChatroom:
         {
-            NSString *operationtype = [NIMKitUtil messageTipContent:message];
+            NSString *operationtype = [self getTypeOpretationType:content.operationType];
             [notiObj setObject:sourceId forKey:@"sourceId"];
             [notiObj setObject:targets forKey:@"targets"];
             [notiObj setObject:operationtype  forKey:@"operationType"];
