@@ -216,7 +216,7 @@ public class ReactCache {
                             NotificationAttachment attachment = (NotificationAttachment) contact.getAttachment();
                             NotificationType operationType = attachment.getType();
                             notiObj.putString("operationType", String.valueOf(operationType.getValue()));
-                            notiObj.putString("sourceId", contact.getFromAccount());
+                            notiObj.putString("sourceId", getTeamUserDisplayName(contactId, contact.getFromAccount()));
 
                             switch (((NotificationAttachment) contact.getAttachment()).getType()) {
                                 case InviteMember:
@@ -233,7 +233,7 @@ public class ReactCache {
                                     WritableArray targetsWritableArray = Arguments.createArray();
 
                                     for (String userId : targets) {
-                                        targetsWritableArray.pushString(userId);
+                                        targetsWritableArray.pushString(getTeamUserDisplayName(contactId, userId));
                                     }
 
                                     notiObj.putArray("targets", targetsWritableArray);
@@ -1050,7 +1050,7 @@ public class ReactCache {
                     NotificationAttachment notiAttachment = (NotificationAttachment) attachment;
                     NotificationType operationType = notiAttachment.getType();
                     notiObj.putString("operationType", String.valueOf(operationType.getValue()));
-                    notiObj.putString("sourceId", item.getFromAccount());
+                    notiObj.putString("sourceId", getTeamUserDisplayName(item.getSessionId(), item.getFromAccount()));
 
                     switch (((NotificationAttachment) item.getAttachment()).getType()) {
                         case InviteMember:
@@ -1067,7 +1067,7 @@ public class ReactCache {
                             WritableArray targetsWritableArray = Arguments.createArray();
 
                             for (String userId : targets) {
-                                targetsWritableArray.pushString(userId);
+                                targetsWritableArray.pushString(getTeamUserDisplayName(item.getSessionId(), item.getFromAccount()));
                             }
 
                             notiObj.putArray("targets", targetsWritableArray);
