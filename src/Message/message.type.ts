@@ -43,6 +43,10 @@ export interface NIMMessage {
       type: NIMTeamOperationTypeUpdateDetail;
       value: any;
     };
+    // audio message
+    duration: number;
+    isPlayed: boolean;
+    url: string;
   };
   fromUser: {
     _id: string;
@@ -58,4 +62,7 @@ export interface NIMMessage {
   status: NIMMessageStatusEnum;
   text: string;
   timeString: string;
+  // audio message
+  mediaPath: string;
+  duration: number;
 }
