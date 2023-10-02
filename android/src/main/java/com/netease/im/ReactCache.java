@@ -173,7 +173,12 @@ public class ReactCache {
                 map.putString("imageLocal", ImageLoaderKit.getMemoryCachedAvatar(imagePath));
                 map.putString("name", name);
                 map.putString("sessionType", Integer.toString(contact.getSessionType().getValue()));
-                map.putString("msgType", Integer.toString(contact.getMsgType().getValue()));
+//                map.putString("msgType", getMessageType(contact.getMsgType(),(CustomAttachment) contact.getAttachment()));
+                if (contact.getMsgType() == MsgTypeEnum.custom) {
+                    map.putString(MessageConstant.Message.MSG_TYPE, getMessageType(contact.getMsgType(),(CustomAttachment) contact.getAttachment()));
+                } else {
+                    map.putString(MessageConstant.Message.MSG_TYPE, getMessageType(contact.getMsgType(), null));
+                }
                 map.putString("msgStatus", Integer.toString(contact.getMsgStatus().getValue()));
                 map.putString("messageId", contact.getRecentMessageId());
 
@@ -837,9 +842,9 @@ public class ReactCache {
      *
      * @return
      */
-    static String getMessageType(IMMessage item) {
+    static String getMessageType(MsgTypeEnum msgType, CustomAttachment attachment) {
         String type = MessageConstant.MsgType.CUSTON;
-        switch (item.getMsgType()) {
+        switch (msgType) {
             case text:
                 type = MessageConstant.MsgType.TEXT;
                 break;
@@ -868,12 +873,6 @@ public class ReactCache {
                 type = MessageConstant.MsgType.ROBOT;
                 break;
             case custom:
-                CustomAttachment attachment = null;
-                try {
-                    attachment = (CustomAttachment) item.getAttachment();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
                 if (attachment != null) {
                     switch (attachment.getType()) {
                         case CustomAttachmentType.RedPacket:
@@ -952,7 +951,12 @@ public class ReactCache {
         WritableMap itemMap = Arguments.createMap();
         itemMap.putString(MessageConstant.Message.MSG_ID, item.getUuid());
 
-        itemMap.putString(MessageConstant.Message.MSG_TYPE, getMessageType(item));
+        if (item.getMsgType() == MsgTypeEnum.custom) {
+            itemMap.putString(MessageConstant.Message.MSG_TYPE, getMessageType(item.getMsgType(),(CustomAttachment) item.getAttachment()));
+        } else {
+            itemMap.putString(MessageConstant.Message.MSG_TYPE, getMessageType(item.getMsgType(), null));
+        }
+
         itemMap.putString(MessageConstant.Message.TIME_STRING, Long.toString(item.getTime() / 1000));
         itemMap.putString(MessageConstant.Message.SESSION_ID, item.getSessionId());
         itemMap.putString(MessageConstant.Message.SESSION_TYPE, Integer.toString(item.getSessionType().getValue()));
