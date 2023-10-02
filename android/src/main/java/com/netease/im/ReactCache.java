@@ -1071,7 +1071,7 @@ public class ReactCache {
                             WritableArray targetsWritableArray = Arguments.createArray();
 
                             for (String userId : targets) {
-                                targetsWritableArray.pushString(getTeamUserDisplayName(item.getSessionId(), item.getFromAccount()));
+                                targetsWritableArray.pushString(getTeamUserDisplayName(item.getSessionId(), userId));
                             }
 
                             notiObj.putArray("targets", targetsWritableArray);
