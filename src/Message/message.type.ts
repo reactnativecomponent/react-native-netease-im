@@ -64,4 +64,5 @@ export interface NIMMessage {
   timeString: string;
   // audio message
   mediaPath: string;
+  duration: number;
 }
