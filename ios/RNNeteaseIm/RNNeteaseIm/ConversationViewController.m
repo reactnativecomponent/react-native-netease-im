@@ -203,28 +203,42 @@
     return result;
 }
 
+- (NSString *)teamNotificationSourceName:(NIMMessage *)message{
+    NSString *source;
+    NIMNotificationObject *object = message.messageObject;
+    NIMTeamNotificationContent *content = (NIMTeamNotificationContent*)object.content;
+//    NSString *currentAccount = [[NIMSDK sharedSDK].loginManager currentAccount];
+//    if ([content.sourceID isEqualToString:currentAccount]) {
+//        source = @"你";
+//    }else{
+        source = [NIMKitUtil showNick:content.sourceID inSession:message.session];
+//    }
+    return source;
+}
+
+- (NSArray *)teamNotificationTargetNames:(NIMMessage *)message{
+    NSMutableArray *targets = [[NSMutableArray alloc] init];
+    NIMNotificationObject *object = message.messageObject;
+    NIMTeamNotificationContent *content = (NIMTeamNotificationContent*)object.content;
+//    NSString *currentAccount = [[NIMSDK sharedSDK].loginManager currentAccount];
+    for (NSString *item in content.targetIDs) {
+//        if ([item isEqualToString:currentAccount]) {
+//            [targets addObject:@"你"];
+//        }else{
+            NSString *targetShowName = [NIMKitUtil showNick:item inSession:message.session];
+            [targets addObject:targetShowName];
+//        }
+    }
+    return targets;
+}
+
+
 - (NSMutableDictionary *)setNotiTeamObj:(NIMMessage *)message {
     NSMutableDictionary *notiObj = [NSMutableDictionary dictionary];
     NIMNotificationObject *messageObject = message.messageObject;
     NIMTeamNotificationContent *content = (NIMTeamNotificationContent*)messageObject.content;
-    
-//            const NSDictionary* keys = @{
-//              @"NIMTeamOperationTypeInvite":           @(0),
-//              @"NIMTeamOperationTypeKick":             @(1),
-//              @"NIMTeamOperationTypeLeave":            @(2),
-//              @"NIMTeamOperationTypeUpdate":           @(3),
-//              @"NIMTeamOperationTypeDismiss":          @(4),
-//              @"NIMTeamOperationTypeApplyPass":        @(5),
-//              @"NIMTeamOperationTypeTransferOwner":    @(6),
-//              @"NIMTeamOperationTypeAddManager":       @(7),
-//              @"NIMTeamOperationTypeRemoveManager":    @(8),
-//              @"NIMTeamOperationTypeAcceptInvitation": @(9),
-//              @"NIMTeamOperationTypeMute":             @(10),
-//          };
-//
-//            NSNumber *state = [keys objectForKey:content.operationType];
                 
-    NSString *sourceId = content.sourceID;
+//    NSString *sourceId = content.sourceID;
     NSMutableArray *targets = [[NSMutableArray alloc] init];
     for (NSString *item in content.targetIDs) {
         [targets addObject:item];
@@ -236,8 +250,8 @@
         case NIMNotificationTypeChatroom:
         {
             NSNumber *operationtype = [self getTypeOpretationType:content.operationType];
-            [notiObj setObject:sourceId forKey:@"sourceId"];
-            [notiObj setObject:targets forKey:@"targets"];
+            [notiObj setObject:[self teamNotificationSourceName:message] forKey:@"sourceId"];
+            [notiObj setObject:[self teamNotificationTargetNames:message] forKey:@"targets"];
             [notiObj setObject:operationtype  forKey:@"operationType"];
             
             if (content.operationType == NIMTeamOperationTypeUpdate) {

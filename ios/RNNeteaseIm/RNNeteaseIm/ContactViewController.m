@@ -198,7 +198,7 @@
         @"NIMUserInfoUpdateTagExt": @(NIMUserInfoUpdateTagExt),
     };
     
-    NSMutableDictionary *mapDict = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary<NSNumber *,id> *mapDict = [[NSMutableDictionary alloc] init];
     
     for (id key in newUserInfo) {
         NSNumber *keyId = [keys objectForKey: key];

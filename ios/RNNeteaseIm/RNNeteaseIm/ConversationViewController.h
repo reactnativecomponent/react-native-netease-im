@@ -82,5 +82,9 @@ typedef void(^Errors)(id erro);
 // search local Messages
 - (void) searchMessages:(NSString *)keyWords success:(Success)succe err:(Errors)err;
 
+- (NSString *)teamNotificationSourceName:(NIMMessage *)message;
+
+- (NSArray *)teamNotificationTargetNames:(NIMMessage *)message;
+
 - (NSMutableDictionary *)setNotiTeamObj:(NIMMessage *)message;
 @end
