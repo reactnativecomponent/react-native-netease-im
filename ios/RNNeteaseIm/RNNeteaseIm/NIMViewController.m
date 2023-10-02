@@ -163,6 +163,47 @@
     [self getResouces];
 }
 
+- (NSString *)getMessageType:(NIMMessageType)messageType{
+    NSString *result = @"";
+    switch (messageType) {
+        case NIMMessageTypeText:
+            result = @"text";
+            break;
+        case NIMMessageTypeImage:
+            result = @"image";
+            break;
+        case NIMMessageTypeAudio:
+            result = @"voice";
+            break;
+        case NIMMessageTypeVideo:
+            result = @"video";
+            break;
+        case NIMMessageTypeLocation:
+            result = @"location";
+            break;
+        case NIMMessageTypeNotification:
+            result = @"notification";
+            break;
+        case NIMMessageTypeTip:
+            result = @"tip";
+            break;
+        case NIMMessageTypeRobot:
+            result = @"robot";
+            break;
+        case NIMMessageTypeRtcCallRecord:
+            result = @"callRecord";
+            break;
+        case NIMMessageTypeCustom:
+            result = @"custom";
+            break;
+            
+        default:
+            break;
+    }
+    
+    return result;
+};
+
 
 
 -(void)getRecentContactListsuccess:(SUCCESS)suc andError:(ERROR)err{
@@ -179,7 +220,7 @@
         //账号
         [dic setObject:[NSString stringWithFormat:@"%@", recent.lastMessage.from] forKey:@"account"];
         //消息类型
-        [dic setObject:[NSString stringWithFormat:@"%zd", recent.lastMessage.messageType] forKey:@"msgType"];
+        [dic setObject:[NSString stringWithFormat:@"%@", [self getMessageType: recent.lastMessage.messageType]] forKey:@"msgType"];
         //消息状态
         [dic setObject:[NSString stringWithFormat:@"%zd", recent.lastMessage.deliveryState] forKey:@"msgStatus"];
         //消息ID
@@ -232,7 +273,7 @@
             //账号
             [dic setObject:[NSString stringWithFormat:@"%@",recent.lastMessage.session.sessionId] forKey:@"account"];
             //消息类型
-            [dic setObject:[NSString stringWithFormat:@"%zd", recent.lastMessage.messageType] forKey:@"msgType"];
+            [dic setObject:[NSString stringWithFormat:@"%@", [self getMessageType: recent.lastMessage.messageType]] forKey:@"msgType"];
             //消息状态
             [dic setObject:[NSString stringWithFormat:@"%zd", recent.lastMessage.deliveryState] forKey:@"msgStatus"];
             //消息ID
@@ -263,7 +304,7 @@
                 //账号
                 [dic setObject:[NSString stringWithFormat:@"%@", recent.lastMessage.from] forKey:@"account"];
                 //消息类型
-                [dic setObject:[NSString stringWithFormat:@"%zd", recent.lastMessage.messageType] forKey:@"msgType"];
+                [dic setObject:[NSString stringWithFormat:@"%@", [self getMessageType: recent.lastMessage.messageType]] forKey:@"msgType"];
                 //消息状态
                 [dic setObject:[NSString stringWithFormat:@"%zd", recent.lastMessage.deliveryState] forKey:@"msgStatus"];
                 //消息ID
