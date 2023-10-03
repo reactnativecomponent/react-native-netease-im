@@ -216,12 +216,17 @@ public class ReactCache {
                                     contact.getFromAccount(),
                                     (NotificationAttachment) contact.getAttachment());
                             WritableMap notiObj = Arguments.createMap();
-//                    text = TeamNotificationHelper.getTeamNotificationText(item, item.getSessionId());
 
                             NotificationAttachment attachment = (NotificationAttachment) contact.getAttachment();
                             NotificationType operationType = attachment.getType();
+                            String sourceId = contact.getFromAccount();
+
+                            WritableMap sourceIdMap = Arguments.createMap();
+                            sourceIdMap.putString("sourceName", getTeamUserDisplayName(contactId, sourceId));
+                            sourceIdMap.putString("sourceId", sourceId);
+
                             notiObj.putString("operationType", String.valueOf(operationType.getValue()));
-                            notiObj.putString("sourceId", getTeamUserDisplayName(contactId, contact.getFromAccount()));
+                            notiObj.putMap("sourceId", sourceIdMap);
 
                             switch (((NotificationAttachment) contact.getAttachment()).getType()) {
                                 case InviteMember:
@@ -237,8 +242,14 @@ public class ReactCache {
 
                                     WritableArray targetsWritableArray = Arguments.createArray();
 
-                                    for (String userId : targets) {
-                                        targetsWritableArray.pushString(getTeamUserDisplayName(contactId, userId));
+                                    for (String targetId : targets) {
+                                        String targetName = getTeamUserDisplayName(contactId, targetId);
+
+                                        WritableMap target = Arguments.createMap();
+                                        target.putString("targetName", targetName);
+                                        target.putString("targetId", targetId);
+
+                                        targetsWritableArray.pushMap(target);
                                     }
 
                                     notiObj.putArray("targets", targetsWritableArray);
@@ -1053,8 +1064,14 @@ public class ReactCache {
 
                     NotificationAttachment notiAttachment = (NotificationAttachment) attachment;
                     NotificationType operationType = notiAttachment.getType();
+                    String sourceId = item.getFromAccount();
+
+                    WritableMap sourceIdMap = Arguments.createMap();
+                    sourceIdMap.putString("sourceName", getTeamUserDisplayName(item.getSessionId(), sourceId));
+                    sourceIdMap.putString("sourceId", sourceId);
+
                     notiObj.putString("operationType", String.valueOf(operationType.getValue()));
-                    notiObj.putString("sourceId", getTeamUserDisplayName(item.getSessionId(), item.getFromAccount()));
+                    notiObj.putMap("sourceId", sourceIdMap);
 
                     switch (((NotificationAttachment) item.getAttachment()).getType()) {
                         case InviteMember:
@@ -1070,8 +1087,14 @@ public class ReactCache {
 
                             WritableArray targetsWritableArray = Arguments.createArray();
 
-                            for (String userId : targets) {
-                                targetsWritableArray.pushString(getTeamUserDisplayName(item.getSessionId(), userId));
+                            for (String targetId : targets) {
+                                String targetName = getTeamUserDisplayName(item.getSessionId(), targetId);
+
+                                WritableMap target = Arguments.createMap();
+                                target.putString("targetName", targetName);
+                                target.putString("targetId", targetId);
+
+                                targetsWritableArray.pushMap(target);
                             }
 
                             notiObj.putArray("targets", targetsWritableArray);
