@@ -1,4 +1,7 @@
-import { NIMSessionTypeEnum } from "../Session/session.type";
+import {
+  NIMSessionTypeEnum,
+  NimSessionTypeExtend,
+} from "../Session/session.type";
 import {
   NIMTeamOperationType,
   NIMTeamOperationTypeUpdateDetail,
@@ -33,21 +36,28 @@ export enum NIMMessageStatusEnum {
   RECEIVE_UNREAD = "receive_unread",
 }
 
+export interface NimMessageTypeExtend extends NimSessionTypeExtend {
+  duration: number;
+  isPlayed: boolean;
+  url: string;
+}
+
 export interface NIMMessage {
-  extend?: {
-    tipMsg?: string;
-    sourceId?: string;
-    targets?: string[];
-    operationType?: NIMTeamOperationType;
-    updateDetail?: {
-      type: NIMTeamOperationTypeUpdateDetail;
-      value: any;
-    };
-    // audio message
-    duration: number;
-    isPlayed: boolean;
-    url: string;
-  };
+  extend?: NimMessageTypeExtend;
+  //  {
+  //   tipMsg?: string;
+  //   sourceId?: string;
+  //   targets?: string[];
+  //   operationType?: NIMTeamOperationType;
+  //   updateDetail?: {
+  //     type: NIMTeamOperationTypeUpdateDetail;
+  //     value: any;
+  //   };
+  //   // audio message
+  //   duration: number;
+  //   isPlayed: boolean;
+  //   url: string;
+  // };
   fromUser: {
     _id: string;
     avatar: string;

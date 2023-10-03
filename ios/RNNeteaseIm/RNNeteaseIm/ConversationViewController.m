@@ -203,16 +203,17 @@
     return result;
 }
 
-- (NSString *)teamNotificationSourceName:(NIMMessage *)message{
-    NSString *source;
+- (NSDictionary *)teamNotificationSourceName:(NIMMessage *)message{
     NIMNotificationObject *object = message.messageObject;
     NIMTeamNotificationContent *content = (NIMTeamNotificationContent*)object.content;
 //    NSString *currentAccount = [[NIMSDK sharedSDK].loginManager currentAccount];
 //    if ([content.sourceID isEqualToString:currentAccount]) {
 //        source = @"你";
 //    }else{
-        source = [NIMKitUtil showNick:content.sourceID inSession:message.session];
+    const NSString *sourceName = [NIMKitUtil showNick:content.sourceID inSession:message.session];
 //    }
+    const NSDictionary *source = @{@"sourceName": sourceName, @"sourceId":content.sourceID};
+    
     return source;
 }
 
@@ -225,8 +226,9 @@
 //        if ([item isEqualToString:currentAccount]) {
 //            [targets addObject:@"你"];
 //        }else{
-            NSString *targetShowName = [NIMKitUtil showNick:item inSession:message.session];
-            [targets addObject:targetShowName];
+        NSString *targetShowName = [NIMKitUtil showNick:item inSession:message.session];
+        const NSDictionary *target = @{@"targetName":targetShowName, @"targetId":item};
+        [targets addObject:target];
 //        }
     }
     return targets;

@@ -51,6 +51,17 @@ export interface CustomMessageType {
   recentContent: string[];
 }
 
+export interface NimSessionTypeExtend {
+  tipMsg?: string;
+  sourceId?: { sourceId: string; sourceName: string };
+  targets?: Array<{ targetId: string; targetName: string }>;
+  operationType?: NIMTeamOperationType;
+  updateDetail?: {
+    type: NIMTeamOperationTypeUpdateDetail;
+    value: any;
+  };
+}
+
 export interface NimSessionType {
   account: string;
   msgStatus: NIMMessageStatusEnum;
@@ -63,14 +74,5 @@ export interface NimSessionType {
   contactId: string;
   imagePath: string;
   name: string;
-  extend?: {
-    tipMsg?: string;
-    sourceId?: string;
-    targets?: string[];
-    operationType?: NIMTeamOperationType;
-    updateDetail?: {
-      type: NIMTeamOperationTypeUpdateDetail;
-      value: any;
-    };
-  };
+  extend?: NimSessionTypeExtend;
 }
