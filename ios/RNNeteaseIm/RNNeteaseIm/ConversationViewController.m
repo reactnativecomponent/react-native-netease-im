@@ -541,16 +541,23 @@
                                    duration:duration];
 }
 //开始播放录音
-- (void)play:(NSString *)filepath{
+- (void)play:(NSString *)filepath {
     [[NIMSDK sharedSDK].mediaManager addDelegate:self];
     if (filepath) {
         [[NIMSDK sharedSDK].mediaManager play:filepath];
     }
 }
 //停止播放
-- (void)stopPlay{
+- (void)stopPlay {
     [[NIMSDK sharedSDK].mediaManager stopPlay];
 }
+
+//停止播放
+- (BOOL)isPlayingRecord {
+    return [[NIMSDK sharedSDK].mediaManager isPlaying];
+}
+
+
 //发送录音
 -(void)sendAudioMessage:(  NSString *)file duration:(  NSString *)duration{
     if (file) {
@@ -895,12 +902,44 @@
     NSDictionary *Audic = @{@"currentTime":[NSString stringWithFormat:@"%f",currentTime],@"recordPower":[NSString stringWithFormat:@"%f",[[NIMSDK sharedSDK].mediaManager recordPeakPower]]};
     model.audioDic = Audic;
 }
+//播放结束回调
+- (void)playAudio:(NSString *)filePath didBeganWithError:(nullable NSError *)error{
+    NSLog(@"didBeganWithError");
+    if(!error) {
+        NIMModel *model = [NIMModel initShareMD];
+        NSDictionary *Audic = @{@"status":@"start"};
+        model.audioDic = Audic;
+    } else {
+        NSLog(@"%@",error);
+    }
+}
 
 //播放结束回调
 - (void)playAudio:(NSString *)filePath didCompletedWithError:(nullable NSError *)error{
+    NSLog(@"didCompletedWithError");
+
     if(!error) {
         NIMModel *model = [NIMModel initShareMD];
-        NSDictionary *Audic = @{@"playEnd":@"true"};
+        NSDictionary *Audic = @{@"status":@"completed"};
+        model.audioDic = Audic;
+    } else {
+        NSLog(@"%@",error);
+    }
+}
+
+- (void)playAudio:(NSString *)filePath progress:(float)value {
+    NSLog(@"progress");
+
+    NIMModel *model = [NIMModel initShareMD];
+    NSDictionary *Audic = @{@"status":@"progress", @"current": @(value)};
+    model.audioDic = Audic;
+}
+
+- (void)stopPlayAudio:(NSString *)filePath didCompletedWithError:(nullable NSError *)error {
+    NSLog(@"stopPlayAudio didBeganWithError");
+    if(!error) {
+        NIMModel *model = [NIMModel initShareMD];
+        NSDictionary *Audic = @{@"status":@"stop"};
         model.audioDic = Audic;
     } else {
         NSLog(@"%@",error);

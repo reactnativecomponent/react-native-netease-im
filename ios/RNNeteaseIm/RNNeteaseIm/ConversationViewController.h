@@ -87,4 +87,6 @@ typedef void(^Errors)(id erro);
 - (NSArray *)teamNotificationTargetNames:(NIMMessage *)message;
 
 - (NSMutableDictionary *)setNotiTeamObj:(NIMMessage *)message;
+
+- (BOOL) isPlayingRecord;
 @end

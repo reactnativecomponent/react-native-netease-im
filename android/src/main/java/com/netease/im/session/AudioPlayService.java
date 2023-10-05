@@ -188,7 +188,7 @@ public class AudioPlayService implements SensorEventListener {
     };
 
     //playing or ready
-    private boolean isPlayingAudio() {
+    public boolean isPlayingAudio() {
 
         if (currentAudioPlayer != null) {
             return state == AudioControllerState.playing
@@ -252,13 +252,13 @@ public class AudioPlayService implements SensorEventListener {
                 listenerPlayingAudioPlayer.seekTo((int) seekPosition);
                 position = seekPosition;
             }
-//            ReactCache.emit(ReactCache.observeAudioRecord, ReactCache.createAudioPlay("prepared", position));
+            ReactCache.emit(ReactCache.observeAudioRecord, ReactCache.createAudioPlay("start", position));
         }
 
         @Override
         public void onCompletion() {
             state = AudioControllerState.stop;
-            ReactCache.emit(ReactCache.observeAudioRecord, ReactCache.createAudioPlay("completion", position));
+            ReactCache.emit(ReactCache.observeAudioRecord, ReactCache.createAudioPlay("completed", position));
         }
 
         @Override
@@ -277,7 +277,7 @@ public class AudioPlayService implements SensorEventListener {
         public void onPlaying(long curPosition) {
             state = AudioControllerState.playing;
             position = curPosition;
-//            ReactCache.emit(ReactCache.observeAudioRecord, ReactCache.createAudioPlay("playing", curPosition));
+            ReactCache.emit(ReactCache.observeAudioRecord, ReactCache.createAudioPlay("progress", curPosition));
         }
     }
 }

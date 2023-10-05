@@ -449,6 +449,12 @@ RCT_EXPORT_METHOD(playLocal:(nonnull NSString *)name type:(nonnull NSString *)ty
     [[ConversationViewController initWithConversationViewController]play:path];
 }
 
+RCT_EXPORT_METHOD(getIsPlayingRecord: (RCTResponseSenderBlock)callback){
+   BOOL isPlayingRecord = [[ConversationViewController initWithConversationViewController] isPlayingRecord];
+    
+    callback(@[@(isPlayingRecord)]);
+}
+
 //停止播放
 RCT_EXPORT_METHOD(stopPlay){
     [[ConversationViewController initWithConversationViewController]stopPlay];

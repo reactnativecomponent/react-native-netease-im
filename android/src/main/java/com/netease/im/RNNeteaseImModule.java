@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.facebook.react.bridge.ActivityEventListener;
 import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -1765,6 +1766,13 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
     @ReactMethod
     public void play(String audioFile, Promise promise) {
         audioPlayService.play(handler, reactContext, audioFile);
+    }
+
+    @ReactMethod
+    public void getIsPlayingRecord(Callback callBack) {
+        Boolean isPlaying = audioPlayService.isPlayingAudio();
+
+        callBack.invoke(isPlaying);
     }
 
     @ReactMethod

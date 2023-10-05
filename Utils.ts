@@ -37,6 +37,10 @@ class NimUtils {
     return RNNeteaseIm.playLocal("assets:///" + name + "." + type, type);
   }
 
+  getIsPlayingRecord(callback: (isPlaying: boolean) => void) {
+    return RNNeteaseIm.getIsPlayingRecord(callback);
+  }
+
   /**
    * 停止播放录音
    * @returns {*}
