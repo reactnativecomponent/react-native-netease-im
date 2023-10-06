@@ -742,6 +742,37 @@ public class ReactCache {
         return writableArray;
     }
 
+      /**
+     * @param messageList
+     * @return Object
+     */
+    public static WritableMap createMessageObjectList(List<IMMessage> messageList) {
+        WritableMap objectGroupMessages = Arguments.createMap();
+
+        if (messageList != null) {
+            int size = messageList.size();
+            for (int i = 0; i < size; i++) {
+
+                IMMessage item = messageList.get(i);
+                if (item != null) {
+                    WritableMap itemMap = createMessage(item);
+                    String sessionId = item.getSessionId();
+                    WritableArray newMessages = Arguments.createArray();
+
+                    if (objectGroupMessages.hasKey(sessionId)) {
+                        ReadableArray currentMessages = objectGroupMessages.getArray(sessionId);
+                        newMessages = Arguments.fromArray(currentMessages.toArrayList());
+                    }
+
+                    newMessages.pushMap(itemMap);
+                    objectGroupMessages.putArray(sessionId, newMessages);
+                }
+            }
+        }
+
+        return objectGroupMessages;
+    }
+
     static String getMessageNotifyType(TeamMessageNotifyTypeEnum notifyTypeEnum){
         String notify = "1";
         if(notifyTypeEnum==TeamMessageNotifyTypeEnum.All){

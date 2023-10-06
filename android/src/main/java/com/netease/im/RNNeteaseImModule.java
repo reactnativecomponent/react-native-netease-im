@@ -25,6 +25,7 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableType;
+import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.netease.im.common.ResourceUtil;
 import com.netease.im.contact.BlackListObserver;
@@ -66,6 +67,7 @@ import com.netease.nimlib.sdk.msg.SystemMessageService;
 import com.netease.nimlib.sdk.msg.constant.MsgStatusEnum;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
+import com.netease.nimlib.sdk.msg.model.MsgSearchOption;
 import com.netease.nimlib.sdk.msg.model.QueryDirectionEnum;
 import com.netease.nimlib.sdk.msg.model.RecentContact;
 import com.netease.nimlib.sdk.msg.model.SystemMessage;
@@ -544,7 +546,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
                 });
     }
 
-      /**
+    /**
      * add manager to Team
      *
      * @param teamId
@@ -556,8 +558,8 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
         ArrayList<String> strList = (ArrayList<String>)(ArrayList<?>)(userIds.toArrayList());
 
         NIMClient.getService(TeamService.class)
-            .addManagers(teamId, strList)
-            .setCallback(new RequestCallback<List<TeamMember>>() {
+                .addManagers(teamId, strList)
+                .setCallback(new RequestCallback<List<TeamMember>>() {
                     @Override
                     public void onSuccess(List<TeamMember> managers) {
                         promise.resolve("" + teamId);
@@ -571,7 +573,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
                     @Override
                     public void onException(Throwable exception) {
                     }
-            });
+                });
     }
 
     /**
@@ -586,23 +588,23 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
         ArrayList<String> strList = (ArrayList<String>)(ArrayList<?>)(userIds.toArrayList());
 
         NIMClient.getService(TeamService.class)
-            .removeManagers(teamId, strList)
-            .setCallback(new RequestCallback<List<TeamMember>>() {
-                @Override
-                public void onSuccess(List<TeamMember> managers) {
-                    promise.resolve("" + teamId);
-                }
+                .removeManagers(teamId, strList)
+                .setCallback(new RequestCallback<List<TeamMember>>() {
+                    @Override
+                    public void onSuccess(List<TeamMember> managers) {
+                        promise.resolve("" + teamId);
+                    }
 
-                @Override
-                public void onFailed(int code) {
-                    promise.reject("" + code, "");
-                }
+                    @Override
+                    public void onFailed(int code) {
+                        promise.reject("" + code, "");
+                    }
 
-                @Override
-                public void onException(Throwable exception) {
-                    // 错误
-                }
-            });
+                    @Override
+                    public void onException(Throwable exception) {
+                        // 错误
+                    }
+                });
     }
 
     /**
@@ -1424,7 +1426,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
         NIMClient.getService(MsgService.class).clearChattingHistory(sessionId, sessionTypeEnum);
     }
 
-   /**
+    /**
      * 更新用户资料
      *
      * @param newUserInfo
@@ -1612,7 +1614,6 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
         IMMessage message = MessageBuilder.createEmptyMessage(sessionId, sessionTypeEnum, time);
         NIMClient.getService(MsgService.class).queryMessageListEx(message, directionEnum, limit, string2Boolean(asc))
                 .setCallback(new RequestCallbackWrapper<List<IMMessage>>() {
-
                     @Override
                     public void onResult(int code, List<IMMessage> result, Throwable exception) {
                         if (code == ResponseCode.RES_SUCCESS) {
@@ -1620,7 +1621,32 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
                                 Object a = ReactCache.createMessageList(result);
                                 promise.resolve(a);
                                 return;
+                            }
+                        }
+                        promise.reject("" + code, "");
+                    }
+                });
+    }
 
+    @ReactMethod
+    public void searchMessages(String keyWords, final Promise promise) {
+        LogUtil.d("test searchMessages,");
+
+        MsgSearchOption option = new MsgSearchOption();
+        option.setSearchContent(keyWords);
+        option.setLimit(100);
+
+        NIMClient.getService(MsgService.class).searchAllMessage(option)
+                .setCallback(new RequestCallbackWrapper<List<IMMessage>>(){
+                    @Override
+                    public void onResult(int code, List<IMMessage> result, Throwable exception) {
+                        LogUtil.d("test searchMessages,", result.toString());
+                        if (code == ResponseCode.RES_SUCCESS) {
+                            if (result != null && result.size() > 0) {
+                                WritableMap a = ReactCache.createMessageObjectList(result);
+
+                                promise.resolve(a);
+                                return;
                             }
                         }
                         promise.reject("" + code, "");

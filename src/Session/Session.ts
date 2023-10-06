@@ -5,6 +5,7 @@ import {
   NIMQueryDirectionEnum,
   NIMSendAttachmentEnum,
 } from "./session.type";
+import { NIMMessage } from "../Message/message.type";
 const { RNNeteaseIm } = NativeModules;
 
 class NimSession {
@@ -75,6 +76,11 @@ class NimSession {
   queryMessageListEx(messageId: string, limit: number) {
     return RNNeteaseIm.queryMessageListEx(messageId, limit);
   }
+
+  searchMessages(keyWords: string): Promise<Record<string, NIMMessage>> {
+    return RNNeteaseIm.searchMessages(keyWords);
+  }
+
   /**
    * 获取最近聊天内容
    * @param sessionId 聊天会话ID,
