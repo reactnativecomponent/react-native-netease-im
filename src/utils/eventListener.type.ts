@@ -13,3 +13,10 @@ export enum NIMEventListenerEnum {
   observeAttachmentProgress = "observeAttachmentProgress",
   observeOnKick = "observeOnKick",
 }
+
+export enum NIMAudioMsgStatusType {
+  START = "start",
+  PROGRESS = "progress",
+  COMPLETED = "completed",
+  STOP = "stop",
+}
