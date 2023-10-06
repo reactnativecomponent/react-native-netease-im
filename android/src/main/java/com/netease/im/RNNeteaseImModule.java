@@ -1630,8 +1630,6 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
 
     @ReactMethod
     public void searchMessages(String keyWords, final Promise promise) {
-        LogUtil.d("test searchMessages,");
-
         MsgSearchOption option = new MsgSearchOption();
         option.setSearchContent(keyWords);
         option.setLimit(100);
