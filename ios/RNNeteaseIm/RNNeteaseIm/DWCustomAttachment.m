@@ -29,7 +29,7 @@
             strType = @"redpacketOpen";
             break;
         case CustomMessageTypeFowardMultipleText:
-            strType = @"fowardMultipleText";
+            strType = @"forwardMultipleText";
             break;
         case CustomMessgeTypeBusinessCard:
             strType = @"card";

@@ -29,7 +29,7 @@
                 custType = CustomMessgeTypeBankTransfer;
             }else if([strType isEqualToString:@"url"]){//链接
                 custType = CustomMessgeTypeUrl;
-            } else if([strType isEqualToString:@"fowardMultipleText"]){//链接
+            } else if([strType isEqualToString:@"forwardMultipleText"]){//链接
                 custType = CustomMessageTypeFowardMultipleText;
             } else if([strType isEqualToString:@"account_notice"]){//账户资金变动
                 custType = CustomMessgeTypeAccountNotice;

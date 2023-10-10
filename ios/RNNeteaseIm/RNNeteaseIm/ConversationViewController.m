@@ -447,7 +447,7 @@
                     case CustomMessageTypeFowardMultipleText: //红包
                     {
                         [dic setObject:obj.dataDict forKey:@"extend"];
-                        [dic setObject:@"fowardMultipleText" forKey:@"msgType"];
+                        [dic setObject:@"forwardMultipleText" forKey:@"msgType"];
                     }
                         break;
                     case CustomMessgeTypeRedpacket: //红包
@@ -1183,7 +1183,7 @@
                 case CustomMessageTypeFowardMultipleText: //红包
                 {
                     [dic2 setObject:obj.dataDict forKey:@"extend"];
-                    [dic2 setObject:@"fowardMultipleText" forKey:@"msgType"];
+                    [dic2 setObject:@"forwardMultipleText" forKey:@"msgType"];
                 }
                     break;
                 case CustomMessgeTypeRedpacket: //红包
