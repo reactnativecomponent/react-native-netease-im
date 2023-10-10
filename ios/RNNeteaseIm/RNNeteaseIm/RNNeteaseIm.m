@@ -400,9 +400,16 @@ RCT_EXPORT_METHOD(sendAudioMessage:(nonnull  NSString *)file duration:(nonnull  
     [[ConversationViewController initWithConversationViewController]sendAudioMessage:file duration:duration];
 }
 //发送自定义消息
-RCT_EXPORT_METHOD(sendCustomMessage:(nonnull  NSDictionary *)attachment){
-    [[ConversationViewController initWithConversationViewController]sendCustomMessage:attachment];
+RCT_EXPORT_METHOD(sendCustomMessage:(NSInteger)custType attachment: (nonnull  NSDictionary *)attachment){
+//    [[ConversationViewController initWithConversationViewController]sendCustomMessage:custType data:attachment];
 }
+
+//发送自定义消息
+RCT_EXPORT_METHOD(forwardMultipleTextMessage: (nonnull  NSDictionary *)attachment  sessionId:(nonnull NSString *)sessionId sessionType:(nonnull NSString *)sessionType content:(nonnull NSString *)content){
+//forwardMessagesText:CustomMessageTypeFowardMultipleText data:attachment sessionId:sessionId sessionType:sessionType content:content data:attachment
+    [[ConversationViewController initWithConversationViewController] forwardMultipleTextMessage:CustomMessageTypeFowardMultipleText data:attachment sessionId:sessionId sessionType:sessionType content:content];
+}
+
 //发送视频消息
 RCT_EXPORT_METHOD(sendVideoMessage:(nonnull  NSString *)file duration:(nonnull  NSString *)duration width:(nonnull  NSString *)width height:(nonnull  NSString *)height displayName:(nonnull  NSString *)displayName){
     [[ConversationViewController initWithConversationViewController]sendVideoMessage:file duration:duration width:width height:height displayName:displayName];
@@ -411,7 +418,7 @@ RCT_EXPORT_METHOD(sendVideoMessage:(nonnull  NSString *)file duration:(nonnull  
 
 //发送地理位置消息
 RCT_EXPORT_METHOD(sendLocationMessage:(nonnull  NSString *)latitude longitude:(nonnull  NSString *)longitude address:(nonnull  NSString *)address){
-    [[ConversationViewController initWithConversationViewController]sendLocationMessage:latitude longitude:longitude address:address];
+   [[ConversationViewController initWithConversationViewController]sendLocationMessage:latitude longitude:longitude address:address];
 }
 //开启录音权限
 RCT_EXPORT_METHOD(onTouchVoice:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){

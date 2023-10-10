@@ -45,6 +45,7 @@
 #define CustomMessgeTypeRedPacketOpenMessage  9     //发送拆红包
 #define CustomMessgeTypeBusinessCard  10     //名片
 #define CustomMessgeTypeCustom  102     //名片
+#define CustomMessageTypeFowardMultipleText 1102
 
 
 #endif /* ImConfig_h */

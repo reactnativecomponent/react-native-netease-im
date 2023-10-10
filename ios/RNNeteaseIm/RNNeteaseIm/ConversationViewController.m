@@ -441,8 +441,15 @@
         }else if (message.messageType == NIMMessageTypeCustom) {
             NIMCustomObject *customObject = message.messageObject;
             DWCustomAttachment *obj = customObject.attachment;
+            NSLog(@"DWCustomAttachment *obj %ld %@", (long)obj.custType, obj.dataDict);
             if (obj) {
                 switch (obj.custType) {
+                    case CustomMessageTypeFowardMultipleText: //红包
+                    {
+                        [dic setObject:obj.dataDict forKey:@"extend"];
+                        [dic setObject:@"fowardMultipleText" forKey:@"msgType"];
+                    }
+                        break;
                     case CustomMessgeTypeRedpacket: //红包
                     {
                         [dic setObject:obj.dataDict forKey:@"extend"];
@@ -604,24 +611,43 @@
 //    }];
 }
 
-//发送自定义消息
--(void)sendCustomMessage:(NSDictionary *)dataDict{
-    NSString *strW = [dataDict objectForKey:@"Width"] ? [NSString stringWithFormat:@"%@",[dataDict objectForKey:@"Width"]] : @"0";
-    NSString *strH = [dataDict objectForKey:@"Height"] ? [NSString stringWithFormat:@"%@",[dataDict objectForKey:@"Height"]] : @"0";
-    [dataDict setValue:strW forKey:@"Width"];
-    [dataDict setValue:strH forKey:@"Height"];
-    [self sendCustomMessage:CustomMessgeTypeCustom data:dataDict];
-}
+////发送自定义消息
+//-(void)sendCustomMessage:(NSDictionary *)dataDict{
+//    NSString *strW = [dataDict objectForKey:@"Width"] ? [NSString stringWithFormat:@"%@",[dataDict objectForKey:@"Width"]] : @"0";
+//    NSString *strH = [dataDict objectForKey:@"Height"] ? [NSString stringWithFormat:@"%@",[dataDict objectForKey:@"Height"]] : @"0";
+//    [dataDict setValue:strW forKey:@"Width"];
+//    [dataDict setValue:strH forKey:@"Height"];
+//    [self sendCustomMessage:CustomMessgeTypeCustom data:dataDict];
+//}
 
 //发送自定义消息2
--(void)sendCustomMessage:(NSInteger )custType data:(NSDictionary *)dataDict{
+-(void)sendCustomMessage:(NSInteger )custType data:(NSDictionary *)dataDict {
     NIMMessage *message;
     DWCustomAttachment *obj = [[DWCustomAttachment alloc]init];
+    NSLog(@"custType %ld", (long)custType);
     obj.custType = custType;
     obj.dataDict = dataDict;
     message = [NIMMessageMaker msgWithCustomAttachment:obj andeSession:self._session];
     if ([self isFriendToSendMessage:message]) {
         [[NIMSDK sharedSDK].chatManager sendMessage:message toSession:self._session error:nil];
+    }
+}
+
+//发送自定义消息2
+-(void)forwardMultipleTextMessage:(NSInteger )custType data:(NSDictionary *)dataDict sessionId:(NSString *)sessionId sessionType:(NSString *)sessionType content:(NSString *)content {
+    NIMSession *session = [NIMSession session:sessionId type:[sessionType integerValue]];
+    
+    NIMMessage *message;
+    DWCustomAttachment *obj = [[DWCustomAttachment alloc]init];
+    NSLog(@"custType %ld", (long)custType);
+    obj.custType = custType;
+    obj.dataDict = dataDict;
+    
+    message = [NIMMessageMaker msgWithCustomAttachment:obj andeSession:session];
+    message.text = content;
+    
+    if ([self isFriendToSendMessage:message]) {
+        [[NIMSDK sharedSDK].chatManager sendMessage:message toSession:session error:nil];
     }
 }
 
@@ -1154,6 +1180,12 @@
         DWCustomAttachment *obj = customObject.attachment;
         if (obj) {
             switch (obj.custType) {
+                case CustomMessageTypeFowardMultipleText: //红包
+                {
+                    [dic2 setObject:obj.dataDict forKey:@"extend"];
+                    [dic2 setObject:@"fowardMultipleText" forKey:@"msgType"];
+                }
+                    break;
                 case CustomMessgeTypeRedpacket: //红包
                 {
                     [dic2 setObject:obj.dataDict forKey:@"extend"];

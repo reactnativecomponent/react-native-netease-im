@@ -28,6 +28,9 @@
         case CustomMessgeTypeRedPacketOpenMessage:
             strType = @"redpacketOpen";
             break;
+        case CustomMessageTypeFowardMultipleText:
+            strType = @"fowardMultipleText";
+            break;
         case CustomMessgeTypeBusinessCard:
             strType = @"card";
             break;
@@ -38,8 +41,8 @@
             strType = @"unknown";
             break;
     }
-    
-    NSDictionary *dict = @{@"msgtype" : strType,@"data":self.dataDict};
+    NSLog(@"custType msgtype %ld,%@", (long)self.custType ,strType);
+    NSDictionary *dict = @{@"msgtype" : strType, @"data": self.dataDict};
     NSData *data = [NSJSONSerialization dataWithJSONObject:dict
                                                    options:0
                                                      error:nil];

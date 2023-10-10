@@ -219,8 +219,84 @@
         [dic setObject:[NSString stringWithFormat:@"%@", [self nameForRecentSession:recent] ] forKey:@"name"];
         //账号
         [dic setObject:[NSString stringWithFormat:@"%@", recent.lastMessage.from] forKey:@"account"];
-        //消息类型
-        [dic setObject:[NSString stringWithFormat:@"%@", [self getMessageType: recent.lastMessage.messageType]] forKey:@"msgType"];
+//        //消息类型
+        if (recent.lastMessage.messageType == NIMMessageTypeCustom) {
+            NIMCustomObject *customObject = recent.lastMessage.messageObject;
+            DWCustomAttachment *obj = customObject.attachment;
+            NSLog(@"DWCustomAttachment *obj %ld %@", (long)obj.custType, obj.dataDict);
+            if (obj) {
+                switch (obj.custType) {
+                    case CustomMessageTypeFowardMultipleText: //红包
+                    {
+//                        [dic setObject:obj.dataDict forKey:@"extend"];
+                        [dic setObject:@"fowardMultipleText" forKey:@"msgType"];
+                    }
+                        break;
+                    case CustomMessgeTypeRedpacket: //红包
+                    {
+                        [dic setObject:obj.dataDict forKey:@"extend"];
+                        //                        [dic setObject:@"redpacket" forKey:@"custType"];
+                        [dic setObject:@"redpacket" forKey:@"msgType"];
+                    }
+                        break;
+                    case CustomMessgeTypeBankTransfer: //转账
+                    {
+                        [dic setObject:obj.dataDict  forKey:@"extend"];
+                        //                        [dic setObject:@"transfer" forKey:@"custType"];
+                        [dic setObject:@"transfer" forKey:@"msgType"];
+                    }
+                        break;
+                    case CustomMessgeTypeRedPacketOpenMessage: //拆红包消息
+                    {
+                        NSDictionary *dataDict = [self dealWithData:obj.dataDict];
+                        if (dataDict) {
+                            [dic setObject:dataDict  forKey:@"extend"];
+                            //                            [dic setObject:@"redpacketOpen" forKey:@"custType"];
+                            [dic setObject:@"redpacketOpen" forKey:@"msgType"];
+                        }else{
+                            
+                            continue;//终止本次循环
+                        }
+                    }
+                        break;
+                    case CustomMessgeTypeUrl: //链接
+                    case CustomMessgeTypeAccountNotice: //账户通知，与账户金额相关变动
+                    {
+                        [dic setObject:[NSString stringWithFormat:@"%d",recent.lastMessage.isRemoteRead] forKey:@"isRemoteRead"];
+                        //                        [dic setObject:[NSString stringWithFormat:@"%ld", message.messageType] forKey:@"msgType"];
+                        if (obj.custType == CustomMessgeTypeAccountNotice) {
+                            [dic setObject:obj.dataDict  forKey:@"extend"];
+                            [dic setObject:@"account_notice" forKey:@"msgType"];
+                        }else{
+                            [dic setObject:obj.dataDict  forKey:@"extend"];
+                            [dic setObject:@"url" forKey:@"msgType"];
+                        }
+                    }
+                        break;
+                    case CustomMessgeTypeBusinessCard://名片
+                    {
+                        [dic setObject:obj.dataDict  forKey:@"extend"];
+                        [dic setObject:@"card" forKey:@"msgType"];
+                    }
+                        break;
+                    case CustomMessgeTypeCustom://自定义
+                    {
+                        [dic setObject:obj.dataDict  forKey:@"extend"];
+                        [dic setObject:@"custom" forKey:@"msgType"];
+                    }
+                        break;
+                    default:
+                    {
+                        [dic setObject:obj.dataDict  forKey:@"extend"];
+                        [dic setObject:@"unknown" forKey:@"msgType"];
+                    }
+                        break;
+                        
+                }
+            }
+        } else {
+            [dic setObject:[NSString stringWithFormat:@"%@", [self getMessageType: recent.lastMessage.messageType]] forKey:@"msgType"];
+        }
         //消息状态
         [dic setObject:[NSString stringWithFormat:@"%zd", recent.lastMessage.deliveryState] forKey:@"msgStatus"];
         //消息ID
@@ -230,7 +306,7 @@
 
         if (recent.lastMessage.messageType == NIMMessageTypeNotification) {           
         // if message type is NIMNotificationTypeTeam/NIMNotificationTypeChatroom/NIMNotificationTypeNetCall
-        [dic setObject:[[ConversationViewController initWithConversationViewController]setNotiTeamObj:recent.lastMessage] forKey:@"extend"];        
+            [dic setObject:[[ConversationViewController initWithConversationViewController]setNotiTeamObj:recent.lastMessage] forKey:@"extend"];
         }
 
         //发送时间
@@ -272,8 +348,84 @@
             [dic setObject:[NSString stringWithFormat:@"%@", [self nameForRecentSession:recent] ] forKey:@"name"];
             //账号
             [dic setObject:[NSString stringWithFormat:@"%@",recent.lastMessage.session.sessionId] forKey:@"account"];
-            //消息类型
-            [dic setObject:[NSString stringWithFormat:@"%@", [self getMessageType: recent.lastMessage.messageType]] forKey:@"msgType"];
+            
+            if (recent.lastMessage.messageType == NIMMessageTypeCustom) {
+                NIMCustomObject *customObject = recent.lastMessage.messageObject;
+                DWCustomAttachment *obj = customObject.attachment;
+                NSLog(@"DWCustomAttachment *obj %ld %@", (long)obj.custType, obj.dataDict);
+                if (obj) {
+                    switch (obj.custType) {
+                        case CustomMessageTypeFowardMultipleText: //红包
+                        {
+    //                        [dic setObject:obj.dataDict forKey:@"extend"];
+                            [dic setObject:@"fowardMultipleText" forKey:@"msgType"];
+                        }
+                            break;
+                        case CustomMessgeTypeRedpacket: //红包
+                        {
+                            [dic setObject:obj.dataDict forKey:@"extend"];
+                            //                        [dic setObject:@"redpacket" forKey:@"custType"];
+                            [dic setObject:@"redpacket" forKey:@"msgType"];
+                        }
+                            break;
+                        case CustomMessgeTypeBankTransfer: //转账
+                        {
+                            [dic setObject:obj.dataDict  forKey:@"extend"];
+                            //                        [dic setObject:@"transfer" forKey:@"custType"];
+                            [dic setObject:@"transfer" forKey:@"msgType"];
+                        }
+                            break;
+                        case CustomMessgeTypeRedPacketOpenMessage: //拆红包消息
+                        {
+                            NSDictionary *dataDict = [self dealWithData:obj.dataDict];
+                            if (dataDict) {
+                                [dic setObject:dataDict  forKey:@"extend"];
+                                //                            [dic setObject:@"redpacketOpen" forKey:@"custType"];
+                                [dic setObject:@"redpacketOpen" forKey:@"msgType"];
+                            }else{
+                                
+                                continue;//终止本次循环
+                            }
+                        }
+                            break;
+                        case CustomMessgeTypeUrl: //链接
+                        case CustomMessgeTypeAccountNotice: //账户通知，与账户金额相关变动
+                        {
+                            [dic setObject:[NSString stringWithFormat:@"%d",recent.lastMessage.isRemoteRead] forKey:@"isRemoteRead"];
+                            //                        [dic setObject:[NSString stringWithFormat:@"%ld", message.messageType] forKey:@"msgType"];
+                            if (obj.custType == CustomMessgeTypeAccountNotice) {
+                                [dic setObject:obj.dataDict  forKey:@"extend"];
+                                [dic setObject:@"account_notice" forKey:@"msgType"];
+                            }else{
+                                [dic setObject:obj.dataDict  forKey:@"extend"];
+                                [dic setObject:@"url" forKey:@"msgType"];
+                            }
+                        }
+                            break;
+                        case CustomMessgeTypeBusinessCard://名片
+                        {
+                            [dic setObject:obj.dataDict  forKey:@"extend"];
+                            [dic setObject:@"card" forKey:@"msgType"];
+                        }
+                            break;
+                        case CustomMessgeTypeCustom://自定义
+                        {
+                            [dic setObject:obj.dataDict  forKey:@"extend"];
+                            [dic setObject:@"custom" forKey:@"msgType"];
+                        }
+                            break;
+                        default:
+                        {
+                            [dic setObject:obj.dataDict  forKey:@"extend"];
+                            [dic setObject:@"unknown" forKey:@"msgType"];
+                        }
+                            break;
+                            
+                    }
+                }
+            } else {
+                [dic setObject:[NSString stringWithFormat:@"%@", [self getMessageType: recent.lastMessage.messageType]] forKey:@"msgType"];
+            }
             //消息状态
             [dic setObject:[NSString stringWithFormat:@"%zd", recent.lastMessage.deliveryState] forKey:@"msgStatus"];
             //消息ID
@@ -303,8 +455,84 @@
                 [dic setObject:[NSString stringWithFormat:@"%@", [self nameForRecentSession:recent] ] forKey:@"name"];
                 //账号
                 [dic setObject:[NSString stringWithFormat:@"%@", recent.lastMessage.from] forKey:@"account"];
-                //消息类型
-                [dic setObject:[NSString stringWithFormat:@"%@", [self getMessageType: recent.lastMessage.messageType]] forKey:@"msgType"];
+                
+                if (recent.lastMessage.messageType == NIMMessageTypeCustom) {
+                    NIMCustomObject *customObject = recent.lastMessage.messageObject;
+                    DWCustomAttachment *obj = customObject.attachment;
+                    NSLog(@"DWCustomAttachment *obj %ld %@", (long)obj.custType, obj.dataDict);
+                    if (obj) {
+                        switch (obj.custType) {
+                            case CustomMessageTypeFowardMultipleText: //红包
+                            {
+        //                        [dic setObject:obj.dataDict forKey:@"extend"];
+                                [dic setObject:@"fowardMultipleText" forKey:@"msgType"];
+                            }
+                                break;
+                            case CustomMessgeTypeRedpacket: //红包
+                            {
+                                [dic setObject:obj.dataDict forKey:@"extend"];
+                                //                        [dic setObject:@"redpacket" forKey:@"custType"];
+                                [dic setObject:@"redpacket" forKey:@"msgType"];
+                            }
+                                break;
+                            case CustomMessgeTypeBankTransfer: //转账
+                            {
+                                [dic setObject:obj.dataDict  forKey:@"extend"];
+                                //                        [dic setObject:@"transfer" forKey:@"custType"];
+                                [dic setObject:@"transfer" forKey:@"msgType"];
+                            }
+                                break;
+                            case CustomMessgeTypeRedPacketOpenMessage: //拆红包消息
+                            {
+                                NSDictionary *dataDict = [self dealWithData:obj.dataDict];
+                                if (dataDict) {
+                                    [dic setObject:dataDict  forKey:@"extend"];
+                                    //                            [dic setObject:@"redpacketOpen" forKey:@"custType"];
+                                    [dic setObject:@"redpacketOpen" forKey:@"msgType"];
+                                }else{
+                                    
+                                    continue;//终止本次循环
+                                }
+                            }
+                                break;
+                            case CustomMessgeTypeUrl: //链接
+                            case CustomMessgeTypeAccountNotice: //账户通知，与账户金额相关变动
+                            {
+                                [dic setObject:[NSString stringWithFormat:@"%d",recent.lastMessage.isRemoteRead] forKey:@"isRemoteRead"];
+                                //                        [dic setObject:[NSString stringWithFormat:@"%ld", message.messageType] forKey:@"msgType"];
+                                if (obj.custType == CustomMessgeTypeAccountNotice) {
+                                    [dic setObject:obj.dataDict  forKey:@"extend"];
+                                    [dic setObject:@"account_notice" forKey:@"msgType"];
+                                }else{
+                                    [dic setObject:obj.dataDict  forKey:@"extend"];
+                                    [dic setObject:@"url" forKey:@"msgType"];
+                                }
+                            }
+                                break;
+                            case CustomMessgeTypeBusinessCard://名片
+                            {
+                                [dic setObject:obj.dataDict  forKey:@"extend"];
+                                [dic setObject:@"card" forKey:@"msgType"];
+                            }
+                                break;
+                            case CustomMessgeTypeCustom://自定义
+                            {
+                                [dic setObject:obj.dataDict  forKey:@"extend"];
+                                [dic setObject:@"custom" forKey:@"msgType"];
+                            }
+                                break;
+                            default:
+                            {
+                                [dic setObject:obj.dataDict  forKey:@"extend"];
+                                [dic setObject:@"unknown" forKey:@"msgType"];
+                            }
+                                break;
+                                
+                        }
+                    }
+                } else {
+                    [dic setObject:[NSString stringWithFormat:@"%@", [self getMessageType: recent.lastMessage.messageType]] forKey:@"msgType"];
+                }
                 //消息状态
                 [dic setObject:[NSString stringWithFormat:@"%zd", recent.lastMessage.deliveryState] forKey:@"msgStatus"];
                 //消息ID

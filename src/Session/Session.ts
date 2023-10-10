@@ -249,12 +249,39 @@ class NimSession {
   }
   /**
    * 发送自定义消息
-   * @param attachment 自定义消息内容{Width:260,Height:100,pushContent:'发来一条自定义消息',recentContent:'[自定义消息]'}
-   * width, height of message, pushContent: string, recentContent: string[]
+   * @param attachment
    * @returns {*}
    */
-  sendCustomMessage(attachment: CustomMessageType) {
-    return RNNeteaseIm.sendCustomMessage(attachment);
+  sendCustomMessage(custType: number, attachment: any) {
+    return RNNeteaseIm.sendCustomMessage(custType, attachment);
+  }
+
+  /**
+   * 
+   * @param dataDict 
+   * @param sessionId 
+   * @param sessionType 
+   * @param content 
+   * @returns 
+   *  NimSession.forwardMultipleTextMessage(
+      { messages: msgs },
+      '14198181486',
+      NIMSessionTypeEnum.P2P,
+      'test 12345',
+    );
+   */
+  forwardMultipleTextMessage(
+    dataDict: any,
+    sessionId: string,
+    sessionType: NIMSessionTypeEnum,
+    content: string
+  ) {
+    return RNNeteaseIm.forwardMultipleTextMessage(
+      dataDict,
+      sessionId,
+      sessionType,
+      content
+    );
   }
   /**
    * 开启录音权限
@@ -295,13 +322,13 @@ class NimSession {
    * @returns {*}
    */
   sendForwardMessage(
-    messageId: string,
+    messageIds: Array<string>,
     sessionId: string,
     sessionType: NIMSessionTypeEnum,
     content: string
   ) {
     return RNNeteaseIm.sendForwardMessage(
-      messageId,
+      messageIds,
       sessionId,
       sessionType,
       content

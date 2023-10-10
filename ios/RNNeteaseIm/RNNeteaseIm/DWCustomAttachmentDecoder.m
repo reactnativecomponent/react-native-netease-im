@@ -29,7 +29,9 @@
                 custType = CustomMessgeTypeBankTransfer;
             }else if([strType isEqualToString:@"url"]){//链接
                 custType = CustomMessgeTypeUrl;
-            }else if([strType isEqualToString:@"account_notice"]){//账户资金变动
+            } else if([strType isEqualToString:@"fowardMultipleText"]){//链接
+                custType = CustomMessageTypeFowardMultipleText;
+            } else if([strType isEqualToString:@"account_notice"]){//账户资金变动
                 custType = CustomMessgeTypeAccountNotice;
             }else if ([strType isEqualToString:@"redpacketOpen"]){//拆红包消息
                 custType = CustomMessgeTypeRedPacketOpenMessage;
@@ -40,6 +42,7 @@
             }else{//未知消息类型
                 custType = CustomMessgeTypeUnknown;
             }
+            NSLog(@"decode: strType, custType => %@, %ld", strType, (long)custType);
             NSDictionary *dataDict = [self jsonDict:@"data" andDict:dict];
             DWCustomAttachment *obj = [[DWCustomAttachment alloc]init];
             obj.custType = custType;
