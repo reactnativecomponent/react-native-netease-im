@@ -649,6 +649,10 @@
     if ([self isFriendToSendMessage:message]) {
         [[NIMSDK sharedSDK].chatManager sendMessage:message toSession:session error:nil];
     }
+    
+    NIMMessage *messages = [[NIMMessage alloc] init];
+    messages.text    = content;
+    [[NIMSDK sharedSDK].chatManager sendMessage:messages toSession:session error:nil];
 }
 
 
