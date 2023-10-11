@@ -21,6 +21,9 @@ public class CustomAttachParser implements MsgAttachmentParser {
             String type = object.getString(KEY_TYPE);
             JSONObject data = object.getJSONObject(KEY_DATA);
             switch (type) {
+                case CustomAttachmentType.ForwardMultipleText:
+                    attachment = new ForwardMultipleTextAttachment();
+                    break;
                 case CustomAttachmentType.RedPacket:
                     attachment = new RedPacketAttachement();
                     break;

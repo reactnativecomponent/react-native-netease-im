@@ -4,9 +4,11 @@ import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Handler;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.common.MapBuilder;
 import com.netease.im.IMApplication;
@@ -19,6 +21,7 @@ import com.netease.im.session.extension.CardAttachment;
 import com.netease.im.session.extension.CustomAttachment;
 import com.netease.im.session.extension.CustomAttachmentType;
 import com.netease.im.session.extension.DefaultCustomAttachment;
+import com.netease.im.session.extension.ForwardMultipleTextAttachment;
 import com.netease.im.session.extension.RedPacketAttachement;
 import com.netease.im.session.extension.RedPacketOpenAttachement;
 import com.netease.im.uikit.cache.NimUserInfoCache;
@@ -772,6 +775,19 @@ public class SessionService {
         attachment.setParams(type, name, imgPath, id);
         IMMessage message = MessageBuilder.createCustomMessage(sessionId, sessionTypeEnum, "[名片] " + name, attachment, config);
         sendMessageSelf(message, onSendMessageListener, false);
+    }
+
+    public void forwardMultipleTextMessage(ReadableMap dataDict,  String sessionId,  String sessionType,  String content, OnSendMessageListener onSendMessageListener) {
+        CustomMessageConfig config = new CustomMessageConfig();
+        ForwardMultipleTextAttachment attachment = new ForwardMultipleTextAttachment();
+
+        SessionTypeEnum sessionTypeE = SessionUtil.getSessionType(sessionType);
+        attachment.setParams(dataDict.getArray("messages"));
+        IMMessage message = MessageBuilder.createCustomMessage(sessionId, sessionTypeE, "", attachment, config);
+        sendMessageSelf(message, onSendMessageListener, false);
+
+        IMMessage messageText = MessageBuilder.createTextMessage(sessionId, sessionTypeEnum, content);
+        sendMessageSelf(messageText, onSendMessageListener, false);
     }
 
     public void sendBankTransferMessage(String amount, String comments, String serialNo, OnSendMessageListener onSendMessageListener) {

@@ -3,6 +3,9 @@ package com.netease.im;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableArray;
@@ -18,6 +21,7 @@ import com.netease.im.session.extension.CardAttachment;
 import com.netease.im.session.extension.CustomAttachment;
 import com.netease.im.session.extension.CustomAttachmentType;
 import com.netease.im.session.extension.DefaultCustomAttachment;
+import com.netease.im.session.extension.ForwardMultipleTextAttachment;
 import com.netease.im.session.extension.LinkUrlAttachment;
 import com.netease.im.session.extension.RedPacketAttachement;
 import com.netease.im.session.extension.RedPacketOpenAttachement;
@@ -917,6 +921,10 @@ public class ReactCache {
             case custom:
                 if (attachment != null) {
                     switch (attachment.getType()) {
+                        case CustomAttachmentType.ForwardMultipleText:
+                            type = MessageConstant.MsgType.ForwardMultipleText;
+                            break;
+
                         case CustomAttachmentType.RedPacket:
                             type = MessageConstant.MsgType.RED_PACKET;
                             break;
@@ -1173,6 +1181,18 @@ public class ReactCache {
                     CustomAttachment customAttachment = (CustomAttachment) attachment;
 
                     switch (customAttachment.getType()) {
+                        case CustomAttachmentType.ForwardMultipleText:
+                            if (attachment instanceof ForwardMultipleTextAttachment) {
+                                WritableMap extend = Arguments.createMap();
+
+                                ForwardMultipleTextAttachment forwardMultipleTextAttachment = (ForwardMultipleTextAttachment) attachment;
+                                JSONArray messagesForwarded = JSON.parseArray(forwardMultipleTextAttachment.toReactNativeCustom());
+
+                                extend.putArray(MessageConstant.ForwardMultipleText.messages, ArrayUtil.toWritableArray(messagesForwarded));
+                                itemMap.putMap(MESSAGE_EXTEND, extend);
+                            }
+                            break;
+
                         case CustomAttachmentType.RedPacket:
                             if (attachment instanceof RedPacketAttachement) {
                                 RedPacketAttachement redPackageAttachement = (RedPacketAttachement) attachment;

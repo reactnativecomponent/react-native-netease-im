@@ -5,7 +5,7 @@ package com.netease.im.session.extension;
  */
 public interface CustomAttachmentType {
 
-
+    String ForwardMultipleText = "forwardMultipleText";
     String RedPacket = "redpacket";//红包
     String BankTransfer = "transfer";//转账
 

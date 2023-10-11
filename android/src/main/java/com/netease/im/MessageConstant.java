@@ -24,6 +24,8 @@ public class MessageConstant {
         public final static String LINK = "url";
         public final static String CARD = "card";
         public final static String CUSTON = "custom";
+
+        public final static String ForwardMultipleText = "forwardMultipleText";
     }
 
     public class MsgStatus {
@@ -125,6 +127,10 @@ public class MessageConstant {
         public final static String name = "name";
         public final static String imgPath = "imgPath";
         public final static String sessionId = "sessionId";
+    }
+
+    public static class ForwardMultipleText{
+        public final static String messages = "messages";
     }
 
     public static class Opt {

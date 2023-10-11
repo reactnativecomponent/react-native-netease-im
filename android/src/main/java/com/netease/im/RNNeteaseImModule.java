@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.WindowManager;
 import android.widget.Toast;
 
@@ -1299,6 +1300,21 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
             }
         });
 
+    }
+
+    /**
+     * 转发消息操作
+     *
+     * @param dataDict
+     * @param sessionId
+     * @param sessionType
+     * @param content
+     */
+    @ReactMethod
+    public void forwardMultipleTextMessage(ReadableMap dataDict, final String sessionId, final String sessionType, final String content) {
+        sessionService.forwardMultipleTextMessage(dataDict,sessionId,sessionType,content,(code, message) -> {
+            return code;
+        });
     }
 
 
