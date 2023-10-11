@@ -25,6 +25,7 @@ export enum NIMMessageTypeEnum {
   LINK = "url",
   CARD = "card",
   CUSTOM = "custom",
+  MULTIPLE_TEXT = "forwardMultipleText",
 }
 
 export enum NIMMessageStatusEnum {

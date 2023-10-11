@@ -322,13 +322,13 @@ class NimSession {
    * @returns {*}
    */
   sendForwardMessage(
-    messageIds: Array<string>,
+    messageId: string,
     sessionId: string,
     sessionType: NIMSessionTypeEnum,
     content: string
   ) {
     return RNNeteaseIm.sendForwardMessage(
-      messageIds,
+      messageId,
       sessionId,
       sessionType,
       content
