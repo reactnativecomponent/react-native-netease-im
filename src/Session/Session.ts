@@ -264,14 +264,16 @@ class NimSession {
    * @param content 
    * @returns 
    *  NimSession.forwardMultipleTextMessage(
-      { messages: msgs },
+      { messages: NIMMessage[] },
       '14198181486',
       NIMSessionTypeEnum.P2P,
       'test 12345',
     );
    */
   forwardMultipleTextMessage(
-    dataDict: any,
+    dataDict: {
+      messages: NIMMessage[];
+    },
     sessionId: string,
     sessionType: NIMSessionTypeEnum,
     content: string
