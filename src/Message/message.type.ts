@@ -41,8 +41,6 @@ export interface NimMessageTypeExtend extends NimSessionTypeExtend {
   duration: number;
   isPlayed: boolean;
   url: string;
-  thumbPath: string;
-  path: string;
 }
 
 export interface NIMMessage {
