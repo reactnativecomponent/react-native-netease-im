@@ -267,94 +267,92 @@
 //同意
 -(void)onAccept:(NSString *)targetID timestamp:(NSString *)timestamp sucess:(Success)success error:(Errors)err{
     
-    __weak typeof(self)weakSelf = self;
-    for (int i = 0; i < self._notiArr.count; i++) {
-        if ([targetID isEqualToString:[[self._notiArr objectAtIndex:i] objectForKey:@"fromAccount"]]) {
-            if ([timestamp isEqualToString:[[self._notiArr objectAtIndex:i] objectForKey:@"time"]]) {
-                NIMSystemNotification *notices = [self._notifications objectAtIndex:i];
-                switch (notices.type) {
-                    case NIMSystemNotificationTypeTeamApply:{
-                        [[NIMSDK sharedSDK].teamManager passApplyToTeam:notices.targetID userId:notices.sourceID completion:^(NSError *error, NIMTeamApplyStatus applyStatus) {
-                            if (!error) {
-                                [weakSelf._notifications replaceObjectAtIndex:i withObject:notices];
-                                for (NIMSystemNotification *notices in weakSelf._notifications) {
-                                    NIMKitInfo *sourceMember = [[NIMKit sharedKit] infoByUser:notices.sourceID option:nil];
-                                    [self updateSourceMember:sourceMember andNoti:notices];
-                                }
-                                notices.handleStatus = NotificationHandleTypeOk;
-                                success(@"同意成功");
-                            }else {
-                                if(error.code == NIMRemoteErrorCodeTimeoutError) {
-                                    err(@"网络问题，请重试");
-                                } else {
-                                    notices.handleStatus = NotificationHandleTypeOutOfDate;
-                                }
-                            }
-                        }];
-                        break;
-                    }
-                    case NIMSystemNotificationTypeTeamInvite:{
-                        [[NIMSDK sharedSDK].teamManager acceptInviteWithTeam:notices.targetID invitorId:notices.sourceID completion:^(NSError *error) {
-                            if (!error) {
-                                [weakSelf._notifications replaceObjectAtIndex:i withObject:notices];
-                                for (NIMSystemNotification *notices in weakSelf._notifications) {
-                                    NIMKitInfo *sourceMember = [[NIMKit sharedKit] infoByUser:notices.sourceID option:nil];
-                                    [self updateSourceMember:sourceMember andNoti:notices];
-                                }
-                                notices.handleStatus = NotificationHandleTypeOk;
-                                success(@"同意成功");
-                            }else {
-                                if(error.code == NIMRemoteErrorCodeTimeoutError) {
-                                    success(@"请求超时");
-                                }
-                                else if (error.code == NIMRemoteErrorCodeTeamNotExists) {
-                                    err(@"群组不存在");
-                                }
-                                else {
-                                    notices.handleStatus = NotificationHandleTypeOutOfDate;
-                                }
+    // __weak typeof(self)weakSelf = self;
+    // for (int i = 0; i < self._notiArr.count; i++) {
+    //     if ([targetID isEqualToString:[[self._notiArr objectAtIndex:i] objectForKey:@"fromAccount"]]) {
+    //         if ([timestamp isEqualToString:[[self._notiArr objectAtIndex:i] objectForKey:@"time"]]) {
+    //             NIMSystemNotification *notices = [self._notifications objectAtIndex:i];
+    //             switch (notices.type) {
+    //                 case NIMSystemNotificationTypeTeamApply:{
+    //                     [[NIMSDK sharedSDK].teamManager passApplyToTeam:notices.targetID userId:notices.sourceID completion:^(NSError *error, NIMTeamApplyStatus applyStatus) {
+    //                         if (!error) {
+    //                             [weakSelf._notifications replaceObjectAtIndex:i withObject:notices];
+    //                             for (NIMSystemNotification *notices in weakSelf._notifications) {
+    //                                 NIMKitInfo *sourceMember = [[NIMKit sharedKit] infoByUser:notices.sourceID option:nil];
+    //                                 [self updateSourceMember:sourceMember andNoti:notices];
+    //                             }
+    //                             notices.handleStatus = NotificationHandleTypeOk;
+    //                             success(@"同意成功");
+    //                         }else {
+    //                             if(error.code == NIMRemoteErrorCodeTimeoutError) {
+    //                                 err(@"网络问题，请重试");
+    //                             } else {
+    //                                 notices.handleStatus = NotificationHandleTypeOutOfDate;
+    //                             }
+    //                         }
+    //                     }];
+    //                     break;
+    //                 }
+    //                 case NIMSystemNotificationTypeTeamInvite:{
+    //                     [[NIMSDK sharedSDK].teamManager acceptInviteWithTeam:notices.targetID invitorId:notices.sourceID completion:^(NSError *error) {
+    //                         if (!error) {
+    //                             [weakSelf._notifications replaceObjectAtIndex:i withObject:notices];
+    //                             for (NIMSystemNotification *notices in weakSelf._notifications) {
+    //                                 NIMKitInfo *sourceMember = [[NIMKit sharedKit] infoByUser:notices.sourceID option:nil];
+    //                                 [self updateSourceMember:sourceMember andNoti:notices];
+    //                             }
+    //                             notices.handleStatus = NotificationHandleTypeOk;
+    //                             success(@"同意成功");
+    //                         }else {
+    //                             if(error.code == NIMRemoteErrorCodeTimeoutError) {
+    //                                 success(@"请求超时");
+    //                             }
+    //                             else if (error.code == NIMRemoteErrorCodeTeamNotExists) {
+    //                                 err(@"群组不存在");
+    //                             }
+    //                             else {
+    //                                 notices.handleStatus = NotificationHandleTypeOutOfDate;
+    //                             }
                                 
-                            }
-                        }];
-                    }
-                        break;
-                    case NIMSystemNotificationTypeFriendAdd:
-                    {
-                        NIMUserRequest *request = [[NIMUserRequest alloc] init];
-                        request.userId = notices.sourceID;
-                        request.operation = NIMUserOperationVerify;
+    //                         }
+    //                     }];
+    //                 }
+    //                     break;
+    //                 case NIMSystemNotificationTypeFriendAdd:
+    //                 {
+    //                     NIMUserRequest *request = [[NIMUserRequest alloc] init];
+    //                     request.userId = notices.sourceID;
+    //                     request.operation = NIMUserOperationVerify;
                         
-                        [[[NIMSDK sharedSDK] userManager] requestFriend:request
-                                                             completion:^(NSError *error) {
-                                                                 if (!error) {
-                                                                     notices.handleStatus = NotificationHandleTypeOk;
-                                                                     [weakSelf._notifications replaceObjectAtIndex:i withObject:notices];
-                                                                     [weakSelf._notiArr removeAllObjects];
-                                                                     for (NIMSystemNotification *notices in weakSelf._notifications) {
-                                                                         NIMKitInfo *sourceMember = [[NIMKit sharedKit] infoByUser:notices.sourceID option:nil];
-                                                                         [self updateSourceMember:sourceMember andNoti:notices];
-                                                                     }
-                                                                     success(@"同意成功");
-                                                                     [weakSelf sendMakeFriendSucessMessgae:request.userId];
-                                                                     [self refrash];
-                                                                 }
-                                                                 else
-                                                                 {
-                                                                     err(@"网络问题，请重试");
+    //                     [[[NIMSDK sharedSDK] userManager] requestFriend:request
+    //                                                          completion:^(NSError *error) {
+    //                                                              if (!error) {
+    //                                                                  notices.handleStatus = NotificationHandleTypeOk;
+    //                                                                  [weakSelf._notifications replaceObjectAtIndex:i withObject:notices];
+    //                                                                  [weakSelf._notiArr removeAllObjects];
+    //                                                                  for (NIMSystemNotification *notices in weakSelf._notifications) {
+    //                                                                      NIMKitInfo *sourceMember = [[NIMKit sharedKit] infoByUser:notices.sourceID option:nil];
+    //                                                                      [self updateSourceMember:sourceMember andNoti:notices];
+    //                                                                  }
+    //                                                                  success(@"同意成功");
+    //                                                                  [weakSelf sendMakeFriendSucessMessgae:request.userId];
+    //                                                                  [self refrash];
+    //                                                              }
+    //                                                              else
+    //                                                              {
+    //                                                                  err(@"网络问题，请重试");
                                                                      
-                                                                 }
-                                                             }];
-                    }
-                        break;
-                    default:
-                        break;
-                }
+    //                                                              }
+    //                                                          }];
+    //                 }
+    //                     break;
+    //                 default:
+    //                     break;
+    //             }
                 
-            }
-        }
-    }
-    
-    
+    //         }
+    //     }
+    // }
 }
 
 

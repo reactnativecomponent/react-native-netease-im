@@ -271,7 +271,9 @@ class NimSession {
     );
    */
   forwardMultipleTextMessage(
-    dataDict: any,
+    dataDict: {
+      messages: NIMMessage[];
+    },
     sessionId: string,
     sessionType: NIMSessionTypeEnum,
     content: string
