@@ -1398,19 +1398,6 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
 
             @Override
             public int onResult(int code, IMMessage message) {
-                WritableMap audioObj = Arguments.createMap();
-                MsgAttachment attachment = message.getAttachment();
-                AudioAttachment audioAttachment = (AudioAttachment) attachment;
-
-                if (attachment instanceof AudioAttachment) {
-                    audioObj.putString(MessageConstant.MediaFile.PATH, audioAttachment.getPath());
-                    audioObj.putString(MessageConstant.MediaFile.THUMB_PATH, audioAttachment.getThumbPath());
-                    audioObj.putString(MessageConstant.MediaFile.URL, audioAttachment.getUrl());
-                    audioObj.putString(MessageConstant.MediaFile.DURATION, Long.toString(audioAttachment.getDuration()));
-                    audioObj.putBoolean(MessageConstant.MediaFile.IS_PLAYED, true);
-
-                    message.setAttachment(attachment);
-                }
                 sessionService.updateMessage(message, MsgStatusEnum.read);
                 return 0;
             }
