@@ -205,7 +205,9 @@
         mapDict[keyId] = [newUserInfo objectForKey:key];
     }
     
-    [[NIMSDK sharedSDK].userManager updateMyUserInfo:mapDict completion:^(NSError * _Nullable error) {
+    NSDictionary<NSNumber *,id> *params = [NSDictionary dictionaryWithDictionary: mapDict];
+    
+    [[NIMSDK sharedSDK].userManager updateMyUserInfo:params completion:^(NSError * _Nullable error) {
          if (!error) {
              NSLog(@"success ");
              success(@"200");
