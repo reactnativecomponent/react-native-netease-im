@@ -1398,9 +1398,20 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
 
             @Override
             public int onResult(int code, IMMessage message) {
-                if (code == ResponseCode.RES_SUCCESS && message != null) {
-                    sessionService.updateMessage(message, MsgStatusEnum.read);
+                WritableMap audioObj = Arguments.createMap();
+                MsgAttachment attachment = message.getAttachment();
+                AudioAttachment audioAttachment = (AudioAttachment) attachment;
+
+                if (attachment instanceof AudioAttachment) {
+                    audioObj.putString(MessageConstant.MediaFile.PATH, audioAttachment.getPath());
+                    audioObj.putString(MessageConstant.MediaFile.THUMB_PATH, audioAttachment.getThumbPath());
+                    audioObj.putString(MessageConstant.MediaFile.URL, audioAttachment.getUrl());
+                    audioObj.putString(MessageConstant.MediaFile.DURATION, Long.toString(audioAttachment.getDuration()));
+                    audioObj.putBoolean(MessageConstant.MediaFile.IS_PLAYED, true);
+
+                    message.setAttachment(attachment);
                 }
+                sessionService.updateMessage(message, MsgStatusEnum.read);
                 return 0;
             }
         });
@@ -1437,9 +1448,13 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
      */
     @ReactMethod
     public void clearMessage(String sessionId, String sessionType, final Promise promise) {
-
-        SessionTypeEnum sessionTypeEnum = SessionUtil.getSessionType(sessionType);
-        NIMClient.getService(MsgService.class).clearChattingHistory(sessionId, sessionTypeEnum);
+        try {
+            SessionTypeEnum sessionTypeEnum = SessionUtil.getSessionType(sessionType);
+            NIMClient.getService(MsgService.class).clearChattingHistory(sessionId, sessionTypeEnum);
+            promise.resolve("200");
+        } catch (Exception e) {
+            promise.reject("CLEAR_ERROR", "Failed to clear chat history: " + e.getMessage());
+        }
     }
 
     /**

@@ -102,8 +102,8 @@ public class MessageConstant {
         public final static String THUMB_PATH = "thumbPath";
         public final static String PATH = "path";
         public final static String URL = "url";
-
         public final static String SIZE = "size";
+        public final static String IS_PLAYED = "isPlayed";
     }
 
     public static class RedPacket {

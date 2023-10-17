@@ -812,8 +812,8 @@ public class SessionService {
         }
         sendMessageSelf(message, onSendMessageListener, false);
 
-        IMMessage messageSelf = MessageBuilder.createTextMessage(sessionId, sessionTypeEnum, content);
-        sendMessageSelf(messageSelf, onSendMessageListener, false);
+        IMMessage messageSelf = MessageBuilder.createTextMessage(sessionId, sessionTypeE, content);
+        sendMessageSelf(messageSelf, onSendMessageListener, false);    
         return 2;
     }
 

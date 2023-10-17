@@ -229,7 +229,7 @@ public class ReactCache {
                             sourceIdMap.putString("sourceName", getTeamUserDisplayName(contactId, sourceId));
                             sourceIdMap.putString("sourceId", sourceId);
 
-                            notiObj.putString("operationType", String.valueOf(operationType.getValue()));
+                            notiObj.putInt("operationType", operationType.getValue());
                             notiObj.putMap("sourceId", sourceIdMap);
 
                             switch (((NotificationAttachment) contact.getAttachment()).getType()) {
@@ -1070,6 +1070,7 @@ public class ReactCache {
                     audioObj.putString(MessageConstant.MediaFile.THUMB_PATH, audioAttachment.getThumbPath());
                     audioObj.putString(MessageConstant.MediaFile.URL, audioAttachment.getUrl());
                     audioObj.putString(MessageConstant.MediaFile.DURATION, Long.toString(audioAttachment.getDuration()));
+                    audioObj.putBoolean(MessageConstant.MediaFile.IS_PLAYED,false);
                 }
                 itemMap.putMap(MESSAGE_EXTEND, audioObj);
             } else if (item.getMsgType() == MsgTypeEnum.video) {
@@ -1109,7 +1110,7 @@ public class ReactCache {
                     sourceIdMap.putString("sourceName", getTeamUserDisplayName(item.getSessionId(), sourceId));
                     sourceIdMap.putString("sourceId", sourceId);
 
-                    notiObj.putString("operationType", String.valueOf(operationType.getValue()));
+                    notiObj.putInt("operationType", operationType.getValue());
                     notiObj.putMap("sourceId", sourceIdMap);
 
                     switch (((NotificationAttachment) item.getAttachment()).getType()) {
