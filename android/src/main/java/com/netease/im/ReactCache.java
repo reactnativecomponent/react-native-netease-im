@@ -229,7 +229,7 @@ public class ReactCache {
                             sourceIdMap.putString("sourceName", getTeamUserDisplayName(contactId, sourceId));
                             sourceIdMap.putString("sourceId", sourceId);
 
-                            notiObj.putString("operationType", String.valueOf(operationType.getValue()));
+                            notiObj.putInt("operationType", operationType.getValue());
                             notiObj.putMap("sourceId", sourceIdMap);
 
                             switch (((NotificationAttachment) contact.getAttachment()).getType()) {
@@ -1110,7 +1110,7 @@ public class ReactCache {
                     sourceIdMap.putString("sourceName", getTeamUserDisplayName(item.getSessionId(), sourceId));
                     sourceIdMap.putString("sourceId", sourceId);
 
-                    notiObj.putString("operationType", String.valueOf(operationType.getValue()));
+                    notiObj.putInt("operationType", operationType.getValue());
                     notiObj.putMap("sourceId", sourceIdMap);
 
                     switch (((NotificationAttachment) item.getAttachment()).getType()) {

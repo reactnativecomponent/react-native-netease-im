@@ -43,6 +43,7 @@ export interface NimMessageTypeExtend extends NimSessionTypeExtend {
   url: string;
   thumbPath: string;
   path: string;
+  messages: NIMMessage;
 }
 
 export interface NIMMessage {
