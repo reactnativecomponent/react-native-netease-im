@@ -26,5 +26,8 @@ static const NSInteger MaxNotificationCount = 20;
 -(void)deleAllNotic;
 -(void)setAllread;
 -(void)onAccept:(NSString *)targetID timestamp:(NSString *)timestamp sucess:(Success)success error:(Errors)err;
+
+-(void)ackAddFriendRequest:(NSString *)targetID isAccept:(nonnull NSString*)isAccept timestamp:(NSString *)timestamp sucess:(Success)success error:(Errors)err;
+
 -(void)onRefuse:(NSString *)targetID timestamp:(NSString *)timestamp sucess:(Success)success error:(Errors)err;
 @end

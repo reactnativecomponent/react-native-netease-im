@@ -264,9 +264,36 @@
         [[[NIMSDK sharedSDK] systemNotificationManager] markAllNotificationsAsRead];
     }
 }
+
+-(void)ackAddFriendRequest:(NSString *)targetID isAccept:(nonnull NSString*)isAccept timestamp:(NSString *)timestamp sucess:(Success)success error:(Errors)err {
+    NIMUserRequest *request = [[NIMUserRequest alloc] init];
+    request.userId = targetID;
+    
+    if ([isAccept isEqualToString:@"1"]) {
+        request.operation = NIMUserOperationVerify;
+    } else {
+        request.operation = NIMUserOperationReject;
+    }
+   
+    [[[NIMSDK sharedSDK] userManager] requestFriend:request
+                                         completion:^(NSError *error) {
+                                             if (!error) {
+                                                 if ([isAccept isEqualToString:@"1"]) {
+                                                     success(@"success");
+                                                     [self sendMakeFriendSucessMessgae:request.userId];
+                                                     [self refrash];
+                                                 } else {
+                                                     success(@"remove done");
+                                                 }
+                                             } else {
+                                                 err(@"网络问题，请重试");
+                                             }
+                                         }];
+}
+
+
 //同意
 -(void)onAccept:(NSString *)targetID timestamp:(NSString *)timestamp sucess:(Success)success error:(Errors)err{
-    
      __weak typeof(self)weakSelf = self;
      for (int i = 0; i < self._notiArr.count; i++) {
          if ([targetID isEqualToString:[[self._notiArr objectAtIndex:i] objectForKey:@"fromAccount"]]) {
@@ -318,34 +345,34 @@
                          }];
                      }
                          break;
-                     case NIMSystemNotificationTypeFriendAdd:
-                     {
-                         NIMUserRequest *request = [[NIMUserRequest alloc] init];
-                         request.userId = notices.sourceID;
-                         request.operation = NIMUserOperationVerify;
-                        
-                         [[[NIMSDK sharedSDK] userManager] requestFriend:request
-                                                              completion:^(NSError *error) {
-                                                                  if (!error) {
-                                                                      notices.handleStatus = NotificationHandleTypeOk;
-                                                                      [weakSelf._notifications replaceObjectAtIndex:i withObject:notices];
-                                                                      [weakSelf._notiArr removeAllObjects];
-                                                                      for (NIMSystemNotification *notices in weakSelf._notifications) {
-                                                                          NIMKitInfo *sourceMember = [[NIMKit sharedKit] infoByUser:notices.sourceID option:nil];
-                                                                          [self updateSourceMember:sourceMember andNoti:notices];
-                                                                      }
-                                                                      success(@"同意成功");
-                                                                      [weakSelf sendMakeFriendSucessMessgae:request.userId];
-                                                                      [self refrash];
-                                                                  }
-                                                                  else
-                                                                  {
-                                                                      err(@"网络问题，请重试");
-                                                                     
-                                                                  }
-                                                              }];
-                     }
-                         break;
+//                     case NIMSystemNotificationTypeFriendAdd:
+//                     {
+//                         NIMUserRequest *request = [[NIMUserRequest alloc] init];
+//                         request.userId = notices.sourceID;
+//                         request.operation = NIMUserOperationVerify;
+//
+//                         [[[NIMSDK sharedSDK] userManager] requestFriend:request
+//                                                              completion:^(NSError *error) {
+//                                                                  if (!error) {
+//                                                                      notices.handleStatus = NotificationHandleTypeOk;
+//                                                                      [weakSelf._notifications replaceObjectAtIndex:i withObject:notices];
+//                                                                      [weakSelf._notiArr removeAllObjects];
+//                                                                      for (NIMSystemNotification *notices in weakSelf._notifications) {
+//                                                                          NIMKitInfo *sourceMember = [[NIMKit sharedKit] infoByUser:notices.sourceID option:nil];
+//                                                                          [self updateSourceMember:sourceMember andNoti:notices];
+//                                                                      }
+//                                                                      success(@"同意成功");
+//                                                                      [weakSelf sendMakeFriendSucessMessgae:request.userId];
+//                                                                      [self refrash];
+//                                                                  }
+//                                                                  else
+//                                                                  {
+//                                                                      err(@"网络问题，请重试");
+//
+//                                                                  }
+//                                                              }];
+//                     }
+//                         break;
                      default:
                          break;
                  }
@@ -426,33 +453,33 @@
                         
                     }
                         break;
-                    case NIMSystemNotificationTypeFriendAdd:
-                    {
-                        NIMUserRequest *request = [[NIMUserRequest alloc] init];
-                        request.userId = notices.sourceID;
-                        request.operation = NIMUserOperationReject;
-                        
-                        [[[NIMSDK sharedSDK] userManager] requestFriend:request
-                                                             completion:^(NSError *error) {
-                                                                 if (!error) {
-                                                                     
-                                                                     notices.handleStatus = NotificationHandleTypeNo;
-//                                                                     [_notifications replaceObjectAtIndex:i withObject:notices];
-//                                                                     for (NIMSystemNotification *notices in _notifications) {
-//                                                                         NIMKitInfo *sourceMember = [[NIMKit sharedKit] infoByUser:notices.sourceID option:nil];
-//                                                                         [self updateSourceMember:sourceMember andNoti:notices];
-//                                                                     }
-                                                                     success(@"拒绝成功");
-                                                                     
-                                                                 }
-                                                                 else
-                                                                 {
-                                                                     err(@"拒绝失败,请重试");
-                                                                 }
-                     
-                                                             }];
-                    }
-                        break;
+//                    case NIMSystemNotificationTypeFriendAdd:
+//                    {
+//                        NIMUserRequest *request = [[NIMUserRequest alloc] init];
+//                        request.userId = notices.sourceID;
+//                        request.operation = NIMUserOperationReject;
+//
+//                        [[[NIMSDK sharedSDK] userManager] requestFriend:request
+//                                                             completion:^(NSError *error) {
+//                                                                 if (!error) {
+//
+//                                                                     notices.handleStatus = NotificationHandleTypeNo;
+////                                                                     [_notifications replaceObjectAtIndex:i withObject:notices];
+////                                                                     for (NIMSystemNotification *notices in _notifications) {
+////                                                                         NIMKitInfo *sourceMember = [[NIMKit sharedKit] infoByUser:notices.sourceID option:nil];
+////                                                                         [self updateSourceMember:sourceMember andNoti:notices];
+////                                                                     }
+//                                                                     success(@"拒绝成功");
+//
+//                                                                 }
+//                                                                 else
+//                                                                 {
+//                                                                     err(@"拒绝失败,请重试");
+//                                                                 }
+//
+//                                                             }];
+//                    }
+//                        break;
                     default:
                         break;
                 }

@@ -236,20 +236,21 @@ RCT_EXPORT_METHOD(addFriendWithType:(nonnull  NSString *)contactId verifyType:(n
     }];
 }
 //通过/拒绝对方好友请求
-RCT_EXPORT_METHOD(ackAddFriendRequest:(nonnull  NSString *)targetId msg:(nonnull  NSString * )msg timestamp:(nonnull  NSString * )timestamp resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
-    if ([msg isEqualToString:@"1"]) {
-        [[NoticeViewController initWithNoticeViewController]onAccept:targetId timestamp:timestamp sucess:^(id param) {
+RCT_EXPORT_METHOD(ackAddFriendRequest:(nonnull NSString*)targetId isAccept:(nonnull NSString *)isAccept timestamp:(nonnull  NSString * )timestamp resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
+//    if ([msg isEqualToString:@"1"]) {
+        NSLog(@"ackAddFriendRequest");
+    [[NoticeViewController initWithNoticeViewController]ackAddFriendRequest:targetId isAccept:isAccept timestamp:timestamp sucess:^(id param) {
             resolve(param);
         } error:^(id erro) {
             reject(@"-1",erro, nil);
         }];
-    }else{
-        [[NoticeViewController initWithNoticeViewController]onRefuse:targetId timestamp:timestamp sucess:^(id param) {
-            resolve(param);
-        } error:^(id erro) {
-            reject(@"-1",erro, nil);
-        }];
-    }
+//    }else{
+//        [[NoticeViewController initWithNoticeViewController]onRefuse:targetId timestamp:timestamp sucess:^(id param) {
+//            resolve(param);
+//        } error:^(id erro) {
+//            reject(@"-1",erro, nil);
+//        }];
+//    }
 }
 //获取通讯录好友
 RCT_EXPORT_METHOD(startFriendList){
