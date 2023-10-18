@@ -793,7 +793,7 @@ public class SessionService {
         ForwardMultipleTextAttachment attachment = new ForwardMultipleTextAttachment();
 
         SessionTypeEnum sessionTypeE = SessionUtil.getSessionType(sessionType);
-        attachment.setParams(dataDict.getString("messages"));
+        attachment.setParams(dataDict.getArray("messages"));
         IMMessage message = MessageBuilder.createCustomMessage(sessionId, sessionTypeE, "", attachment, config);
         sendMessageSelf(message, onSendMessageListener, false);
 
