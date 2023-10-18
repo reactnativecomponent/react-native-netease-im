@@ -1070,7 +1070,13 @@ public class ReactCache {
                     audioObj.putString(MessageConstant.MediaFile.THUMB_PATH, audioAttachment.getThumbPath());
                     audioObj.putString(MessageConstant.MediaFile.URL, audioAttachment.getUrl());
                     audioObj.putString(MessageConstant.MediaFile.DURATION, Long.toString(audioAttachment.getDuration()));
-                    audioObj.putBoolean(MessageConstant.MediaFile.IS_PLAYED,false);
+
+                    if (item.getStatus() == MsgStatusEnum.read) {
+                        audioObj.putBoolean(MessageConstant.MediaFile.IS_PLAYED,true);
+                    } else {
+                        audioObj.putBoolean(MessageConstant.MediaFile.IS_PLAYED,false);
+                    }
+
                 }
                 itemMap.putMap(MESSAGE_EXTEND, audioObj);
             } else if (item.getMsgType() == MsgTypeEnum.video) {
