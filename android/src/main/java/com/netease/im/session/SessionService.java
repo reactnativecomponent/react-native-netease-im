@@ -57,6 +57,7 @@ import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.msg.model.MemberPushOption;
 import com.netease.nimlib.sdk.msg.model.MessageReceipt;
 import com.netease.nimlib.sdk.msg.model.QueryDirectionEnum;
+import com.netease.nimlib.sdk.msg.model.RecentContact;
 import com.netease.nimlib.sdk.msg.model.RevokeMsgNotification;
 import com.netease.nimlib.sdk.team.model.Team;
 
@@ -348,8 +349,18 @@ public class SessionService {
      * 收到已读回执（更新VH的已读label）
      */
 
-    private void receiveReceipt() {//TODO
+    private void receiveReceipt(List<MessageReceipt> messageReceipts) {//TODO
+        Log.d("receiveReceipt", messageReceipts.toString());
+        IMMessage   anchor = MessageBuilder.createEmptyMessage(sessionId, sessionTypeEnum, 0);
 
+        getMsgService().queryMessageListEx(anchor, QueryDirectionEnum.QUERY_OLD, 1, true).setCallback(new RequestCallbackWrapper<List<IMMessage>>() {
+            @Override
+            public void onResult(int code, List<IMMessage> messageList, Throwable throwable) {
+                Log.d("queryMessageList", messageList.toString());
+
+                refreshMessageList(messageList);
+            }
+        });
     }
 
     private void onMessageStatusChange(IMMessage message, boolean isSend) {
@@ -367,7 +378,7 @@ public class SessionService {
     private Observer<List<MessageReceipt>> messageReceiptObserver = new Observer<List<MessageReceipt>>() {
         @Override
         public void onEvent(List<MessageReceipt> messageReceipts) {
-            receiveReceipt();
+            receiveReceipt(messageReceipts);
         }
     };
 
@@ -782,7 +793,7 @@ public class SessionService {
         ForwardMultipleTextAttachment attachment = new ForwardMultipleTextAttachment();
 
         SessionTypeEnum sessionTypeE = SessionUtil.getSessionType(sessionType);
-        attachment.setParams(dataDict.getArray("messages"));
+        attachment.setParams(dataDict.getString("messages"));
         IMMessage message = MessageBuilder.createCustomMessage(sessionId, sessionTypeE, "", attachment, config);
         sendMessageSelf(message, onSendMessageListener, false);
 

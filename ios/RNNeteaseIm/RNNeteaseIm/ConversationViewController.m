@@ -333,6 +333,9 @@
         [dic setObject:[NSString stringWithFormat:@"%@", message.text] forKey:@"text"];
         [dic setObject:[NSString stringWithFormat:@"%@", message.session.sessionId] forKey:@"sessionId"];
         [dic setObject:[NSString stringWithFormat:@"%ld", message.session.sessionType] forKey:@"sessionType"];
+        
+        [dic setObject:[NSString stringWithFormat:@"%d",message.isRemoteRead] forKey:@"isRemoteRead"];
+
         switch (message.deliveryState) {
             case NIMMessageDeliveryStateFailed:
                 [dic setObject:@"send_failed" forKey:@"status"];
@@ -814,10 +817,17 @@
 - (void)onRecvMessages:(NSArray *)messages
 {
     NIMMessage *message = messages.firstObject;
+    
     if ([message.session.sessionId isEqualToString:_sessionID]) {
         [self refrashMessage:message From:@"receive" ];
         NIMMessageReceipt *receipt = [[NIMMessageReceipt alloc] initWithMessage:message];
-        [[[NIMSDK sharedSDK] chatManager] sendMessageReceipt:receipt completion:nil];
+        
+        if (message.session.sessionType == NIMSessionTypeTeam) {
+            [[[NIMSDK sharedSDK] chatManager] sendTeamMessageReceipts:@[receipt] completion:nil];
+        } else {
+            [[[NIMSDK sharedSDK] chatManager] sendMessageReceipt:receipt completion:nil];
+        }
+        
         //标记已读消息
         [[NIMSDK sharedSDK].conversationManager markAllMessagesReadInSession:self._session];
         
@@ -825,6 +835,37 @@
             [self playTipsMusicWithMessage:message];
         }
     }
+}
+
+- (void)onRecvMessageReceipts:(NSArray<NIMMessageReceipt *> *)receipts
+{
+    NSMutableArray *messageIds = [NSMutableArray array];
+    NSLog(@"onRecv MessageReceipts receipt %@", receipts);
+
+    for (NIMMessageReceipt *receipt in receipts) {
+        
+        NSArray *messageArr =  [[[NIMSDK sharedSDK] conversationManager]messagesInSession:receipt.session message:nil limit: 1];
+        
+        NIMModel *model = [NIMModel initShareMD];
+                
+        model.ResorcesArr = [self setTimeArr:messageArr]; // onObserveReceiveMessage
+
+//        NSLog(@"onRecv MessageReceipts session %@", receipt.session);
+//        NSLog(@"onRecv MessageReceipts messageId %@", receipt.messageId);
+//        NSLog(@"onRecv MessageReceipts teamReceiptInfo %@", receipt.teamReceiptInfo);
+
+//        [messageIds addObject: receipt.messageId];
+//
+//        if (receipt.teamReceiptInfo != nil) {
+//            NSLog(@"receipt teamInfo %@", receipt.teamReceiptInfo);
+//        }
+    }
+    
+//    NSArray<NIMMessage *> *currentMessage = [[[NIMSDK sharedSDK] conversationManager] messagesInSession:self._session messageIds:messageIds];
+//
+//    NSMutableArray *messages = [self setTimeArr:currentMessage];
+//
+//
 }
 
 - (void)playTipsMusicWithMessage:(NIMMessage *)message{
@@ -1072,6 +1113,9 @@
     [dic2 setObject:[NSString stringWithFormat:@"%@", message.text] forKey:@"text"];
     [dic2 setObject:[NSString stringWithFormat:@"%@", message.session.sessionId] forKey:@"sessionId"];
     [dic2 setObject:[NSString stringWithFormat:@"%ld", message.session.sessionType] forKey:@"sessionType"];
+    
+    [dic2 setObject:[NSString stringWithFormat:@"%d", message.isRemoteRead] forKey:@"isRemoteRead"];
+
     switch (message.deliveryState) {
         case NIMMessageDeliveryStateFailed:
             [dic2 setObject:@"send_failed" forKey:@"status"];

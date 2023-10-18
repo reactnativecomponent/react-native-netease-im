@@ -62,6 +62,8 @@ export interface NIMMessage {
   //   isPlayed: boolean;
   //   url: string;
   // };
+  isRemoteRead: number;
+
   fromUser: {
     _id: string;
     avatar: string;
