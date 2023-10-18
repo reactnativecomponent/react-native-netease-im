@@ -188,6 +188,8 @@ public class IMApplication {
             pushConfig.xmAppKey = miPushConfig.xmAppKey;
             pushConfig.xmCertificateName = miPushConfig.xmCertificateName;
             pushConfig.hwCertificateName = miPushConfig.hwCertificateName;
+            pushConfig.fcmCertificateName= miPushConfig.fcmCertificateName;
+
             options.mixPushConfig = pushConfig;
         }
 
