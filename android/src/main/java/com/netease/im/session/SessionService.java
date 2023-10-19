@@ -795,7 +795,8 @@ public class SessionService {
 //        SessionTypeEnum sessionTypeE = SessionUtil.getSessionType(sessionType);
 //        attachment.setParams(dataDict.getString("messages"));
 //        IMMessage message = MessageBuilder.createCustomMessage(sessionId, sessionTypeE, "", attachment, config);
-        IMMessage message = MessageBuilder.createTextMessage(sessionId, sessionTypeEnum, dataDict.getString("messages"));
+        SessionTypeEnum sessionTypeE = SessionUtil.getSessionType(sessionType);
+        IMMessage message = MessageBuilder.createTextMessage(sessionId, sessionTypeE, dataDict.getString("messages"));
 
         Map<String, Object> remoteExt = MapBuilder.newHashMap();
         remoteExt.put("extendType", "forwardMultipleText");
@@ -803,7 +804,7 @@ public class SessionService {
 
         sendMessageSelf(message, onSendMessageListener, false);
 
-        IMMessage messageText = MessageBuilder.createTextMessage(sessionId, sessionTypeEnum, content);
+        IMMessage messageText = MessageBuilder.createTextMessage(sessionId, sessionTypeE, content);
         sendMessageSelf(messageText, onSendMessageListener, false);
     }
 
