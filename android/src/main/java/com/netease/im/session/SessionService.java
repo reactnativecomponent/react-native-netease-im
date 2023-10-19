@@ -789,12 +789,18 @@ public class SessionService {
     }
 
     public void forwardMultipleTextMessage(ReadableMap dataDict,  String sessionId,  String sessionType,  String content, OnSendMessageListener onSendMessageListener) {
-        CustomMessageConfig config = new CustomMessageConfig();
-        ForwardMultipleTextAttachment attachment = new ForwardMultipleTextAttachment();
+//        CustomMessageConfig config = new CustomMessageConfig();
+//        ForwardMultipleTextAttachment attachment = new ForwardMultipleTextAttachment();
 
-        SessionTypeEnum sessionTypeE = SessionUtil.getSessionType(sessionType);
-        attachment.setParams(dataDict.getArray("messages"));
-        IMMessage message = MessageBuilder.createCustomMessage(sessionId, sessionTypeE, "", attachment, config);
+//        SessionTypeEnum sessionTypeE = SessionUtil.getSessionType(sessionType);
+//        attachment.setParams(dataDict.getString("messages"));
+//        IMMessage message = MessageBuilder.createCustomMessage(sessionId, sessionTypeE, "", attachment, config);
+        IMMessage message = MessageBuilder.createTextMessage(sessionId, sessionTypeEnum, dataDict.getString("messages"));
+
+        Map<String, Object> remoteExt = MapBuilder.newHashMap();
+        remoteExt.put("extendType", "forwardMultipleText");
+        message.setRemoteExtension(remoteExt);
+
         sendMessageSelf(message, onSendMessageListener, false);
 
         IMMessage messageText = MessageBuilder.createTextMessage(sessionId, sessionTypeEnum, content);

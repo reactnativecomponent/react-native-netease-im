@@ -408,7 +408,7 @@ RCT_EXPORT_METHOD(sendCustomMessage:(NSInteger)custType attachment: (nonnull  NS
 //发送自定义消息
 RCT_EXPORT_METHOD(forwardMultipleTextMessage: (nonnull  NSDictionary *)attachment  sessionId:(nonnull NSString *)sessionId sessionType:(nonnull NSString *)sessionType content:(nonnull NSString *)content){
 //forwardMessagesText:CustomMessageTypeFowardMultipleText data:attachment sessionId:sessionId sessionType:sessionType content:content data:attachment
-    [[ConversationViewController initWithConversationViewController] forwardMultipleTextMessage:CustomMessageTypeFowardMultipleText data:attachment sessionId:sessionId sessionType:sessionType content:content];
+    [[ConversationViewController initWithConversationViewController] forwardMultipleTextMessage:attachment sessionId:sessionId sessionType:sessionType content:content];
 }
 
 //发送视频消息

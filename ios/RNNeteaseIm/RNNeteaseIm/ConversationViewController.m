@@ -363,6 +363,14 @@
         
         if (message.messageType == NIMMessageTypeText) {
             [dic setObject:@"text" forKey:@"msgType"];
+            NSLog(@"message exten =>> %@", message.remoteExt);
+            if ([[message.remoteExt objectForKey:@"extendType"]  isEqual: @"forwardMultipleText"]) {
+                NSMutableDictionary *extend = [NSMutableDictionary dictionary];
+                [extend setObject:message.text forKey:@"messages"];
+                
+                [dic setObject:extend forKey:@"extend"];
+                [dic setObject:@"forwardMultipleText" forKey:@"msgType"];
+            }
         }else if (message.messageType  == NIMMessageTypeImage) {
             [dic setObject:@"image" forKey:@"msgType"];
             NIMImageObject *object = message.messageObject;
@@ -447,12 +455,12 @@
             NSLog(@"DWCustomAttachment *obj %ld %@", (long)obj.custType, obj.dataDict);
             if (obj) {
                 switch (obj.custType) {
-                    case CustomMessageTypeFowardMultipleText: //红包
-                    {
-                        [dic setObject:obj.dataDict forKey:@"extend"];
-                        [dic setObject:@"forwardMultipleText" forKey:@"msgType"];
-                    }
-                        break;
+//                    case CustomMessageTypeFowardMultipleText: //红包
+//                    {
+//                        [dic setObject:obj.dataDict forKey:@"extend"];
+//                        [dic setObject:@"forwardMultipleText" forKey:@"msgType"];
+//                    }
+//                        break;
                     case CustomMessgeTypeRedpacket: //红包
                     {
                         [dic setObject:obj.dataDict forKey:@"extend"];
@@ -637,25 +645,38 @@
 }
 
 //发送自定义消息2
--(void)forwardMultipleTextMessage:(NSInteger )custType data:(NSDictionary *)dataDict sessionId:(NSString *)sessionId sessionType:(NSString *)sessionType content:(NSString *)content {
+-(void)forwardMultipleTextMessage:(NSDictionary *)dataDict sessionId:(NSString *)sessionId sessionType:(NSString *)sessionType content:(NSString *)content {
     NIMSession *session = [NIMSession session:sessionId type:[sessionType integerValue]];
     
-    NIMMessage *message;
-    DWCustomAttachment *obj = [[DWCustomAttachment alloc]init];
-    NSLog(@"custType %ld", (long)custType);
-    obj.custType = custType;
-    obj.dataDict = dataDict;
-    
-    message = [NIMMessageMaker msgWithCustomAttachment:obj andeSession:session];
-    message.text = content;
+    NIMMessage *message = [NIMMessageMaker msgWithText:[dataDict objectForKey:@"messages"] andApnsMembers:@[] andeSession:session];
+    //发送消息
+    NSDictionary  *remoteExt = @{@"extendType": @"forwardMultipleText"};
+    message.remoteExt = remoteExt;
     
     if ([self isFriendToSendMessage:message]) {
         [[NIMSDK sharedSDK].chatManager sendMessage:message toSession:session error:nil];
-        
-        NIMMessage *messages = [[NIMMessage alloc] init];
-        messages.text    = content;
-        [[NIMSDK sharedSDK].chatManager sendMessage:messages toSession:session error:nil];
+
+        NIMMessage *_message = [[NIMMessage alloc] init];
+        _message.text    = content;
+        [[NIMSDK sharedSDK].chatManager sendMessage:_message toSession:session error:nil];
     }
+    
+//    NIMMessage *message;
+//    DWCustomAttachment *obj = [[DWCustomAttachment alloc]init];
+//    NSLog(@"custType %ld", (long)custType);
+//    obj.custType = custType;
+//    obj.dataDict = dataDict;
+    
+//    message = [NIMMessageMaker msgWithCustomAttachment:obj andeSession:session];
+//    message.text = content;
+//
+//    if ([self isFriendToSendMessage:message]) {
+//        [[NIMSDK sharedSDK].chatManager sendMessage:message toSession:session error:nil];
+//
+//        NIMMessage *messages = [[NIMMessage alloc] init];
+//        messages.text    = content;
+//        [[NIMSDK sharedSDK].chatManager sendMessage:messages toSession:session error:nil];
+//    }
 }
 
 
@@ -1143,6 +1164,15 @@
     [dic2 setObject:fromUser forKey:@"fromUser"];
     if (message.messageType == NIMMessageTypeText) {
         [dic2 setObject:@"text" forKey:@"msgType"];
+        
+        NSLog(@"message exten =>> %@", message.remoteExt);
+        if ([[message.remoteExt objectForKey:@"extendType"]  isEqual: @"forwardMultipleText"]) {
+            NSMutableDictionary *extend = [NSMutableDictionary dictionary];
+            [extend setObject:message.text forKey:@"messages"];
+            
+            [dic2 setObject:extend forKey:@"extend"];
+            [dic2 setObject:@"forwardMultipleText" forKey:@"msgType"];
+        }
     }else if (message.messageType  == NIMMessageTypeImage) {
         [dic2 setObject:@"image" forKey:@"msgType"];
         NIMImageObject *object = message.messageObject;
@@ -1228,12 +1258,12 @@
         DWCustomAttachment *obj = customObject.attachment;
         if (obj) {
             switch (obj.custType) {
-                case CustomMessageTypeFowardMultipleText: //红包
-                {
-                    [dic2 setObject:obj.dataDict forKey:@"extend"];
-                    [dic2 setObject:@"forwardMultipleText" forKey:@"msgType"];
-                }
-                    break;
+//                case CustomMessageTypeFowardMultipleText: //红包
+//                {
+//                    [dic2 setObject:obj.dataDict forKey:@"extend"];
+//                    [dic2 setObject:@"forwardMultipleText" forKey:@"msgType"];
+//                }
+//                    break;
                 case CustomMessgeTypeRedpacket: //红包
                 {
                     [dic2 setObject:obj.dataDict forKey:@"extend"];

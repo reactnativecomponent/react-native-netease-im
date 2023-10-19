@@ -223,15 +223,15 @@
         if (recent.lastMessage.messageType == NIMMessageTypeCustom) {
             NIMCustomObject *customObject = recent.lastMessage.messageObject;
             DWCustomAttachment *obj = customObject.attachment;
-            NSLog(@"DWCustomAttachment *obj %ld %@", (long)obj.custType, obj.dataDict);
+
             if (obj) {
                 switch (obj.custType) {
-                    case CustomMessageTypeFowardMultipleText: //红包
-                    {
-//                        [dic setObject:obj.dataDict forKey:@"extend"];
-                        [dic setObject:@"forwardMultipleText" forKey:@"msgType"];
-                    }
-                        break;
+//                    case CustomMessageTypeFowardMultipleText: //红包
+//                    {
+////                        [dic setObject:obj.dataDict forKey:@"extend"];
+//                        [dic setObject:@"forwardMultipleText" forKey:@"msgType"];
+//                    }
+//                        break;
                     case CustomMessgeTypeRedpacket: //红包
                     {
                         [dic setObject:obj.dataDict forKey:@"extend"];
@@ -295,7 +295,15 @@
                 }
             }
         } else {
-            [dic setObject:[NSString stringWithFormat:@"%@", [self getMessageType: recent.lastMessage.messageType]] forKey:@"msgType"];
+            if ([[recent.lastMessage.remoteExt objectForKey:@"extendType"]  isEqual: @"forwardMultipleText"]) {
+                NSMutableDictionary *extend = [NSMutableDictionary dictionary];
+                [extend setObject:recent.lastMessage.text forKey:@"messages"];
+                
+                [dic setObject:extend forKey:@"extend"];
+                [dic setObject:@"forwardMultipleText" forKey:@"msgType"];
+            } else {
+                [dic setObject:[NSString stringWithFormat:@"%@", [self getMessageType: recent.lastMessage.messageType]] forKey:@"msgType"];
+            }
         }
         //消息状态
         [dic setObject:[NSString stringWithFormat:@"%zd", recent.lastMessage.deliveryState] forKey:@"msgStatus"];
@@ -355,12 +363,12 @@
                 NSLog(@"DWCustomAttachment *obj %ld %@", (long)obj.custType, obj.dataDict);
                 if (obj) {
                     switch (obj.custType) {
-                        case CustomMessageTypeFowardMultipleText: //红包
-                        {
-    //                        [dic setObject:obj.dataDict forKey:@"extend"];
-                            [dic setObject:@"forwardMultipleText" forKey:@"msgType"];
-                        }
-                            break;
+//                        case CustomMessageTypeFowardMultipleText: //红包
+//                        {
+//    //                        [dic setObject:obj.dataDict forKey:@"extend"];
+//                            [dic setObject:@"forwardMultipleText" forKey:@"msgType"];
+//                        }
+//                            break;
                         case CustomMessgeTypeRedpacket: //红包
                         {
                             [dic setObject:obj.dataDict forKey:@"extend"];
@@ -424,7 +432,15 @@
                     }
                 }
             } else {
-                [dic setObject:[NSString stringWithFormat:@"%@", [self getMessageType: recent.lastMessage.messageType]] forKey:@"msgType"];
+                if ([[recent.lastMessage.remoteExt objectForKey:@"extendType"]  isEqual: @"forwardMultipleText"]) {
+                    NSMutableDictionary *extend = [NSMutableDictionary dictionary];
+                    [extend setObject:recent.lastMessage.text forKey:@"messages"];
+                    
+                    [dic setObject:extend forKey:@"extend"];
+                    [dic setObject:@"forwardMultipleText" forKey:@"msgType"];
+                } else {
+                    [dic setObject:[NSString stringWithFormat:@"%@", [self getMessageType: recent.lastMessage.messageType]] forKey:@"msgType"];
+                }
             }
             //消息状态
             [dic setObject:[NSString stringWithFormat:@"%zd", recent.lastMessage.deliveryState] forKey:@"msgStatus"];
@@ -459,15 +475,14 @@
                 if (recent.lastMessage.messageType == NIMMessageTypeCustom) {
                     NIMCustomObject *customObject = recent.lastMessage.messageObject;
                     DWCustomAttachment *obj = customObject.attachment;
-                    NSLog(@"DWCustomAttachment *obj %ld %@", (long)obj.custType, obj.dataDict);
                     if (obj) {
                         switch (obj.custType) {
-                            case CustomMessageTypeFowardMultipleText: //红包
-                            {
-        //                        [dic setObject:obj.dataDict forKey:@"extend"];
-                                [dic setObject:@"forwardMultipleText" forKey:@"msgType"];
-                            }
-                                break;
+//                            case CustomMessageTypeFowardMultipleText: //红包
+//                            {
+//        //                        [dic setObject:obj.dataDict forKey:@"extend"];
+//                                [dic setObject:@"forwardMultipleText" forKey:@"msgType"];
+//                            }
+//                                break;
                             case CustomMessgeTypeRedpacket: //红包
                             {
                                 [dic setObject:obj.dataDict forKey:@"extend"];
@@ -531,7 +546,15 @@
                         }
                     }
                 } else {
-                    [dic setObject:[NSString stringWithFormat:@"%@", [self getMessageType: recent.lastMessage.messageType]] forKey:@"msgType"];
+                    if ([[recent.lastMessage.remoteExt objectForKey:@"extendType"]  isEqual: @"forwardMultipleText"]) {
+                        NSMutableDictionary *extend = [NSMutableDictionary dictionary];
+                        [extend setObject:recent.lastMessage.text forKey:@"messages"];
+                        
+                        [dic setObject:extend forKey:@"extend"];
+                        [dic setObject:@"forwardMultipleText" forKey:@"msgType"];
+                    } else {
+                        [dic setObject:[NSString stringWithFormat:@"%@", [self getMessageType: recent.lastMessage.messageType]] forKey:@"msgType"];
+                    }
                 }
                 //消息状态
                 [dic setObject:[NSString stringWithFormat:@"%zd", recent.lastMessage.deliveryState] forKey:@"msgStatus"];

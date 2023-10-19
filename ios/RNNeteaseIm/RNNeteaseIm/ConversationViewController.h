@@ -39,7 +39,7 @@ typedef void(^Errors)(id erro);
 -(void)sendCustomMessage:(NSInteger )custType data:(NSDictionary *)dataDict;
 
 // just forward multiple message text
--(void)forwardMultipleTextMessage:(NSInteger )custType data:(NSDictionary *)dataDict sessionId:(NSString *)sessionId sessionType:(NSString *)sessionType content:(NSString *)content;
+-(void)forwardMultipleTextMessage:(NSDictionary *)dataDict sessionId:(NSString *)sessionId sessionType:(NSString *)sessionType content:(NSString *)content;
 
 //发送地理位置消息
 -(void)sendLocationMessage:(  NSString *)latitude longitude:(  NSString *)longitude address:(  NSString *)address;

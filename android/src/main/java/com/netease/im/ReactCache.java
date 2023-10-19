@@ -181,7 +181,15 @@ public class ReactCache {
                 if (contact.getMsgType() == MsgTypeEnum.custom) {
                     map.putString(MessageConstant.Message.MSG_TYPE, getMessageType(contact.getMsgType(),(CustomAttachment) contact.getAttachment()));
                 } else {
-                    map.putString(MessageConstant.Message.MSG_TYPE, getMessageType(contact.getMsgType(), null));
+                    if (contact.getExtension() != null) {
+                        WritableMap extend = Arguments.createMap();
+
+                        extend.putString("messages", contact.getContent());
+                        map.putMap(MESSAGE_EXTEND, extend);
+                        map.putString(MessageConstant.Message.MSG_TYPE, "forwardMultipleText");
+                    } else {
+                        map.putString(MessageConstant.Message.MSG_TYPE, getMessageType(contact.getMsgType(), null));
+                    }
                 }
                 map.putString("msgStatus", Integer.toString(contact.getMsgStatus().getValue()));
                 map.putString("messageId", contact.getRecentMessageId());
@@ -1004,7 +1012,15 @@ public class ReactCache {
         if (item.getMsgType() == MsgTypeEnum.custom) {
             itemMap.putString(MessageConstant.Message.MSG_TYPE, getMessageType(item.getMsgType(),(CustomAttachment) item.getAttachment()));
         } else {
-            itemMap.putString(MessageConstant.Message.MSG_TYPE, getMessageType(item.getMsgType(), null));
+            if (item.getRemoteExtension() != null & item.getRemoteExtension().get("extendType").toString() == "forwardMultipleText") {
+                WritableMap extend = Arguments.createMap();
+
+                extend.putString("messages", item.getContent());
+                itemMap.putMap(MESSAGE_EXTEND, extend);
+                itemMap.putString(MessageConstant.Message.MSG_TYPE, "forwardMultipleText");
+            } else {
+                itemMap.putString(MessageConstant.Message.MSG_TYPE, getMessageType(item.getMsgType(), null));
+            }
         }
 
         itemMap.putString(MessageConstant.Message.TIME_STRING, Long.toString(item.getTime() / 1000));
@@ -1188,17 +1204,17 @@ public class ReactCache {
                     CustomAttachment customAttachment = (CustomAttachment) attachment;
 
                     switch (customAttachment.getType()) {
-                        case CustomAttachmentType.ForwardMultipleText:
-                            if (attachment instanceof ForwardMultipleTextAttachment) {
-                                WritableMap extend = Arguments.createMap();
-
-                                ForwardMultipleTextAttachment forwardMultipleTextAttachment = (ForwardMultipleTextAttachment) attachment;
-                                JSONArray messagesForwarded = JSON.parseArray(forwardMultipleTextAttachment.toReactNativeCustom());
-
-                                extend.putArray(MessageConstant.ForwardMultipleText.messages, ArrayUtil.toWritableArray(messagesForwarded));
-                                itemMap.putMap(MESSAGE_EXTEND, extend);
-                            }
-                            break;
+//                        case CustomAttachmentType.ForwardMultipleText:
+//                            if (attachment instanceof ForwardMultipleTextAttachment) {
+//                                WritableMap extend = Arguments.createMap();
+//
+//                                ForwardMultipleTextAttachment forwardMultipleTextAttachment = (ForwardMultipleTextAttachment) attachment;
+//                                JSONArray messagesForwarded = JSON.parseArray(forwardMultipleTextAttachment.toReactNativeCustom());
+//
+//                                extend.putArray(MessageConstant.ForwardMultipleText.messages, ArrayUtil.toWritableArray(messagesForwarded));
+//                                itemMap.putMap(MESSAGE_EXTEND, extend);
+//                            }
+//                            break;
 
                         case CustomAttachmentType.RedPacket:
                             if (attachment instanceof RedPacketAttachement) {
