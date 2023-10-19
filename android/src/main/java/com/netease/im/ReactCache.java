@@ -182,11 +182,17 @@ public class ReactCache {
                     map.putString(MessageConstant.Message.MSG_TYPE, getMessageType(contact.getMsgType(),(CustomAttachment) contact.getAttachment()));
                 } else {
                     if (contact.getExtension() != null) {
-                        WritableMap extend = Arguments.createMap();
+                        Map<String, Object> extensionMsg = contact.getExtension();
 
-                        extend.putString("messages", contact.getContent());
-                        map.putMap(MESSAGE_EXTEND, extend);
-                        map.putString(MessageConstant.Message.MSG_TYPE, "forwardMultipleText");
+                        if (extensionMsg.containsKey("extendType")) {
+                            if (extensionMsg.get("extendType").toString().equals("forwardMultipleText")) {
+                                WritableMap extend = Arguments.createMap();
+
+                                extend.putString("messages", contact.getContent());
+                                map.putMap(MESSAGE_EXTEND, extend);
+                                map.putString(MessageConstant.Message.MSG_TYPE, "forwardMultipleText");
+                            }
+                        }
                     } else {
                         map.putString(MessageConstant.Message.MSG_TYPE, getMessageType(contact.getMsgType(), null));
                     }
@@ -1012,12 +1018,17 @@ public class ReactCache {
         if (item.getMsgType() == MsgTypeEnum.custom) {
             itemMap.putString(MessageConstant.Message.MSG_TYPE, getMessageType(item.getMsgType(),(CustomAttachment) item.getAttachment()));
         } else {
-            if (item.getRemoteExtension() != null & item.getRemoteExtension().get("extendType").toString() == "forwardMultipleText") {
-                WritableMap extend = Arguments.createMap();
+            if (item.getRemoteExtension() != null) {
+                Map<String, Object> extensionMsg = item.getRemoteExtension();
+                if (extensionMsg.containsKey("extendType")) {
+                    if (extensionMsg.get("extendType").toString().equals("forwardMultipleText")) {
+                        WritableMap extend = Arguments.createMap();
 
-                extend.putString("messages", item.getContent());
-                itemMap.putMap(MESSAGE_EXTEND, extend);
-                itemMap.putString(MessageConstant.Message.MSG_TYPE, "forwardMultipleText");
+                        extend.putString("messages", item.getContent());
+                        itemMap.putMap(MESSAGE_EXTEND, extend);
+                        itemMap.putString(MessageConstant.Message.MSG_TYPE, "forwardMultipleText");
+                    }
+                }
             } else {
                 itemMap.putString(MessageConstant.Message.MSG_TYPE, getMessageType(item.getMsgType(), null));
             }
