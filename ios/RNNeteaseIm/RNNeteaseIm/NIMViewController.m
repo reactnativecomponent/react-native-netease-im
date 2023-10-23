@@ -273,12 +273,12 @@
                         }
                     }
                         break;
-                    case CustomMessgeTypeBusinessCard://名片
-                    {
-                        [dic setObject:obj.dataDict  forKey:@"extend"];
-                        [dic setObject:@"card" forKey:@"msgType"];
-                    }
-                        break;
+//                    case CustomMessgeTypeBusinessCard://名片
+//                    {
+//                        [dic setObject:obj.dataDict  forKey:@"extend"];
+//                        [dic setObject:@"card" forKey:@"msgType"];
+//                    }
+//                        break;
                     case CustomMessgeTypeCustom://自定义
                     {
                         [dic setObject:obj.dataDict  forKey:@"extend"];
@@ -301,6 +301,9 @@
                 
                 [dic setObject:extend forKey:@"extend"];
                 [dic setObject:@"forwardMultipleText" forKey:@"msgType"];
+            } else if ([[recent.lastMessage.remoteExt objectForKey:@"extendType"]  isEqual: @"card"]) {
+                [dic setObject:recent.lastMessage.remoteExt forKey:@"extend"];
+                [dic setObject:@"card" forKey:@"msgType"];
             } else {
                 [dic setObject:[NSString stringWithFormat:@"%@", [self getMessageType: recent.lastMessage.messageType]] forKey:@"msgType"];
             }
@@ -438,6 +441,9 @@
                     
                     [dic setObject:extend forKey:@"extend"];
                     [dic setObject:@"forwardMultipleText" forKey:@"msgType"];
+                } else if ([[recent.lastMessage.remoteExt objectForKey:@"extendType"]  isEqual: @"card"]) {
+                    [dic setObject:recent.lastMessage.remoteExt forKey:@"extend"];
+                    [dic setObject:@"card" forKey:@"msgType"];
                 } else {
                     [dic setObject:[NSString stringWithFormat:@"%@", [self getMessageType: recent.lastMessage.messageType]] forKey:@"msgType"];
                 }
@@ -552,6 +558,9 @@
                         
                         [dic setObject:extend forKey:@"extend"];
                         [dic setObject:@"forwardMultipleText" forKey:@"msgType"];
+                    } else if ([[recent.lastMessage.remoteExt objectForKey:@"extendType"]  isEqual: @"card"]) {
+                        [dic setObject:recent.lastMessage.remoteExt forKey:@"extend"];
+                        [dic setObject:@"card" forKey:@"msgType"];
                     } else {
                         [dic setObject:[NSString stringWithFormat:@"%@", [self getMessageType: recent.lastMessage.messageType]] forKey:@"msgType"];
                     }

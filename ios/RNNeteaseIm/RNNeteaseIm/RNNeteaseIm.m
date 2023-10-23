@@ -485,8 +485,9 @@ RCT_EXPORT_METHOD(sendBankTransferMessage:(NSString *)amount comments:(NSString 
     [[ConversationViewController initWithConversationViewController] sendBankTransferMessage:amount comments:comments serialNo:serialNo];
 }
 //发送名片消息
-RCT_EXPORT_METHOD(sendCardMessage:(NSString *)type name:(NSString *)name imgPath:(NSString *)imgPath sessionId:(NSString *)sessionId){
-    [[ConversationViewController initWithConversationViewController] sendCardMessage:type sessionId:sessionId name:name imgPath:imgPath];
+RCT_EXPORT_METHOD(sendCardMessage:(NSString *)toSessionType sessionId:(NSString *)toSessionId name:(NSString *)name imgPath:(NSString *)strImgPath cardSessionId:(NSString *)cardSessionId cardSessionType:(NSString *)cardSessionType){
+    
+    [[ConversationViewController initWithConversationViewController] sendCardMessage:toSessionType sessionId:toSessionId name:name imgPath:strImgPath cardSessionId:cardSessionId cardSessionType:cardSessionType];
 }
 
 //发送提醒消息

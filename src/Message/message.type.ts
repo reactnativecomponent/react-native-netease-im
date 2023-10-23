@@ -44,6 +44,13 @@ export interface NimMessageTypeExtend extends NimSessionTypeExtend {
   thumbPath: string;
   path: string;
   messages: NIMMessage;
+
+  // have when message type is "card"
+  extendType?: string;
+  type?: string; // card session type
+  name?: string; // card session name
+  imgPath?: string; // card image avatar
+  sessionId?: string; // card sessionId
 }
 
 export interface NIMMessage {

@@ -779,12 +779,25 @@ public class SessionService {
         sendMessageSelf(message, onSendMessageListener, false);
     }
 
-    public void sendCardMessage(String type, String name, String imgPath, String id, OnSendMessageListener onSendMessageListener) {
-        CustomMessageConfig config = new CustomMessageConfig();
-        CardAttachment attachment = new CardAttachment();
-        name = NimUserInfoCache.getInstance().getUserName(id);
-        attachment.setParams(type, name, imgPath, id);
-        IMMessage message = MessageBuilder.createCustomMessage(sessionId, sessionTypeEnum, "[名片] " + name, attachment, config);
+    public void sendCardMessage(String toSessionType,String toSessionId, String name, String imgPath, String cardSessionId, String cardSessionType, OnSendMessageListener onSendMessageListener) {
+//        CustomMessageConfig config = new CustomMessageConfig();
+//        CardAttachment attachment = new CardAttachment();
+//        name = NimUserInfoCache.getInstance().getUserName(id);
+//        attachment.setParams(type, name, imgPath, id);
+//        IMMessage message = MessageBuilder.createCustomMessage(sessionId, sessionTypeEnum, "[名片] " + name, attachment, config);
+//        sendMessageSelf(message, onSendMessageListener, false);
+        SessionTypeEnum sessionTypeE = SessionUtil.getSessionType(toSessionType);
+        IMMessage message = MessageBuilder.createTextMessage(toSessionId, sessionTypeE, "card");
+
+        Map<String, Object> remoteExt = MapBuilder.newHashMap();
+        remoteExt.put("extendType", "card");
+        remoteExt.put("type", cardSessionType);
+        remoteExt.put("name", name);
+        remoteExt.put("sessionId", cardSessionId);
+        remoteExt.put("imgPath", imgPath);
+
+        message.setRemoteExtension(remoteExt);
+
         sendMessageSelf(message, onSendMessageListener, false);
     }
 
