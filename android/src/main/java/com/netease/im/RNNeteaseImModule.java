@@ -1218,12 +1218,19 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
 
     @ReactMethod
     public void sendCardMessage(String toSessionType,String toSessionId, String name, String imgPath, String cardSessionId, String cardSessionType, final Promise promise) {
-        sessionService.sendCardMessage(toSessionType, toSessionId, name, imgPath, cardSessionId, cardSessionType, new SessionService.OnSendMessageListener() {
-            @Override
-            public int onResult(int code, IMMessage message) {
-                return 0;
-            }
-        });
+        try {
+            sessionService.sendCardMessage(toSessionType, toSessionId, name, imgPath, cardSessionId, cardSessionType, new SessionService.OnSendMessageListener() {
+                @Override
+                public int onResult(int code, IMMessage message) {
+                    return 0;
+                }
+            });
+
+            promise.resolve("200");
+        }
+        catch (Exception e){
+            promise.reject("SEND_ERROR", "Failed to send card message: " + e.getMessage());
+        }
 
     }
 
