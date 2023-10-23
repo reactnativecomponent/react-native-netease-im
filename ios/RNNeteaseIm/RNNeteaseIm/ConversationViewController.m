@@ -371,6 +371,11 @@
                 [dic setObject:extend forKey:@"extend"];
                 [dic setObject:@"forwardMultipleText" forKey:@"msgType"];
             }
+            
+            if ([[message.remoteExt objectForKey:@"extendType"]  isEqual: @"card"]) {
+                [dic setObject:message.remoteExt forKey:@"extend"];
+                [dic setObject:@"card" forKey:@"msgType"];
+            }
         }else if (message.messageType  == NIMMessageTypeImage) {
             [dic setObject:@"image" forKey:@"msgType"];
             NIMImageObject *object = message.messageObject;
@@ -502,12 +507,12 @@
                         }
                     }
                         break;
-                    case CustomMessgeTypeBusinessCard://名片
-                    {
-                        [dic setObject:obj.dataDict  forKey:@"extend"];
-                        [dic setObject:@"card" forKey:@"msgType"];
-                    }
-                        break;
+//                    case CustomMessgeTypeBusinessCard://名片
+//                    {
+//                        [dic setObject:obj.dataDict  forKey:@"extend"];
+//                        [dic setObject:@"card" forKey:@"msgType"];
+//                    }
+//                        break;
                     case CustomMessgeTypeCustom://自定义
                     {
                         [dic setObject:obj.dataDict  forKey:@"extend"];
@@ -743,18 +748,17 @@
 }
 
 //发送名片
-- (void)sendCardMessage:(NSString *)type sessionId:(NSString *)sessionId name:(NSString *)name imgPath:(NSString *)strImgPath{
-    if ([type isEqualToString:@"个人名片"]) {
-        NIMUser *user = [[NIMSDK sharedSDK].userManager userInfo:sessionId];
-        NIMUserInfo *userInfo = user.userInfo;
-        name = userInfo.nickName ? userInfo.nickName : name;
-        
-    }else{
-        NIMTeam *team = [[[NIMSDK sharedSDK] teamManager]teamById:sessionId];
-        name = team.teamName ? team.teamName : name;
+- (void)sendCardMessage:(NSString *)toSessionType sessionId:(NSString *)toSessionId name:(NSString *)name imgPath:(NSString *)strImgPath cardSessionId:(NSString *)cardSessionId cardSessionType:(NSString *)cardSessionType {
+    NIMSession *session = [NIMSession session:toSessionId type:[toSessionType integerValue]];
+
+    NIMMessage *message = [NIMMessageMaker msgWithText:@"card" andApnsMembers:@[] andeSession:session];
+    //发送消息
+    NSDictionary  *remoteExt = @{@"extendType": @"card", @"type":cardSessionType, @"name":name, @"imgPath":strImgPath, @"sessionId":cardSessionId};
+    message.remoteExt = remoteExt;
+    
+    if ([self isFriendToSendMessage:message]) {
+        [[NIMSDK sharedSDK].chatManager sendMessage:message toSession:session error:nil];
     }
-    NSDictionary *dict = @{@"type":type,@"name":name,@"imgPath":strImgPath,@"sessionId":sessionId};
-    [self sendCustomMessage:CustomMessgeTypeBusinessCard data:dict];
 }
 
 // dict字典转json字符串
@@ -1172,6 +1176,11 @@
             
             [dic2 setObject:extend forKey:@"extend"];
             [dic2 setObject:@"forwardMultipleText" forKey:@"msgType"];
+        }
+        
+        if ([[message.remoteExt objectForKey:@"extendType"]  isEqual: @"card"]) {
+            [dic2 setObject:message.remoteExt forKey:@"extend"];
+            [dic2 setObject:@"card" forKey:@"msgType"];
         }
     }else if (message.messageType  == NIMMessageTypeImage) {
         [dic2 setObject:@"image" forKey:@"msgType"];

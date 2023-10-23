@@ -214,12 +214,21 @@ class NimSession {
    * @returns {*}
    */
   sendCardMessage(
-    type: NIMSendAttachmentEnum,
+    toSessionType: string,
+    toSessionId: string,
     name: string,
     imgPath: string,
-    sessionId: string
+    cardSessionId: string,
+    cardSessionType: string
   ) {
-    return RNNeteaseIm.sendCardMessage(type, name, imgPath, sessionId);
+    return RNNeteaseIm.sendCardMessage(
+      toSessionType,
+      toSessionId,
+      name,
+      imgPath,
+      cardSessionId,
+      cardSessionType
+    );
   }
   /**
    * 拆红包

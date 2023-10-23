@@ -185,17 +185,39 @@ public class ReactCache {
                         Map<String, Object> extensionMsg = contact.getExtension();
 
                         if (extensionMsg.containsKey("extendType")) {
-                            if (extensionMsg.get("extendType").toString().equals("forwardMultipleText")) {
+                            String extendType = extensionMsg.get("extendType").toString();
+                            if (extendType.equals("forwardMultipleText")) {
                                 WritableMap extend = Arguments.createMap();
 
                                 extend.putString("messages", contact.getContent());
                                 map.putMap(MESSAGE_EXTEND, extend);
                                 map.putString(MessageConstant.Message.MSG_TYPE, "forwardMultipleText");
                             }
+
+                            if (extendType.equals("card")) {
+                                WritableMap writableMapExtend = new WritableNativeMap();
+
+                                for (Map.Entry<String, Object> entry : extensionMsg.entrySet()) {
+                                    writableMapExtend.putString(entry.getKey(), entry.getValue().toString());
+                                }
+
+                                map.putMap(MESSAGE_EXTEND, writableMapExtend);
+                                map.putString(MessageConstant.Message.MSG_TYPE, "card");
+                            }
                         }
                     } else {
                         map.putString(MessageConstant.Message.MSG_TYPE, getMessageType(contact.getMsgType(), null));
                     }
+
+//                    if (contact.getExtension() != null) {
+//                        WritableMap extend = Arguments.createMap();
+//
+//                        extend.putString("messages", contact.getContent());
+//                        map.putMap(MESSAGE_EXTEND, extend);
+//                        map.putString(MessageConstant.Message.MSG_TYPE, "forwardMultipleText");
+//                    } else {
+//                        map.putString(MessageConstant.Message.MSG_TYPE, getMessageType(contact.getMsgType(), null));
+//                    }
                 }
                 map.putString("msgStatus", Integer.toString(contact.getMsgStatus().getValue()));
                 map.putString("messageId", contact.getRecentMessageId());
@@ -383,17 +405,17 @@ public class ReactCache {
                                 }
                             }
                             break;
-                        case CustomAttachmentType.Card:
-                            if (attachment instanceof CardAttachment) {
-                                String str;
-                                if (fromAccount.equals(LoginService.getInstance().getAccount())) {
-                                    str = "推荐了";
-                                } else {
-                                    str = "向你推荐了";
-                                }
-                                content = str + ((CardAttachment) attachment).getName();
-                            }
-                            break;
+//                        case CustomAttachmentType.Card:
+//                            if (attachment instanceof CardAttachment) {
+//                                String str;
+//                                if (fromAccount.equals(LoginService.getInstance().getAccount())) {
+//                                    str = "推荐了";
+//                                } else {
+//                                    str = "向你推荐了";
+//                                }
+//                                content = str + ((CardAttachment) attachment).getName();
+//                            }
+//                            break;
                         default:
                             if (attachment instanceof DefaultCustomAttachment) {
                                 content = ((DefaultCustomAttachment) attachment).getDigst();
@@ -1020,13 +1042,25 @@ public class ReactCache {
         } else {
             if (item.getRemoteExtension() != null) {
                 Map<String, Object> extensionMsg = item.getRemoteExtension();
+
                 if (extensionMsg.containsKey("extendType")) {
-                    if (extensionMsg.get("extendType").toString().equals("forwardMultipleText")) {
+                    String extendType = extensionMsg.get("extendType").toString();
+                    if (extendType.equals("forwardMultipleText")) {
                         WritableMap extend = Arguments.createMap();
 
                         extend.putString("messages", item.getContent());
                         itemMap.putMap(MESSAGE_EXTEND, extend);
                         itemMap.putString(MessageConstant.Message.MSG_TYPE, "forwardMultipleText");
+                    }
+
+                    if (extendType.equals("card")) {
+                        WritableMap writableMapExtend = new WritableNativeMap();
+                        for (Map.Entry<String, Object> entry : extensionMsg.entrySet()) {
+                            writableMapExtend.putString(entry.getKey(), entry.getValue().toString());
+                        }
+
+                        itemMap.putMap(MESSAGE_EXTEND, writableMapExtend);
+                        itemMap.putString(MessageConstant.Message.MSG_TYPE, "card");
                     }
                 }
             } else {
@@ -1261,12 +1295,12 @@ public class ReactCache {
                                 itemMap.putMap(MESSAGE_EXTEND, rpOpen.toReactNative());
                             }
                             break;
-                        case CustomAttachmentType.Card:
-                            if (attachment instanceof CardAttachment) {
-                                CardAttachment cardAttachment = (CardAttachment) attachment;
-                                itemMap.putMap(MESSAGE_EXTEND, cardAttachment.toReactNative());
-                            }
-                            break;
+                        // case CustomAttachmentType.Card:
+                        //     if (attachment instanceof CardAttachment) {
+                        //         CardAttachment cardAttachment = (CardAttachment) attachment;
+                        //         itemMap.putMap(MESSAGE_EXTEND, cardAttachment.toReactNative());
+                        //     }
+                        //     break;
                         default:
                             if (attachment instanceof DefaultCustomAttachment) {
                                 DefaultCustomAttachment defaultCustomAttachment = (DefaultCustomAttachment) attachment;
