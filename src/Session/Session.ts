@@ -341,8 +341,8 @@ class NimSession {
    * @param messageId
    * @returns {*}
    */
-  revokeMessage(messageId: string) {
-    return RNNeteaseIm.revokeMessage(messageId);
+  revokeMessage(messageId: string, language: string) {
+    return RNNeteaseIm.revokeMessage(messageId, language);
   }
 
   /**

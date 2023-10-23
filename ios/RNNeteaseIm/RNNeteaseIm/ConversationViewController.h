@@ -60,7 +60,7 @@ typedef void(^Errors)(id erro);
 //本地历史记录
 -(void)localSessionList:(NSString *)sessionId sessionType:(NSString *)sessionType timeLong:(NSString *)timeLong direction:(NSString *)direction limit:(NSString *)limit asc:(BOOL)asc success:(Success)succe;
 //撤回消息
--(void)revokeMessage:(NSString *)messageId success:(Success)succe;
+-(void)revokeMessage:(NSString *)messageId withLanguage:(NSString *)language success:(Success)succe error:(Errors)err ;
 //开始播放录音
 - (void)play:(NSString *)filepath;
 //停止播放
@@ -77,7 +77,7 @@ typedef void(^Errors)(id erro);
 - (void)updateAudioMessagePlayStatus:(NSString *)messageID;
 
 //获得撤回内容
-- (NSString *)tipOnMessageRevoked:(id)message;
+- (NSString *)tipOnMessageRevoked:(id)message withLanguage:(NSString *)language;
 //更具提示生成撤回消息
 - (NIMMessage *)msgWithTip:(NSString *)tip;
 //重发消息
