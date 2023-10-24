@@ -1690,6 +1690,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
                             promise.reject("" + code, "");
                         } else {
                             Object a = ReactCache.createMessageList(messageList);
+                            sessionService.sendMsgReceipt(messageList);
                             promise.resolve(a);
                         }
                         return 0;

@@ -112,6 +112,16 @@
         NIMMessage *currentM = currentMessage[0];
         NSArray *messageArr =  [[[NIMSDK sharedSDK] conversationManager]messagesInSession:self._session message:currentM limit: index];
         if (messageArr.count != 0) {
+            NIMMessage *lastMessage = [messageArr lastObject];
+            
+            NIMMessageReceipt *receipt = [[NIMMessageReceipt alloc] initWithMessage:lastMessage];
+            
+            if (lastMessage.session.sessionType == NIMSessionTypeTeam) {
+                [[[NIMSDK sharedSDK] chatManager] sendTeamMessageReceipts:@[receipt] completion:nil];
+            } else {
+                [[[NIMSDK sharedSDK] chatManager] sendMessageReceipt:receipt completion:nil];
+            }
+            
             succe([self setTimeArr:messageArr]);
         }else{
            
@@ -121,6 +131,17 @@
     }
     else{
         NSArray *messageArr =  [[[NIMSDK sharedSDK] conversationManager]messagesInSession:self._session message:nil limit: index];
+        
+        NIMMessage *lastMessage = [messageArr lastObject];
+        
+        NIMMessageReceipt *receipt = [[NIMMessageReceipt alloc] initWithMessage:lastMessage];
+        
+        if (lastMessage.session.sessionType == NIMSessionTypeTeam) {
+            [[[NIMSDK sharedSDK] chatManager] sendTeamMessageReceipts:@[receipt] completion:nil];
+        } else {
+            [[[NIMSDK sharedSDK] chatManager] sendMessageReceipt:receipt completion:nil];
+        }
+        
         if ([self setTimeArr:messageArr].count != 0) {
             NSMutableDictionary *dic = [[self setTimeArr:messageArr] objectAtIndex:[self setTimeArr:messageArr].count - 1];
             [[NSUserDefaults standardUserDefaults]setObject:[dic objectForKey:@"time"] forKey:@"timestamp"];
@@ -651,6 +672,7 @@
 
 //发送自定义消息2
 -(void)forwardMultipleTextMessage:(NSDictionary *)dataDict sessionId:(NSString *)sessionId sessionType:(NSString *)sessionType content:(NSString *)content {
+
     NIMSession *session = [NIMSession session:sessionId type:[sessionType integerValue]];
     
     NIMMessage *message = [NIMMessageMaker msgWithText:[dataDict objectForKey:@"messages"] andApnsMembers:@[] andeSession:session];
@@ -661,9 +683,11 @@
     if ([self isFriendToSendMessage:message]) {
         [[NIMSDK sharedSDK].chatManager sendMessage:message toSession:session error:nil];
 
-        NIMMessage *_message = [[NIMMessage alloc] init];
-        _message.text    = content;
-        [[NIMSDK sharedSDK].chatManager sendMessage:_message toSession:session error:nil];
+        if (content != nil) {
+            NIMMessage *_message = [[NIMMessage alloc] init];
+            _message.text    = content;
+            [[NIMSDK sharedSDK].chatManager sendMessage:_message toSession:session error:nil];
+        }
     }
     
 //    NIMMessage *message;
