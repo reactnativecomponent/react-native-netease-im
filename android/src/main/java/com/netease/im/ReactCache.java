@@ -268,7 +268,7 @@ public class ReactCache {
                             notiObj.putInt("operationType", operationType.getValue());
                             notiObj.putMap("sourceId", sourceIdMap);
 
-                            switch (((NotificationAttachment) contact.getAttachment()).getType()) {
+                            switch (operationType) {
                                 case InviteMember:
                                 case KickMember:
                                 case PassTeamApply:
@@ -1180,7 +1180,7 @@ public class ReactCache {
                     notiObj.putInt("operationType", operationType.getValue());
                     notiObj.putMap("sourceId", sourceIdMap);
 
-                    switch (((NotificationAttachment) item.getAttachment()).getType()) {
+                    switch (operationType) {
                         case InviteMember:
                         case KickMember:
                         case PassTeamApply:

@@ -1,6 +1,7 @@
 package com.netease.im.login;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableMap;
@@ -20,7 +21,9 @@ import com.netease.nimlib.sdk.auth.AuthServiceObserver;
 import com.netease.nimlib.sdk.auth.constant.LoginSyncStatus;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
+import com.netease.nimlib.sdk.msg.attachment.NotificationAttachment;
 import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
+import com.netease.nimlib.sdk.msg.constant.NotificationType;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.msg.model.RecentContact;
@@ -66,7 +69,7 @@ public class RecentContactObserver {
                 items.clear();
                 if (recentContacts != null) {
                     for (RecentContact c : recentContacts) {
-                        doAddDeleteQuitTeamMessage(c, true);
+                        doAddDeleteQuitTeamMessage(c, false);
                     }
                 }
 //                items.addAll(recentContacts);
@@ -92,8 +95,8 @@ public class RecentContactObserver {
 
         String contactId = recent.getContactId();
         SessionTypeEnum sessionTypeEnum = recent.getSessionType();
-//        LogUtil.w("deleteRecentContactCallback-", "---" + contactId);
-//        LogUtil.w("deleteRecentContactCallback-", "---" + recent.getContent());
+        // Log.d("deleteRecentContact-", "---" + contactId);
+        // Log.d("deleteRecentContact-", "---" + recent.getContent());
         if (callback) {
             NIMClient.getService(MsgService.class).deleteRecentContact2(contactId, sessionTypeEnum);
         } else {
@@ -119,22 +122,23 @@ public class RecentContactObserver {
     }
 
     private void onRecentContactChanged(List<RecentContact> recentContacts) {
-        int index;
+        // Log.d("onRecentContactChanged", recentContacts.toString());
+//        int index;
         for (RecentContact r : recentContacts) {
-            index = -1;
+//            index = -1;
             for (int i = 0; i < items.size(); i++) {
                 if (r.getContactId().equals(items.get(i).getContactId())
                         && r.getSessionType() == (items.get(i).getSessionType())) {
-                    index = i;
+//                    index = i;
                     break;
                 }
             }
 
-            if (index >= 0) {
-                items.remove(index);
-            }
+//            if (index >= 0) {
+//                items.remove(index);
+//            }
 
-            doAddDeleteQuitTeamMessage(r, true);
+            doAddDeleteQuitTeamMessage(r, false);
 
         }
 
@@ -143,6 +147,7 @@ public class RecentContactObserver {
 
     void doAddDeleteQuitTeamMessage(final RecentContact r, boolean isDelete) {
         if (isDelete && r.getSessionType() == SessionTypeEnum.Team) {
+
             final String contactId = r.getContactId();
             final Team t = NIMClient.getService(TeamService.class).queryTeamBlock(contactId);
             if (t != null) {
@@ -252,6 +257,36 @@ public class RecentContactObserver {
                         }
                         ReactCache.emit(ReactCache.observeAccountNotice, noticeAttachment == null ? null : noticeAttachment.toReactNative());
                         break;
+                    }
+                }
+                if (m.getMsgType() == MsgTypeEnum.notification) {
+                    NotificationAttachment notiAttachment = (NotificationAttachment) m.getAttachment();
+                    NotificationType operationType = notiAttachment.getType();
+
+                    // Log.d("imMessages", String.valueOf(operationType.getValue()));
+                    switch (operationType) {
+                        case DismissTeam:
+                        case KickMember:
+                        case InviteMember:
+                        case AcceptInvite:
+                            List<RecentContact> newItems = new ArrayList<RecentContact>();
+
+                            for (int i=0; i < items.size(); i++) {
+                                RecentContact newRecentContact = items.get(i);
+
+                                if (items.get(i).getContactId().equals(m.getSessionId())) {
+                                    newRecentContact.setLastMsg(m);
+                                }
+
+                                newItems.add(items.get(i));
+                            }
+//                            NIMClient.getService(MsgService.class).insertLocalMessage(m, m.getFromAccount());
+                            items.clear();
+                            items.addAll(newItems);
+                            onRecentContactChanged(newItems);
+                            break;
+                        default:
+                            break;
                     }
                 }
             }
