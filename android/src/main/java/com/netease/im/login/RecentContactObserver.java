@@ -123,20 +123,20 @@ public class RecentContactObserver {
 
     private void onRecentContactChanged(List<RecentContact> recentContacts) {
         // Log.d("onRecentContactChanged", recentContacts.toString());
-//        int index;
+        int index;
         for (RecentContact r : recentContacts) {
-//            index = -1;
+            index = -1;
             for (int i = 0; i < items.size(); i++) {
                 if (r.getContactId().equals(items.get(i).getContactId())
                         && r.getSessionType() == (items.get(i).getSessionType())) {
-//                    index = i;
+                    index = i;
                     break;
                 }
             }
 
-//            if (index >= 0) {
-//                items.remove(index);
-//            }
+            if (index >= 0) {
+                items.remove(index);
+            }
 
             doAddDeleteQuitTeamMessage(r, false);
 
