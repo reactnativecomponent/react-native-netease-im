@@ -1422,11 +1422,13 @@
 }
 
 //转发消息
--(void)forwardMessage:(NSString *)messageId sessionId:(NSString *)sessionId sessionType:(NSString *)sessionType content:(NSString *)content success:(Success)succe{
+-(void)forwardMessage:(NSArray *)messageIds sessionId:(NSString *)sessionId sessionType:(NSString *)sessionType content:(NSString *)content success:(Success)succe{
     NIMSession *session = [NIMSession session:sessionId type:[sessionType integerValue]];
-    NSArray *currentMessage = [[[NIMSDK sharedSDK] conversationManager] messagesInSession:self._session messageIds:@[messageId]];
-    NIMMessage *message = currentMessage[0];
-    [[NIMSDK sharedSDK].chatManager forwardMessage:message toSession:session error:nil];
+    NSArray *currentMessages = [[[NIMSDK sharedSDK] conversationManager] messagesInSession:self._session messageIds:messageIds];
+//    NIMMessage *message = currentMessage[0];
+    for (id message in currentMessages) {
+        [[NIMSDK sharedSDK].chatManager forwardMessage:message toSession:session error:nil];
+     }
     //发送消息
     NIMMessage *messages = [[NIMMessage alloc] init];
     messages.text    = content;

@@ -285,7 +285,7 @@ class NimSession {
     },
     sessionId: string,
     sessionType: NIMSessionTypeEnum,
-    content: string
+    content: string | null
   ) {
     return RNNeteaseIm.forwardMultipleTextMessage(
       dataDict,
@@ -333,13 +333,13 @@ class NimSession {
    * @returns {*}
    */
   sendForwardMessage(
-    messageId: string,
+    messageIds: string[],
     sessionId: string,
     sessionType: NIMSessionTypeEnum,
     content: string
   ) {
     return RNNeteaseIm.sendForwardMessage(
-      messageId,
+      messageIds,
       sessionId,
       sessionType,
       content

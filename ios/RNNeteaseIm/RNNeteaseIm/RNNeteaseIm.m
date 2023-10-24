@@ -362,8 +362,8 @@ RCT_EXPORT_METHOD(queryMessageListHistory:(nonnull  NSString *)sessionId session
     }];
 }
 //转发消息
-RCT_EXPORT_METHOD(sendForwardMessage:(nonnull NSString *)messageId sessionId:(nonnull NSString *)sessionId sessionType:(nonnull NSString *)sessionType content:(nonnull NSString *)content resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
-    [[ConversationViewController initWithConversationViewController]forwardMessage:messageId sessionId:sessionId sessionType:sessionType content:content success:^(id param) {
+RCT_EXPORT_METHOD(sendForwardMessage:(nonnull NSArray *)messageIds sessionId:(nonnull NSString *)sessionId sessionType:(nonnull NSString *)sessionType content:(nonnull NSString *)content resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
+    [[ConversationViewController initWithConversationViewController]forwardMessage:messageIds sessionId:sessionId sessionType:sessionType content:content success:^(id param) {
         resolve(param);
     }];
 }
@@ -406,7 +406,7 @@ RCT_EXPORT_METHOD(sendCustomMessage:(NSInteger)custType attachment: (nonnull  NS
 }
 
 //发送自定义消息
-RCT_EXPORT_METHOD(forwardMultipleTextMessage: (nonnull  NSDictionary *)attachment  sessionId:(nonnull NSString *)sessionId sessionType:(nonnull NSString *)sessionType content:(nonnull NSString *)content){
+RCT_EXPORT_METHOD(forwardMultipleTextMessage: (nonnull  NSDictionary *)attachment  sessionId:(nonnull NSString *)sessionId sessionType:(nonnull NSString *)sessionType content:(NSString *)content){
 //forwardMessagesText:CustomMessageTypeFowardMultipleText data:attachment sessionId:sessionId sessionType:sessionType content:content data:attachment
     [[ConversationViewController initWithConversationViewController] forwardMultipleTextMessage:attachment sessionId:sessionId sessionType:sessionType content:content];
 }

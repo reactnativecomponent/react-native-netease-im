@@ -832,22 +832,26 @@ public class SessionService {
         sendMessageSelf(message, onSendMessageListener, false);
     }
 
-    public int sendForwardMessage(IMMessage selectMessage, final String sessionId, final String sessionType, String content, OnSendMessageListener onSendMessageListener) {
-        if (selectMessage == null) {
+    public int sendForwardMessage(List<IMMessage> selectMessages, final String sessionId, final String sessionType, String content, OnSendMessageListener onSendMessageListener) {
+        if (selectMessages == null) {
             return 0;
         }
-        if (MessageUtil.shouldIgnore(selectMessage)) {
-            return 1;
-        }
         SessionTypeEnum sessionTypeE = SessionUtil.getSessionType(sessionType);
-        IMMessage message = MessageBuilder.createForwardMessage(selectMessage, sessionId, sessionTypeE);
-        if (message == null) {
-            return 1;
+
+//        if (MessageUtil.shouldIgnore(selectMessages)) {
+//            return 1;
+//        }
+
+        for (IMMessage _message : selectMessages) {
+            IMMessage message = MessageBuilder.createForwardMessage(_message, sessionId, sessionTypeE);
+            if (message == null) {
+                return 1;
+            }
+            sendMessageSelf(message, onSendMessageListener, false);
         }
-        sendMessageSelf(message, onSendMessageListener, false);
 
         IMMessage messageSelf = MessageBuilder.createTextMessage(sessionId, sessionTypeE, content);
-        sendMessageSelf(messageSelf, onSendMessageListener, false);    
+        sendMessageSelf(messageSelf, onSendMessageListener, false);
         return 2;
     }
 

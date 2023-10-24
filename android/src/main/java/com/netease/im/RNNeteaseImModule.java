@@ -97,6 +97,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import static com.netease.im.ReceiverMsgParser.getIntent;
+import static com.netease.nimlib.sdk.NIMSDK.getMsgService;
 
 
 public class RNNeteaseImModule extends ReactContextBaseJavaModule implements LifecycleEventListener, ActivityEventListener {
@@ -1328,14 +1329,20 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
      * @param promise
      */
     @ReactMethod
-    public void sendForwardMessage(String messageId, final String sessionId, final String sessionType, final String content, final Promise promise) {
+    public void sendForwardMessage(ReadableArray messageIds, final String sessionId, final String sessionType, final String content, final Promise promise) {
         LogUtil.w(TAG, "sendForwardMessage" + content);
 
-        sessionService.queryMessage(messageId, new SessionService.OnMessageQueryListener() {
+        ArrayList<String> msgIds = (ArrayList<String>)(ArrayList<?>)(messageIds.toArrayList());
+        getMsgService().queryMessageListByUuid(msgIds).setCallback(new RequestCallbackWrapper<List<IMMessage>>() {
             @Override
-            public int onResult(int code, IMMessage message) {
+            public void onResult(int code, List<IMMessage> messageList, Throwable throwable) {
 
-                int result = sessionService.sendForwardMessage(message, sessionId, sessionType, content, new SessionService.OnSendMessageListener() {
+                if (messageList == null || messageList.isEmpty()) {
+                    promise.reject("" + code, "");
+                    return;
+                }
+
+                int result = sessionService.sendForwardMessage(messageList, sessionId, sessionType, content, new SessionService.OnSendMessageListener() {
                     @Override
                     public int onResult(int code, IMMessage message) {
                         return 0;
@@ -1348,7 +1355,6 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
                 } else {
                     promise.resolve(ResponseCode.RES_SUCCESS + "");
                 }
-                return 0;
             }
         });
     }
