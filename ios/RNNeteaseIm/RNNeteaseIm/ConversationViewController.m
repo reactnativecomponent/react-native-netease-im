@@ -1410,14 +1410,13 @@
     succe(@"已发送");
 }
 //撤回消息
--(void)revokeMessage:(NSString *)messageId success:(Success)succe error:(Errors)err {
+-(void)revokeMessage:(NSString *)messageId success:(Success)succe{
     NSArray *currentMessage = [[[NIMSDK sharedSDK] conversationManager] messagesInSession:self._session messageIds:@[messageId]];
     NIMMessage *currentmessage = currentMessage[0];
 //    __weak typeof(self) weakSelf = self;
     [[NIMSDK sharedSDK].chatManager revokeMessage:currentmessage completion:^(NSError * _Nullable error) {
         if (error) {
             if (error.code == NIMRemoteErrorCodeDomainExpireOld) {
-                err(@"Messages sent more than 2 minutes cannot be withdrawn");
                 UIAlertController *alterVC = [UIAlertController alertControllerWithTitle:@"" message:@"Messages sent more than 2 minutes cannot be withdrawn" preferredStyle:UIAlertControllerStyleAlert];
                 UIAlertAction *sureAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                     
@@ -1426,7 +1425,6 @@
                 [self presentViewController:alterVC animated:NO completion:nil];
             }else{
                 NSLog(@"Message recall failed, please try again");
-                err(@"Message recall failed, please try again");
             }
         }
         else

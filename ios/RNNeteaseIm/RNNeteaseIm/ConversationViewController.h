@@ -59,7 +59,7 @@ typedef void(^Errors)(id erro);
 //本地历史记录
 -(void)localSessionList:(NSString *)sessionId sessionType:(NSString *)sessionType timeLong:(NSString *)timeLong direction:(NSString *)direction limit:(NSString *)limit asc:(BOOL)asc success:(Success)succe;
 //撤回消息
--(void)revokeMessage:(NSString *)messageId success:(Success)succe error:(Errors)err ;
+-(void)revokeMessage:(NSString *)messageId success:(Success)succe;
 //开始播放录音
 - (void)play:(NSString *)filepath;
 //停止播放

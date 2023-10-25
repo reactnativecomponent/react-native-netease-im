@@ -368,12 +368,10 @@ RCT_EXPORT_METHOD(sendForwardMessage:(nonnull NSString *)messageId sessionId:(no
     }];
 }
 //撤回消息
-RCT_EXPORT_METHOD(revokeMessage:(nonnull NSString *)messageId language:(NSString *)language resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
+RCT_EXPORT_METHOD(revokeMessage:(nonnull NSString *)messageId resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
     [[ConversationViewController initWithConversationViewController]revokeMessage:messageId success:^(id param) {
         resolve(param);
-    } error:^(id erro) {
-        reject([NSString stringWithFormat:@"%ld",(long)NIMRemoteErrorCodeDomainExpireOld],erro,nil);
-    } ];
+    }];
 }
 //重发消息
 RCT_EXPORT_METHOD(resendMessage:(nonnull NSString *)messageId){
