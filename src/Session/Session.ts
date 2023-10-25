@@ -77,7 +77,7 @@ class NimSession {
     return RNNeteaseIm.queryMessageListEx(messageId, limit);
   }
 
-  searchMessages(keyWords: string): Promise<Record<string, NIMMessage>> {
+  searchMessages(keyWords: string): Promise<Record<string, NIMMessage[]>> {
     return RNNeteaseIm.searchMessages(keyWords);
   }
 
