@@ -369,7 +369,7 @@ RCT_EXPORT_METHOD(sendForwardMessage:(nonnull NSString *)messageId sessionId:(no
 }
 //撤回消息
 RCT_EXPORT_METHOD(revokeMessage:(nonnull NSString *)messageId language:(NSString *)language resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
-    [[ConversationViewController initWithConversationViewController]revokeMessage:messageId withLanguage:language success:^(id param) {
+    [[ConversationViewController initWithConversationViewController]revokeMessage:messageId success:^(id param) {
         resolve(param);
     } error:^(id erro) {
         reject([NSString stringWithFormat:@"%ld",(long)NIMRemoteErrorCodeDomainExpireOld],erro,nil);

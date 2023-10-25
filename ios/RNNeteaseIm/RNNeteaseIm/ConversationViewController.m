@@ -1410,7 +1410,7 @@
     succe(@"已发送");
 }
 //撤回消息
--(void)revokeMessage:(NSString *)messageId withLanguage:(NSString *)language success:(Success)succe error:(Errors)err {
+-(void)revokeMessage:(NSString *)messageId success:(Success)succe error:(Errors)err {
     NSArray *currentMessage = [[[NIMSDK sharedSDK] conversationManager] messagesInSession:self._session messageIds:@[messageId]];
     NIMMessage *currentmessage = currentMessage[0];
 //    __weak typeof(self) weakSelf = self;
@@ -1433,7 +1433,7 @@
         {
             succe(@"Withdrawal successful");
             
-            NSString * tip = [self tipOnMessageRevoked:currentmessage withLanguage:language];
+            NSString * tip = [self tipOnMessageRevoked:currentmessage];
             NIMMessage *tipMessage = [self msgWithTip:tip];
             tipMessage.timestamp = currentmessage.timestamp * 1000;
             
@@ -1473,7 +1473,7 @@
     return message;
 }
 
-- (NSString *)tipOnMessageRevoked:(id)message withLanguage:(NSString *)language
+- (NSString *)tipOnMessageRevoked:(id)message
 {
     NSString *fromUid = nil;
     NIMSession *session = nil;

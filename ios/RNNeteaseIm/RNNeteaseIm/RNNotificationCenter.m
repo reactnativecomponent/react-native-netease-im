@@ -102,7 +102,7 @@
 #pragma mark -- NIMChatManagerDelegate
 - (void)onRecvRevokeMessageNotification:(NIMRevokeMessageNotification *)notification
 {
-    NSString * tip = [[ConversationViewController initWithConversationViewController] tipOnMessageRevoked:notification withLanguage:@"vi"];
+    NSString * tip = [[ConversationViewController initWithConversationViewController] tipOnMessageRevoked:notification];
     NIMMessage *tipMessage = [[ConversationViewController initWithConversationViewController] msgWithTip:tip];
     tipMessage.timestamp = notification.timestamp;
     NIMMessage *deleMess = notification.message;
