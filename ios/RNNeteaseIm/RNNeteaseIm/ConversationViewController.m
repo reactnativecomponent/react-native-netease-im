@@ -1493,7 +1493,7 @@
     
     BOOL isFromMe = [fromUid isEqualToString:[[NIMSDK sharedSDK].loginManager currentAccount]];
     
-    NSString *tip = ([language isEqualToString:@"vi"]) ? @"Bạn" : @"你";
+    NSString *tip = @"你";
     
     NSString *strSendName = [self getUserName:fromUid];
     
@@ -1512,10 +1512,6 @@
             default:
                 break;
         }
-    }
-    
-    if ([language isEqualToString:@"vi"]) {
-        return [NSString stringWithFormat:@"%@revoked_success", tip];
     }
 
     return [NSString stringWithFormat:@"%@revoked_success", tip];
