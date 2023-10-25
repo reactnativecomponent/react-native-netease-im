@@ -275,6 +275,14 @@
             NSNumber *operationtype = [self getTypeOpretationType:content.operationType];
             [notiObj setObject:[self teamNotificationSourceName:message] forKey:@"sourceId"];
             [notiObj setObject:[self teamNotificationTargetNames:message] forKey:@"targets"];
+            if ([operationtype isEqualToNumber:@10]) {
+                id attachment = [content attachment];
+                if ([attachment isKindOfClass:[NIMMuteTeamMemberAttachment class]]) {
+                    BOOL mute = [(NIMMuteTeamMemberAttachment *)attachment flag];
+                    NSString *muteStr = mute? @"mute" : @"unmute";
+                    [notiObj setObject:muteStr  forKey:@"isMute"];
+                }
+            }
             [notiObj setObject:operationtype  forKey:@"operationType"];
             
             if (content.operationType == NIMTeamOperationTypeUpdate) {

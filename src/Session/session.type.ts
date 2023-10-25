@@ -56,6 +56,7 @@ export interface NimSessionTypeExtend {
   sourceId?: { sourceId: string; sourceName: string };
   targets?: Array<{ targetId: string; targetName: string }>;
   operationType?: NIMTeamOperationType;
+  isMute?: "mute" | "unmute";
   updateDetail?: {
     type: NIMTeamOperationTypeUpdateDetail;
     value: any;

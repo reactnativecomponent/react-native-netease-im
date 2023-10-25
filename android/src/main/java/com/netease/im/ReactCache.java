@@ -63,6 +63,7 @@ import com.netease.nimlib.sdk.team.constant.TeamMessageNotifyTypeEnum;
 import com.netease.nimlib.sdk.team.constant.VerifyTypeEnum;
 import com.netease.nimlib.sdk.team.model.MemberChangeAttachment;
 //import com.netease.nimlib.sdk.team.model.MuteMemberAttachment;
+import com.netease.nimlib.sdk.team.model.MuteMemberAttachment;
 import com.netease.nimlib.sdk.team.model.Team;
 import com.netease.nimlib.sdk.team.model.TeamMember;
 //import com.netease.nimlib.sdk.team.model.UpdateTeamAttachment;
@@ -292,6 +293,11 @@ public class ReactCache {
                                         targetsWritableArray.pushMap(target);
                                     }
 
+                                    if  (operationType == NotificationType.MuteTeamMember) {
+                                        MuteMemberAttachment muteMemberAttachment = (MuteMemberAttachment) attachment;
+                                        notiObj.putString("isMute", muteMemberAttachment.isMute() ? "mute" : "unmute");
+                                    }
+
                                     notiObj.putArray("targets", targetsWritableArray);
                                     break;
                                 case LeaveTeam:
@@ -317,10 +323,6 @@ public class ReactCache {
                                     for (Map.Entry<TeamFieldEnum, Object> field : updateTeamAttachmentDetail) {
                                         updateDetail.putString("type", mockUpKeys.get(field.getKey()));
                                         updateDetail.putString("value", field.getValue().toString());
-
-                                        // Log.d("tét field.toString", field.toString() );
-                                        // Log.d("tét field.getKey()", field.getKey().toString() );
-                                        // Log.d("tét field.getValue()", field.getValue().toString() );
                                     }
                                     notiObj.putMap("updateDetail", updateDetail);
                                     break;
@@ -1202,6 +1204,11 @@ public class ReactCache {
                                 target.putString("targetId", targetId);
 
                                 targetsWritableArray.pushMap(target);
+                            }
+
+                            if  (operationType == NotificationType.MuteTeamMember) {
+                                MuteMemberAttachment muteMemberAttachment = (MuteMemberAttachment) attachment;
+                                notiObj.putString("isMute", muteMemberAttachment.isMute() ? "mute" : "unmute");
                             }
 
                             notiObj.putArray("targets", targetsWritableArray);
