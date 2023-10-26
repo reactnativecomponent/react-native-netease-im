@@ -14,7 +14,7 @@ typedef void(^Errors)(id erro);
 @interface ConversationViewController : UIViewController<NIMChatManagerDelegate,NIMConversationManagerDelegate>
 
 +(instancetype)initWithConversationViewController;
--(void)localSession:(NSInteger)index cerrentmessageId:(NSString *)currentMessageID success:(Success)succe err:(Errors)err;
+-(void)localSession:(NSInteger)index currentMessageID:(NSString *)currentMessageID direction:(int)direction success:(Success)succe err:(Errors)err;
 -(void)startSession:(NSString *)sessionID withType:(NSString *)type;
 -(void)stopSession;
 //-(void)sendAudioRecode:(NSString *)filePath;

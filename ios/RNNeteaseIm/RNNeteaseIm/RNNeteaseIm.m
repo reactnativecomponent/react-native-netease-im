@@ -347,8 +347,8 @@ RCT_EXPORT_METHOD(stopSession){
     [[ConversationViewController initWithConversationViewController]stopSession];
 }
 //聊天界面历史记录
-RCT_EXPORT_METHOD(queryMessageListEx:(nonnull  NSString *)messageId limit:(int)limit resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
-    [[ConversationViewController initWithConversationViewController]localSession:limit cerrentmessageId:messageId success:^(id param) {
+RCT_EXPORT_METHOD(queryMessageListEx:(nonnull  NSString *)messageId limit:(int)limit direction:(int)direction resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
+    [[ConversationViewController initWithConversationViewController]localSession:limit currentMessageID:messageId direction:direction success:^(id param) {
         resolve(param);
     } err:^(id erro) {
         reject(@"-1",erro, nil);

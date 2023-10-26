@@ -103,51 +103,43 @@
     }
 }
 //聊天界面历史记录
--(void)localSession:(NSInteger)index cerrentmessageId:(NSString *)currentMessageID success:(Success)succe err:(Errors)err{
+-(void)localSession:(NSInteger)index currentMessageID:(NSString *)currentMessageID direction:(int)direction success:(Success)succe err:(Errors)err{
     _index = index;
     [[NIMSDK sharedSDK].conversationManager markAllMessagesReadInSession:self._session];
+    NIMGetMessagesDynamicallyParam *param = [[NIMGetMessagesDynamicallyParam alloc] init];
+    param.session = self._session;
+    param.limit = index;
+
     if (currentMessageID.length != 0) {
-        
         NSArray *currentMessage = [[[NIMSDK sharedSDK] conversationManager] messagesInSession:self._session messageIds:@[currentMessageID] ];
         NIMMessage *currentM = currentMessage[0];
-        NSArray *messageArr =  [[[NIMSDK sharedSDK] conversationManager]messagesInSession:self._session message:currentM limit: index];
-        if (messageArr.count != 0) {
+        
+        param.anchorClientId = currentM.messageId;
+    }
+    param.order = direction;
+    
+    [[[NIMSDK sharedSDK] conversationManager]getMessagesDynamically:param completion:^(NSError * _Nullable error, BOOL isReliable, NSArray<NIMMessage *> * _Nullable messageArr) {
+        if (error) {
+            err(@"暂无更多");
+        } else {
             NIMMessage *lastMessage = [messageArr lastObject];
-            
             NIMMessageReceipt *receipt = [[NIMMessageReceipt alloc] initWithMessage:lastMessage];
-            
+
             if (lastMessage.session.sessionType == NIMSessionTypeTeam) {
-                [[[NIMSDK sharedSDK] chatManager] sendTeamMessageReceipts:@[receipt] completion:nil];
+               [[[NIMSDK sharedSDK] chatManager] sendTeamMessageReceipts:@[receipt] completion:nil];
             } else {
-                [[[NIMSDK sharedSDK] chatManager] sendMessageReceipt:receipt completion:nil];
+               [[[NIMSDK sharedSDK] chatManager] sendMessageReceipt:receipt completion:nil];
+            }
+            
+            if (currentMessageID.length == 0 && [self setTimeArr:messageArr].count != 0) {
+                NSMutableDictionary *dic = [[self setTimeArr:messageArr] objectAtIndex:[self setTimeArr:messageArr].count - 1];
+                [[NSUserDefaults standardUserDefaults]setObject:[dic objectForKey:@"time"] forKey:@"timestamp"];
             }
             
             succe([self setTimeArr:messageArr]);
-        }else{
-           
-            err(@"暂无更多");
+
         }
-        
-    }
-    else{
-        NSArray *messageArr =  [[[NIMSDK sharedSDK] conversationManager]messagesInSession:self._session message:nil limit: index];
-        
-        NIMMessage *lastMessage = [messageArr lastObject];
-        
-        NIMMessageReceipt *receipt = [[NIMMessageReceipt alloc] initWithMessage:lastMessage];
-        
-        if (lastMessage.session.sessionType == NIMSessionTypeTeam) {
-            [[[NIMSDK sharedSDK] chatManager] sendTeamMessageReceipts:@[receipt] completion:nil];
-        } else {
-            [[[NIMSDK sharedSDK] chatManager] sendMessageReceipt:receipt completion:nil];
-        }
-        
-        if ([self setTimeArr:messageArr].count != 0) {
-            NSMutableDictionary *dic = [[self setTimeArr:messageArr] objectAtIndex:[self setTimeArr:messageArr].count - 1];
-            [[NSUserDefaults standardUserDefaults]setObject:[dic objectForKey:@"time"] forKey:@"timestamp"];
-        }
-        succe([self setTimeArr:messageArr]);
-    }
+    }];
 }
 //更新录音消息为已播放
 - (void)updateAudioMessagePlayStatus:(NSString *)messageID{

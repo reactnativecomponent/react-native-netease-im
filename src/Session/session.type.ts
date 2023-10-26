@@ -7,6 +7,11 @@ import {
   NIMTeamOperationTypeUpdateDetail,
 } from "../Team/team.type";
 
+export enum QueryDirectionType {
+  NEW = 1,
+  OLD = 0,
+}
+
 export enum NIMSessionTypeEnum {
   None = "None",
   P2P = "0",

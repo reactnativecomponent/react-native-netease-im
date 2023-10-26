@@ -4,6 +4,7 @@ import {
   NIMSessionTypeEnum,
   NIMQueryDirectionEnum,
   NIMSendAttachmentEnum,
+  QueryDirectionType,
 } from "./session.type";
 import { NIMMessage } from "../Message/message.type";
 const { RNNeteaseIm } = NativeModules;
@@ -73,8 +74,12 @@ class NimSession {
    * @param limit 查询结果的条数限制
    * @returns {*}  @see 回调返回最近所有消息记录
    */
-  queryMessageListEx(messageId: string, limit: number) {
-    return RNNeteaseIm.queryMessageListEx(messageId, limit);
+  queryMessageListEx(
+    messageId: string,
+    limit: number,
+    direction: QueryDirectionType
+  ) {
+    return RNNeteaseIm.queryMessageListEx(messageId, limit, direction);
   }
 
   searchMessages(keyWords: string): Promise<Record<string, NIMMessage>> {
