@@ -111,10 +111,7 @@
     param.limit = index;
 
     if (currentMessageID.length != 0) {
-        NSArray *currentMessage = [[[NIMSDK sharedSDK] conversationManager] messagesInSession:self._session messageIds:@[currentMessageID] ];
-        NIMMessage *currentM = currentMessage[0];
-        
-        param.anchorClientId = currentM.messageId;
+        param.anchorClientId = currentMessageID;
     }
     param.order = direction;
     
