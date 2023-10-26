@@ -128,7 +128,7 @@ export interface NIMTeamMemberType {
   gender: NIMUserGenderEnum;
   isInBlackList: NIMCommonBooleanType;
   isMe: NIMCommonBooleanType;
-  isMuted: NIMCommonBooleanType;
+  isMute: NIMCommonBooleanType;
   isMyFriend: NIMCommonBooleanType;
   mobile: string;
   mute: NIMCommonBooleanType;

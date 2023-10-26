@@ -1443,22 +1443,23 @@
     [[NIMSDK sharedSDK].chatManager revokeMessage:currentmessage completion:^(NSError * _Nullable error) {
         if (error) {
             if (error.code == NIMRemoteErrorCodeDomainExpireOld) {
-                UIAlertController *alterVC = [UIAlertController alertControllerWithTitle:@"" message:@"发送时间超过2分钟的消息，不能被撤回" preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertController *alterVC = [UIAlertController alertControllerWithTitle:@"" message:@"Messages sent more than 2 minutes cannot be withdrawn" preferredStyle:UIAlertControllerStyleAlert];
                 UIAlertAction *sureAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                     
                 }];
                 [alterVC addAction:sureAction];
                 [self presentViewController:alterVC animated:NO completion:nil];
             }else{
-                NSLog(@"消息撤回失败，请重试");
+                NSLog(@"Message recall failed, please try again");
             }
         }
         else
         {
-            succe(@"撤回成功");
+            succe(@"Withdrawal successful");
+            
             NSString * tip = [self tipOnMessageRevoked:currentmessage];
             NIMMessage *tipMessage = [self msgWithTip:tip];
-            tipMessage.timestamp = currentmessage.timestamp;
+            tipMessage.timestamp = currentmessage.timestamp * 1000;
             
             NSDictionary *deleteDict = @{@"msgId":messageId};
             [NIMModel initShareMD].deleteMessDict = deleteDict;
@@ -1517,11 +1518,15 @@
     }
     
     BOOL isFromMe = [fromUid isEqualToString:[[NIMSDK sharedSDK].loginManager currentAccount]];
+    
     NSString *tip = @"你";
+    
+    NSString *strSendName = [self getUserName:fromUid];
+    
     if (!isFromMe) {
         switch (session.sessionType) {
             case NIMSessionTypeP2P:
-                tip = @"对方";
+                tip = strSendName;
                 break;
             case NIMSessionTypeTeam:{
                 NIMKitInfoFetchOption *option = [[NIMKitInfoFetchOption alloc] init];
@@ -1534,7 +1539,8 @@
                 break;
         }
     }
-    return [NSString stringWithFormat:@"%@撤回了一条消息",tip];
+
+    return [NSString stringWithFormat:@"%@revoked_success", tip];
 }
 //麦克风权限
 - (void)onTouchVoiceSucc:(Success)succ Err:(Errors)err{
