@@ -1696,7 +1696,7 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
         sessionService.queryMessage(messageId, new SessionService.OnMessageQueryListener() {
             @Override
             public int onResult(int code, IMMessage message) {
-                sessionService.queryMessageListEx(message, direction == 1 ? QueryDirectionEnum.QUERY_OLD : QueryDirectionEnum.QUERY_NEW, limit, new SessionService.OnMessageQueryListListener() {
+                sessionService.queryMessageListEx(message, direction == 1 ? QueryDirectionEnum.QUERY_NEW : QueryDirectionEnum.QUERY_OLD, limit, new SessionService.OnMessageQueryListListener() {
                     @Override
                     public int onResult(int code, List<IMMessage> messageList, Set<String> timedItems) {
                         if (messageList == null || messageList.isEmpty()) {

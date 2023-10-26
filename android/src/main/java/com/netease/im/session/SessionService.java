@@ -475,7 +475,7 @@ public class SessionService {
         if (anchor == null) {
             anchor = MessageBuilder.createEmptyMessage(sessionId, sessionTypeEnum, 0);
         }
-        getMsgService().queryMessageListEx(anchor, direction, limit, false)
+        getMsgService().queryMessageListEx(anchor, direction, limit, direction == QueryDirectionEnum.QUERY_NEW ? true : false)
                 .setCallback(new RequestCallbackWrapper<List<IMMessage>>() {
 
                     @Override
