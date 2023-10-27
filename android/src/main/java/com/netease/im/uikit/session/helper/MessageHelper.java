@@ -1,6 +1,7 @@
 package com.netease.im.uikit.session.helper;
 
 import com.netease.im.login.LoginService;
+import com.netease.im.uikit.cache.NimUserInfoCache;
 import com.netease.im.uikit.cache.TeamDataCache;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.msg.MessageBuilder;
@@ -42,12 +43,23 @@ public class MessageHelper {
 
         IMMessage message = MessageBuilder.createTipMessage(item.getSessionId(), item.getSessionType());
         String nick = "";
-        if (item.getSessionType() == SessionTypeEnum.Team) {
-            nick = TeamDataCache.getInstance().getTeamMemberDisplayNameYou(item.getSessionId(), item.getFromAccount());
-        } else if (item.getSessionType() == SessionTypeEnum.P2P) {
-            nick = item.getFromAccount().equals(LoginService.getInstance().getAccount()) ? "你" : "对方";
+
+//        if (item.getSessionType() == SessionTypeEnum.Team) {
+//            nick = TeamDataCache.getInstance().getTeamMemberDisplayNameYou(item.getSessionId(), item.getFromAccount());
+//        } else if (item.getSessionType() == SessionTypeEnum.P2P) {
+//            nick = item.getFromAccount().equals(LoginService.getInstance().getAccount()) ? "你" : NimUserInfoCache.getInstance().getUserName(item.getFromAccount());
+//        }
+        if (item.getFromAccount().equals(LoginService.getInstance().getAccount())) {
+            nick = "你";
+        } else  {
+            nick = item.getSessionType() == SessionTypeEnum.Team ? TeamDataCache.getInstance().getTeamMemberDisplayNameYou(item.getSessionId(), item.getFromAccount()) : NimUserInfoCache.getInstance().getUserName(item.getFromAccount());
         }
-        message.setContent(nick + "撤回了一条消息");
+
+        Map<String, Object> remoteExt = new HashMap<>(1);
+        remoteExt.put("extendType", "revoked_success");
+
+        message.setContent(nick + " revoked_success");
+        message.setRemoteExtension(remoteExt);
 //        message.setPushContent(nick + "撤回了一条消息");
         message.setStatus(MsgStatusEnum.success);
         CustomMessageConfig config = new CustomMessageConfig();

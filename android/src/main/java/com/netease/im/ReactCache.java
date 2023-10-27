@@ -205,6 +205,14 @@ public class ReactCache {
                                 map.putMap(MESSAGE_EXTEND, writableMapExtend);
                                 map.putString(MessageConstant.Message.MSG_TYPE, "card");
                             }
+
+                            if (extendType.equals("revoked_success")) {
+                                WritableMap writableMapExtend = new WritableNativeMap();
+                                writableMapExtend.putString("tipMsg", contact.getContent());
+
+                                map.putMap(MESSAGE_EXTEND, writableMapExtend);
+                                map.putString(MessageConstant.Message.MSG_TYPE, "notification");
+                            }
                         }
                     } else {
                         map.putString(MessageConstant.Message.MSG_TYPE, getMessageType(contact.getMsgType(), null));
@@ -1063,6 +1071,14 @@ public class ReactCache {
 
                         itemMap.putMap(MESSAGE_EXTEND, writableMapExtend);
                         itemMap.putString(MessageConstant.Message.MSG_TYPE, "card");
+                    }
+
+                    if (extendType.equals("revoked_success")) {
+                        WritableMap writableMapExtend = new WritableNativeMap();
+                        writableMapExtend.putString("tipMsg", item.getContent());
+
+                        itemMap.putMap(MESSAGE_EXTEND, writableMapExtend);
+                        itemMap.putString(MessageConstant.Message.MSG_TYPE, "notification");
                     }
                 }
             } else {

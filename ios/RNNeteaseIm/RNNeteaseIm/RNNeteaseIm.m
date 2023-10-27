@@ -371,6 +371,8 @@ RCT_EXPORT_METHOD(sendForwardMessage:(nonnull NSArray *)messageIds sessionId:(no
 RCT_EXPORT_METHOD(revokeMessage:(nonnull NSString *)messageId resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
     [[ConversationViewController initWithConversationViewController]revokeMessage:messageId success:^(id param) {
         resolve(param);
+    } Err:^(id erro) {
+        reject(@"-1",erro,nil);
     }];
 }
 //重发消息

@@ -1441,30 +1441,28 @@
     succe(@"已发送");
 }
 //撤回消息
--(void)revokeMessage:(NSString *)messageId success:(Success)succe{
+-(void)revokeMessage:(NSString *)messageId success:(Success)succe Err:(Errors)err{
     NSArray *currentMessage = [[[NIMSDK sharedSDK] conversationManager] messagesInSession:self._session messageIds:@[messageId]];
     NIMMessage *currentmessage = currentMessage[0];
 //    __weak typeof(self) weakSelf = self;
     [[NIMSDK sharedSDK].chatManager revokeMessage:currentmessage completion:^(NSError * _Nullable error) {
         if (error) {
             if (error.code == NIMRemoteErrorCodeDomainExpireOld) {
-                UIAlertController *alterVC = [UIAlertController alertControllerWithTitle:@"" message:@"Messages sent more than 2 minutes cannot be withdrawn" preferredStyle:UIAlertControllerStyleAlert];
-                UIAlertAction *sureAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                    
-                }];
-                [alterVC addAction:sureAction];
-                [self presentViewController:alterVC animated:NO completion:nil];
+                err(@"expired");
             }else{
-                NSLog(@"Message recall failed, please try again");
+                err(@"fail");
             }
         }
         else
         {
-            succe(@"Withdrawal successful");
+            succe(@"success");
             
             NSString * tip = [self tipOnMessageRevoked:currentmessage];
             NIMMessage *tipMessage = [self msgWithTip:tip];
             tipMessage.timestamp = currentmessage.timestamp * 1000;
+            
+            NSDictionary  *remoteExt = @{@"extendType": @"revoked_success"};
+            tipMessage.remoteExt = remoteExt;
             
             NSDictionary *deleteDict = @{@"msgId":messageId};
             [NIMModel initShareMD].deleteMessDict = deleteDict;
@@ -1502,42 +1500,31 @@
     return message;
 }
 
-- (NSString *)tipOnMessageRevoked:(id)message
+- (NSString *)tipOnMessageRevoked:(NIMMessage *)message
 {
-    NSString *fromUid = nil;
-    NIMSession *session = nil;
+    NSString *fromUid = message.from;
+    NIMSession *session = message.session;
     
-    if ([message isKindOfClass:[NIMMessage class]])
-    {
-        fromUid = [(NIMMessage *)message from];
-        session = [(NIMMessage *)message session];
-    }
-    else if([message isKindOfClass:[NIMRevokeMessageNotification class]])
-    {
-        fromUid = [(NIMRevokeMessageNotification *)message fromUserId];
-        session = [(NIMRevokeMessageNotification *)message session];
-    }
-    else
-    {
-        assert(0);
-    }
-    
+    NSLog(@"sessionsession %ld", (long)session.sessionType);
+
     BOOL isFromMe = [fromUid isEqualToString:[[NIMSDK sharedSDK].loginManager currentAccount]];
-    
+
     NSString *tip = @"你";
-    
+    NSLog(@"fromUidfromUid %@ %ld", fromUid, (long)session.sessionType);
     NSString *strSendName = [self getUserName:fromUid];
-    
+
     if (!isFromMe) {
         switch (session.sessionType) {
             case NIMSessionTypeP2P:
                 tip = strSendName;
+                NSLog(@"fromUidfromUid NIMSessionTypeP2P %@",tip );
                 break;
             case NIMSessionTypeTeam:{
                 NIMKitInfoFetchOption *option = [[NIMKitInfoFetchOption alloc] init];
                 option.session = session;
                 NIMKitInfo *info = [[NIMKit sharedKit] infoByUser:fromUid option:option];
                 tip = info.showName;
+                NSLog(@"fromUidfromUid NIMSessionTypeTeam %@",tip);
             }
                 break;
             default:
@@ -1545,7 +1532,7 @@
         }
     }
 
-    return [NSString stringWithFormat:@"%@revoked_success", tip];
+    return [NSString stringWithFormat:@" %@ revoked_success", tip];
 }
 //麦克风权限
 - (void)onTouchVoiceSucc:(Success)succ Err:(Errors)err{

@@ -1376,28 +1376,22 @@ public class RNNeteaseImModule extends ReactContextBaseJavaModule implements Lif
     public void revokeMessage(String messageId, final Promise promise) {
         LogUtil.w(TAG, "revokeMessage" + messageId);
         sessionService.queryMessage(messageId, new SessionService.OnMessageQueryListener() {
-
             @Override
             public int onResult(int code, IMMessage message) {
 
-                int result = sessionService.revokeMessage(message, new SessionService.OnSendMessageListener() {
+                sessionService.revokeMessage(message, new SessionService.OnSendMessageListener() {
                     @Override
                     public int onResult(int code, IMMessage message) {
                         if (code == ResponseCode.RES_SUCCESS) {
-                            promise.resolve("" + code);
+                            promise.resolve("success");
                         } else if (code == ResponseCode.RES_OVERDUE) {
-                            showTip(R.string.revoke_failed);
+                            promise.reject("" + code, "expired");
                         } else {
-                            promise.reject("" + code, "");
+                            promise.reject("" + code, "fail");
                         }
                         return 0;
                     }
                 });
-                if (result == 0) {
-                    showTip("请选择消息");
-                } else if (result == 1) {
-                    showTip("该类型消息不支持撤销");
-                }
                 return 0;
             }
         });
