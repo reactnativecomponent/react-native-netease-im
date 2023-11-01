@@ -357,15 +357,16 @@ RCT_EXPORT_METHOD(startSession:(nonnull  NSString *)sessionId type:(nonnull  NSS
 RCT_EXPORT_METHOD(stopSession){
     [[ConversationViewController initWithConversationViewController]stopSession];
 }
-//聊天界面历史记录
-- (void)searchMessages:(NSString *)keyWords success:(Success)succe err:(Errors)err{
-    [[ConversationViewController initWithConversationViewController]localSession:limit currentMessageID:messageId direction:direction success:^(id param) {
-        resolve(param);
-    } err:^(id erro) {
-        reject(@"-1",erro, nil);
-    }];
-    
-}
+
+// //聊天界面历史记录
+// - (void)searchMessages:(NSString *)keyWords success:(Success)succe err:(Errors)err{
+//     [[ConversationViewController initWithConversationViewController]localSession:limit currentMessageID:messageId direction:direction success:^(id param) {
+//         resolve(param);
+//     } err:^(id erro) {
+//         reject(@"-1",erro, nil);
+//     }];
+// }
+
 //本地历史记录
 RCT_EXPORT_METHOD(queryMessageListHistory:(nonnull  NSString *)sessionId sessionType:(nonnull  NSString *)sessionType timeLong:(nonnull  NSString *)timeLong direction:(nonnull  NSString *)direction limit:(nonnull  NSString *)limit   asc:(BOOL)asc resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
     [[ConversationViewController initWithConversationViewController]localSessionList:sessionId sessionType:sessionType timeLong:timeLong direction:direction limit:limit asc:asc success:^(id param) {
