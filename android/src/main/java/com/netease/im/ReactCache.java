@@ -1090,7 +1090,7 @@ public class ReactCache {
         itemMap.putString(MessageConstant.Message.SESSION_ID, item.getSessionId());
         itemMap.putString(MessageConstant.Message.SESSION_TYPE, Integer.toString(item.getSessionType().getValue()));
 
-        itemMap.putString(MessageConstant.Message.IS_OUTGOING, Integer.toString(item.getDirect().getValue()));
+        itemMap.putBoolean(MessageConstant.Message.IS_OUTGOING, item.getDirect().getValue() == 0);
         itemMap.putString(MessageConstant.Message.STATUS, getMessageStatus(item.getStatus()));
         itemMap.putString(MessageConstant.Message.ATTACH_STATUS, Integer.toString(item.getAttachStatus().getValue()));
         itemMap.putString(MessageConstant.Message.IS_REMOTE_READ, boolean2String(receiveReceiptCheck(item)));
