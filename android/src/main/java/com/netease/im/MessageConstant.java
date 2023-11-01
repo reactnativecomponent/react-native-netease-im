@@ -33,7 +33,7 @@ public class MessageConstant {
         public final static String SEND_DRAFT = "send_draft";
         public final static String SEND_FAILE = "send_failed";
         public final static String SEND_SENDING = "send_going";
-        public final static String SEND_SUCCESS = "send_succed";
+        public final static String SEND_SUCCESS = "send_succeed";
         public final static String RECEIVE_READ = "receive_read";
         public final static String RECEIVE_UNREAD = "receive_unread";
     }
