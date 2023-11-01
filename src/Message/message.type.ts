@@ -32,7 +32,7 @@ export enum NIMMessageStatusEnum {
   SEND_DRAFT = "send_draft",
   SEND_FAILED = "send_failed",
   SEND_SENDING = "send_going",
-  SEND_SUCCESS = "send_succed",
+  SEND_SUCCESS = "send_succeed",
   RECEIVE_READ = "receive_read",
   RECEIVE_UNREAD = "receive_unread",
 }
