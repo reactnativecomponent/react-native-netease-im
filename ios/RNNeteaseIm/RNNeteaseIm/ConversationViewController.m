@@ -1560,11 +1560,11 @@
     
     NSLog(@"sessionsession %ld", (long)session.sessionType);
 
-//    if ([message isKindOfClass:[NIMMessage class]])
-//    {
-//        fromUid = [(NIMMessage *)message from];
-//        session = [(NIMMessage *)message session];
-//    }
+    if ([message isKindOfClass:[NIMMessage class]])
+    {
+        fromUid = [(NIMMessage *)message from];
+        session = [(NIMMessage *)message session];
+    }
 //    else if([message isKindOfClass:[NIMRevokeMessageNotification class]])
 //    {
 //        NIMRevokeMessageNotification *notifiRevoke = message;
@@ -1573,37 +1573,41 @@
 //        NSLog(@"fromUid:%@ session:%@",fromUid,session);
 //
 //    }
-//    else
-//    {
-//        assert(0);
-//    }
+    else
+    {
+        assert(0);
+    }
 
-//    BOOL isFromMe = [fromUid isEqualToString:[[NIMSDK sharedSDK].loginManager currentAccount]];
-//
-//    NSString *tip = @"你";
-//    NSLog(@"fromUidfromUid %@ %ld", fromUid, (long)session.sessionType);
-//    NSString *strSendName = fromUid != nil ? [self getUserName:fromUid] : "";
-//
-//    if (!isFromMe) {
-//        switch (session.sessionType) {
-//            case NIMSessionTypeP2P:
-//                tip = strSendName;
-//                NSLog(@"fromUidfromUid NIMSessionTypeP2P %@",tip );
-//                break;
-//            case NIMSessionTypeTeam:{
-//                NIMKitInfoFetchOption *option = [[NIMKitInfoFetchOption alloc] init];
-//                option.session = session;
-//                NIMKitInfo *info = [[NIMKit sharedKit] infoByUser:fromUid option:option];
-//                tip = info.showName;
-//                NSLog(@"fromUidfromUid NIMSessionTypeTeam %@",tip);
-//            }
-//                break;
-//            default:
-//                break;
-//        }
-//    }
+    BOOL isFromMe = [fromUid isEqualToString:[[NIMSDK sharedSDK].loginManager currentAccount]];
 
-    return [NSString stringWithFormat:@"revoked_success"];
+    NSLog(@"fromUidfromUid %@ %ld", fromUid, (long)session.sessionType);
+    
+    if (fromUid == nil) {
+        return [NSString stringWithFormat:@"revoked_success"];
+    }
+    
+    NSString *tip = @"你";
+
+    if (!isFromMe) {
+        switch (session.sessionType) {
+            case NIMSessionTypeP2P:
+                tip = [self getUserName:fromUid];
+                NSLog(@"fromUidfromUid NIMSessionTypeP2P %@",tip );
+                break;
+            case NIMSessionTypeTeam:{
+                NIMKitInfoFetchOption *option = [[NIMKitInfoFetchOption alloc] init];
+                option.session = session;
+                NIMKitInfo *info = [[NIMKit sharedKit] infoByUser:fromUid option:option];
+                tip = info.showName;
+                NSLog(@"fromUidfromUid NIMSessionTypeTeam %@",tip);
+            }
+                break;
+            default:
+                break;
+        }
+    }
+
+    return [NSString stringWithFormat:@" %@ revoked_success", tip];
 }
 //麦克风权限
 - (void)onTouchVoiceSucc:(Success)succ Err:(Errors)err{

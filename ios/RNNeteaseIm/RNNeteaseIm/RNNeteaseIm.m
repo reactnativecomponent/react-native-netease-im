@@ -295,7 +295,7 @@ RCT_EXPORT_METHOD(setMessageNotify:(nonnull NSString *)contactId needNotify:(non
 }
 
 //search local Messages
-RCT_EXPORT_METHOD(searchMessages:(nonnull NSString *)keyWords anchor:(NSString *)anchor limit:(int)limit messageType:(NSArray *)messageType resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
+RCT_EXPORT_METHOD(searchMessages:(nonnull NSString *)keyWords resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
     [[ConversationViewController initWithConversationViewController] searchMessages:keyWords success:^(id param) {
         resolve(param);
     } err:^(id erro) {
@@ -358,7 +358,7 @@ RCT_EXPORT_METHOD(stopSession){
     [[ConversationViewController initWithConversationViewController]stopSession];
 }
 //聊天界面历史记录
-RCT_EXPORT_METHOD(queryMessageListEx:(nonnull  NSString *)messageId limit:(int)limit direction:(int)direction resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
+- (void)searchMessages:(NSString *)keyWords success:(Success)succe err:(Errors)err{
     [[ConversationViewController initWithConversationViewController]localSession:limit currentMessageID:messageId direction:direction success:^(id param) {
         resolve(param);
     } err:^(id erro) {
