@@ -295,13 +295,24 @@ RCT_EXPORT_METHOD(setMessageNotify:(nonnull NSString *)contactId needNotify:(non
 }
 
 //search local Messages
-RCT_EXPORT_METHOD(searchMessages:(nonnull NSString *)keyWords resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
+RCT_EXPORT_METHOD(searchMessages:(nonnull NSString *)keyWords anchor:(NSString *)anchor limit:(int)limit messageType:(NSArray *)messageType resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
     [[ConversationViewController initWithConversationViewController] searchMessages:keyWords success:^(id param) {
         resolve(param);
     } err:^(id erro) {
         reject(@"-1",erro,nil);
     }];
 }
+
+//search local Messages in session
+RCT_EXPORT_METHOD(searchMessagesinCurrentSession:(NSString *)keyWords anchorId:(NSString *)anchorId limit:(int)limit messageType:(NSArray *)messageType direction:(int)direction resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
+    [[ConversationViewController initWithConversationViewController] searchMessagesinCurrentSession:keyWords anchorId:anchorId limit:limit messageType:messageType direction:direction success:^(id param) {
+        NSLog(@"paramparamparamparam %@", param);
+        resolve(param);
+    } err:^(id erro) {
+        reject(@"-1",erro,nil);
+    }];
+}
+
 
 //刷新最近会话列表
 - (void)updateMessageList{

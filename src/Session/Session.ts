@@ -6,7 +6,7 @@ import {
   NIMSendAttachmentEnum,
   QueryDirectionType,
 } from "./session.type";
-import { NIMMessage } from "../Message/message.type";
+import { NIMMessage, NIMMessageTypeEnum } from "../Message/message.type";
 const { RNNeteaseIm } = NativeModules;
 
 class NimSession {
@@ -84,6 +84,28 @@ class NimSession {
 
   searchMessages(keyWords: string): Promise<Record<string, NIMMessage[]>> {
     return RNNeteaseIm.searchMessages(keyWords);
+  }
+
+  searchMessagesInCurrentSession({
+    keyWords,
+    anchorId,
+    limit,
+    messageType,
+    direction,
+  }: {
+    keyWords: string;
+    anchorId: string;
+    limit: number;
+    messageType: Array<NIMMessageTypeEnum>;
+    direction: QueryDirectionType;
+  }): Promise<NIMMessage[]> {
+    return RNNeteaseIm.searchMessagesinCurrentSession(
+      keyWords,
+      anchorId,
+      limit,
+      messageType,
+      direction
+    );
   }
 
   /**

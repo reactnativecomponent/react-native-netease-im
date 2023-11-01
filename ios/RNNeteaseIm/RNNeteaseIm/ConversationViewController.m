@@ -178,6 +178,59 @@
     }];
 }
 
+
+//search local Messages
+- (void)searchMessagesinCurrentSession:(NSString *)keyWords anchorId:(NSString *)anchorId limit:(int)limit messageType:(NSArray *)messageType direction:(int)direction success:(Success)succe err:(Errors)err{
+    NIMMessageSearchOption *option = [[NIMMessageSearchOption alloc] init];
+    option.limit = limit;
+    if (keyWords.length != 0) {
+        option.searchContent = keyWords;
+    }
+    
+    option.order = direction == 1 ? NIMMessageSearchOrderAsc : NIMMessageSearchOrderDesc;
+    
+    if (messageType.count != 0) {
+        const NSDictionary* keysMessageType = @{
+          @"text": @(NIMMessageTypeText),
+          @"voice": @(NIMMessageTypeAudio),
+          @"image": @(NIMMessageTypeImage),
+          @"video": @(NIMMessageTypeVideo),
+          @"file": @(NIMMessageTypeFile),
+        };
+        
+        NSMutableArray * messageTypeOptions = [[NSMutableArray alloc] init];
+        
+        for (NSString *_messageKey in messageType) {
+            [messageTypeOptions addObject:[keysMessageType objectForKey:_messageKey]];
+        }
+        
+        option.messageTypes = messageTypeOptions;
+    }
+
+    
+    
+    if (anchorId.length != 0) {
+        NSArray *currentMessage = [[[NIMSDK sharedSDK] conversationManager] messagesInSession:self._session messageIds:@[anchorId] ];
+        NIMMessage *currentM = currentMessage[0];
+        
+        option.startTime = direction == 1 ? currentM.timestamp : 0;
+        option.endTime = direction == 0 ? currentM.timestamp : 0;
+    }
+    
+
+    NSLog(@"searchAllMessages option: %@]", option);
+
+    [[NIMSDK sharedSDK].conversationManager searchMessages:self._session option:option result:^(NSError * _Nullable error, NSArray<NIMMessage *> * __nullable messages) {
+        NSLog(@"searchAllMessages messages: %@]", messages);
+
+        if (!error) {
+            succe([self setTimeArr:messages]);
+        } else {
+            err(error);
+        }
+    }];
+}
+
 - (NSNumber *) getTypeOpretationType:(NIMTeamOperationType) operationType {
     NSNumber *result = @-1;
 
@@ -1459,7 +1512,7 @@
             
             NSString * tip = [self tipOnMessageRevoked:currentmessage];
             NIMMessage *tipMessage = [self msgWithTip:tip];
-            tipMessage.timestamp = currentmessage.timestamp * 1000;
+            tipMessage.timestamp = currentmessage.timestamp;
             
             NSDictionary  *remoteExt = @{@"extendType": @"revoked_success"};
             tipMessage.remoteExt = remoteExt;
@@ -1507,32 +1560,50 @@
     
     NSLog(@"sessionsession %ld", (long)session.sessionType);
 
-    BOOL isFromMe = [fromUid isEqualToString:[[NIMSDK sharedSDK].loginManager currentAccount]];
+//    if ([message isKindOfClass:[NIMMessage class]])
+//    {
+//        fromUid = [(NIMMessage *)message from];
+//        session = [(NIMMessage *)message session];
+//    }
+//    else if([message isKindOfClass:[NIMRevokeMessageNotification class]])
+//    {
+//        NIMRevokeMessageNotification *notifiRevoke = message;
+//        fromUid = notifiRevoke.message.from;
+//        session = notifiRevoke.session;
+//        NSLog(@"fromUid:%@ session:%@",fromUid,session);
+//
+//    }
+//    else
+//    {
+//        assert(0);
+//    }
 
-    NSString *tip = @"你";
-    NSLog(@"fromUidfromUid %@ %ld", fromUid, (long)session.sessionType);
-    NSString *strSendName = [self getUserName:fromUid];
+//    BOOL isFromMe = [fromUid isEqualToString:[[NIMSDK sharedSDK].loginManager currentAccount]];
+//
+//    NSString *tip = @"你";
+//    NSLog(@"fromUidfromUid %@ %ld", fromUid, (long)session.sessionType);
+//    NSString *strSendName = fromUid != nil ? [self getUserName:fromUid] : "";
+//
+//    if (!isFromMe) {
+//        switch (session.sessionType) {
+//            case NIMSessionTypeP2P:
+//                tip = strSendName;
+//                NSLog(@"fromUidfromUid NIMSessionTypeP2P %@",tip );
+//                break;
+//            case NIMSessionTypeTeam:{
+//                NIMKitInfoFetchOption *option = [[NIMKitInfoFetchOption alloc] init];
+//                option.session = session;
+//                NIMKitInfo *info = [[NIMKit sharedKit] infoByUser:fromUid option:option];
+//                tip = info.showName;
+//                NSLog(@"fromUidfromUid NIMSessionTypeTeam %@",tip);
+//            }
+//                break;
+//            default:
+//                break;
+//        }
+//    }
 
-    if (!isFromMe) {
-        switch (session.sessionType) {
-            case NIMSessionTypeP2P:
-                tip = strSendName;
-                NSLog(@"fromUidfromUid NIMSessionTypeP2P %@",tip );
-                break;
-            case NIMSessionTypeTeam:{
-                NIMKitInfoFetchOption *option = [[NIMKitInfoFetchOption alloc] init];
-                option.session = session;
-                NIMKitInfo *info = [[NIMKit sharedKit] infoByUser:fromUid option:option];
-                tip = info.showName;
-                NSLog(@"fromUidfromUid NIMSessionTypeTeam %@",tip);
-            }
-                break;
-            default:
-                break;
-        }
-    }
-
-    return [NSString stringWithFormat:@" %@ revoked_success", tip];
+    return [NSString stringWithFormat:@"revoked_success"];
 }
 //麦克风权限
 - (void)onTouchVoiceSucc:(Success)succ Err:(Errors)err{
