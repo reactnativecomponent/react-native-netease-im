@@ -1018,8 +1018,9 @@
 
 - (void)fetchMessageAttachment:(NIMMessage *)message didCompleteWithError:(NSError *)error
 {
-    NSLog(@"完成下载图片");
-    [[NSNotificationCenter defaultCenter]postNotificationName:@"RNNeteaseimDidCompletePic" object:nil];
+    NIMVideoObject *object = message.messageObject;
+    [self refrashMessage:message From:@"receive"];
+//    [[NSNotificationCenter defaultCenter]postNotificationName:@"RNNeteaseimDidCompletePic" object:nil];
     //    if ([message.session isEqual:_session]) {
     //        NIMMessageModel *model = [self.interactor findMessageModel:message];
     //        //下完缩略图之后，因为比例有变化，重新刷下宽高。
@@ -1043,7 +1044,7 @@
 //    tipMessage.timestamp = notification.timestamp;
 //    NIMMessage *deleMess = notification.message;
 //    NSDictionary *deleteDict = @{@"msgId":deleMess.messageId};
-//   
+//
 //    // saveMessage 方法执行成功后会触发 onRecvMessages: 回调，但是这个回调上来的 NIMMessage 时间为服务器时间，和界面上的时间有一定出入，所以要提前先在界面上插入一个和被删消息的界面时间相符的 Tip, 当触发 onRecvMessages: 回调时，组件判断这条消息已经被插入过了，就会忽略掉。
 //    [[NIMSDK sharedSDK].conversationManager saveMessage:tipMessage
 //                                             forSession:notification.session
@@ -1343,7 +1344,7 @@
         [dic2 setObject:notiObj forKey:@"extend"];
     }else if (message.messageType == NIMMessageTypeNotification) {
         [dic2 setObject:@"notification" forKey:@"msgType"];
-        [dic2 setObject:[self setNotiTeamObj:message] forKey:@"extend"];        
+        [dic2 setObject:[self setNotiTeamObj:message] forKey:@"extend"];
     }else if (message.messageType == NIMMessageTypeCustom) {
         NIMCustomObject *customObject = message.messageObject;
         DWCustomAttachment *obj = customObject.attachment;
@@ -1558,29 +1559,7 @@
     NSString *fromUid = message.from;
     NIMSession *session = message.session;
     
-    NSLog(@"sessionsession %ld", (long)session.sessionType);
-
-    if ([message isKindOfClass:[NIMMessage class]])
-    {
-        fromUid = [(NIMMessage *)message from];
-        session = [(NIMMessage *)message session];
-    }
-//    else if([message isKindOfClass:[NIMRevokeMessageNotification class]])
-//    {
-//        NIMRevokeMessageNotification *notifiRevoke = message;
-//        fromUid = notifiRevoke.message.from;
-//        session = notifiRevoke.session;
-//        NSLog(@"fromUid:%@ session:%@",fromUid,session);
-//
-//    }
-    else
-    {
-        assert(0);
-    }
-
-    BOOL isFromMe = [fromUid isEqualToString:[[NIMSDK sharedSDK].loginManager currentAccount]];
-
-    NSLog(@"fromUidfromUid %@ %ld", fromUid, (long)session.sessionType);
+    BOOL isFromMe = message.isOutgoingMsg;
     
     if (fromUid == nil) {
         return [NSString stringWithFormat:@"revoked_success"];
@@ -1592,14 +1571,12 @@
         switch (session.sessionType) {
             case NIMSessionTypeP2P:
                 tip = [self getUserName:fromUid];
-                NSLog(@"fromUidfromUid NIMSessionTypeP2P %@",tip );
                 break;
             case NIMSessionTypeTeam:{
                 NIMKitInfoFetchOption *option = [[NIMKitInfoFetchOption alloc] init];
                 option.session = session;
                 NIMKitInfo *info = [[NIMKit sharedKit] infoByUser:fromUid option:option];
                 tip = info.showName;
-                NSLog(@"fromUidfromUid NIMSessionTypeTeam %@",tip);
             }
                 break;
             default:

@@ -202,17 +202,15 @@
     
     for (id key in newUserInfo) {
         NSNumber *keyId = [keys objectForKey: key];
-        mapDict[keyId] = [newUserInfo objectForKey:key];
+        [mapDict setObject:[newUserInfo objectForKey:key] forKey:keyId];
     }
     
-    NSDictionary<NSNumber *,id> *params = [NSDictionary dictionaryWithDictionary: mapDict];
-    
-    [[NIMSDK sharedSDK].userManager updateMyUserInfo:params completion:^(NSError * _Nullable error) {
+    [[NIMSDK sharedSDK].userManager updateMyUserInfo:mapDict completion:^(NSError * _Nullable error) {
          if (!error) {
-             NSLog(@"success ");
+             NSLog(@"success updateMyUserInfo");
              success(@"200");
         }else{
-            err(error);
+            err(@"error");
         }
     }];
 }

@@ -70,6 +70,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
 
 import androidx.annotation.NonNull;
 
@@ -714,7 +715,6 @@ public class SessionService {
 //        int width = mediaPlayer == null ? 0 : mediaPlayer.getVideoWidth();
     public void sendVideoMessage(String file, String duration, int width, int height, String displayName, OnSendMessageListener onSendMessageListener) {
 
-
 //        String filename = md5 + "." + FileUtil.getExtensionName(file);
         file = Uri.parse(file).getPath();
         String md5 = TextUtils.isEmpty(displayName) ? MD5.getStreamMD5(file) : displayName;
@@ -1047,6 +1047,19 @@ public class SessionService {
         if (isOriginImageHasDownloaded(message)) {
             return;
         }
+
+        // Define a callback that will be executed when the future completes.
+        Consumer<Void> callback = result -> {
+            if (result != null) {
+                // The download was successful, and 'result' is the Void value.
+                System.out.println("Download successful");
+                ReactCache.emit(ReactCache.observeReceiveMessage, message);
+            } else {
+                // An error occurred during the download.
+                System.out.println("Download failed");
+            }
+        };
+
         AbortableFuture future = getService(MsgService.class).downloadAttachment(message, isThumb);
     }
 
