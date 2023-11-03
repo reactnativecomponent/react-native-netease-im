@@ -426,7 +426,7 @@ RCT_EXPORT_METHOD(forwardMultipleTextMessage: (nonnull  NSDictionary *)attachmen
 }
 
 //发送视频消息
-RCT_EXPORT_METHOD(sendVideoMessage:(nonnull  NSString *)file duration:(nonnull  NSString *)duration width:(nonnull  NSString *)width height:(nonnull  NSString *)height displayName:(nonnull  NSString *)displayName){
+RCT_EXPORT_METHOD(sendVideoMessage:(nonnull  NSString *)file duration:(nonnull  NSString *)duration width:(nonnull  NSNumber *)width height:(nonnull  NSNumber *)height displayName:(nonnull  NSString *)displayName){
     [[ConversationViewController initWithConversationViewController]sendVideoMessage:file duration:duration width:width height:height displayName:displayName];
 
 }

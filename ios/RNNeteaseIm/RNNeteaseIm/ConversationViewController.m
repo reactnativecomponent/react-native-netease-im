@@ -688,7 +688,7 @@
 }
 
 //发送视频
--(void)sendVideoMessage:(  NSString *)path duration:(  NSString *)duration width:(  NSString *)width height:(  NSString *)height displayName:(  NSString *)displayName{
+-(void)sendVideoMessage:(  NSString *)path duration:(  NSString *)duration width:(  NSNumber *)width height:(  NSNumber *)height displayName:(  NSString *)displayName{
 //    __weak typeof(self) weakSelf = self;
 //    [self.mediaFetcher fetchMediaFromCamera:^(NSString *path, UIImage *image) {
         NIMMessage *message;

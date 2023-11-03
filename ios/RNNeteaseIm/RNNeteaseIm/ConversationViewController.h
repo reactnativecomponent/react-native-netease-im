@@ -34,7 +34,7 @@ typedef void(^Errors)(id erro);
 //发送音频
 -(void)sendAudioMessage:(  NSString *)file duration:(  NSString *)duration;
 //发送视频
--(void)sendVideoMessage:(  NSString *)path duration:(  NSString *)duration width:(  NSString *)width height:(  NSString *)height displayName:(  NSString *)displayName;
+-(void)sendVideoMessage:(  NSString *)path duration:(  NSString *)duration width:(  NSNumber *)width height:(  NSNumber *)height displayName:(  NSString *)displayName;
 //发送自定义消息
 -(void)sendCustomMessage:(NSInteger )custType data:(NSDictionary *)dataDict;
 
